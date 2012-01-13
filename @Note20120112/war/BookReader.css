@@ -1,0 +1,183 @@
+/** Add css rules here for your application. */
+
+
+/** Example rules used by the template application (remove for your app) */
+h1 {
+  font-size: 16pt;
+  font-weight: bold;
+  color: #777777;
+  text-align: center;
+}
+
+.sendButton {
+  display: block;
+	font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.dialogVPanel {
+  margin: 5px;
+  
+}
+
+.serverResponseLabelError {
+
+	color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+Root {
+possition: CENTER;
+vertical-align: middle;
+text-align: center;
+}
+popup {
+	margin: 1px 1px 5px 5px;
+}
+.gwt-PopUpTr-new {
+background-color: blue !important;
+
+    /* Override glass panel to 10% opacity (= 90% transparency) */
+    filter: alpha(opacity = 30) !important; /* IE */
+    opacity: 0.3 !important; /* non-IE */
+}
+
+.RichTextToolbar {
+	background: #E2E2E2;
+	padding:5px;
+	margin:0px;
+	/*border: red 1px solid;*/
+}
+
+.RichTextToolbar .gwt-ToggleButton {
+	background: #F4F4F4;
+	border: 1px outset #ccc;
+}
+
+.RichTextToolbar .gwt-PushButton {
+	background: #F4F4F4;
+	border: 1px outset #ccc;
+}
+
+.RichTextToolbar .gwt-ToggleButton-up-hovering {
+	background: #F4F4F4;
+	border-color: #9cf #69e #69e #7af;
+}
+
+.RichTextToolbar .gwt-PushButton-up-hovering {
+	background: #F4F4F4;
+	border-color: #9cf #69e #69e #7af;
+}
+
+.RichTextToolbar .gwt-ToggleButton-down {
+	background: #D5D5D5;
+	border-color: #777777 #777777 #777777 #777777;
+}
+
+.RichTextToolbar .gwt-PushButton-down {
+	background: #D5D5D5;
+	border-color: #777777 #777777 #777777 #777777;
+}
+
+.RichTextToolbar .gwt-ToggleButton-down-hovering {
+	background: #D5D5D5;
+	border-color: #9cf #69e #69e #7af;
+}
+
+.RichTextToolbar .gwt-PushButton-down-hovering {
+	background: #D5D5D5;
+	border-color: #9cf #69e #69e #7af;
+}
+
+.RichTextToolbar .gwt-PushButton-up-disabled {
+	background: #717171;
+	border-color: #B9968F #B9968F #B9968F #B9968F;
+}
+
+.RichTextToolbar .gwt-PushButton-down-disabled {
+	background: #717171;
+	border-color: #B9968F #B9968F #B9968F #B9968F;
+}
+
+.RichTextToolbar .gwt-ToggleButton-up-disabled {
+	background: #717171;
+	border-color: #B9968F #B9968F #B9968F #B9968F;
+}
+
+.RichTextToolbar .gwt-ToggleButton-down-disabled {
+	background: #717171;
+	border-color: #B9968F #B9968F #B9968F #B9968F;
+}
+.Directores {
+font-size: 15pt;
+  font-weight: bold;
+  color: #777777;
+  text-align: center;
+}
+.TituloWelcome {
+font-size: 30pt;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 10px;
+  text-align: center;
+}
+.Desarrolladores {
+ font-size: 11pt;
+  font-weight: bold;
+  color: #777777;
+  margin: 0px 0px 0px;
+  text-align: center;
+}
+.h5 {
+	color: Red;
+	font-size: 11px;
+	text-align: left;
+}
+.gwt-ButtonControler {
+  font-size: 45pt;
+  font-weight: bold;
+  color: #777777;
+  text-align: center;
+}
+.HelpWelcome {
+font-size: 11pt;
+  font-weight: bold;
+  color: Blue;
+  text-align: center;
+    margin: 40px 0px 10px;
+}
+.gwt-SplitLayoutPanelmio {
+position: RELATIVE;
+}
+.gwt-StackPanel {
+ 	font-size: 10px;
+}
+.Root2 {
+possition: LEFT;
+}
+.gwt-MenuItemMio {
+  color: Red;
+}
+.image2 {
+	
+}
+.gwt-ButtonRed {
+  color: Red;
+}
+.gwt-ButtonBlack {
+  color: Black;
+}
+.TituloAplicacion {
+font-size: 50pt;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 10px;
+  text-align: center;
+}
+.Root3 {
+height: 100%;
+   vertical-align: middle;
+}

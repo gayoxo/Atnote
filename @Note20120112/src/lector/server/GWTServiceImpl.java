@@ -1,0 +1,3146 @@
+package lector.server;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+
+import lector.client.admin.activity.ReadingActivity;
+import lector.client.book.reader.GWTService;
+import lector.client.catalogo.client.Catalog;
+import lector.client.catalogo.client.Entity;
+import lector.client.catalogo.client.File;
+import lector.client.catalogo.client.FileException;
+import lector.client.catalogo.client.Folder;
+import lector.client.catalogo.server.Catalogo;
+import lector.client.catalogo.server.Entry;
+import lector.client.catalogo.server.FileDB;
+import lector.client.catalogo.server.FolderDB;
+import lector.client.controler.Constants;
+import lector.client.language.Language;
+import lector.client.language.LanguageNotFoundException;
+import lector.client.login.GroupApp;
+import lector.client.login.GroupNotFoundException;
+import lector.client.login.UserApp;
+import lector.client.login.UserNotFoundException;
+import lector.client.reader.Annotation;
+import lector.client.reader.AnnotationNotFoundException;
+import lector.client.reader.Book;
+import lector.client.reader.BookNotFoundException;
+import lector.client.reader.GeneralException;
+import lector.client.reader.IlegalFolderFusionException;
+import lector.client.reader.NullParameterException;
+
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
+
+	private static ArrayList<Long> ids;
+	private static ArrayList<Long> entryIds;
+	@PersistenceContext(name = "BookReader11Abr01PU")
+	private EntityManager entityManager;
+	private EntityTransaction entityTransaction;
+
+	public ArrayList<Annotation> getAnnotationsByBookId(String bookId)
+			throws GeneralException, AnnotationNotFoundException,
+			NullParameterException {
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> listAnnotations;
+		if (bookId == null) {
+			throw new NullParameterException(
+					"Parameter aniId cant be null in method loadAnnotationById");
+		}
+		try {
+			String sql = "SELECT a FROM Annotation a WHERE a.bookId='" + bookId
+					+ "'";
+			list = entityManager.createQuery(sql).getResultList();
+			listAnnotations = new ArrayList<Annotation>(list);
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method loadAnnotationById: " + e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+
+			}
+		}
+		if (list.isEmpty()) {
+			throw new AnnotationNotFoundException(
+					"Annotation not found in method loadAnnotationById");
+		}
+		return listAnnotations;
+	}
+
+	public synchronized Long saveAnnotation(Annotation annotation) {
+		ArrayList<Long> fileIdsBeforeUpdate = null;
+		ArrayList<Long> fileIdsAfterUpdate = null;
+		boolean isNewFile = false;
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		now = calendar.getTime();
+		annotation.setCreatedDate(now);
+		if (annotation.getId() != null) {
+			fileIdsBeforeUpdate = getFilesIdsByAnnotationId(annotation.getId());
+			entityManager.merge(annotation);
+		} else {
+			entityManager.persist(annotation);
+			isNewFile = true;
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.close();
+		if (isNewFile) {
+			fileIdsBeforeUpdate = annotation.getFileIds();
+			if (fileIdsBeforeUpdate != null && !fileIdsBeforeUpdate.isEmpty()) {
+				saveAnnotationIdInFiles(annotation.getId(), fileIdsBeforeUpdate);
+			}
+			fileIdsAfterUpdate = fileIdsBeforeUpdate;
+		} else {
+			fileIdsAfterUpdate = getFilesIdsByAnnotationId(annotation.getId());
+		}
+
+		ArrayList<Long> newFileIds = newFilesInAnnotation(fileIdsBeforeUpdate,
+				fileIdsAfterUpdate);
+		if (newFileIds != null) {
+			saveAnnotationIdInFiles(annotation.getId(), newFileIds);
+		}
+
+		return annotation.getId();
+	}
+
+	private ArrayList<Long> newFilesInAnnotation(ArrayList<Long> oldFiles,
+			ArrayList<Long> oldFilesUpdated) {
+		ArrayList<Long> newFileIds = null;
+		if (oldFiles != null) {
+			if (oldFiles.size() != oldFilesUpdated.size()) {
+				newFileIds = new ArrayList<Long>();
+				for (int i = 0; i < oldFilesUpdated.size(); i++) {
+					if (!(containsInArray(oldFiles, oldFilesUpdated.get(i)))) {
+						newFileIds.add(oldFilesUpdated.get(i));
+					}
+				}
+			}
+		}
+
+		return newFileIds;
+	}
+
+	private boolean containsInArray(ArrayList<Long> oldFileIds, Long newId) {
+		for (Long id : oldFileIds) {
+			if (id.equals(newId))
+				return true;
+		}
+		return false;
+	}
+
+	private ArrayList<Long> getFilesIdsByAnnotationId(Long annotationId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<List<Long>> list;
+		ArrayList<Long> finalList;
+		String sql = "SELECT DISTINCT g.fileIds FROM Annotation g WHERE g.id="
+				+ annotationId;
+		list = entityManager.createQuery(sql).getResultList();
+		if (!list.isEmpty())
+			finalList = new ArrayList<Long>(list.get(0));
+		else
+			finalList = new ArrayList<Long>();
+		entityManager.close();
+		return finalList;
+	}
+
+	private void saveAnnotationIdInFiles(Long annotationId,
+			ArrayList<Long> fileIds) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		for (int i = 0; i < fileIds.size(); i++) {
+			entityManager = EMF.get().createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			FileDB fileChanged = entityManager.find(FileDB.class,
+					fileIds.get(i));
+			if (!(fileChanged.getAnnotationsIds().contains(annotationId))) {
+				fileChanged.getAnnotationsIds().add(annotationId);
+				// entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.merge(fileChanged);
+				entityTransaction.commit();
+			}
+		}
+	}
+
+	private Annotation swapAnnotation(Annotation annotation) {
+		Annotation annotationAux = new Annotation();
+		annotationAux.setId(annotation.getId());
+		annotationAux.setBookId(annotation.getBookId());
+		annotationAux.setUserId(annotation.getUserId());
+		annotationAux.setVisibility(annotation.getVisibility());
+		annotationAux.setUpdatability(annotation.getUpdatability());
+		annotationAux.setTextSelector(annotation.getTextSelector());
+		annotationAux.setIsPersisted(annotation.isPersisted());
+		annotationAux.setPageNumber(annotation.getPageNumber());
+		annotationAux.setFileIds(annotation.getFileIds());
+		annotationAux.setComment(annotation.getComment());
+		annotationAux.setCreatedDate(annotation.getCreatedDate());
+		if (annotation.getUserName() == null)
+			annotationAux.setUserName("Unknown");
+		else
+			annotationAux.setUserName(annotation.getUserName());
+
+		for (Long visibilityGroupId : annotation.getVisibilityGroupIds()) {
+			annotationAux.getVisibilityGroupIds().add(visibilityGroupId);
+		}
+		for (Long updateableGroupId : annotation.getUpdatableGroupIds()) {
+			annotationAux.getUpdatableGroupIds().add(updateableGroupId);
+		}
+		return annotationAux;
+	}
+
+	private Annotation loadAnnotationById(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		Annotation annotation = entityManager.find(Annotation.class, id);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return annotation;
+	}
+
+	public ArrayList<Annotation> getAnnotationsByPageNumber(Integer pageNumber,
+			String bookId, Long readingActivityId) throws GeneralException,
+			AnnotationNotFoundException, NullParameterException,
+			BookNotFoundException {
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		java.util.ArrayList<Annotation> listAnnotations2 = new ArrayList<Annotation>();
+
+		if (pageNumber == null) {
+			throw new NullParameterException(
+					"Parameter aniId cant be null in method loadAnnotationById");
+		}
+		try {
+			String sql = "SELECT a FROM Annotation a WHERE a.pageNumber="
+					+ pageNumber + " and a.bookId='" + bookId
+					+ "' AND a.readingActivity=" + readingActivityId;
+			list = entityManager.createQuery(sql).getResultList();
+			for (int i = 0; i < list.size(); i++) {
+				Annotation annotationAux = swapAnnotation(list.get(i));
+				annotationAux.setEditable(true);
+				listAnnotations2.add(annotationAux);
+				annotationAux.setFileIds(new ArrayList<Long>(annotationAux
+						.getFileIds()));
+			}
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method loadAnnotationById: " + e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+
+		if (list.isEmpty()) {
+			throw new AnnotationNotFoundException(
+					"Annotation not found in method loadAnnotationById");
+		}
+
+		return listAnnotations2;
+
+	}
+
+	public int deleteAnnotation(Annotation annotationId)
+			throws GeneralException, NullParameterException,
+			AnnotationNotFoundException {
+		entityManager = EMF.get().createEntityManager();
+
+		if (annotationId == null) {
+			throw new NullParameterException(
+					"Parameter annotation cant be null in method saveAnnotation");
+		}
+		try {
+			Annotation annotationDeleted = entityManager.find(Annotation.class,
+					annotationId.getId());
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.remove(annotationDeleted);
+			entityTransaction.commit();
+		} catch (Exception e) {
+			entityTransaction.rollback();
+			throw new GeneralException("Exception in method saveSubject: "
+					+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return 1;
+	}
+
+	public ArrayList<Book> getBooks(String query) {
+		String cleanQuery = removeSpaces(query);
+		URL url;
+		URLConnection connection;
+		String line;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader;
+		ArrayList<Book> books = new ArrayList<Book>();
+		Book book = null;
+		try {
+			url = new URL(
+					"https://ajax.googleapis.com/ajax/services/search/books?"
+							+ "v=1.0&as_brr=1&q="
+							+ cleanQuery
+							+ "&rsz=8&start=0&rsz=8&key=ABQIAAAAgGfd0Syld4wI6M_8-PchExQ_l6-Ytnm_KJl3gFahMrxfvqMmehRrB92flZ-iJptRd3l62UsasikVhg");
+			connection = url.openConnection();
+			connection.addRequestProperty("Referer",
+					"http://kido180020783.appspot.com/");
+			reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+
+			JSONObject json = new JSONObject(builder.toString());
+			JSONObject responseObject = json.getJSONObject("responseData");
+			JSONArray results = responseObject.getJSONArray("results");
+			String authors = results.getJSONObject(0).getString("authors");
+			book = new Book();
+			book.setAuthor(authors);
+			for (int i = 0; i < results.length(); i++) {
+				JSONObject jsonBook = results.getJSONObject(i);
+				books.add(new Book(jsonBook.getString("authors"), jsonBook
+						.getString("bookId"), jsonBook.getString("pageCount"),
+						jsonBook.getString("publishedYear"), jsonBook
+								.getString("title"), jsonBook
+								.getString("tbUrl"), jsonBook
+								.getString("unescapedUrl")));
+			}
+
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (JSONException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return books;
+	}
+
+	public ArrayList<Book> getBooks(String query, int start) {
+		String cleanQuery = removeSpaces(query);
+		URL url;
+		URLConnection connection;
+		String line;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader;
+		ArrayList<Book> books = new ArrayList<Book>();
+		Book book = null;
+		try {
+			url = new URL(
+					"https://ajax.googleapis.com/ajax/services/search/books?"
+							+ "v=1.0&as_brr=1&q="
+							+ cleanQuery
+							+ "&rsz=8&start="
+							+ start
+							+ "&rsz=8&key=ABQIAAAAgGfd0Syld4wI6M_8-PchExQ_l6-Ytnm_KJl3gFahMrxfvqMmehRrB92flZ-iJptRd3l62UsasikVhg");
+			connection = url.openConnection();
+			connection.addRequestProperty("Referer",
+					"http://kido180020783.appspot.com/");
+			reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+
+			JSONObject json = new JSONObject(builder.toString());
+			JSONObject responseObject = json.getJSONObject("responseData");
+			JSONArray results = responseObject.getJSONArray("results");
+			String authors = results.getJSONObject(0).getString("authors");
+			book = new Book();
+			book.setAuthor(authors);
+			for (int i = 0; i < results.length(); i++) {
+				JSONObject jsonBook = results.getJSONObject(i);
+				books.add(new Book(jsonBook.getString("authors"), jsonBook
+						.getString("bookId"), jsonBook.getString("pageCount"),
+						jsonBook.getString("publishedYear"), jsonBook
+								.getString("title"), jsonBook
+								.getString("tbUrl"), jsonBook
+								.getString("unescapedUrl")));
+			}
+
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (JSONException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return books;
+	}
+
+	public int getAnnotationsNumberByFileName(String name)
+			throws GeneralException, NullParameterException,
+			AnnotationNotFoundException {
+		int total = 0;
+		List<Annotation> annotations;
+		entityManager = EMF.get().createEntityManager();
+		if (name == null) {
+			throw new NullParameterException(
+					"Parameter cant be null in method deleteDnServices");
+		}
+		try {
+			String sql = "SELECT a FROM Annotation a where a.fileName='" + name
+					+ "'";
+			annotations = entityManager.createQuery(sql).getResultList();
+			total = annotations.size();
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method saveAnnotationType: " + e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return total;
+	}
+
+	public ArrayList<Annotation> getAnnotationsByAnnotationType(
+			String annotationTypeName) throws GeneralException,
+			NullParameterException, AnnotationNotFoundException {
+
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> listAnnotations;
+		if (annotationTypeName == null) {
+			throw new NullParameterException(
+					"Parameter aniId cant be null in method loadAnnotationById");
+		}
+		try {
+			String sql = "SELECT a FROM Annotation a WHERE a.annotationType='"
+					+ annotationTypeName + "'";
+			list = entityManager.createQuery(sql).getResultList();
+			listAnnotations = new ArrayList<Annotation>(list);
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method loadAnnotationById: " + e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		if (list.isEmpty()) {
+			throw new AnnotationNotFoundException(annotationTypeName);
+		}
+		return listAnnotations;
+
+	}
+
+	public ArrayList<Annotation> getAnnotationsByAnnotationTypeAndBook(
+			String annotationType, String bookId, Integer pageNumber)
+			throws GeneralException, AnnotationNotFoundException,
+			NullParameterException, BookNotFoundException {
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> listAnnotations;
+		if (pageNumber == null) {
+			throw new NullParameterException(
+					"Parameter aniId cant be null in method loadAnnotationById");
+		}
+		try {
+			String sql = "SELECT a FROM Annotation a WHERE a.pageNumber="
+					+ pageNumber + " AND a.bookId='" + bookId
+					+ "' AND a.annotationType='" + annotationType + "'";
+			list = entityManager.createQuery(sql).getResultList();
+			listAnnotations = new ArrayList<Annotation>(list);
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method loadAnnotationById: " + e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		if (list.isEmpty()) {
+			throw new AnnotationNotFoundException(
+					"Annotation not found in method loadAnnotationById");
+		}
+		return listAnnotations;
+	}
+
+	public int fusionFiles(Long fFromId, Long fToId) throws GeneralException,
+			NullParameterException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+
+		if (fFromId == null || fToId == null) {
+			throw new NullParameterException(
+					"Parameter cant be null in method deleteDnServices");
+		}
+		int total = 0;
+		int annotationsToFileTo = 0;
+		FileDB fileFrom = loadFileById(fFromId);
+		ArrayList<Long> annotationFromIds = fileFrom.getAnnotationsIds();
+
+		try {
+
+			FileDB fileTo = loadFileById2(fToId);
+			if (annotationFromIds != null) {
+				total = annotationFromIds.size();
+				for (int i = 0; i < annotationFromIds.size(); i++) {
+					if (!(fileTo.getAnnotationsIds().contains(annotationFromIds
+							.get(i)))) {
+						annotationsToFileTo++;
+						fileTo.getAnnotationsIds()
+								.add(annotationFromIds.get(i));
+					}
+				}
+			}
+			if (annotationsToFileTo > 0) {
+				saveFile(fileTo);
+			}
+			for (int i = 0; i < total; i++) {
+				int a = 0;
+				Annotation annotation = loadAnnotationById(annotationFromIds
+						.get(i));
+				if (!annotation.getFileIds().contains(fileTo)) {
+					a++;
+					annotation.getFileIds().add(fToId);
+				}
+				if (a > 0) {
+					saveAnnotation(annotation);
+				}
+			}
+
+			deleteFileForFusion(fFromId);
+		} catch (Exception e) {
+			entityTransaction.rollback();
+			throw new GeneralException("Exception in method saveFileName: "
+					+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return total;
+	}
+
+	// private void setFileAndAnnotationRelation(Long annotationId, FileDB
+	// fileTo) {
+	// EntityManager entityManager = EMF.get().createEntityManager();
+	// EntityTransaction entityTransaction = entityManager.getTransaction();
+	// Annotation annotationChanged = entityManager.find(Annotation.class,
+	// annotationId);
+	// annotationChanged.setFileId(fileTo.getId());
+	// entityTransaction = entityManager.getTransaction();
+	// entityTransaction.begin();
+	// entityManager.merge(annotationChanged);
+	// entityTransaction.commit();
+	//
+	// FileDB fileDBChanged = entityManager.find(FileDB.class, fileTo.getId());
+	// if (!(fileDBChanged.getAnnotationsIds().contains(annotationId))) {
+	// fileDBChanged.getAnnotationsIds().add(annotationId);
+	// entityTransaction = entityManager.getTransaction();
+	// entityTransaction.begin();
+	// entityManager.merge(fileDBChanged);
+	// entityTransaction.commit();
+	//
+	// }
+	// }
+
+	private void deleteFileForFusion(Long fileId) {
+		FileDB file = loadFileById2(fileId);
+		deleteFileFromParent(file);
+		deletePlainFile(file);
+	}
+
+	private FileDB swapFileDB(FileDB fileDB) {
+		FileDB fileAux = new FileDB();
+		fileAux.setId(fileDB.getId());
+		fileAux.setCatalogId(fileDB.getCatalogId());
+		fileAux.setName(fileDB.getName());
+		fileAux.setFatherId(fileDB.getFatherId());
+		fileAux.setAnnotationsIds(fileDB.getAnnotationsIds());
+		return fileAux;
+	}
+
+	private Book getBookInGoogleByISBN(String query) {
+		String cleanQuery = removeSpaces(query);
+		URL url;
+		URLConnection connection;
+		String line;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader;
+		ArrayList<Book> books = new ArrayList<Book>();
+		Book book = null;
+		try {
+			url = new URL(
+					"https://ajax.googleapis.com/ajax/services/search/books?"
+							+ "as_brr=1&v=1.0&q="
+							+ cleanQuery
+							+ "&rsz=8&start=3&key=ABQIAAAAgGfd0Syld4wI6M_8-PchExQ_l6-Ytnm_KJl3gFahMrxfvqMmehRrB92flZ-iJptRd3l62UsasikVhg");
+			connection = url.openConnection();
+			connection.addRequestProperty("Referer",
+					"http://kido180020783.appspot.com/");
+			reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+
+			JSONObject json = new JSONObject(builder.toString());
+			JSONObject responseObject = json.getJSONObject("responseData");
+			JSONArray results = responseObject.getJSONArray("results");
+			String authors = results.getJSONObject(0).getString("authors");
+			book = new Book();
+			book.setAuthor(authors);
+			for (int i = 0; i < results.length(); i++) {
+				JSONObject jsonBook = results.getJSONObject(i);
+				books.add(new Book(jsonBook.getString("authors"), jsonBook
+						.getString("bookId"), jsonBook.getString("pageCount"),
+						jsonBook.getString("publishedYear"), jsonBook
+								.getString("title"), jsonBook
+								.getString("tbUrl"), jsonBook
+								.getString("unescapedUrl")));
+			}
+
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (JSONException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return books.get(0);
+	}
+
+	public Book loadFullBookInGoogle(String query) {
+		Book book = getBookInGoogleByISBN(query);
+		String cleanGoogleBookId = book.getUrl().substring(33, 45);
+		book.setWebLinks(getBookImageInGoole(getBookImageStringInGoogle(cleanGoogleBookId)));
+		book.setImagesPath(book.getWebLinks().get(0));
+		return book;
+	}
+
+	public boolean isIntNumber(String num) {
+		try {
+			Integer.parseInt(num);
+
+		} catch (NumberFormatException nfe) {
+
+			return false;
+		}
+		return true;
+	}
+
+	public String removeSpaces(String s) {
+		StringTokenizer st = new StringTokenizer(s, " ", false);
+		String t = "";
+		while (st.hasMoreElements()) {
+			t += st.nextElement();
+		}
+		return t;
+	}
+
+	public String getBookImageStringInGoogle(String id) {
+		URL url;
+		URLConnection connection;
+		String line;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader;
+		try {
+			url = new URL(
+					"http://books.google.com/ebooks/reader?id="
+							+ id
+							+ "&pg=PP0&key=ABQIAAAAgGfd0Syld4wI6M_8-PchExQ_l6-Ytnm_KJl3gFahMrxfvqMmehRrB92flZ-iJptRd3l62UsasikVhg");
+			connection = url.openConnection();
+			connection.addRequestProperty("Referer",
+					"http://kido180020783.appspot.com/");
+			reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return builder.toString();
+	}
+
+	public ArrayList<String> getBookImageInGoole(String imagesWithinHTML) {
+		ArrayList<String> list = new ArrayList<String>();
+		// System.out.println(imagesWithinHTML);
+		// Portadas
+		String[] PP0 = imagesWithinHTML.split("\"pid\":\"PP0\",\"src\":\"");
+		if (PP0.length == 2) {
+			String[] PP = PP0[1].split("\"");
+
+			list.add(PP[0].replaceAll("\\\\u0026", "&"));
+		}
+		String[] PP1 = imagesWithinHTML.split("\"pid\":\"PP1\",\"src\":\"");
+		if (PP1.length == 2) {
+			String[] PP = PP1[1].split("\"");
+
+			list.add(PP[0].replaceAll("\\\\u0026", "&"));
+		}
+		// Hojas
+		String[] PAI = imagesWithinHTML.split("\"pid\":\"PA1\",\"src\":\"");
+		String[] PP = PAI[1].split("\"");
+
+		list.add(PP[0].replaceAll("\\\\u0026", "&"));
+		int cont = 2;
+		while (PAI.length != 1) {
+			PAI = imagesWithinHTML.split("\"pid\":\"PA" + cont
+					+ "\",\"src\":\"");
+			if (PAI.length != 1) {
+				PP = PAI[1].split("\"");
+				list.add(PP[0].replaceAll("\\\\u0026", "&"));
+			}
+			cont++;
+		}
+		return list;
+	}
+
+	// private List<Annotation> annotationsSwapAux(List<Annotation>
+	// tempAnnotations) {
+	//
+	// List<Annotation> annotations = new ArrayList<Annotation>();
+	//
+	// for (int i = 0; i < tempAnnotations.size(); i++) {
+	// annotations.add(tempAnnotations.get(i));
+	// }
+	// for (int i = 0; i < tempAnnotations.size(); i++) {
+	// annotations.get(i).setCreatedDate(
+	// tempAnnotations.get(i).getCreatedDate());
+	// annotations.get(i).setEditable(tempAnnotations.get(i).isEditable());
+	//
+	// annotations.get(i).setTextSelector(
+	// tempAnnotations.get(i).getTextSelector());
+	// annotations.get(i).setPageNumber(
+	// tempAnnotations.get(i).getPageNumber());
+	// annotations.get(i).setComment(tempAnnotations.get(i).getComment());
+	// annotations.get(i).setBookId(tempAnnotations.get(i).getBookId());
+	// annotations.get(i).setFileId(tempAnnotations.get(i).getFileId());
+	// annotations.get(i).setUserId(tempAnnotations.get(i).getUserId());
+	// annotations.get(i).setVisibility(
+	// tempAnnotations.get(i).getVisibility());
+	// annotations.get(i).setUpdatability(
+	// tempAnnotations.get(i).getUpdatability());
+	// annotations.get(i).setVisibilityGroupIds(
+	// tempAnnotations.get(i).getVisibilityGroupIds());
+	// annotations.get(i).setUpdatableGroupIds(
+	// tempAnnotations.get(i).getUpdatableGroupIds());
+	// annotations.get(i).setIsPersisted(
+	// tempAnnotations.get(i).isPersisted());
+	// }
+	// return annotations;
+	// }
+
+	// METODOS NECESARIOS PARA LA RESOLUCIÓN DE LOS TIPOS POR RBOL
+	public void moveFile(Long fileId, Long fToId) {
+		FileDB file = loadFileById2(fileId);
+		deleteFileFromParent(file);
+		if (loadFolderById(fToId) != null) {
+			file.setFatherId(fToId);
+			if (file.getCatalogId() != null) {
+				file.setCatalogId(null);
+			}
+		} else {
+			file.setCatalogId(fToId);
+			if (file.getFatherId() != null) {
+				file.setFatherId(null);
+			}
+		}
+		saveFile(file);
+		addChildToParent(fileId, fToId);
+	}
+
+	public void moveFolder(Long fFromId, Long fToId) {
+		FolderDB fFrom = loadFolderById(fFromId);
+		deleteFolderFromParent(fFrom);
+		if (loadFolderById(fToId) != null) {
+			fFrom.setFatherId(fToId);
+
+		} else {
+			fFrom.setCatalogId(fToId);
+			if (fFrom.getFatherId() != null) {
+				fFrom.setFatherId(null);
+			}
+		}
+		saveFolder(fFrom);
+		addChildToParent(fFromId, fToId);
+	}
+
+	private void addChildToParent(Long childId, Long parentId) {
+
+		Catalogo catalog = loadCatalogById2(parentId);
+		if (catalog != null) {
+			if (!(catalog.getEntryIds().contains(childId))) {
+				catalog.getEntryIds().add(childId);
+				saveCatalog(catalog);
+			}
+		} else {
+			FolderDB folder = loadFolderById(parentId);
+			if (!(folder.getEntryIds().contains(childId))) {
+				folder.getEntryIds().add(childId);
+			}
+			saveFolder(folder);
+		}
+	}
+
+	public void fusionFolder(Long fFromId, Long fToId)
+			throws IlegalFolderFusionException {
+		FolderDB fFrom = loadFolderById(fFromId);
+		FolderDB fTo = loadFolderById(fToId);
+		if (isFolderDestinationDecendant(fFromId, fTo)) {
+			throw new IlegalFolderFusionException(
+					"Sorry, no merge is possible from a parent to a child category");
+		}
+		ArrayList<FolderDB> foldersChildren = getFolderChildren(fFrom);
+		if (!foldersChildren.isEmpty()) {
+			setNewFatherToFolder(foldersChildren, fToId);
+		}
+		ArrayList<FileDB> fileChildren = getFileChildren(fFrom);
+		if (!fileChildren.isEmpty()) {
+			setNewFatherToFiles(fileChildren, fToId);
+		}
+		deleteFolderFromParent(fFrom);
+		deletePlainFolder(fFrom);
+	}
+
+	private boolean isFolderDestinationDecendant(Long folderFromId,
+			FolderDB folderTo) {
+		boolean isDecendant = false;
+		FolderDB folderToFather = loadFolderById(folderTo.getFatherId());
+		while (!isDecendant && (folderToFather != null)) {
+			if (folderToFather.getId().equals(folderFromId)) {
+				isDecendant = true;
+			} else {
+				if (folderToFather.getFatherId() != null) {
+					folderToFather = loadFolderById(folderToFather
+							.getFatherId());
+				} else {
+					folderToFather = null;
+				}
+
+			}
+		}
+		return isDecendant;
+	}
+
+	private void deleteFolderFromParent(FolderDB folder) {
+		if (folder.getFatherId() != null) {
+			FolderDB folderAux = loadFolderById(folder.getFatherId());
+			folderAux.getEntryIds().remove(folder.getId());
+			saveFolder(folderAux);
+
+		} else {
+			Catalogo catalogo = loadCatalogById2(folder.getCatalogId());
+			catalogo.getEntryIds().remove(folder.getId());
+			saveCatalog(catalogo);
+		}
+	}
+
+	private void deletePlainFolder(FolderDB folder) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		List<FolderDB> folders;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		String sql = "SELECT a FROM FolderDB a WHERE a.id=" + folder.getId();
+		folders = entityManager.createQuery(sql).getResultList();
+		entityManager.remove(folders.get(0));
+		entityTransaction.commit();
+	}
+
+	// TODO: NO CONSIDERA CUANDO EL FILE SE MUEVE AL ROOT
+
+	private void setNewFatherToFiles(ArrayList<FileDB> fileChildren,
+			Long newFather) {
+		for (int i = 0; i < fileChildren.size(); i++) {
+			FileDB fileAux = swapFile(fileChildren.get(i));
+			fileAux.setFatherId(newFather);
+			saveFile(fileAux);
+		}
+
+	}
+
+	private ArrayList<FileDB> getFileChildren(FolderDB folder) {
+		EntityManager entityManager;
+		List<FileDB> files;
+		ArrayList<FileDB> fileList;
+		entityManager = EMF.get().createEntityManager();
+		String sql = "SELECT a FROM FileDB a WHERE a.fatherId="
+				+ folder.getId();
+		files = entityManager.createQuery(sql).getResultList();
+		fileList = new ArrayList<FileDB>(files);
+		return fileList;
+	}
+
+	private void setNewFatherToFolder(ArrayList<FolderDB> folderChildren,
+			Long newFather) {
+		for (int i = 0; i < folderChildren.size(); i++) {
+			FolderDB folderAux = swapFolder(folderChildren.get(i));
+			folderAux.setFatherId(newFather);
+			saveFolder(folderAux);
+		}
+	}
+
+	private FileDB swapFile(FileDB file) {
+		FileDB fileAux = new FileDB();
+		fileAux.setId(file.getId());
+		fileAux.setFatherId(file.getFatherId());
+		fileAux.setName(file.getName());
+		return fileAux;
+	}
+
+	private FolderDB swapFolder(FolderDB folder) {
+		FolderDB folderAux = new FolderDB();
+		folderAux.setId(folder.getId());
+		folderAux.setFatherId(folder.getFatherId());
+		folderAux.setName(folder.getName());
+		for (Long entryId : folder.getEntryIds()) {
+			folderAux.getEntryIds().add(entryId);
+		}
+
+		return folderAux;
+	}
+
+	private ArrayList<FolderDB> getFolderChildren(FolderDB folder) {
+		EntityManager entityManager;
+		List<FolderDB> folders;
+		ArrayList<FolderDB> folderList;
+		entityManager = EMF.get().createEntityManager();
+		String sql = "SELECT a FROM FolderDB a WHERE a.fatherId="
+				+ folder.getId();
+		folders = entityManager.createQuery(sql).getResultList();
+		folderList = new ArrayList<FolderDB>(folders);
+		return folderList;
+	}
+
+	public void deleteFile(Long fileId) {
+		FileDB fileDB = loadFileById2(fileId);
+		int aux = deleteFilesInAnnotations(fileId);
+		deleteFileFromParent(fileDB);
+		deletePlainFile(fileDB);
+	}
+
+	private int deleteFilesInAnnotations(Long fileId) {
+		int total = 0;
+		List<Annotation> annotations;
+		EntityManager entityManager = EMF.get().createEntityManager();
+		try {
+
+			String sql = "SELECT a FROM Annotation a where a.fileIds=" + fileId;
+			annotations = entityManager.createQuery(sql).getResultList();
+			total = annotations.size();
+			for (int i = 0; i < annotations.size(); i++) {
+				if (annotations.get(i).getFileIds().contains(fileId)) {
+					annotations.get(i).getFileIds().remove(fileId);
+
+					Annotation annotationAux = swapAnnotation(annotations
+							.get(i));
+					if (annotationAux.getFileIds().size() > 0) {
+						saveAnnotation(annotationAux);
+					} else {
+						deleteAnnotation(annotationAux);
+					}
+
+				}
+			}
+
+		} catch (Exception e) {
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return total;
+	}
+
+	private void deleteAnnotationInFiles(Long annotationId) {
+		int total = 0;
+		List<FileDB> fileDBs;
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		String sql = "SELECT a FROM FileDB a where a.annotationsIds="
+				+ annotationId;
+		fileDBs = entityManager.createQuery(sql).getResultList();
+		for (int i = 0; i < fileDBs.size(); i++) {
+			if (fileDBs.get(i).getAnnotationsIds().contains(annotationId)) {
+				fileDBs.get(i).getAnnotationsIds().remove(annotationId);
+				total++;
+				FileDB fileDBAux = swapFileDB(fileDBs.get(i));
+				if (fileDBAux.getAnnotationsIds().size() > 0) {
+					savePlainFile(fileDBAux);
+				}
+
+			}
+		}
+	}
+
+	// private void removeAnnotationFromFile(Annotation annotation) {
+	// EntityManager entityManager;
+	// EntityTransaction entityTransaction;
+	// FileDB file = loadFileById2(annotation.getFileId());
+	// if (file.getAnnotationsIds().contains(annotation.getId())) {
+	// file.getAnnotationsIds().remove(annotation.getId());
+	// entityManager = EMF.get().createEntityManager();
+	// entityTransaction = entityManager.getTransaction();
+	// entityTransaction.begin();
+	// entityManager.merge(file);
+	// entityTransaction.commit();
+	// }
+	// }
+
+	private void deleteFileFromParent(FileDB file) {
+		if (file.getFatherId() == null) {
+			Catalogo catalogo = loadCatalogById2(file.getCatalogId());
+			catalogo.getEntryIds().remove(file.getId());
+			saveCatalog(catalogo);
+		} else {
+			FolderDB folder = loadFolderById(file.getFatherId());
+			folder.getEntryIds().remove(file.getId());
+			saveFolder(folder);
+		}
+
+	}
+
+	private void deletePlainFile(FileDB file) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		List<FileDB> files;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		String sql = "SELECT a FROM FileDB a WHERE a.id=" + file.getId();
+		files = entityManager.createQuery(sql).getResultList();
+		entityManager.remove(files.get(0));
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	// NUEVO JULIO Busca el id del catalogo dado el padre.
+	private Long loadCatalogIdByFatherId(Long id) {
+		FolderDB fatherFolder = loadFolderById(id);
+		while (fatherFolder.getFatherId() != null) {
+			fatherFolder = loadFolderById(fatherFolder.getFatherId());
+		}
+		return fatherFolder.getCatalogId();
+	}
+
+	public Long saveFile(File filesys) throws FileException {
+		Long catalogId;
+		if (filesys.getFather() == null) {
+			catalogId = filesys.getCatalogId();
+		} else {
+			catalogId = loadCatalogIdByFatherId(filesys.getFather().getID());
+		}
+
+		if (isFileNameInDB(filesys.getName(), catalogId)
+				&& filesys.getID() == null) {
+			throw new FileException(
+					"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
+		}
+		FileDB file = cloneFile(filesys);
+		savePlainFile(file);
+
+		if (filesys.getFather() != null) {
+			FolderDB fatherFolder = loadFolderById(file.getFatherId());
+			if (fatherFolder != null) {
+				if (!(fatherFolder.getEntryIds().contains(file.getId()))) {
+					fatherFolder.getEntryIds().add(file.getId());
+					updateFolder(fatherFolder);
+				}
+			}
+
+		} else {
+			Catalogo catalog = loadCatalogById2(file.getCatalogId());
+			if (catalog != null) {
+				if (!(catalog.getEntryIds().contains(file.getId()))) {
+					catalog.getEntryIds().add(file.getId());
+					saveCatalog(catalog);
+
+				}
+
+			}
+		}
+
+		return file.getId();
+	}
+
+	private boolean isFileNameInDB(String fileName, Long catalogId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<FileDB> list;
+		boolean flag = true;
+		String sql = "SELECT a FROM FileDB a WHERE a.name='" + fileName
+				+ "' AND a.catalogId=" + catalogId;
+		list = entityManager.createQuery(sql).getResultList();
+
+		if (list.isEmpty()) {
+			flag = false;
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return flag;
+	}
+
+	private void cloneFileSys(FileDB fileDB, File file) {
+		if (file.getFather() != null) {
+			file.getFather().setID(fileDB.getFatherId());
+		}
+		file.setID(fileDB.getId());
+
+	}
+
+	private void saveFile(FileDB file) {
+		savePlainFile(file);
+		if (file.getFatherId() != null) {
+			FolderDB fatherFolder = loadFolderById(file.getFatherId());
+			if (!(fatherFolder.getEntryIds().contains(file.getId()))) {
+				fatherFolder.getEntryIds().add(file.getId());
+				updateFolder(fatherFolder);
+			}
+		} else {
+			Catalogo catalog = loadCatalogById2(file.getCatalogId());
+			if (!(catalog.getEntryIds().contains(file.getId()))) {
+				catalog.getEntryIds().add(file.getId());
+				saveCatalog(catalog);
+			}
+		}
+
+	}
+
+	private FileDB cloneFile(File f) {
+		FileDB fileDB = new FileDB();
+		fileDB.setId(f.getID());
+		if (f.getFather() != null) {
+			fileDB.setFatherId(f.getFather().getID());
+		}
+
+		fileDB.setCatalogId(f.getCatalogId());
+		fileDB.setName(f.getName());
+		return fileDB;
+	}
+
+	private void updateFolder(FolderDB folder) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(folder);
+		entityManager.flush();
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	private void savePlainFile(FileDB file) {
+
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (file.getId() == null) {
+			entityManager.persist(file);
+		} else {
+
+			entityManager.merge(file);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.close();
+
+	}
+
+	public Long saveFolder(Folder folderSys) throws FileException {
+		Long folderId = 0l;
+		if (folderSys.getFather() != null) {
+			if (hasTwinBrother(folderSys.getName(), folderSys.getFather()
+					.getID(), false)) {
+				throw new FileException(
+						"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
+			}
+		} else {
+			if (hasTwinBrother(folderSys.getName(), folderSys.getCatalogId(),
+					true)) {
+				throw new FileException(
+						"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
+			}
+		}
+		try {
+			FolderDB folder = cloneFolder(folderSys);
+			savePlainFolder(folder);
+			folderId = folder.getId();
+			if (folderSys.getFather() != null) {
+				FolderDB fatherFolder = loadFolderById(folder.getFatherId());
+				if (fatherFolder != null) {
+					if (!(fatherFolder.getEntryIds().contains(folder.getId()))) {
+						fatherFolder.getEntryIds().add(folder.getId());
+						updateFolder(fatherFolder);
+					}
+				}
+			} else {
+				Catalogo catalog = loadCatalogById2(folder.getCatalogId());
+				if (catalog != null) {
+					if (!(catalog.getEntryIds().contains(folder.getId()))) {
+						catalog.getEntryIds().add(folder.getId());
+						saveCatalog(catalog);
+					}
+				}
+			}
+			cloneFolderSys(folder, folderSys);
+		} catch (FileException fe) {
+		}
+		return folderId;
+	}
+
+	private boolean hasTwinBrother(String name, Long fatherId,
+			boolean isFatherCatalog) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<FolderDB> list;
+		boolean flag = true;
+		String sql = "SELECT a FROM FolderDB a WHERE a.name='" + name + "'";
+		list = entityManager.createQuery(sql).getResultList();
+
+		if (list.isEmpty()) {
+			flag = false;
+		} else if (isFatherCatalog) {
+			if (!(list.get(0).getCatalogId().equals(fatherId))) {
+				flag = false;
+			}
+		} else {
+			if (!(list.get(0).getFatherId().equals(fatherId))) {
+				flag = false;
+			}
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return flag;
+	}
+
+	private void cloneFolderSys(FolderDB folderDB, Folder folder) {
+		if (folder.getFather() != null) {
+			folder.getFather().setID(folderDB.getFatherId());
+		}
+		folder.setID(folderDB.getId());
+	}
+
+	private void saveFolder(FolderDB folder) {
+		savePlainFolder(folder);
+		if (folder.getFatherId() == null) {
+			Catalogo catalog = loadCatalogById2(folder.getCatalogId());
+			if (!(catalog.getEntryIds().contains(folder.getId()))) {
+				catalog.getEntryIds().add(folder.getId());
+				saveCatalog(catalog);
+			}
+		} else {
+			FolderDB fatherFolder = loadFolderById(folder.getFatherId());
+			if (!(fatherFolder.getEntryIds().contains(folder.getId()))) {
+				fatherFolder.getEntryIds().add(folder.getId());
+				updateFolder(fatherFolder);
+			}
+		}
+	}
+
+	private FolderDB cloneFolder(Folder f) throws FileException {
+		FolderDB folderDB = new FolderDB();
+		folderDB.setId(f.getID());
+		if (f.getFather() != null) {
+			folderDB.setFatherId(f.getFather().getID());
+		}
+		folderDB.setCatalogId(f.getCatalogId());
+		folderDB.setName(f.getName());
+		for (int i = 0; i < f.getSons().size(); i++) {
+			folderDB.getEntryIds().add(f.getSons().get(i).getID());
+		}
+		return folderDB;
+	}
+
+	private void savePlainFolder(FolderDB folder) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (folder.getId() == null) {
+			entityManager.persist(folder);
+		} else {
+			entityManager.merge(folder);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+	}
+
+	private FolderDB loadFolderById(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<FolderDB> list;
+		ArrayList<FolderDB> folders;
+		if (id==null) return null;
+		String sql = "SELECT r FROM FolderDB r WHERE r.id=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		folders = new ArrayList<FolderDB>(list);
+
+		if (list.isEmpty()) {
+			folders.add(null);
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return folders.get(0);
+	}
+
+	public FileDB loadFileById(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<FileDB> list;
+		ArrayList<FileDB> files;
+		String sql = "SELECT r FROM FileDB r WHERE r.id=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		files = new ArrayList<FileDB>(list);
+
+		FileDB fileDB = null;
+		if (!list.isEmpty()) {
+			fileDB = files.get(0);
+			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
+					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
+			fileDB.getAnnotationsIds().clear();
+			fileDB.setAnnotationsIds(annotationsIds);
+
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return fileDB;
+	}
+
+	private FileDB loadFileById2(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<FileDB> list;
+		ArrayList<FileDB> files;
+		String sql = "SELECT r FROM FileDB r WHERE r.id=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		files = new ArrayList<FileDB>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			files.add(null);
+		}
+		FileDB fileDB = files.get(0);
+		return fileDB;
+	}
+
+	public FileDB loadFileByNameAndCatalogId(String fileName, Long catalogId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<FileDB> list;
+		ArrayList<FileDB> files;
+		String sql = "SELECT r FROM FileDB r WHERE r.uppercaseName='"
+				+ fileName + "' AND r.catalogId=" + catalogId;
+		list = entityManager.createQuery(sql).getResultList();
+		files = new ArrayList<FileDB>(list);
+
+		if (list.isEmpty()) {
+			return null;
+		}
+
+		FileDB fileDB = files.get(0);
+		java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
+				(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
+		fileDB.getAnnotationsIds().clear();
+		fileDB.setAnnotationsIds(annotationsIds);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return fileDB;
+	}
+
+	public Catalogo loadCatalogById(Long catalogId) {
+		EntityManager entityManager;
+		List<Catalogo> list;
+		ArrayList<Catalogo> listCatalogs;
+		entityManager = EMF.get().createEntityManager();
+		String sql = "SELECT c FROM Catalogo c WHERE c.id=" + catalogId;
+		list = entityManager.createQuery(sql).getResultList();
+		listCatalogs = new ArrayList<Catalogo>(list);
+		Catalogo catalogo = listCatalogs.get(0);
+
+		ArrayList<Long> entries = new ArrayList<Long>(
+				(java.util.ArrayList<Long>) listCatalogs.get(0).getEntryIds());
+		catalogo.getEntryIds().clear();
+		catalogo.setEntryIds(entries);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			listCatalogs.add(null);
+		}
+		return catalogo;
+	}
+
+	private Catalogo loadCatalogById2(Long catalogId) {
+		EntityManager entityManager;
+		List<Catalogo> list;
+		ArrayList<Catalogo> listCatalogs;
+		entityManager = EMF.get().createEntityManager();
+		String sql = "SELECT c FROM Catalogo c WHERE c.id=" + catalogId;
+		list = entityManager.createQuery(sql).getResultList();
+		listCatalogs = new ArrayList<Catalogo>(list);
+		Catalogo catalogo = listCatalogs.get(0);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return catalogo;
+	}
+
+	public void deleteCatalog(Long catalogId) throws GeneralException,
+			NullParameterException {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		Catalogo catalogoDeleted = entityManager
+				.find(Catalogo.class, catalogId);
+		deleteCatalogChildren(catalogoDeleted.getEntryIds());
+		int total = removeCatalogFromReadingActivities(catalogId);
+
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(catalogoDeleted);
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	public void saveCatalog(Catalogo catalog) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (catalog.getId() != null) {
+			entityManager.merge(catalog);
+		} else {
+			entityManager.persist(catalog);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	public ArrayList<Catalog> getCatalogs() {
+
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Catalogo> list;
+		ArrayList<Catalog> listClientCatalogs = new ArrayList<Catalog>();
+		String sql = "SELECT a FROM Catalogo a";
+		list = entityManager.createQuery(sql).getResultList();
+		buildClientCatalogs(list, listClientCatalogs);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return listClientCatalogs;
+
+	}
+
+	private void buildClientCatalogs(List<Catalogo> catalogs,
+			ArrayList<Catalog> clientCatalog) {
+		for (int i = 0; i < catalogs.size(); i++) {
+			clientCatalog.add(new Catalog());
+		}
+		for (int i = 0; i < catalogs.size(); i++) {
+			clientCatalog.get(i).setId(catalogs.get(i).getId());
+			clientCatalog.get(i).setPrivate(catalogs.get(i).isIsPrivate());
+			clientCatalog.get(i).setProfessorId(
+					catalogs.get(i).getProfessorId());
+			clientCatalog.get(i).setCatalogName(
+					catalogs.get(i).getCatalogName());
+		}
+	}
+
+	public ArrayList<Entity> getSons(Long fatherId, Long catalogId) {
+		EntityManager entityManager;
+		List<Entry> list;
+		ArrayList<Entry> listEntries;
+		entityManager = EMF.get().createEntityManager();
+		String sql;
+		if (fatherId == null) {
+			sql = "SELECT f FROM FolderDB f WHERE f.catalogId=" + catalogId
+					+ " AND f.fatherId=NULL";
+		} else {
+			sql = "SELECT f FROM FolderDB f WHERE f.fatherId=" + fatherId;
+		}
+		list = entityManager.createQuery(sql).getResultList();
+		listEntries = new ArrayList<Entry>(list);
+		entityManager = EMF.get().createEntityManager();
+
+		if (fatherId == null) {
+			sql = "SELECT f FROM FileDB f WHERE f.catalogId=" + catalogId
+					+ " AND f.fatherId=NULL";
+		} else {
+			sql = "SELECT f FROM FileDB f WHERE f.fatherId=" + fatherId;
+		}
+
+		list = entityManager.createQuery(sql).getResultList();
+		listEntries.addAll(list);
+		return buildEntities(listEntries);
+
+	}
+
+	private ArrayList<Entity> buildEntities(ArrayList<Entry> listEntitys) {
+		ArrayList<Entity> sons = new ArrayList<Entity>();
+		for (int i = 0; i < listEntitys.size(); i++) {
+			Entry son = listEntitys.get(i);
+			if (son instanceof FolderDB) {
+				Folder sonF = new Folder(son.getName(), son.getId(),
+						son.getCatalogId());
+				cloneFolderSys((FolderDB) son, sonF);
+				sons.add(sonF);
+			} else {
+				File sonf = new File(son.getName(), son.getId(),
+						son.getCatalogId());
+				cloneFileSys((FileDB) son, sonf);
+				sons.add(sonf);
+			}
+		}
+		return sons;
+	}
+
+	public boolean isRecentToSave(Annotation annotation) {
+		Annotation annotationInDB = loadAnnotationById(annotation.getId());
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		now = calendar.getTime();
+		annotation.setCreatedDate(now);
+		if (annotation.getCreatedDate().before(annotationInDB.getCreatedDate())) {
+			return false;
+		} else {
+			saveAnnotation(annotation);
+			return true;
+		}
+	}
+
+	public void deleteFolder(Long folderId) throws GeneralException {
+		ids = new ArrayList<Long>();
+		deepFolderDeletion(folderId);
+		deleteEntries(ids);
+
+	}
+
+	private void deleteEntries(ArrayList<Long> entriesIds)
+			throws GeneralException {
+		FolderDB folder;
+		for (int i = 0; i < entriesIds.size(); i++) {
+			folder = loadFolderById(entriesIds.get(i));
+			if (folder != null) {
+				deleteFolderFromParent(folder);
+				// deleteFolder(folder.getId());
+				deletePlainFolder(folder);
+			} else {
+				deleteFile(entriesIds.get(i));
+			}
+		}
+	}
+
+	private void deleteCatalogChildren(ArrayList<Long> catalogChildren)
+			throws GeneralException {
+		FolderDB folder;
+		for (int i = 0; i < catalogChildren.size(); i++) {
+			folder = loadFolderById(catalogChildren.get(i));
+			if (folder != null) {
+				deleteFolder(catalogChildren.get(i));
+			} else {
+				deleteFile(catalogChildren.get(i));
+			}
+		}
+
+	}
+
+	private void deepFolderDeletion(Long folderId) {
+		FolderDB folder = loadFolderById(folderId);
+		if (folder != null) {
+			ArrayList<FolderDB> foldersChildren = getFolderChildren(folder);
+			for (int i = 0; i < foldersChildren.size(); i++) {
+				deepFolderDeletion(foldersChildren.get(i).getId());
+			}
+			ArrayList<FileDB> filesChildren = getFileChildren(folder);
+			for (int i = 0; i < filesChildren.size(); i++) {
+				ids.add(filesChildren.get(i).getId());
+			}
+		}
+		ids.add(folderId);
+	}
+
+	// servicios de usuarios.
+	public UserApp loginAuxiliar(String userEmail) throws UserNotFoundException {
+
+		UserApp userApp = new UserApp();
+		userApp = loadUserByEmail(userEmail);
+		if (userApp == null) { // PROBAR AQUI LANZANDO UNA EXCEPCION CON EL URL
+			// COMO MENSAJE, PERO NO FUNCIONA, VER QUE PASA
+			userApp = new UserApp();
+			userApp.setIsAuthenticated(false);
+			return userApp;
+		}
+		makeAUtilArrayListLong(userApp);
+		makeAUtilArrayListString(userApp);
+		userApp.setLoggedIn(true);
+		userApp.setIsAuthenticated(true);
+		return userApp;
+	}
+
+	public UserApp login(String requestUri) throws UserNotFoundException {
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		UserApp userApp = new UserApp();
+		if (user != null) {
+			userApp = loadUserByEmail(user.getEmail());
+			if (userApp == null) { // PROBAR AQUI LANZANDO UNA EXCEPCION CON EL
+				// URL COMO MENSAJE, PERO NO FUNCIONA, VER
+				// QUE PASA
+				userApp = new UserApp();
+				userApp.setLoggedIn(false);
+				userApp.setLoginUrl(userService.createLoginURL(requestUri));
+				userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
+				userApp.setIsAuthenticated(false);
+				return userApp;
+			}
+
+			makeAUtilArrayListLong(userApp);
+			makeAUtilArrayListString(userApp);
+			userApp.setLoggedIn(true);
+			userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
+			userApp.setLoginUrl(userService.createLoginURL(requestUri));
+		} else {
+
+			userApp.setLoggedIn(false);
+			userApp.setLoginUrl(userService.createLoginURL(requestUri));
+			userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
+		}
+		return userApp;
+	}
+
+	private void makeAUtilArrayListLong(UserApp userApp) {
+		ArrayList<Long> groupIds = new ArrayList<Long>();
+		for (int i = 0; i < userApp.getGroupIds().size(); i++) {
+			Long groupIdAux = userApp.getGroupIds().get(i);
+			groupIds.add(groupIdAux);
+		}
+		userApp.getGroupIds().clear();
+		userApp.setGroupIds((ArrayList<Long>) groupIds);
+	}
+
+	private void makeAUtilArrayListString(UserApp userApp) {
+		ArrayList<String> bookIds = new ArrayList<String>();
+		for (int i = 0; i < userApp.getBookIds().size(); i++) {
+			String bookIdAux = userApp.getBookIds().get(i);
+			bookIds.add(bookIdAux);
+		}
+		userApp.getBookIds().clear();
+		userApp.setBookIds((ArrayList<String>) bookIds);
+
+	}
+
+	public UserApp loadUserById(Long userId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<UserApp> list;
+		ArrayList<UserApp> usersApp;
+		String sql = "SELECT r FROM UserApp r WHERE r.id=" + userId;
+		list = entityManager.createQuery(sql).getResultList();
+		usersApp = new ArrayList<UserApp>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			usersApp.add(null);
+		}
+
+		UserApp userReturned = usersApp.get(0);
+		if (userReturned != null) {
+			userReturned.setBookIds(new ArrayList<String>(userReturned
+					.getBookIds()));
+			userReturned.setGroupIds(new ArrayList<Long>(userReturned
+					.getGroupIds()));
+
+		}
+
+		return usersApp.get(0);
+	}
+
+	public boolean saveUser(UserApp user) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		boolean out = false;
+		if (user.getId() == null) {
+			if (loadUserByEmail(user.getEmail()) == null) {
+				entityManager.persist(user);
+				out = true;
+			}
+		} else {
+			entityManager.merge(user);
+			out = true;
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return out;
+	}
+
+	public ArrayList<UserApp> getUsersApp() throws UserNotFoundException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<UserApp> list;
+		ArrayList<UserApp> listUserApps;
+		String sql = "SELECT a FROM UserApp a WHERE a.profile='Student'";
+		list = entityManager.createQuery(sql).getResultList();
+		listUserApps = new ArrayList<UserApp>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		for (int i = 0; i < listUserApps.size(); i++) {
+			listUserApps.get(i).setBookIds(
+					new ArrayList<String>(listUserApps.get(i).getBookIds()));
+			listUserApps.get(i).setGroupIds(
+					new ArrayList<Long>(listUserApps.get(i).getGroupIds()));
+		}
+		return listUserApps;
+	}
+
+	public ArrayList<UserApp> getProfessor() throws UserNotFoundException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<UserApp> list;
+		ArrayList<UserApp> listUserApps;
+		String sql = "SELECT a FROM UserApp a WHERE a.profile='Professor'";
+		list = entityManager.createQuery(sql).getResultList();
+		listUserApps = new ArrayList<UserApp>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		for (int i = 0; i < listUserApps.size(); i++) {
+			listUserApps.get(i).setBookIds(
+					new ArrayList<String>(listUserApps.get(i).getBookIds()));
+			listUserApps.get(i).setGroupIds(
+					new ArrayList<Long>(listUserApps.get(i).getGroupIds()));
+		}
+		return listUserApps;
+	}
+
+	// NO PROBADO
+	public int deleteUserApp(Long userId) {
+		int total = 0;
+		EntityManager entityManager = EMF.get().createEntityManager();
+		UserApp userAppDeleted = entityManager.find(UserApp.class, userId);
+		total = userAppDeleted.getGroupIds().size();
+		if (userAppDeleted.getGroupIds() != null) {
+			for (int i = 0; i < userAppDeleted.getGroupIds().size(); i++) {
+				removeUserFromGroup(userId, userAppDeleted.getGroupIds().get(i));
+			}
+		}
+		deletePrivateAnnotationsOfUser(userId);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(userAppDeleted);
+		entityTransaction.commit();
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return total;
+	}
+
+	private void deletePrivateAnnotationsOfUser(Long userId) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		ArrayList<Annotation> annotationsToBeDeleted = getPrivateAnnotationsByUserId(userId);
+		if (!annotationsToBeDeleted.isEmpty()) {
+
+			for (int i = 0; i < annotationsToBeDeleted.size(); i++) {
+				deleteAnnotationInFiles(annotationsToBeDeleted.get(i).getId());
+				entityManager = EMF.get().createEntityManager();
+				entityTransaction = entityManager.getTransaction();
+				Annotation annotationToBeDeleted = entityManager
+						.find(Annotation.class, annotationsToBeDeleted.get(i)
+								.getId());
+				entityTransaction.begin();
+				entityManager.remove(annotationToBeDeleted);
+				entityTransaction.commit();
+			}
+		}
+	}
+
+	private ArrayList<Annotation> getPrivateAnnotationsByUserId(Long userId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> listUserApps;
+		String sql = "SELECT a FROM Annotation a WHERE a.userId=" + userId
+				+ "AND a.visibility=false";
+		list = entityManager.createQuery(sql).getResultList();
+		listUserApps = new ArrayList(list);
+		entityManager.close();
+		return listUserApps;
+	}
+
+	public void removeUserAndGroupRelation(Long userId, Long groupId) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		UserApp userApp = loadUserById(userId);
+		if (userApp.getGroupIds().contains(groupId)) {
+			userApp.getGroupIds().remove(groupId);
+			entityManager = EMF.get().createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(userApp);
+			entityTransaction.commit();
+			GroupApp group = loadGroupById2(groupId);
+			if (group.getUsersIds().contains(userId)) {
+				group.getUsersIds().remove(userId);
+				entityManager = EMF.get().createEntityManager();
+				entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.merge(group);
+				entityTransaction.commit();
+			}
+		}
+	}
+
+	public GroupApp loadGroupById(Long groupId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<GroupApp> list;
+		ArrayList<GroupApp> groups;
+		String sql = "SELECT r FROM GroupApp r WHERE r.id=" + groupId;
+		list = entityManager.createQuery(sql).getResultList();
+		groups = new ArrayList<GroupApp>(list);
+		GroupApp group = groups.get(0);
+
+		ArrayList<Long> userIds = new ArrayList<Long>(
+				(java.util.ArrayList<Long>) group.getUsersIds());
+		group.getUsersIds().clear();
+		group.setUsersIds(userIds);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			groups.add(null);
+		}
+		return group;
+	}
+
+	public GroupApp loadGroupById2(Long groupId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<GroupApp> list;
+		ArrayList<GroupApp> groups;
+		String sql = "SELECT r FROM GroupApp r WHERE r.id=" + groupId;
+		list = entityManager.createQuery(sql).getResultList();
+		groups = new ArrayList<GroupApp>(list);
+		GroupApp group = groups.get(0);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			groups.add(null);
+		}
+		return group;
+	}
+
+	public GroupApp loadGroupByName(String groupName) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<GroupApp> list;
+		ArrayList<GroupApp> groups;
+		String sql = "SELECT r FROM GroupApp r WHERE r.name='" + groupName
+				+ "'";
+		list = entityManager.createQuery(sql).getResultList();
+		groups = new ArrayList<GroupApp>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			groups.add(null);
+		}
+		GroupApp groupReturn = groups.get(0);
+		if (groupReturn != null) {
+			groupReturn.setUsersIds(new ArrayList<Long>(groupReturn
+					.getUsersIds()));
+			groupReturn.setBookIds(new ArrayList<String>(groupReturn
+					.getBookIds()));
+
+		}
+
+		return groupReturn;
+	}
+
+	public boolean saveNewGroup(GroupApp groupApp)
+			throws GroupNotFoundException {
+		ArrayList<GroupApp> groupApps = getGroups();
+		boolean found = false;
+		for (int i = 0; i < groupApps.size(); i++) {
+			if (groupApp.getName().equals(groupApps.get(i).getName())) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			saveGroup(groupApp);
+		}
+		return found;
+	}
+
+	public void saveGroup(GroupApp groupApp) {
+		ArrayList<Long> usersIdsBeforeUpdate = null;
+		boolean isNewGroup = false;
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (groupApp.getId() == null) {
+			entityManager.persist(groupApp);
+			isNewGroup = true;
+
+		} else {
+			usersIdsBeforeUpdate = getUsersIdsByGroupId(groupApp.getId());
+
+			entityManager.merge(groupApp);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.close();
+		if (isNewGroup) {
+			usersIdsBeforeUpdate = groupApp.getUsersIds();
+			if (usersIdsBeforeUpdate != null) {
+				saveGroupIdInUsers(groupApp.getId(), usersIdsBeforeUpdate);
+			}
+		}
+		ArrayList<Long> usersIdsAfterUpdate = groupApp.getUsersIds();
+		ArrayList<Long> newUsersIds = newUsersinGroup(usersIdsBeforeUpdate,
+				usersIdsAfterUpdate);
+		if (newUsersIds != null) {
+			saveGroupIdInUsers(groupApp.getId(), newUsersIds);
+		}
+	}
+
+	private void saveGroupIdInUsers(Long groupId, ArrayList<Long> usersIds) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		for (int i = 0; i < usersIds.size(); i++) {
+			entityManager = EMF.get().createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			UserApp userAppChanged = entityManager.find(UserApp.class,
+					usersIds.get(i));
+			userAppChanged.getGroupIds().add(groupId);
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(userAppChanged);
+			entityTransaction.commit();
+		}
+	}
+
+	private ArrayList<Long> newUsersinGroup(ArrayList<Long> oldUsers,
+			ArrayList<Long> oldUsersUpdated) {
+		ArrayList<Long> newUsersIds = null;
+		if (oldUsers != null) {
+			if (oldUsers.size() != oldUsersUpdated.size()) {
+				newUsersIds = new ArrayList<Long>();
+				for (int i = 0; i < oldUsersUpdated.size(); i++) {
+					if (!(oldUsers.contains(oldUsersUpdated.get(i)))) {
+						newUsersIds.add(oldUsersUpdated.get(i));
+					}
+				}
+			}
+		}
+
+		return newUsersIds;
+	}
+
+	private ArrayList<Long> getUsersIdsByGroupId(Long groupId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<List<Long>> list;
+		ArrayList<List<Long>> listcopy;
+		ArrayList<Long> listUserApps;
+		String sql = "SELECT DISTINCT g.usersIds FROM GroupApp g WHERE g.id="
+				+ groupId;
+		list = entityManager.createQuery(sql).getResultList();
+
+		listcopy = new ArrayList<List<Long>>(list);
+
+		listUserApps = new ArrayList<Long>(listcopy.get(0));
+		entityManager.close();
+		return listUserApps;
+	}
+
+	// NO PROBADO
+	public ArrayList<UserApp> getUsersByGroupId(Long groupId) {
+		ArrayList<Long> listUserApps;
+		listUserApps = getUsersIdsByGroupId(groupId);
+		ArrayList<UserApp> usersByGroup = new ArrayList<UserApp>();
+		for (int i = 0; i < listUserApps.size(); i++) {
+			UserApp user = loadUserById(listUserApps.get(i));
+			usersByGroup.add(user);
+		}
+		return usersByGroup;
+	}
+
+	private void removeUserFromGroup(Long userId, Long groupId) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		GroupApp group = loadGroupById(groupId);
+		if (group.getUsersIds().contains(userId)) {
+			group.getUsersIds().remove(userId);
+			entityManager = EMF.get().createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(group);
+			entityTransaction.commit();
+		}
+	}
+
+	public UserApp loadUserByEmail(String email) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<UserApp> list;
+		ArrayList<UserApp> usersApp;
+		String sql = "SELECT r FROM UserApp r WHERE r.email='" + email + "'";
+		list = entityManager.createQuery(sql).getResultList();
+		usersApp = new ArrayList<UserApp>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+
+		}
+		if (list.isEmpty()) {
+			usersApp.add(null);
+		}
+
+		UserApp userReturned = usersApp.get(0);
+		if (userReturned != null) {
+			userReturned.setBookIds(new ArrayList<String>(userReturned
+					.getBookIds()));
+			userReturned.setGroupIds(new ArrayList<Long>(userReturned
+					.getGroupIds()));
+
+		}
+
+		return usersApp.get(0);
+	}
+
+	// NO PROBADO
+	public ArrayList<GroupApp> getGroups() throws GroupNotFoundException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<GroupApp> list;
+		ArrayList<GroupApp> listGroupApps;
+		String sql = "SELECT a FROM GroupApp a";
+		list = entityManager.createQuery(sql).getResultList();
+		listGroupApps = new ArrayList<GroupApp>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		for (int i = 0; i < listGroupApps.size(); i++) {
+			listGroupApps.get(i).setUsersIds(
+					new ArrayList<Long>(listGroupApps.get(i).getUsersIds()));
+			listGroupApps.get(i).setBookIds(
+					new ArrayList<String>(listGroupApps.get(i).getBookIds()));
+		}
+
+		return listGroupApps;
+	}
+
+	public int deleteGroup(Long groupId) {
+		int total = 0;
+		EntityManager entityManager = EMF.get().createEntityManager();
+		GroupApp groupToBeDeleted = entityManager.find(GroupApp.class, groupId);
+		if (groupToBeDeleted.getUsersIds() != null) {
+			total = groupToBeDeleted.getUsersIds().size();
+			for (int i = 0; i < total; i++) {
+				removeGroupFromUser(groupId, groupToBeDeleted.getUsersIds()
+						.get(i));
+			}
+		}
+		removeGroupFromReadingActivity(groupId);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(groupToBeDeleted);
+		entityTransaction.commit();
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return total;
+	}
+
+	public int deleteProfessor(Long professorId) throws GeneralException,
+			NullParameterException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		UserApp professorDeleted = entityManager.find(UserApp.class,
+				professorId);
+		int total = removeReadingActivitiesOfProfessor(professorId);
+		deletePrivateCatalogsByProfessorId(professorId);
+		deletePrivateAnnotationsOfUser(professorId);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(professorDeleted);
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return total;
+	}
+
+	private void removeGroupFromUser(Long groupId, Long userId) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		UserApp userApp = loadUserById(userId);
+
+		if (userApp.getGroupIds().contains(groupId)) {
+			userApp.getGroupIds().remove(groupId);
+			entityManager = EMF.get().createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(userApp);
+			entityTransaction.commit();
+		}
+	}
+
+	public ArrayList<Annotation> getAnnotationsByPageNumbertByStudentId(
+			Integer pageNumber, String bookId, Long studentId,
+			Long readingActivityId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		java.util.ArrayList<Annotation> listAnnotations2 = new ArrayList<Annotation>();
+		String sql = "SELECT a FROM Annotation a WHERE a.pageNumber="
+				+ pageNumber + " AND a.bookId='" + bookId
+				+ "' AND a.readingActivity=" + readingActivityId;
+		list = entityManager.createQuery(sql).getResultList();
+		listAnnotations2 = new ArrayList(list);
+		ArrayList<Annotation> annotationsSorted = filterAnnotationsByStudent(
+				listAnnotations2, studentId);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+
+		}
+
+		for (int i = 0; i < annotationsSorted.size(); i++) {
+
+			annotationsSorted.get(i).setVisibilityGroupIds(
+					new ArrayList<Long>(annotationsSorted.get(i)
+							.getVisibilityGroupIds()));
+			annotationsSorted.get(i).setUpdatableGroupIds(
+					new ArrayList<Long>(annotationsSorted.get(i)
+							.getUpdatableGroupIds()));
+			annotationsSorted.get(i).setFileIds(
+					new ArrayList<Long>(annotationsSorted.get(i).getFileIds()));
+		}
+
+		return annotationsSorted;
+
+	}
+
+	private ArrayList<Annotation> filterAnnotationsByStudent(
+			ArrayList<Annotation> annotations, Long studentId) {
+		ArrayList<Annotation> annotationsSorted = new ArrayList<Annotation>();
+		for (int i = 0; i < annotations.size(); i++) {
+			Annotation annotation = annotations.get(i);
+			if (!(annotation.getUpdatability())
+					|| !(annotation.getUserId().equals(studentId))) {
+
+				if (annotation.getVisibility()) {
+					if (!annotation.getUpdatability()
+							&& annotation.getUserId().equals(studentId)) {
+						annotation.setIsEditable(true);
+
+					}
+					annotationsSorted.add(annotation);
+
+				} else if (!annotation.getVisibility()
+						&& annotation.getUserId().equals(studentId)) {
+					annotation.setIsEditable(true);
+					annotationsSorted.add(annotation);
+
+				}
+			} else {
+				annotation.setIsEditable(true);
+				annotationsSorted.add(annotation);
+			}
+		}
+		return annotationsSorted;
+
+	}
+
+	// NO PROBADO
+	public ArrayList<GroupApp> getGroupsByUserId(Long userId) {
+		ArrayList<GroupApp> groups = new ArrayList<GroupApp>();
+		UserApp userApp = loadUserById(userId);
+
+		if (!userApp.getGroupIds().isEmpty()) {
+			for (int i = 0; i < userApp.getGroupIds().size(); i++) {
+				GroupApp groupApp = loadGroupById(userApp.getGroupIds().get(i));
+				groups.add(groupApp);
+			}
+		}
+		for (int i = 0; i < groups.size(); i++) {
+			groups.get(i).setUsersIds(
+					new ArrayList<Long>(groups.get(i).getUsersIds()));
+			groups.get(i).setBookIds(
+					new ArrayList<String>(groups.get(i).getBookIds()));
+		}
+		return groups;
+	}
+
+	// LANGUAGES
+
+	public ArrayList<String> getLanguagesNames() throws GeneralException,
+			LanguageNotFoundException, NullParameterException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<String> list;
+		ArrayList<String> listLanguages;
+		try {
+			String sql = "SELECT DISTINCT at.nameId FROM Language at";
+			list = entityManager.createQuery(sql).getResultList();
+			listLanguages = new ArrayList<String>(list);
+		} catch (Exception e) {
+			throw new GeneralException("Exception in method loadLanguageById: "
+					+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+
+		return listLanguages;
+	}
+
+	public ArrayList<Language> getLanguages() throws GeneralException,
+			LanguageNotFoundException, NullParameterException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Language> list;
+		ArrayList<Language> listLanguages;
+		try {
+			String sql = "SELECT at FROM Language at";
+			list = entityManager.createQuery(sql).getResultList();
+			listLanguages = new ArrayList<Language>(list);
+		} catch (Exception e) {
+			throw new GeneralException("Exception in method loadLanguageById: "
+					+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return listLanguages;
+	}
+
+	public Language loadLanguageByName(String nameId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<Language> list;
+		ArrayList<Language> languages;
+		String sql = "SELECT r FROM Language r WHERE r.nameId='" + nameId + "'";
+		list = entityManager.createQuery(sql).getResultList();
+		languages = new ArrayList<Language>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			languages.add(null);
+		}
+		return languages.get(0);
+	}
+
+	public int deleteLanguage(String languageName) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		Language languageToBeDeleted = entityManager.find(Language.class,
+				languageName);
+		int total = removeLanguageFromReadingActivity(languageName);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(languageToBeDeleted);
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return total;
+	}
+
+	public void saveLanguage(Language language) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (language.getNameId() == null) {
+			entityManager.persist(language);
+		} else {
+			entityManager.merge(language);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	// RECENT ACTIVITY
+
+	public void saveReadingActivity(ReadingActivity readingActivity) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (readingActivity.getId() == null) {
+			entityManager.persist(readingActivity);
+		} else {
+			entityManager.merge(readingActivity);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	public ReadingActivity loadReadingActivityById(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.id=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			readingActivitys.add(null);
+		}
+		return readingActivitys.get(0);
+	}
+
+	public void deleteReadingActivity(Long readingActivityId)
+			throws GeneralException, NullParameterException,
+			AnnotationNotFoundException {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		int total = removeReadingActivityFromAnnotations(readingActivityId);
+		entityManager = EMF.get().createEntityManager();
+		ReadingActivity readingActivityDeleted = entityManager.find(
+				ReadingActivity.class, readingActivityId);
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(readingActivityDeleted);
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	public int removeReadingActivityFromAnnotations(Long readingActivity)
+			throws GeneralException, NullParameterException,
+			AnnotationNotFoundException {
+		int total = 0;
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		ArrayList<Annotation> annotations = getAnnotationsByReadingActivityId(readingActivity);
+		if (!annotations.isEmpty()) {
+			for (Annotation annotation : annotations) {
+				deleteAnnotation(annotation);
+			}
+			total = annotations.size();
+		}
+		return total;
+	}
+
+	private ArrayList<Annotation> getAnnotationsByReadingActivityId(
+			Long readingActivity) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> readingActivitys;
+		String sql = "SELECT r FROM Annotation r WHERE r.readingActivity="
+				+ readingActivity;
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<Annotation>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return readingActivitys;
+	}
+
+	public ArrayList<ReadingActivity> getReadingActivityByUserId(Long userId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		UserApp user = entityManager.find(UserApp.class, userId);
+		ArrayList<ReadingActivity> readingActivities = new ArrayList<ReadingActivity>();
+		for (Long groupId : user.getGroupIds()) {
+			ArrayList<ReadingActivity> readingActivitiesByGroupId = getReadingActivityByGroupId(groupId);
+			if (!readingActivitiesByGroupId.isEmpty()) {
+				readingActivities.addAll(readingActivitiesByGroupId);
+			}
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return readingActivities;
+	}
+
+	private ArrayList<ReadingActivity> getReadingActivityByGroupId(Long groupId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.groupId="
+				+ groupId;
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return readingActivitys;
+	}
+
+	private void deletePrivateCatalogsByProfessorId(Long professorId)
+			throws GeneralException, NullParameterException {
+		ArrayList<Catalogo> catalogos = getPrivateCatalogsByProfessorId(professorId);
+		for (int i = 0; i < catalogos.size(); i++) {
+			deleteCatalog(catalogos.get(i).getId());
+		}
+
+	}
+
+	public ArrayList<Catalogo> getPrivateCatalogsByProfessorId(Long professorId) {
+
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Catalogo> list;
+		ArrayList<Catalogo> listClientCatalogs = new ArrayList<Catalogo>();
+		String sql = "SELECT a FROM Catalogo a WHERE a.professorId="
+				+ professorId + "AND a.isPrivate=true";
+		list = entityManager.createQuery(sql).getResultList();
+		listClientCatalogs = new ArrayList<Catalogo>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return listClientCatalogs;
+	}
+
+	private ArrayList<Catalogo> getCatalogsByProfessorId(Long professorId) {
+
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Catalogo> list;
+		ArrayList<Catalogo> listClientCatalogs = new ArrayList<Catalogo>();
+		String sql = "SELECT a FROM Catalogo a WHERE a.professorId="
+				+ professorId;
+		list = entityManager.createQuery(sql).getResultList();
+		listClientCatalogs = new ArrayList<Catalogo>(list);
+		// backed.ArrayList magia para tranformar a util.java.ArrayList
+		for (int i = 0; i < listClientCatalogs.size(); i++) {
+			Catalogo catalogo = listClientCatalogs.get(i);
+			ArrayList<Long> entries = new ArrayList<Long>(
+					(java.util.ArrayList<Long>) catalogo.getEntryIds());
+			catalogo.getEntryIds().clear();
+			catalogo.setEntryIds(entries);
+		}
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return listClientCatalogs;
+	}
+
+	public ArrayList<Catalogo> getVisbibleCatalogsByProfessorId(Long professorId) {
+
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Catalogo> list;
+		ArrayList<Catalogo> listClientCatalogs = getPrivateCatalogsByProfessorId(professorId);
+		ArrayList<Catalogo> listQueryCatalogs = new ArrayList<Catalogo>();
+		String sql = "SELECT a FROM Catalogo a WHERE a.isPrivate=false";
+		list = entityManager.createQuery(sql).getResultList();
+		listQueryCatalogs = new ArrayList<Catalogo>(list);
+		listClientCatalogs.addAll(listQueryCatalogs);
+		// backed.ArrayList magia para tranformar a util.java.ArrayList
+		for (int i = 0; i < listClientCatalogs.size(); i++) {
+			Catalogo catalogo = listClientCatalogs.get(i);
+			ArrayList<Long> entries = new ArrayList<Long>(
+					(java.util.ArrayList<Long>) catalogo.getEntryIds());
+			catalogo.getEntryIds().clear();
+			catalogo.setEntryIds(entries);
+		}
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return listClientCatalogs;
+	}
+
+	private void removeGroupFromReadingActivity(Long groupId) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		ArrayList<ReadingActivity> readingActivities = getReadingActivityByGroupId(groupId);
+		if (!readingActivities.isEmpty()) {
+			for (ReadingActivity readingActivity : readingActivities) {
+				readingActivity.setGroupId(null);
+				entityManager = EMF.get().createEntityManager();
+				entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.merge(readingActivity);
+				entityTransaction.commit();
+			}
+		}
+
+	}
+
+	private int removeLanguageFromReadingActivity(String languageName) {
+		int total = 0;
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		ArrayList<ReadingActivity> readingActivities = getReadingActivityByLanguageName(languageName);
+		if (!readingActivities.isEmpty()) {
+			for (ReadingActivity readingActivity : readingActivities) {
+				readingActivity.setLanguageName("");
+				entityManager = EMF.get().createEntityManager();
+				entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.merge(readingActivity);
+				entityTransaction.commit();
+			}
+			total = readingActivities.size();
+		}
+		return total;
+	}
+
+	private int removeCatalogFromReadingActivities(Long catalogId) {
+		int total = 0;
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		ArrayList<ReadingActivity> readingActivities = getReadingActivitiesByCatalogId(catalogId);
+		if (!readingActivities.isEmpty()) {
+			for (ReadingActivity readingActivity : readingActivities) {
+				if (readingActivity.getCatalogId().equals(catalogId)) {
+					readingActivity.setCatalogId(null);
+				} else {
+					readingActivity.setOpenCatalogId(null);
+				}
+
+				entityManager = EMF.get().createEntityManager();
+				entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.merge(readingActivity);
+				entityTransaction.commit();
+			}
+			total = readingActivities.size();
+		}
+		return total;
+	}
+
+	private ArrayList<ReadingActivity> getReadingActivitiesByCatalogId(
+			Long catalogId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		List<ReadingActivity> list2;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.catalogId="
+				+ catalogId;
+		list = entityManager.createQuery(sql).getResultList();
+		sql = "SELECT r FROM ReadingActivity r WHERE r.openCatalogId="
+				+ catalogId;
+		list2 = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+		readingActivitys.addAll(list2);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return readingActivitys;
+	}
+
+	private int removeReadingActivitiesOfProfessor(Long professorId) {
+		int total = 0;
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		ArrayList<ReadingActivity> readingActivities = getReadingActivityByProfessorId(professorId);
+		if (!readingActivities.isEmpty()) {
+			for (ReadingActivity readingActivity : readingActivities) {
+				entityManager = EMF.get().createEntityManager();
+				entityTransaction = entityManager.getTransaction();
+				ReadingActivity readingActivityToBeRemoved = entityManager
+						.find(ReadingActivity.class, readingActivity.getId());
+				entityTransaction.begin();
+				entityManager.remove(readingActivityToBeRemoved);
+				entityTransaction.commit();
+				if (entityManager.isOpen()) {
+					entityManager.close();
+				}
+			}
+			total = readingActivities.size();
+		}
+		return total;
+	}
+
+	public ArrayList<ReadingActivity> getReadingActivityByProfessorId(
+			Long professorId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.professorId="
+				+ professorId;
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return readingActivitys;
+	}
+
+	private ArrayList<ReadingActivity> getReadingActivityByLanguageName(
+			String languageName) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.languageName='"
+				+ languageName + "'";
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return readingActivitys;
+	}
+
+	public void removeFileFromAnnotation(Long annotationId, Long fileId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction;
+		Annotation annotation = entityManager.find(Annotation.class,
+				annotationId);
+		if (annotation.getFileIds().contains(fileId)) {
+			annotation.getFileIds().remove(fileId);
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(annotation);
+			entityTransaction.commit();
+			entityManager = EMF.get().createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			FileDB fileDB = entityManager.find(FileDB.class, fileId);
+			if (fileDB.getAnnotationsIds().contains(annotationId)) {
+				fileDB.getAnnotationsIds().remove(annotationId);
+				// entityManager = EMF.get().createEntityManager();
+				entityTransaction.begin();
+				entityManager.merge(fileDB);
+				entityTransaction.commit();
+			}
+		}
+
+	}
+
+	public ArrayList<FileDB> getFilesByIds(ArrayList<Long> ids) {
+		ArrayList<FileDB> fileDBs = new ArrayList<FileDB>();
+		for (int i = 0; i < ids.size(); i++) {
+			FileDB FB = loadFileById(ids.get(i));
+			fileDBs.add(FB);
+		}
+
+		return fileDBs;
+	}
+
+	private FileDB loadFileDBByNameAndCatalogId(String name, Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<FileDB> list;
+		ArrayList<FileDB> files;
+		String sql = "SELECT f FROM FileDB f WHERE f.name='" + name
+				+ "' AND f.catalogId=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		files = new ArrayList<FileDB>(list);
+
+		FileDB fileDB = null;
+		if (!list.isEmpty()) {
+			fileDB = files.get(0);
+			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
+					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
+			fileDB.getAnnotationsIds().clear();
+
+			fileDB.setAnnotationsIds(annotationsIds);
+
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return fileDB;
+	}
+
+	public ArrayList<FileDB> getFilesByNameAndCatalogId(
+			ArrayList<String> names, Long catalogId) {
+		ArrayList<FileDB> fileDBs = new ArrayList<FileDB>();
+		for (int i = 0; i < names.size(); i++) {
+			fileDBs.add(loadFileDBByNameAndCatalogId(names.get(i), catalogId));
+		}
+
+		return fileDBs;
+	}
+
+	public ArrayList<Long> getEntriesIdsByNames(ArrayList<String> names,
+			Long catalogTeacher, Long catalogOpen) {
+		/*
+		 * buscar tipos con los nombres/* buscar las carpetas con names a�adir a
+		 * la lista los tipos obtenidos a�adir a la lista funcion-recursiva
+		 * {lista de carpetas}
+		 */
+		EntityManager entityManager;
+		ArrayList<Long> listFiles = new ArrayList<Long>();
+		ArrayList<Long> listFolder = new ArrayList<Long>();
+		entityManager = EMF.get().createEntityManager();
+		String sql;
+		for (int i = 0; i < names.size(); i++) {
+			Entry inputFile = loadFileByNameAndCatalogId(names.get(i)
+					.toUpperCase(), catalogTeacher);
+			Entry inputFolder = loadFolderByNameAndCatalogId(names.get(i)
+					.toUpperCase(), catalogTeacher);
+			if (inputFile != null) {
+				listFiles.add(inputFile.getId());
+			}
+			if (inputFolder != null) {
+				listFolder.add(inputFolder.getId());
+
+			}
+			inputFile = loadFileByNameAndCatalogId(names.get(i).toUpperCase(),
+					catalogOpen);
+			inputFolder = loadFolderByNameAndCatalogId(names.get(i)
+					.toUpperCase(), catalogOpen);
+			if (inputFile != null) {
+				listFiles.add(inputFile.getId());
+			}
+
+			if (inputFolder != null) {
+				listFolder.add(inputFolder.getId());
+
+			}
+		}
+
+		listFiles.addAll(getChildrenFilesIdsByFolders(listFolder));
+
+		return listFiles;
+
+	}
+
+	private FolderDB loadFolderByNameAndCatalogId(String folderName,
+			Long catalogId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<FolderDB> list;
+		ArrayList<FolderDB> folders;
+		String sql = "SELECT r FROM FolderDB r WHERE r.uppercaseName='"
+				+ folderName + "' AND r.catalogId=" + catalogId;
+		list = entityManager.createQuery(sql).getResultList();
+		folders = new ArrayList<FolderDB>(list);
+
+		if (list.isEmpty()) {
+			return null;
+		}
+
+		FolderDB folderDB = folders.get(0);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return folderDB;
+	}
+
+	private ArrayList<Long> getChildrenFilesIdsByFolders(
+			ArrayList<Long> folderIds) {
+		ArrayList<Entry> entryChildren = new ArrayList<Entry>();
+		for (Long fatherId : folderIds) {
+			entryChildren.addAll(getSons(fatherId));
+		}
+
+		ArrayList<Long> fileSons = new ArrayList<Long>();
+		ArrayList<Long> folderSons = new ArrayList<Long>();
+
+		for (Entry entry : entryChildren) {
+			if (entry instanceof FileDB) {
+				fileSons.add(entry.getId());
+			} else {
+
+				folderSons.add(entry.getId());
+			}
+		}
+		if (!folderSons.isEmpty()) {
+			ArrayList<Long> recursiveChildren = getChildrenFilesIdsByFolders(folderSons);
+			fileSons.addAll(recursiveChildren);
+		}
+
+		return fileSons;
+	}
+
+	public ArrayList<Entry> getSons(Long fatherId) {
+		EntityManager entityManager;
+		List<Entry> list;
+		ArrayList<Entry> listEntries;
+		entityManager = EMF.get().createEntityManager();
+		String sql;
+		sql = "SELECT f FROM FolderDB f WHERE f.fatherId=" + fatherId;
+		list = entityManager.createQuery(sql).getResultList();
+		listEntries = new ArrayList<Entry>(list);
+		entityManager = EMF.get().createEntityManager();
+		sql = "SELECT f FROM FileDB f WHERE f.fatherId=" + fatherId;
+		list = entityManager.createQuery(sql).getResultList();
+		listEntries.addAll(list);
+		return listEntries;
+
+	}
+
+	public ArrayList<Annotation> getAnnotationsByIdsStudent(ArrayList<Long> ids,Long Student) {
+		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		for (int i = 0; i < ids.size(); i++) {
+			Annotation annotation = loadAnnotationById(ids.get(i));
+			if (annotation != null) {
+				annotations.add(annotation);
+			}
+
+		}
+		ArrayList<Annotation> annotationsSorted = filterAnnotationsByStudent(
+				annotations, Student);
+		for (int i = 0; i < annotations.size(); i++) {
+
+			annotations.get(i).setVisibilityGroupIds(
+					new ArrayList<Long>(annotations.get(i)
+							.getVisibilityGroupIds()));
+			annotations.get(i).setUpdatableGroupIds(
+					new ArrayList<Long>(annotations.get(i)
+							.getUpdatableGroupIds()));
+			annotations.get(i).setFileIds(
+					new ArrayList<Long>(annotations.get(i).getFileIds()));
+		}
+		return annotations;
+	}
+
+	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids) {
+		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		for (int i = 0; i < ids.size(); i++) {
+			Annotation annotation = loadAnnotationById(ids.get(i));
+			if (annotation != null) {
+				annotations.add(annotation);
+			}
+
+		}
+		for (int i = 0; i < annotations.size(); i++) {
+
+			annotations.get(i).setVisibilityGroupIds(
+					new ArrayList<Long>(annotations.get(i)
+							.getVisibilityGroupIds()));
+			annotations.get(i).setUpdatableGroupIds(
+					new ArrayList<Long>(annotations.get(i)
+							.getUpdatableGroupIds()));
+			annotations.get(i).setFileIds(
+					new ArrayList<Long>(annotations.get(i).getFileIds()));
+		}
+		return annotations;
+	}
+	
+	public ArrayList<Annotation> getAnnotationsByAuthors(
+			ArrayList<Long> authorsIds) {
+		ArrayList<Annotation> Annotations = new ArrayList<Annotation>();
+		for (int i = 0; i < authorsIds.size(); i++) {
+			ArrayList<Annotation> Annotation = loadAnnotationByAuthorId(authorsIds.get(i));
+			if (Annotation != null) {
+				Annotations.addAll(Annotation);
+			}
+
+		}
+		return Annotations;
+	}
+
+	public ArrayList<Annotation> loadAnnotationByAuthorId(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> annotations;
+		String sql = "SELECT r FROM Annotation r WHERE r.userId=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		annotations = new ArrayList<Annotation>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			//annotations.add(null);
+		}
+		ArrayList<Annotation> annotationReturnArra=new ArrayList<Annotation>();
+		for (Annotation annotation : annotations){
+		Annotation annotationReturn = annotation;
+		if (annotationReturn != null) {
+			annotationReturn.setFileIds(new ArrayList<Long>(annotationReturn
+					.getFileIds()));
+			annotationReturn.setVisibilityGroupIds(new ArrayList<Long>(
+					annotationReturn.getVisibilityGroupIds()));
+			annotationReturn.setUpdatableGroupIds(new ArrayList<Long>(
+					annotationReturn.getUpdatableGroupIds()));
+		}
+		annotationReturnArra.add(annotationReturn);
+		}
+
+		return annotationReturnArra;
+
+	}
+
+//	public ArrayList<Annotation> getAnnotationsByIdsAndAuthors(
+//			ArrayList<Long> ids, ArrayList<Long> authorIds) {
+//		ArrayList<Annotation> annotationsAux = getAnnotationsByIds(ids);
+//		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+//		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+//			annotations.addAll(annotationsAux);
+//		}
+//		annotationsAux = getAnnotationsByAuthors(authorIds);
+//		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+//			for (int i = 0; i < annotationsAux.size(); i++) {
+//				if (!ids.contains(annotationsAux.get(i).getId())) {
+//					annotations.add(annotationsAux.get(i));
+//				}
+//			}
+//		}
+//		return annotations;
+//	}
+	
+	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(
+			ArrayList<Long> ids, ArrayList<Long> authorIds,Long Activity) {
+		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids);
+		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			annotations.addAll(annotationsAux);
+		}
+		if (ids.isEmpty()){
+		annotationsAux = getAnnotationsByAuthors(authorIds);
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			for (int i = 0; i < annotationsAux.size(); i++) {
+				if (!ids.contains(annotationsAux.get(i).getId())) {
+					annotations.add(annotationsAux.get(i));
+				}
+			}
+		}}
+		else {
+			if (!authorIds.isEmpty()){
+			annotationsAux=new ArrayList<Annotation>();
+			for (Annotation annotation : annotations) {
+				if (IsIn(annotation,authorIds)) annotationsAux.add(annotation);
+			}
+			annotations=annotationsAux;
+			}
+			
+		}
+		return annotations;
+	}
+	
+	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(
+			ArrayList<Long> ids, ArrayList<Long> authorIds,Long Activity,Long Student) {
+		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsStudent(ids, Student);
+		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			annotations.addAll(annotationsAux);
+		}
+		if (ids.isEmpty()){
+		annotationsAux = getAnnotationsByAuthors(authorIds);
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			for (int i = 0; i < annotationsAux.size(); i++) {
+				if (!ids.contains(annotationsAux.get(i).getId())) {
+					annotations.add(annotationsAux.get(i));
+				}
+			}
+		}}
+		else {
+			if (!authorIds.isEmpty()){
+			annotationsAux=new ArrayList<Annotation>();
+			for (Annotation annotation : annotations) {
+				if (IsIn(annotation,authorIds)) annotationsAux.add(annotation);
+			}
+			annotations=annotationsAux;
+			}
+			
+		}
+		return annotations;
+	}
+	
+	private boolean IsIn(Annotation annotation, ArrayList<Long> authorIds) {
+		for (Long long1 : authorIds) {
+			if (annotation.getUserId().equals(long1)) return true;
+		}
+		return false;
+	}
+
+	public ArrayList<FileDB> getEntriesIdsByIdsRec(ArrayList<Long> Ids) {
+		/*
+		 * buscar tipos con los nombres/* buscar las carpetas con names a�adir a
+		 * la lista los tipos obtenidos a�adir a la lista funcion-recursiva
+		 * {lista de carpetas}
+		 */
+		EntityManager entityManager;
+		ArrayList<FileDB> listFiles = new ArrayList<FileDB>();
+		ArrayList<FolderDB> listFolder = new ArrayList<FolderDB>();
+		entityManager = EMF.get().createEntityManager();
+		String sql;
+		for (int i = 0; i < Ids.size(); i++) {
+			Entry inputFile = loadFileById(Ids.get(i));
+			Entry inputFolder = loadFolderById((Ids.get(i)));
+			if (inputFile != null) {
+				listFiles.add((FileDB) inputFile);
+			}
+			if (inputFolder != null) {
+				listFolder.add((FolderDB) inputFolder);
+
+			}
+			
+		}
+
+		listFiles.addAll(getChildrenFilesIdsByFoldersRec(listFolder));
+
+		ArrayList<FileDB> Salida=new ArrayList<FileDB>();
+		for (FileDB fileDB : listFiles) {
+			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
+					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
+			fileDB.getAnnotationsIds().clear();
+			if (annotationsIds.isEmpty()) 
+				{
+				annotationsIds = new java.util.ArrayList<Long>();
+				FileDB A=new FileDB();
+				A.setAnnotationsIds(annotationsIds);
+				A.setCatalogId(fileDB.getCatalogId());
+				A.setFatherId(fileDB.getFatherId());
+				A.setId(fileDB.getId());
+				A.setName(fileDB.getName());
+				Salida.add(A);
+				}
+			else {
+				fileDB.setAnnotationsIds(annotationsIds);			
+				Salida.add(fileDB);
+			}
+		}
+		return Salida;
+
+	}
+	
+	private ArrayList<FileDB> getChildrenFilesIdsByFoldersRec(
+			ArrayList<FolderDB> folderIds) {
+		ArrayList<Entry> entryChildren = new ArrayList<Entry>();
+		for (FolderDB fatherId : folderIds) {
+			entryChildren.addAll(getSons(fatherId.getId()));
+		}
+
+		ArrayList<FileDB> fileSons = new ArrayList<FileDB>();
+		ArrayList<FolderDB> folderSons = new ArrayList<FolderDB>();
+
+		for (Entry entry : entryChildren) {
+			if (entry instanceof FileDB) {
+				FileDB fileDB = (FileDB) entry;
+				fileSons.add(fileDB);
+				
+			} else {
+
+				folderSons.add((FolderDB) entry);
+			}
+		}
+		if (!folderSons.isEmpty()) {
+			ArrayList<FileDB> recursiveChildren = getChildrenFilesIdsByFoldersRec(folderSons);
+			fileSons.addAll(recursiveChildren);
+		}
+
+		ArrayList<FileDB> Salida=new ArrayList<FileDB>();
+		for (FileDB fileDB : fileSons) {
+			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
+					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
+			fileDB.getAnnotationsIds().clear();
+			if (annotationsIds.isEmpty()) 
+			{
+			annotationsIds = new java.util.ArrayList<Long>();
+			FileDB A=new FileDB();
+			A.setAnnotationsIds(annotationsIds);
+			A.setCatalogId(fileDB.getCatalogId());
+			A.setFatherId(fileDB.getFatherId());
+			A.setId(fileDB.getId());
+			A.setName(fileDB.getName());
+			Salida.add(A);
+			}
+		else {
+			fileDB.setAnnotationsIds(annotationsIds);			
+			Salida.add(fileDB);
+		}
+		}
+		
+		return fileSons;
+	}
+
+
+}
