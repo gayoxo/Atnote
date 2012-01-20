@@ -44,15 +44,13 @@ public class TextComment extends DialogBox {
 //	private VerticalPanel verticalPanel_3;
 	private Language ActualLang;
 	private Annotation annotation;
-	private PanelTextComentAuth PanelTexto;
+	private PanelTextComent PanelTexto;
 	
 	
 	public TextComment(TextSelector textSelectorin, Book book) {
 
 		super(false);
 		setAnimationEnabled(true);
-		setGlassEnabled(true);
-		setModal(true);
 		CommentPanel.setEstado(true);
 		Date now = new Date();
 		setHTML(ActualUser.getUser().getEmail() + "  -  " + now.toGMTString());
@@ -187,7 +185,7 @@ public class TextComment extends DialogBox {
 
 		menuBar.addItem(mntmCancelar);
 
-		PanelTexto=new PanelTextComentAuth(ActualLang);
+		PanelTexto=new PanelTextComent(ActualLang);
 		verticalPanel.add(PanelTexto);
 		PanelTexto.setSize("100%", "100%");
 

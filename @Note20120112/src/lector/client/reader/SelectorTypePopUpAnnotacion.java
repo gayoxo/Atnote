@@ -8,7 +8,7 @@ import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
 import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
-import lector.client.reader.PanelTextComentAuth.CatalogTipo;
+import lector.client.reader.PanelTextComent.CatalogTipo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

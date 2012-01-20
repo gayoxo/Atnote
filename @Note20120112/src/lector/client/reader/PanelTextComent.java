@@ -1,50 +1,250 @@
 package lector.client.reader;
 
+import lector.client.controler.Constants;
+import lector.client.language.Language;
+import lector.client.login.ActualUser;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
-public abstract class PanelTextComent extends Composite{
-	public PanelTextComent() {
+public class PanelTextComent extends Composite {
+
+	private RichTextArea richTextArea;
+	private RichTextToolbar toolbar;
+	private HorizontalPanel horizontalPanel;
+	private HorizontalPanel horizontalPanel_1;
+	private Language ActualLang;
+	private SelectorTypePopUpAnnotacion finder;
+	private Button BotonSelectType;
+	private HorizontalPanel horizontalPanel_3;
+	private HorizontalPanel horizontalPanel_4;
+	private Label LabelPrivPub;
+	private ListBox comboBox;
+	private CheckBox chckbxNewCheckBox;
+	private HorizontalPanel horizontalPanel_2;
+	private Button BotonSelectTypePublic;
+	private HorizontalPanel PenelBotonesTipo;
+	private ScrollPanel scrollPanel;
+
+	public enum CatalogTipo {
+		
+		Catalog1("<img src=\"File.gif\">"), Catalog2("<img src=\"File2.gif\">");
+		
+		private String Texto;
+		
+		private CatalogTipo(String A) {
+			Texto=A;
+		}
+		
+		public String getTexto() {
+			return Texto;
+		}
+		
+	};
+	public PanelTextComent(Language ActualLangin) {
+		
+		VerticalPanel verticalPanel = new VerticalPanel();
+		initWidget(verticalPanel);
+		verticalPanel.setSize("100%", "100%");
+		ActualLang=ActualLangin;
+		richTextArea = new RichTextArea();
+		toolbar = new RichTextToolbar(richTextArea);
+		verticalPanel.add(toolbar);
+		verticalPanel.add(richTextArea);
+		richTextArea.setSize("100%", "100%");
+		
+
+		horizontalPanel = new HorizontalPanel();
+		horizontalPanel
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel.add(horizontalPanel);
+		horizontalPanel.setWidth("");
+
+		horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setSpacing(6);
+		horizontalPanel_1
+				.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_1
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(horizontalPanel_1);
+		horizontalPanel_1.setHeight("53px");
+
+		BotonSelectType = new Button(ActualLang.getSetTypes());
+		BotonSelectType.addClickHandler(new ClickHandler() {
+
+
+			public void onClick(ClickEvent event) {
+				finder = new SelectorTypePopUpAnnotacion(PenelBotonesTipo,ActualUser.getCatalogo(),CatalogTipo.Catalog1);
+				finder.center();
+				finder.setModal(true);
+			}
+		});
+		horizontalPanel_1.add(BotonSelectType);
+		
+		horizontalPanel_2 = new HorizontalPanel();
+		horizontalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_2.setSpacing(6);
+		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(horizontalPanel_2);
+		horizontalPanel_2.setHeight("53px");
+		
+		BotonSelectTypePublic = new Button(ActualLang.getSetTypesPublic());
+		BotonSelectTypePublic.addClickHandler(new ClickHandler() {
+
+
+			public void onClick(ClickEvent event) {
+				finder = new SelectorTypePopUpAnnotacionPublic(PenelBotonesTipo,ActualUser.getOpenCatalog(),CatalogTipo.Catalog2);
+				finder.center();
+				finder.setModal(true);
+			}
+		});
+		horizontalPanel_2.add(BotonSelectTypePublic);
+
+		
+
+		horizontalPanel_3 = new HorizontalPanel();
+		horizontalPanel_3
+				.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_3.setSpacing(6);
+		horizontalPanel_3
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(horizontalPanel_3);
+
+		horizontalPanel_4 = new HorizontalPanel();
+		horizontalPanel_4.setSpacing(3);
+		horizontalPanel_4
+				.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_4
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_3.add(horizontalPanel_4);
+		horizontalPanel_4.setHeight("42px");
+
+		LabelPrivPub = new Label(ActualLang.getVisibility() + " : ");
+		horizontalPanel_4.add(LabelPrivPub);
+
+		comboBox = new ListBox();
+		horizontalPanel_4.add(comboBox);
+		comboBox.addChangeHandler(new ChangeHandler() {
+
+
+			public void onChange(ChangeEvent event) {
+				ListBox a = (ListBox) event.getSource();
+				if (a.getItemText(a.getSelectedIndex()).equals(
+						Constants.ANNOTATION_PUBLIC)) {
+					chckbxNewCheckBox.setVisible(true);
+				} else {
+					chckbxNewCheckBox.setVisible(false);
+				}
+			}
+		});
+
+		comboBox.addItem(Constants.ANNOTATION_PRIVATE);
+		comboBox.addItem(Constants.ANNOTATION_PUBLIC);
+
+		chckbxNewCheckBox = new CheckBox(ActualLang.getUpgradeable());
+		horizontalPanel_3.add(chckbxNewCheckBox);
+		
+		scrollPanel = new ScrollPanel();
+		verticalPanel.add(scrollPanel);
+		scrollPanel.setWidth("100%");
+		
+		PenelBotonesTipo = new HorizontalPanel();
+		scrollPanel.setWidget(PenelBotonesTipo);
+		chckbxNewCheckBox.setVisible(false);
+
+		// Previous = annotation.getTagsIds();
+		// for (int i = 0; i < Previous.size(); i++) {
+		// TagAddedButtonSelection newe = new TagAddedButtonSelection(
+		// Previous.get(i), TagsAdadidos, ListaTags);
+		// ListaTags.add(newe);
+		// TagsAdadidos.add(newe);
+		//
+		// }
+
 	}
 
-
-
 	
-	public abstract void setRichTextArea(RichTextArea richTextArea);
+	public void setRichTextArea(RichTextArea richTextArea) {
+		this.richTextArea = richTextArea;
+	}
 	
-	public abstract RichTextArea getRichTextArea();
+	public RichTextArea getRichTextArea() {
+		return richTextArea;
+	}
 	
-	public abstract HorizontalPanel getPenelBotonesTipo();
+	public HorizontalPanel getPenelBotonesTipo() {
+		return PenelBotonesTipo;
+	}
 	
-	public abstract void setPenelBotonesTipo(HorizontalPanel penelBotonesTipo);
+	public void setPenelBotonesTipo(HorizontalPanel penelBotonesTipo) {
+		PenelBotonesTipo = penelBotonesTipo;
+	}
 	
-	public abstract CheckBox getChckbxNewCheckBox();
+	public CheckBox getChckbxNewCheckBox() {
+		return chckbxNewCheckBox;
+	}
 	
-	public abstract void setChckbxNewCheckBox(CheckBox chckbxNewCheckBox);
+	public void setChckbxNewCheckBox(CheckBox chckbxNewCheckBox) {
+		this.chckbxNewCheckBox = chckbxNewCheckBox;
+	}
 	
-	public abstract void setComboBox(ListBox comboBox);
+	public void setComboBox(ListBox comboBox) {
+		this.comboBox = comboBox;
+	}
 	
-	public abstract ListBox getComboBox();
+	public ListBox getComboBox() {
+		return comboBox;
+	}
 	
-	public abstract RichTextToolbar getToolbar();
+	public RichTextToolbar getToolbar() {
+		return toolbar;
+	}
 	
-	public abstract void setToolbar(RichTextToolbar toolbar);
+	public void setToolbar(RichTextToolbar toolbar) {
+		this.toolbar = toolbar;
+	}
 	
-	public abstract Button getBotonSelectType();
+	public Button getBotonSelectType() {
+		return BotonSelectType;
+	}
 	
-	public abstract Button getBotonSelectTypePublic();
+	public Button getBotonSelectTypePublic() {
+		return BotonSelectTypePublic;
+	}
 	
-	public abstract void setBotonSelectType(Button botonSelectType);
+	public void setBotonSelectType(Button botonSelectType) {
+		BotonSelectType = botonSelectType;
+	}
 	
-	public abstract Label getLabelPrivPub();
+	public Label getLabelPrivPub() {
+		return LabelPrivPub;
+	}
 	
-	public abstract void setLabelPrivPub(Label labelPrivPub);
+	public void setLabelPrivPub(Label labelPrivPub) {
+		LabelPrivPub = labelPrivPub;
+	}
 	
-	public abstract void setUpgradeable(Annotation A);
+	public void setUpgradeable(Annotation A)
+	{
+	if ((!A.getUpdatability())&&(A.getUserId()!=ActualUser.getUser().getId())&&(ActualUser.getRol()==Constants.STUDENT))
+		{
+		BotonSelectTypePublic.setEnabled(false);
+		BotonSelectType.setEnabled(false);
+		richTextArea.setEnabled(false);
+		}
+	}
+	
 }
