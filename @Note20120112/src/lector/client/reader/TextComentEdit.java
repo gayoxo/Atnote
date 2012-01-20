@@ -297,7 +297,7 @@ public class TextComentEdit extends DialogBox {
 		PanelTexto.setSize("100%", "100%");
 		
 		PanelTexto.getRichTextArea().setHTML(annotation.getComment().toString());
-
+		
 
 		bookReaderServiceHolder.getFilesByIds(annotation.getFileIds(),
 				new AsyncCallback<ArrayList<FileDB>>() {
@@ -340,8 +340,8 @@ public class TextComentEdit extends DialogBox {
 
 										}
 									});
-									PanelTexto.getPenelBotonesTipo().add(B);
 								}
+								PanelTexto.getPenelBotonesTipo().add(B);
 							}
 						}
 					}
