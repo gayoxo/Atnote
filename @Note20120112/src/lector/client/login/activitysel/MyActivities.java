@@ -21,6 +21,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -33,6 +39,8 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 public class MyActivities implements EntryPoint {
 
@@ -47,8 +55,9 @@ public class MyActivities implements EntryPoint {
 	public void onModuleLoad() {
 		BooksIDs = new ArrayList<ReadingActivity>();
 		verticalPanel = new VerticalPanel();
+		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		RootPanel RootMenu = RootPanel.get("Menu");
-		RootPanel RootTXOriginal = RootPanel.get("Original");
+		RootPanel RootTXOriginal = RootPanel.get();
 		generaBookIds();
 
 		MenuBar menuBar = new MenuBar(false);
@@ -84,20 +93,21 @@ public class MyActivities implements EntryPoint {
 			menuBar.addItem(menuItem_2);
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		RootTXOriginal.add(horizontalPanel);
 		horizontalPanel.setSize("100%", "100%");
 
 		verticalPanel.setSpacing(10);
 		horizontalPanel.add(verticalPanel);
-		verticalPanel.setSize("218px", "");
-
-		SimplePanel simplePanel = new SimplePanel();
-		horizontalPanel.add(simplePanel);
-		simplePanel.setSize("655px", "655px");
-
-		Image image = new Image("logo_ucm.jpg");
-		simplePanel.setWidget(image);
-		image.setSize("100%", "100%");
+		verticalPanel.setSize("278px", "");
+		
+		VerticalPanel verticalPanel_1 = new VerticalPanel();
+		verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(verticalPanel_1);
+		
+		Image image_1 = new Image("Logo.jpg");
+		verticalPanel_1.add(image_1);
 		BooksIDs = new ArrayList<ReadingActivity>();
 
 	}
@@ -147,9 +157,10 @@ public class MyActivities implements EntryPoint {
 	}
 
 	private void setealibros() {
-		for (int i = 0; i < BooksIDs.size(); i++) {
+		for (int i = 0; i < BooksIDs.size()-1; i++) {
 
 			ButtonActivityReader button = new ButtonActivityReader(BooksIDs.get(i));
+			button.setWidth("100%");
 			if (!buttonexist(button)) {
 				if (CheckCompleta(button))
 				{
@@ -163,7 +174,23 @@ public class MyActivities implements EntryPoint {
 						button.setTitle("Inclomplete Activity Data");
 					}
 				}
-				button.setWidth("100%");
+	
+				button.addMouseDownHandler(new MouseDownHandler() {
+					public void onMouseDown(MouseDownEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+					}
+				});
+				button.addMouseOutHandler(new MouseOutHandler() {
+					public void onMouseOut(MouseOutEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+					}
+				});
+				button.addMouseOverHandler(new MouseOverHandler() {
+					public void onMouseOver(MouseOverEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+					}
+				});
+				button.setStyleName("gwt-ButtonTOP");
 				button.addClickHandler(new ClickHandler() {
 					private AsyncCallback<Book> callback;
 
@@ -219,6 +246,97 @@ public class MyActivities implements EntryPoint {
 				});
 			}
 
+		}
+		
+		//Ultimo Botton
+		if (!BooksIDs.isEmpty())
+		{
+			ButtonActivityReader button = new ButtonActivityReader(BooksIDs.get(BooksIDs.size()-1));
+			button.setWidth("100%");
+			if (!buttonexist(button)) {
+				if (CheckCompleta(button))
+				{
+				verticalPanel.add(button);
+				}else
+				{
+					if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))	
+					{
+						verticalPanel.add(button);
+						button.setEnabled(false);
+						button.setTitle("Inclomplete Activity Data");
+					}
+				}
+				
+				button.setStyleName("gwt-ButtonBotton");
+				button.addMouseOutHandler(new MouseOutHandler() {
+					public void onMouseOut(MouseOutEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+					}
+				});
+				button.addMouseOverHandler(new MouseOverHandler() {
+					public void onMouseOver(MouseOverEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+					}
+				});
+				button.addMouseDownHandler(new MouseDownHandler() {
+					public void onMouseDown(MouseDownEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+					}
+				});
+				button.addClickHandler(new ClickHandler() {
+					private AsyncCallback<Book> callback;
+
+					public void onClick(ClickEvent event) {
+
+						LoadingPanel.getInstance().center();
+						LoadingPanel.getInstance().setLabelTexto("Loading...");
+						callback = new AsyncCallback<Book>() {
+
+							public void onFailure(Throwable caught) {
+								if (retryCounter<3)
+								{
+								retryCounter++;
+								//TODO Error a lenguaje
+								Window.alert("Try Again " + retryCounter);
+								bookReaderServiceHolder.loadFullBookInGoogle(RAtemp,
+										callback);
+								
+								}else
+								{
+								Window.alert("Failed to load the book, this may be unavailable or the connection is too slow.");
+								LoadingPanel.getInstance().hide();
+//								throw new UnsupportedOperationException(
+//										"Not supported yet.");
+								}
+							}
+
+							public void onSuccess(Book result) {
+								ActualUser.setReadingactivity(RA);
+								ActualUser.setBook(result);
+								ArrayList<Long> L=new ArrayList<Long>();
+								L.add(new Long(Long.MIN_VALUE));
+								MainEntryPoint.setFiltroTypes(L);
+								loadCatalog();
+								LoadingPanel.getInstance().hide();
+
+								// MainEntryPoint.SetBook(result);
+								// labelTester.setText(result.getAuthor());
+								// MainEntryPoint.getTechnicalSpecs().setBook(result);
+
+							}
+
+
+						};
+						ButtonActivityReader B = (ButtonActivityReader) event.getSource();
+						String[] SS = B.getRA().getBookId().split(Constants.BREAKER);
+						RA=B.getRA();
+						retryCounter=0;
+						RAtemp=SS[1];
+						bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
+								callback);
+					}
+				});
+			}
 		}
 	}
 

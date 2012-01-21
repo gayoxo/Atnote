@@ -13,6 +13,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
@@ -27,6 +28,7 @@ public class Welcome implements EntryPoint {
 			.create(GWTService.class);
 	private Button btnNewButton;
 	private HorizontalPanel horizontalPanel;
+	private RootPanel Footer;
 
 	
 	//DESCOMENTAR EN DESARROLLO, CREA UN USUARIO ROOT.
@@ -49,6 +51,7 @@ public class Welcome implements EntryPoint {
 	//	callUserRoot();
 
 		RootPanel rootPanel = RootPanel.get();
+		Footer=RootPanel.get("footer");
 		rootPanel.setSize("100%", "100%");
 		rootPanel.setStyleName("Root");
 
@@ -57,7 +60,8 @@ public class Welcome implements EntryPoint {
 		verticalPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setStyleName("Root");
-		rootPanel.add(verticalPanel,0,0);
+	//	rootPanel.add(verticalPanel,0,0);
+		rootPanel.add(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
 		
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
@@ -68,25 +72,50 @@ public class Welcome implements EntryPoint {
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		verticalPanel_1.add(horizontalPanel_1);
 		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				
+				Image image_1 = new Image("Logo.jpg");
+				horizontalPanel_1.add(image_1);
+						
+						HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
+						horizontalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel_2.setSpacing(7);
+						verticalPanel_1.add(horizontalPanel_2);
+						
+								Image image = new Image("logo_ucm.jpg");
+								image.addClickHandler(new ClickHandler() {
+									public void onClick(ClickEvent event) {
+										Window.open("http://www.ucm.es", "_blank",null);
 
-		Image image = new Image("logo_ucm.jpg");
-		horizontalPanel_1.add(image);
-		image.setSize("496px", "504px");
-		
-		Label lblnote = new Label("@Note");
-		horizontalPanel_1.add(lblnote);
-		lblnote.setStyleName("TituloAplicacion");
-		lblnote.setHeight("97px");
-		
-				Label lblNewLabel = new Label(
-						"Directors: Amelia del Rosario Sanz Cabrerizo, Jose Luis Sierra");
-				verticalPanel_1.add(lblNewLabel);
-				lblNewLabel.setStyleName("Directores");
+									}
+								});
+								horizontalPanel_2.add(image);
+								image.setSize("75px", "78px");
+								
+								Image image_2 = new Image("logo-leethi_fa.gif");
+								image_2.addClickHandler(new ClickHandler() {
+									public void onClick(ClickEvent event) {
+										Window.open("http://www.ucm.es/info/leethi/", "_blank",null);
+										
+									}
+								});
+								horizontalPanel_2.add(image_2);
+								image_2.setSize("164px", "72px");
+								
+								Image image_3 = new Image("ISLA.jpg");
+								horizontalPanel_2.add(image_3);
+								image_3.setSize("201px", "69px");
 				
 						Label lblNewLabel_1 = new Label(
 								"Developers: Cesar Ruiz, Joaquin Gayoso");
-						verticalPanel_1.add(lblNewLabel_1);
+					//	verticalPanel_1.add(lblNewLabel_1);
+						SimplePanel S=new SimplePanel();
+						Footer.add(S);
+						S.setWidget(lblNewLabel_1);
 						lblNewLabel_1.setStyleName("Desarrolladores");
+								
+								HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
+								verticalPanel_1.add(horizontalPanel_3);
+								horizontalPanel_3.setHeight("70px");
 						
 								horizontalPanel = new HorizontalPanel();
 								verticalPanel_1.add(horizontalPanel);
@@ -138,11 +167,17 @@ public class Welcome implements EntryPoint {
 						 * horizontalPanel.add(signOutLink);
 						 */
 						if (result.isLoggedIn()) {
-							if (result.getProfile().equals(Constants.STUDENT))
+							if (result.getProfile().equals(Constants.STUDENT)){
 								Controlador.change2MyActivities();
+								Footer.clear();
+							}
 							else if (result.getProfile().equals(
 									Constants.PROFESSOR))
+							{
 								Controlador.change2Administrator();
+								Footer.clear();
+							}
+								
 						} else {
 							if (!result.isIsAuthenticated()) {
 								Window.alert("You are not authorized to view this application");
