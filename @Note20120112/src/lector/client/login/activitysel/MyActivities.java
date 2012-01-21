@@ -54,10 +54,10 @@ public class MyActivities implements EntryPoint {
 
 	public void onModuleLoad() {
 		BooksIDs = new ArrayList<ReadingActivity>();
-		verticalPanel = new VerticalPanel();
-		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		RootPanel RootMenu = RootPanel.get("Menu");
+		
 		RootPanel RootTXOriginal = RootPanel.get();
+		RootTXOriginal.setStyleName("Root2");
 		generaBookIds();
 
 		MenuBar menuBar = new MenuBar(false);
@@ -94,20 +94,52 @@ public class MyActivities implements EntryPoint {
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		RootTXOriginal.add(horizontalPanel);
+		RootTXOriginal.add(horizontalPanel, 0, 24);
 		horizontalPanel.setSize("100%", "100%");
-
-		verticalPanel.setSpacing(10);
+		verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
-		verticalPanel.setSize("278px", "");
+		verticalPanel.setWidth("272px");
+		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		HorizontalPanel Glue = new HorizontalPanel();
+		verticalPanel.add(Glue);
+		Glue.setHeight("20px");
+		
+//		
+//		ButtonActivityReader button = new ButtonActivityReader(new ReadingActivity("HOLA",null,null,null,null));
+//		button.setStyleName("gwt-ButtonTOP");
+//		button.setWidth("100%");
+//		verticalPanel.add(button);
+//		button.addMouseDownHandler(new MouseDownHandler() {
+//				public void onMouseDown(MouseDownEvent event) {
+//					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+//				}
+//			});
+//		button.addMouseOutHandler(new MouseOutHandler() {
+//				public void onMouseOut(MouseOutEvent event) {
+//					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+//				}
+//			});
+//		button.addMouseOverHandler(new MouseOverHandler() {
+//				public void onMouseOver(MouseOverEvent event) {
+//					((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+//				}
+//			});
+		
 		
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
 		verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.add(verticalPanel_1);
+		verticalPanel_1.setSize("100%", "100%");
+		
+		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_1.add(horizontalPanel_1);
 		
 		Image image_1 = new Image("Logo.jpg");
-		verticalPanel_1.add(image_1);
+		horizontalPanel_1.add(image_1);
 		BooksIDs = new ArrayList<ReadingActivity>();
 
 	}
@@ -160,6 +192,7 @@ public class MyActivities implements EntryPoint {
 		for (int i = 0; i < BooksIDs.size()-1; i++) {
 
 			ButtonActivityReader button = new ButtonActivityReader(BooksIDs.get(i));
+			button.setStyleName("gwt-ButtonTOP");
 			button.setWidth("100%");
 			if (!buttonexist(button)) {
 				if (CheckCompleta(button))
@@ -190,7 +223,6 @@ public class MyActivities implements EntryPoint {
 						((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
 					}
 				});
-				button.setStyleName("gwt-ButtonTOP");
 				button.addClickHandler(new ClickHandler() {
 					private AsyncCallback<Book> callback;
 
@@ -415,7 +447,8 @@ public class MyActivities implements EntryPoint {
 	}
 
 	private boolean buttonexist(Button button) {
-		for (int i = 0; i < verticalPanel.getWidgetCount(); i++) {
+		//El primero es un Glue
+		for (int i = 1; i < verticalPanel.getWidgetCount(); i++) {
 			Button B = ((Button) verticalPanel.getWidget(i));
 			if (B.getText().equals(button.getText()))
 				return true;

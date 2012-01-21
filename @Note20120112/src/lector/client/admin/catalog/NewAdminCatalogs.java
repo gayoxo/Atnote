@@ -15,9 +15,16 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -25,6 +32,7 @@ import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class NewAdminCatalogs implements EntryPoint {
 
@@ -45,7 +53,7 @@ public class NewAdminCatalogs implements EntryPoint {
 		
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
-		menuBar.setWidth("100%");
+		menuBar.setWidth("99%");
 		
 		MenuItem menuItem = new MenuItem("Catalogue", false, (Command) null);
 		menuItem.setHTML("Catalog Administration");
@@ -76,8 +84,9 @@ public class NewAdminCatalogs implements EntryPoint {
 		menuBar.addItem(mntmBack);
 		
 		HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
+		horizontalSplitPanel.setSplitPosition("272px");
 		RootTXOriginal.add(horizontalSplitPanel, 0, 25);
-		horizontalSplitPanel.setSize("100%", "100%");
+		horizontalSplitPanel.setSize("99%", "96%");
 		
 		Selected = new VerticalPanel();
 		Selected.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -88,6 +97,10 @@ public class NewAdminCatalogs implements EntryPoint {
 		Actual.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalSplitPanel.setLeftWidget(Actual);
 		Actual.setSize("100%", "");
+		
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		Actual.add(horizontalPanel);
+		horizontalPanel.setHeight("20px");
 		
 
 		LoadingPanel.getInstance().center();
@@ -102,8 +115,8 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 	public void onSuccess(ArrayList<Catalogo> result) {
 		LoadingPanel.getInstance().hide();
 		ArrayList<Catalogo> CatalogMostrar=result;
-		for (Catalogo catalog : CatalogMostrar) {
-			Catalog C=Catalog.cloneCatalogo(catalog);
+		for (int i = 0; i < CatalogMostrar.size()-1; i++) {
+			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(i));
 			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
 			nue.setWidth("100%");
 
@@ -114,9 +127,54 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 					panel.showRelativeTo((BottonCatalog)event.getSource());
 				}
 			});
-			
-			
+			nue.setStyleName("gwt-ButtonTOP");
+			nue.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+				}
+			});
+			nue.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				}
+			});
+			nue.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+				}
+			});
 		}
+		if (!CatalogMostrar.isEmpty())
+		{
+			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(CatalogMostrar.size()-1));
+			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
+			nue.setWidth("100%");
+
+			nue.addClickHandler(new ClickHandler() {
+				
+				public void onClick(ClickEvent event) {
+					SeleccionMenuCatalog panel=new SeleccionMenuCatalog((BottonCatalog)event.getSource(),yo);
+					panel.showRelativeTo((BottonCatalog)event.getSource());
+				}
+			});
+			nue.setStyleName("gwt-ButtonBotton");
+			nue.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+				}
+			});
+			nue.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+				}
+			});
+			nue.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+				}
+			});
+		}
+		
 		
 	}});
 
@@ -129,6 +187,9 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 	{
 		Actual.clear();
 		Selected.clear();
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		Actual.add(horizontalPanel);
+		horizontalPanel.setHeight("20px");
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
 bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().getId(), new AsyncCallback<ArrayList<Catalogo>>() {
@@ -142,8 +203,8 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 	public void onSuccess(ArrayList<Catalogo> result) {
 		LoadingPanel.getInstance().hide();
 		ArrayList<Catalogo> CatalogMostrar=result;
-		for (Catalogo catalog : CatalogMostrar) {
-			Catalog C=Catalog.cloneCatalogo(catalog);
+		for (int i = 0; i < CatalogMostrar.size()-1; i++) {
+			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(i));
 			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
 			nue.setWidth("100%");
 
@@ -154,8 +215,52 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 					panel.showRelativeTo((BottonCatalog)event.getSource());
 				}
 			});
-			
-			
+			nue.setStyleName("gwt-ButtonTOP");
+			nue.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+				}
+			});
+			nue.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				}
+			});
+			nue.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+				}
+			});
+		}
+		if (!CatalogMostrar.isEmpty())
+		{
+			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(CatalogMostrar.size()-1));
+			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
+			nue.setWidth("100%");
+
+			nue.addClickHandler(new ClickHandler() {
+				
+				public void onClick(ClickEvent event) {
+					SeleccionMenuCatalog panel=new SeleccionMenuCatalog((BottonCatalog)event.getSource(),yo);
+					panel.showRelativeTo((BottonCatalog)event.getSource());
+				}
+			});
+			nue.setStyleName("gwt-ButtonBotton");
+			nue.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+				}
+			});
+			nue.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+				}
+			});
+			nue.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+				}
+			});
 		}
 		
 	}});
