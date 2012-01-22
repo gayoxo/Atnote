@@ -12,9 +12,16 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -102,11 +109,27 @@ public class NewAdminActivities implements EntryPoint {
 					public void onSuccess(ArrayList<ReadingActivity> result) {
 						LoadingPanel.getInstance().hide();
 						ArrayList<ReadingActivity> ActivityMostrar = result;
-						for (ReadingActivity activity : ActivityMostrar) {
+						for (int i = 0; i < ActivityMostrar.size()-1; i++) {
+							
 							BottonActivity nue = new BottonActivity(Actual,
-									Selected, activity);
+									Selected, ActivityMostrar.get(i));
 							nue.setWidth("100%");
-
+							nue.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+								}
+							});
+							nue.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+								}
+							});
+							nue.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+								}
+							});
+							nue.setStyleName("gwt-ButtonTOP");
 							nue.addClickHandler(new ClickHandler() {
 
 								public void onClick(ClickEvent event) {
@@ -119,7 +142,39 @@ public class NewAdminActivities implements EntryPoint {
 							});
 
 						}
+						if (!ActivityMostrar.isEmpty()) {
+							
+							BottonActivity nue = new BottonActivity(Actual,
+									Selected, ActivityMostrar.get(ActivityMostrar.size()-1));
+							nue.setWidth("100%");
+							nue.setStyleName("gwt-ButtonBotton");
+							nue.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							nue.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							nue.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+								}
+							});
+							nue.addClickHandler(new ClickHandler() {
 
+								public void onClick(ClickEvent event) {
+									SeleccionMenuActivity panel = new SeleccionMenuActivity(
+											(BottonActivity) event.getSource(),
+											yo);
+									panel.showRelativeTo((BottonActivity) event
+											.getSource());
+								}
+							});
+
+						}
 					}
 				});
 
@@ -143,11 +198,60 @@ public class NewAdminActivities implements EntryPoint {
 					public void onSuccess(ArrayList<ReadingActivity> result) {
 						LoadingPanel.getInstance().hide();
 						ArrayList<ReadingActivity> ActivityMostrar = result;
-						for (ReadingActivity activity : ActivityMostrar) {
+for (int i = 0; i < ActivityMostrar.size()-1; i++) {
+							
 							BottonActivity nue = new BottonActivity(Actual,
-									Selected, activity);
+									Selected, ActivityMostrar.get(i));
 							nue.setWidth("100%");
+							nue.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+								}
+							});
+							nue.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+								}
+							});
+							nue.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+								}
+							});
+							nue.setStyleName("gwt-ButtonTOP");
+							nue.addClickHandler(new ClickHandler() {
 
+								public void onClick(ClickEvent event) {
+									SeleccionMenuActivity panel = new SeleccionMenuActivity(
+											(BottonActivity) event.getSource(),
+											yo);
+									panel.showRelativeTo((BottonActivity) event
+											.getSource());
+								}
+							});
+
+						}
+						if (!ActivityMostrar.isEmpty()) {
+							
+							BottonActivity nue = new BottonActivity(Actual,
+									Selected, ActivityMostrar.get(ActivityMostrar.size()-1));
+							nue.setWidth("100%");
+							nue.setStyleName("gwt-ButtonBotton");
+							nue.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							nue.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							nue.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+								}
+							});
 							nue.addClickHandler(new ClickHandler() {
 
 								public void onClick(ClickEvent event) {

@@ -67,6 +67,7 @@ public class Administrador implements EntryPoint {
 		menuBar.addItem(mntmNewItem);
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setStyleName("Root2");
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setSpacing(12);
@@ -75,7 +76,7 @@ public class Administrador implements EntryPoint {
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
-		verticalPanel.setSize("272px", "");
+		verticalPanel.setSize("400px", "");
 		
 		Button btnNewButton = new Button("Catalogue");
 		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
@@ -104,7 +105,7 @@ public class Administrador implements EntryPoint {
 		verticalPanel.add(Glue);
 		Glue.setSize("100%", "40px");
 		verticalPanel.add(btnNewButton);
-		btnNewButton.setSize("100%", "");
+		btnNewButton.setSize("100%", "100%");
 		
 		
 		
@@ -131,7 +132,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnLanguagesAdministration);
-		btnLanguagesAdministration.setSize("100%", "");
+		btnLanguagesAdministration.setSize("100%", "100%");
 		
 		
 		Button btnNewButton_9 = new Button("Activity");
@@ -157,7 +158,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnNewButton_9);
-		btnNewButton_9.setSize("100%", "");
+		btnNewButton_9.setSize("100%", "100%");
 		
 		
 		Button btnNewButton_1 = new Button("Group");
@@ -183,7 +184,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnNewButton_1);
-		btnNewButton_1.setSize("100%", "");
+		btnNewButton_1.setSize("100%", "100%");
 		
 		
 		
@@ -210,7 +211,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnNewButton_5);
-		btnNewButton_5.setSize("100%", "");
+		btnNewButton_5.setSize("100%", "100%");
 		
 		Button btnNewButton_6 = new Button("Administrators");
 		btnNewButton_6.addMouseOutHandler(new MouseOutHandler() {
@@ -235,7 +236,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnNewButton_6);
-		btnNewButton_6.setSize("100%", "");
+		btnNewButton_6.setSize("100%", "100%");
 		
 		
 		Button btnNewButton_2 = new Button("Get a Book");
@@ -261,7 +262,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnNewButton_2);
-		btnNewButton_2.setSize("100%", "");
+		btnNewButton_2.setSize("100%", "100%");
 		
 		Button btnNewButton_3 = new Button("My Books");
 		btnNewButton_3.addMouseOutHandler(new MouseOutHandler() {
@@ -281,7 +282,7 @@ public class Administrador implements EntryPoint {
 		});
 		btnNewButton_3.setStyleName("gwt-ButtonTOP");
 		verticalPanel.add(btnNewButton_3);
-		btnNewButton_3.setSize("100%", "");
+		btnNewButton_3.setSize("100%", "100%");
 		btnNewButton_3.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Controlador.change2MyBooks();
@@ -306,7 +307,7 @@ public class Administrador implements EntryPoint {
 		});
 		btnNewButton_10.setStyleName("gwt-ButtonTOP");
 		verticalPanel.add(btnNewButton_10);
-		btnNewButton_10.setSize("100%", "");
+		btnNewButton_10.setSize("100%", "100%");
 		btnNewButton_10.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Controlador.change2MyActivities();
@@ -314,7 +315,7 @@ public class Administrador implements EntryPoint {
 		});
 		
 		btnNewButton_4 = new Button("Return to the Activity");
-		btnNewButton_4.setStyleName("gwt-ButtonBotton");
+		btnNewButton_4.setStyleName("gwt-ButtonBottonSaveOver");
 		btnNewButton_4.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
@@ -331,7 +332,7 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		verticalPanel.add(btnNewButton_4);
-		btnNewButton_4.setSize("100%", "");
+		btnNewButton_4.setSize("100%", "100%");
 		if (ActualUser.getReadingactivity()==null) btnNewButton_4.setEnabled(false);
 		else btnNewButton_4.setEnabled(true);
 		btnNewButton_4.addClickHandler(new ClickHandler() {

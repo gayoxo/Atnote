@@ -11,6 +11,10 @@ import lector.client.catalogo.client.TagEntity;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -48,6 +52,10 @@ public class StackPanelMio extends StackPanel {
     VerticalPanel ALL;
     ClickHandler BotonClick;
     BotonesStackPanelMio BotonTipo;
+	MouseDownHandler BotonDown;
+	MouseOutHandler BotonOut;
+	MouseOverHandler BotonOver;
+	String StileName;
     
 	public StackPanelMio() {
 		
@@ -58,6 +66,11 @@ public class StackPanelMio extends StackPanel {
 	        }
 	        };
 		
+	        BotonDown=null;
+	        BotonOut=null;
+	        BotonOver=null;
+	        StileName=null;
+	        
 		A = new VerticalPanel();
 		
         Numbers = new VerticalPanel();
@@ -341,6 +354,10 @@ public class StackPanelMio extends StackPanel {
 			
 			Act.setActual(Actual);
 			Act.addClickHandler(BotonClick);
+			if (BotonDown!=null) Act.addMouseDownHandler(BotonDown);
+			if (BotonOut!=null) Act.addMouseOutHandler(BotonOut);
+			if (BotonOver!=null) Act.addMouseOverHandler(BotonOver);
+			if (StileName!=null) Act.setStyleName(StileName);
 	}
 	
 	public void addBotonLessTen(Entity S) {
@@ -358,13 +375,42 @@ public class StackPanelMio extends StackPanel {
 		
 		Act.setActual(ALL);
 		Act.addClickHandler(BotonClick);
+		if (BotonDown!=null) Act.addMouseDownHandler(BotonDown);
+		if (BotonOut!=null) Act.addMouseOutHandler(BotonOut);
+		if (BotonOver!=null) Act.addMouseOverHandler(BotonOver);
+		if (StileName!=null) Act.setStyleName(StileName);
+		if ((BotonDown!=null) || (BotonOut!=null)||(BotonOver!=null)||(StileName!=null)) {
+			Act.setWidth("100%");
+			Act.setHeight("100%");
+		}
 	}
 	
 	public void setBotonClick(ClickHandler botonClick) {
 		BotonClick = botonClick;
 	}
 	
+	public void setMouseDownHandler(MouseDownHandler botonDown) {
+		BotonDown = botonDown;
+	}
+	
+	
+	public void setMouseOutHandler(MouseOutHandler botonOut) {
+		BotonOut = botonOut;
+	}
+	
+	public void setMouseOverHandler(MouseOverHandler botonOver) {
+		BotonOver = botonOver;
+	}
+	
+	
 	public void setBotonTipo(BotonesStackPanelMio botonTipo) {
 		BotonTipo = botonTipo;
 	}
+
+	public void setStyleNameBotton(String string) {
+		StileName=string;
+		
+	}
+	
+	
 }

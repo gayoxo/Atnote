@@ -129,7 +129,6 @@ font-size: 30pt;
   font-weight: bold;
   color: #777777;
   margin: 0px 0px 0px;
-  text-align: center;
 }
 .h5 {
 	color: Red;
@@ -180,4 +179,125 @@ font-size: 50pt;
 .Root3 {
 height: 100%;
    vertical-align: middle;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-left: 0%;
+	font-size: 11px;
+	font-weight: bolder;
+	color: #C00;
+	text-align: right;
+}
+.gwt-ButtonBotton  {
+ background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+
+}
+.gwt-ButtonTOP {
+ background: transparent url('BotonArriba.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+}
+.gwt-ButtonTOPOver {
+ background: transparent url('BotonArriba.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+}
+.gwt-ButtonPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+}
+.gwt-ButtonBottonOver {
+background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+.gwt-ButtonPushBotton {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+	  background-size:  100% 100%;
+}
+.gwt-ButtonTOP2 {
+background: url(BotonArriba.jpg) no-repeat center center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+
+}
+.gwt-ButtonBottonSave {
+ background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: Red;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+
+}
+.gwt-ButtonBottonSaveOver {
+
+	 background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: Red;
+	text-decoration: none;
+	border: 0px solid;
+		font-size: 35px;
+}
+.gwt-ButtonBottonSavePush {
+display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Red;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+	  background-size:  100% 100%;
 }

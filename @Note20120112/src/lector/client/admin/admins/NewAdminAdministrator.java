@@ -33,6 +33,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 
 public class NewAdminAdministrator implements EntryPoint {
 
@@ -109,6 +115,22 @@ public class NewAdminAdministrator implements EntryPoint {
 						if (verticalPanel_1.getWidgetCount()==0) SaveAdmins.setVisible(false);
 					}
 				});
+				btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+					public void onMouseDown(MouseDownEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+					}
+				});
+				btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
+					public void onMouseOut(MouseOutEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+					}
+				});
+				btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
+					public void onMouseOver(MouseOverEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+					}
+				});
+				btnNewButton_1.setStyleName("gwt-ButtonTOP");
 				btnNewButton_1.setText(textBox.getText());
 				btnNewButton_1.setHTML("<img src=\"Admin.gif\">" + textBox.getText());
 				verticalPanel_1.add(btnNewButton_1);
@@ -190,7 +212,23 @@ public class NewAdminAdministrator implements EntryPoint {
 				SaveAdmins.setVisible(false);
 			}
 		});
-		SaveAdmins.setStyleName("gwt-MenuItemMio");
+		SaveAdmins.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonSavePush");
+			}
+		});
+		SaveAdmins.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonSave");
+			}
+		});
+		SaveAdmins.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonSaveOver");
+			}
+		});
+		SaveAdmins.setStyleName("gwt-ButtonBottonSave");
+		//SaveAdmins.setStyleName("gwt-MenuItemMio");
 		verticalPanel.add(SaveAdmins);
 		SaveAdmins.setWidth("100%");
 		
@@ -261,6 +299,22 @@ public class NewAdminAdministrator implements EntryPoint {
 
 			
 		});
+		stackPanel_1.setMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+			}
+		});
+		stackPanel_1.setMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+			}
+		});
+		stackPanel_1.setMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+			}
+		});
+		stackPanel_1.setStyleNameBotton("gwt-ButtonTOP");
 		
 		// Profesores
 		LoadingPanel.getInstance().center();

@@ -12,12 +12,19 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -99,7 +106,7 @@ public class BookAdministration implements EntryPoint {
 		splitLayoutPanel.setSize("100%", "100%");
 
 		VerticalPanel simplePanel = new VerticalPanel();
-		splitLayoutPanel.addWest(simplePanel, 220.0);
+		splitLayoutPanel.addWest(simplePanel, 500.0);
 		simplePanel.setWidth("100%");
 
 		ScrollPanel scrollPanel = new ScrollPanel();
@@ -112,7 +119,7 @@ public class BookAdministration implements EntryPoint {
 
 		Selected = new VerticalPanel();
 		simplePanel_1.setWidget(Selected);
-		Selected.setSize("100%", "100%");
+		Selected.setWidth("100%");
 
 		stackPanel_1 = new StackPanelMio();
 		scrollPanel.setWidget(stackPanel_1);
@@ -126,7 +133,22 @@ public class BookAdministration implements EntryPoint {
 				((BotonesStackPanelAdministracionMio) event.getSource()).Swap();
 			}
 		});
-
+		stackPanel_1.setMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+			}
+		});
+		stackPanel_1.setMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+			}
+		});
+		stackPanel_1.setMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+			}
+		});
+		stackPanel_1.setStyleNameBotton("gwt-ButtonTOP");
 		ArrayList<String> ListaBooks = ActualUser.getUser().getBookIds();
 		if (ListaBooks.size() < 10) {
 			Long IDi = 0l;
