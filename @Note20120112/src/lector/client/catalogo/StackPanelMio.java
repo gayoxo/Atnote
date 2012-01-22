@@ -13,9 +13,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -354,10 +357,54 @@ public class StackPanelMio extends StackPanel {
 			
 			Act.setActual(Actual);
 			Act.addClickHandler(BotonClick);
-			if (BotonDown!=null) Act.addMouseDownHandler(BotonDown);
-			if (BotonOut!=null) Act.addMouseOutHandler(BotonOut);
-			if (BotonOver!=null) Act.addMouseOverHandler(BotonOver);
-			if (StileName!=null) Act.setStyleName(StileName);
+			Act.addClickHandler(new ClickHandler() {
+				
+				public void onClick(ClickEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+					
+				}
+			});
+			if (BotonDown==null) {
+				BotonDown=new MouseDownHandler() {
+					public void onMouseDown(MouseDownEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+					}
+				};
+			}
+			Act.addMouseDownHandler(BotonDown);
+			
+			if (BotonOut==null)
+				{
+				BotonOut=new MouseOutHandler() {
+					public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+					}
+				};
+				}
+			Act.addMouseOutHandler(BotonOut);
+			
+			if (BotonOver==null)
+				{
+				BotonOver=new MouseOverHandler() {
+					public void onMouseOver(MouseOverEvent event) {
+						
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+						
+					}
+				};
+				}
+			Act.addMouseOverHandler(BotonOver);
+			
+			
+			if (StileName==null){
+				StileName="gwt-ButtonTOP";
+			} 
+			Act.setStyleName(StileName);
+			
+
+				Act.setWidth("100%");
+				Act.setHeight("100%");
+
 	}
 	
 	public void addBotonLessTen(Entity S) {
@@ -375,14 +422,54 @@ public class StackPanelMio extends StackPanel {
 		
 		Act.setActual(ALL);
 		Act.addClickHandler(BotonClick);
-		if (BotonDown!=null) Act.addMouseDownHandler(BotonDown);
-		if (BotonOut!=null) Act.addMouseOutHandler(BotonOut);
-		if (BotonOver!=null) Act.addMouseOverHandler(BotonOver);
-		if (StileName!=null) Act.setStyleName(StileName);
-		if ((BotonDown!=null) || (BotonOut!=null)||(BotonOver!=null)||(StileName!=null)) {
+		Act.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				
+			}
+		});
+		if (BotonDown==null) {
+			BotonDown=new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+				}
+			};
+		}
+		Act.addMouseDownHandler(BotonDown);
+		
+		if (BotonOut==null)
+			{
+			BotonOut=new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				}
+			};
+			}
+		Act.addMouseOutHandler(BotonOut);
+		
+		if (BotonOver==null)
+			{
+			BotonOver=new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					
+						((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+					
+				}
+			};
+			}
+		Act.addMouseOverHandler(BotonOver);
+		
+		
+		if (StileName==null){
+			StileName="gwt-ButtonTOP";
+		} 
+		Act.setStyleName(StileName);
+		
+
 			Act.setWidth("100%");
 			Act.setHeight("100%");
-		}
+
 	}
 	
 	public void setBotonClick(ClickHandler botonClick) {

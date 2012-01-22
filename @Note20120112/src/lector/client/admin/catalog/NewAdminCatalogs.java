@@ -33,11 +33,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
 
 public class NewAdminCatalogs implements EntryPoint {
 
 	private VerticalPanel Actual;
-	private VerticalPanel Selected;
 	private NewAdminCatalogs yo;
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 	.create(GWTService.class);
@@ -83,24 +84,38 @@ public class NewAdminCatalogs implements EntryPoint {
 		});
 		menuBar.addItem(mntmBack);
 		
-		HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
-		horizontalSplitPanel.setSplitPosition("272px");
-		RootTXOriginal.add(horizontalSplitPanel, 0, 25);
-		horizontalSplitPanel.setSize("99%", "96%");
-		
-		Selected = new VerticalPanel();
-		Selected.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		horizontalSplitPanel.setRightWidget(Selected);
-		Selected.setSize("100%", "");
-		
-		Actual = new VerticalPanel();
-		Actual.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		horizontalSplitPanel.setLeftWidget(Actual);
-		Actual.setSize("100%", "");
+		VerticalPanel verticalPanel = new VerticalPanel();
+		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		RootTXOriginal.add(verticalPanel);
+		verticalPanel.setSize("100%", "100%");
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		Actual.add(horizontalPanel);
-		horizontalPanel.setHeight("20px");
+		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel.add(horizontalPanel);
+		horizontalPanel.setWidth("100%");
+		
+		Actual = new VerticalPanel();
+		horizontalPanel.add(Actual);
+		Actual.setWidth("400px");
+		Actual.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		VerticalPanel verticalPanel_1 = new VerticalPanel();
+		verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(verticalPanel_1);
+		
+		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_1.add(horizontalPanel_1);
+		
+		Image image = new Image("Logo.jpg");
+		horizontalPanel_1.add(image);
+		
+//		HorizontalPanel horizontalPanel = new HorizontalPanel();
+//		Actual.add(horizontalPanel);
+//		horizontalPanel.setHeight("20px");
 		
 
 		LoadingPanel.getInstance().center();
@@ -117,7 +132,7 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 		ArrayList<Catalogo> CatalogMostrar=result;
 		for (int i = 0; i < CatalogMostrar.size()-1; i++) {
 			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(i));
-			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
+			BottonCatalog nue=new BottonCatalog(Actual,new VerticalPanel(),C);
 			nue.setWidth("100%");
 
 			nue.addClickHandler(new ClickHandler() {
@@ -147,7 +162,7 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 		if (!CatalogMostrar.isEmpty())
 		{
 			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(CatalogMostrar.size()-1));
-			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
+			BottonCatalog nue=new BottonCatalog(Actual,new VerticalPanel(),C);
 			nue.setWidth("100%");
 
 			nue.addClickHandler(new ClickHandler() {
@@ -186,10 +201,9 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 	public void refresh()
 	{
 		Actual.clear();
-		Selected.clear();
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		Actual.add(horizontalPanel);
-		horizontalPanel.setHeight("20px");
+//		HorizontalPanel horizontalPanel = new HorizontalPanel();
+//		Actual.add(horizontalPanel);
+//		horizontalPanel.setHeight("20px");
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
 bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().getId(), new AsyncCallback<ArrayList<Catalogo>>() {
@@ -205,7 +219,7 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 		ArrayList<Catalogo> CatalogMostrar=result;
 		for (int i = 0; i < CatalogMostrar.size()-1; i++) {
 			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(i));
-			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
+			BottonCatalog nue=new BottonCatalog(Actual,new VerticalPanel(),C);
 			nue.setWidth("100%");
 
 			nue.addClickHandler(new ClickHandler() {
@@ -235,7 +249,7 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 		if (!CatalogMostrar.isEmpty())
 		{
 			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(CatalogMostrar.size()-1));
-			BottonCatalog nue=new BottonCatalog(Actual,Selected,C);
+			BottonCatalog nue=new BottonCatalog(Actual,new VerticalPanel(),C);
 			nue.setWidth("100%");
 
 			nue.addClickHandler(new ClickHandler() {
