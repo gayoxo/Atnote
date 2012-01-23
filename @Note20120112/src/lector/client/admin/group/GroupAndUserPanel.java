@@ -11,6 +11,12 @@ import lector.client.reader.LoadingPanel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -102,10 +108,93 @@ public class GroupAndUserPanel extends Composite {
 				new AsyncCallback<ArrayList<UserApp>>() {
 
 					public void onSuccess(ArrayList<UserApp> result) {
-						for (UserApp user : result) {
-							Button User = new Button(user.getEmail());
+					
+
+						for (int i = 0; i < result.size()-1; i++) {			
+							Button User = new Button(result.get(i).getEmail());
 							Panel_Usuarios.add(User);
 							User.setWidth("100%");
+							User.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+								}
+							});
+							User.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+								}
+							});
+							User.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+								}
+							});
+							User.setStyleName("gwt-ButtonTOP");
+							User.addClickHandler(new ClickHandler() {
+
+								public void onClick(ClickEvent event) {
+									if (Window
+											.confirm("Are you sure to remove the user from the list")) {
+										String SourceText = ((Button) event
+												.getSource()).getHTML();
+										bookReaderServiceHolder
+												.loadUserByEmail(
+														SourceText,
+														new AsyncCallback<UserApp>() {
+
+															public void onFailure(
+																	Throwable caught) {
+																Window.alert("The user could not be loaded");
+															}
+
+															public void onSuccess(
+																	UserApp result) {
+																bookReaderServiceHolder
+																		.removeUserAndGroupRelation(
+																				result.getId(),
+																				Mygroup.getId(),
+																				new AsyncCallback<Void>() {
+
+																					public void onFailure(
+																							Throwable caught) {
+																						Window.alert("The user could not be removed from his/her group");
+
+																					}
+
+																					public void onSuccess(
+																							Void result) {
+																						refresh();
+																					}
+																				});
+
+															}
+														});
+
+									}
+
+								}
+							});
+						}
+						if (!result.isEmpty()){
+							Button User = new Button(result.get(result.size()-1).getEmail());
+							Panel_Usuarios.add(User);
+							User.setWidth("100%");
+							User.setStyleName("gwt-ButtonBotton");
+							User.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							User.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							User.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+								}
+							});
 							User.addClickHandler(new ClickHandler() {
 
 								public void onClick(ClickEvent event) {
@@ -176,10 +265,26 @@ public class GroupAndUserPanel extends Composite {
 
 					public void onSuccess(ArrayList<UserApp> result) {
 						LoadingPanel.getInstance().hide();
-						for (UserApp user : result) {
-							Button User = new Button(user.getEmail());
+						for (int i = 0; i < result.size()-1; i++) {			
+							Button User = new Button(result.get(i).getEmail());
 							Panel_Usuarios.add(User);
 							User.setWidth("100%");
+							User.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+								}
+							});
+							User.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+								}
+							});
+							User.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+								}
+							});
+							User.setStyleName("gwt-ButtonTOP");
 							User.addClickHandler(new ClickHandler() {
 
 								public void onClick(ClickEvent event) {
@@ -187,8 +292,6 @@ public class GroupAndUserPanel extends Composite {
 											.confirm("Are you sure to remove the user from the list")) {
 										String SourceText = ((Button) event
 												.getSource()).getHTML();
-										LoadingPanel.getInstance().center();
-										LoadingPanel.getInstance().setLabelTexto("Deleting Phase 1...");
 										bookReaderServiceHolder
 												.loadUserByEmail(
 														SourceText,
@@ -196,15 +299,11 @@ public class GroupAndUserPanel extends Composite {
 
 															public void onFailure(
 																	Throwable caught) {
-																LoadingPanel.getInstance().hide();
 																Window.alert("The user could not be loaded");
 															}
 
 															public void onSuccess(
 																	UserApp result) {
-																LoadingPanel.getInstance().hide();
-																LoadingPanel.getInstance().center();
-																LoadingPanel.getInstance().setLabelTexto("Deleting Phase 2...");
 																bookReaderServiceHolder
 																		.removeUserAndGroupRelation(
 																				result.getId(),
@@ -213,29 +312,13 @@ public class GroupAndUserPanel extends Composite {
 
 																					public void onFailure(
 																							Throwable caught) {
-																						LoadingPanel.getInstance().hide();
 																						Window.alert("The user could not be removed from his/her group");
 
 																					}
 
 																					public void onSuccess(
 																							Void result) {
-																						LoadingPanel.getInstance().hide();
-																						bookReaderServiceHolder.loadGroupById(Mygroup.getId(), new AsyncCallback<GroupApp>() {
-																							
-																							public void onSuccess(GroupApp result) {
-																								LoadingPanel.getInstance().hide();
-																								Mygroup.setUsersIds(result.getUsersIds());
-																								refresh();
-																								
-																							}
-																							
-																							public void onFailure(Throwable caught) {
-																								LoadingPanel.getInstance().hide();
-																								Window.alert("The group could not be retrieved");
-																								
-																							}
-																						});
+																						refresh();
 																					}
 																				});
 
@@ -246,10 +329,73 @@ public class GroupAndUserPanel extends Composite {
 
 								}
 							});
-							
-							
-							
 						}
+						if (!result.isEmpty()){
+							Button User = new Button(result.get(result.size()-1).getEmail());
+							Panel_Usuarios.add(User);
+							User.setWidth("100%");
+							User.setStyleName("gwt-ButtonBotton");
+							User.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							User.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							User.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+								}
+							});
+							User.addClickHandler(new ClickHandler() {
+
+								public void onClick(ClickEvent event) {
+									if (Window
+											.confirm("Are you sure to remove the user from the list")) {
+										String SourceText = ((Button) event
+												.getSource()).getHTML();
+										bookReaderServiceHolder
+												.loadUserByEmail(
+														SourceText,
+														new AsyncCallback<UserApp>() {
+
+															public void onFailure(
+																	Throwable caught) {
+																Window.alert("The user could not be loaded");
+															}
+
+															public void onSuccess(
+																	UserApp result) {
+																bookReaderServiceHolder
+																		.removeUserAndGroupRelation(
+																				result.getId(),
+																				Mygroup.getId(),
+																				new AsyncCallback<Void>() {
+
+																					public void onFailure(
+																							Throwable caught) {
+																						Window.alert("The user could not be removed from his/her group");
+
+																					}
+
+																					public void onSuccess(
+																							Void result) {
+																						refresh();
+																					}
+																				});
+
+															}
+														});
+
+									}
+
+								}
+							});
+						}
+
 
 					}
 

@@ -29,11 +29,13 @@ import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
 
 public class NewAdminActivities implements EntryPoint {
 
 	private VerticalPanel Actual;
-	private VerticalPanel Selected;
 	private NewAdminActivities yo;
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
@@ -79,20 +81,36 @@ public class NewAdminActivities implements EntryPoint {
 			}
 		});
 		menuBar.addItem(mntmBack);
-
-		HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
-		RootTXOriginal.add(horizontalSplitPanel, 0, 25);
-		horizontalSplitPanel.setSize("100%", "100%");
-
-		Selected = new VerticalPanel();
-		Selected.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		horizontalSplitPanel.setRightWidget(Selected);
-		Selected.setSize("100%", "");
-
-		Actual = new VerticalPanel();
-		Actual.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		horizontalSplitPanel.setLeftWidget(Actual);
-		Actual.setSize("100%", "");
+		
+		VerticalPanel verticalPanel = new VerticalPanel();
+		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		RootTXOriginal.add(verticalPanel);
+		verticalPanel.setSize("100%", "100%");
+		
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setSpacing(6);
+		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel.add(horizontalPanel);
+		horizontalPanel.setWidth("100%");
+		
+				Actual = new VerticalPanel();
+				horizontalPanel.add(Actual);
+				Actual.setWidth("400px");
+				Actual.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				
+				VerticalPanel verticalPanel_1 = new VerticalPanel();
+				verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				horizontalPanel.add(verticalPanel_1);
+				
+				HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
+				horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				verticalPanel_1.add(horizontalPanel_1);
+				
+				Image image = new Image("Logo.jpg");
+				horizontalPanel_1.add(image);
 
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
@@ -112,7 +130,7 @@ public class NewAdminActivities implements EntryPoint {
 						for (int i = 0; i < ActivityMostrar.size()-1; i++) {
 							
 							BottonActivity nue = new BottonActivity(Actual,
-									Selected, ActivityMostrar.get(i));
+									new VerticalPanel(), ActivityMostrar.get(i));
 							nue.setWidth("100%");
 							nue.addMouseDownHandler(new MouseDownHandler() {
 								public void onMouseDown(MouseDownEvent event) {
@@ -145,7 +163,7 @@ public class NewAdminActivities implements EntryPoint {
 						if (!ActivityMostrar.isEmpty()) {
 							
 							BottonActivity nue = new BottonActivity(Actual,
-									Selected, ActivityMostrar.get(ActivityMostrar.size()-1));
+									new VerticalPanel(), ActivityMostrar.get(ActivityMostrar.size()-1));
 							nue.setWidth("100%");
 							nue.setStyleName("gwt-ButtonBotton");
 							nue.addMouseOutHandler(new MouseOutHandler() {
@@ -182,7 +200,6 @@ public class NewAdminActivities implements EntryPoint {
 
 	public void refresh() {
 		Actual.clear();
-		Selected.clear();
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Saving...");
 		bookReaderServiceHolder.getReadingActivityByProfessorId(ActualUser
@@ -201,7 +218,7 @@ public class NewAdminActivities implements EntryPoint {
 for (int i = 0; i < ActivityMostrar.size()-1; i++) {
 							
 							BottonActivity nue = new BottonActivity(Actual,
-									Selected, ActivityMostrar.get(i));
+									new VerticalPanel(), ActivityMostrar.get(i));
 							nue.setWidth("100%");
 							nue.addMouseDownHandler(new MouseDownHandler() {
 								public void onMouseDown(MouseDownEvent event) {
@@ -234,7 +251,7 @@ for (int i = 0; i < ActivityMostrar.size()-1; i++) {
 						if (!ActivityMostrar.isEmpty()) {
 							
 							BottonActivity nue = new BottonActivity(Actual,
-									Selected, ActivityMostrar.get(ActivityMostrar.size()-1));
+									new VerticalPanel(), ActivityMostrar.get(ActivityMostrar.size()-1));
 							nue.setWidth("100%");
 							nue.setStyleName("gwt-ButtonBotton");
 							nue.addMouseOutHandler(new MouseOutHandler() {

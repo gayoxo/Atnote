@@ -32,6 +32,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 
 
 public class NewUserAdministrator implements EntryPoint {
@@ -113,6 +119,22 @@ public class NewUserAdministrator implements EntryPoint {
 							if (verticalPanel_1.getWidgetCount()==0) SaveNewUsers.setVisible(false);
 						}
 					});
+					btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+						}
+					});
+					btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+						}
+					});
+					btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+						}
+					});
+					btnNewButton_1.setStyleName("gwt-ButtonTOP");
 					btnNewButton_1.setText(textBox.getText());
 					btnNewButton_1.setHTML("<img src=\"Users.gif\">" + textBox.getText());
 					verticalPanel_1.add(btnNewButton_1);
@@ -191,8 +213,23 @@ public class NewUserAdministrator implements EntryPoint {
 				SaveNewUsers.setVisible(false);
 			}
 		});
-		
-		SaveNewUsers.setStyleName("gwt-MenuItemMio");
+		SaveNewUsers.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonSavePush");
+			}
+		});
+		SaveNewUsers.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonSave");
+			}
+		});
+		SaveNewUsers.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonSaveOver");
+			}
+		});
+		SaveNewUsers.setStyleName("gwt-ButtonBottonSave");
+	//	SaveNewUsers.setStyleName("gwt-MenuItemMio");
 		verticalPanel.add(SaveNewUsers);
 		SaveNewUsers.setWidth("100%");
 

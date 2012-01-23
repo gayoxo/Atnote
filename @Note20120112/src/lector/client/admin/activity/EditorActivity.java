@@ -18,6 +18,12 @@ import lector.client.reader.LoadingPanel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,6 +31,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -344,7 +351,6 @@ public class EditorActivity extends PopupPanel {
 
 	}
 	
-	//TODO This;
 	private void generatecatalogPublicOld()
 	{
 		if (ActualActivity.getOpenCatalogId() != null) {
@@ -381,8 +387,9 @@ public class EditorActivity extends PopupPanel {
 				.getUser().getId(), new AsyncCallback<ArrayList<Catalogo>>() {
 
 			public void onSuccess(ArrayList<Catalogo> result) {
-				for (Catalogo catalog2 : result) {
-					Catalog catalog = Catalog.cloneCatalogo(catalog2);
+				for (int i = 0; i < result.size()-1; i++) {
+
+					Catalog catalog = Catalog.cloneCatalogo(result.get(i));
 					Botoncatalogo BC = new Botoncatalogo(catalog);
 					BC.setWidth("100%");
 					CatalogPanel.add(BC);
@@ -394,6 +401,54 @@ public class EditorActivity extends PopupPanel {
 							PanelSeleccionCatalogo PSC= new PanelSeleccionCatalogo(BCE.getCatalogo(),CatalogLabel,OpenCatalogLabel,Yo);
 							PSC.showRelativeTo(BCE);
 
+						}
+					});
+					BC.addMouseDownHandler(new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+						}
+					});
+					BC.addMouseOutHandler(new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+						}
+					});
+					BC.addMouseOverHandler(new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+						}
+					});
+					BC.setStyleName("gwt-ButtonTOP");
+				}
+				if (!result.isEmpty()) {
+					Catalog catalog = Catalog.cloneCatalogo(result.get(result.size()-1));
+					Botoncatalogo BC = new Botoncatalogo(catalog);
+					BC.setWidth("100%");
+					CatalogPanel.add(BC);
+					BC.addClickHandler(new ClickHandler() {
+
+						public void onClick(ClickEvent event) {
+							Botoncatalogo BCE = (Botoncatalogo) event
+									.getSource();
+							PanelSeleccionCatalogo PSC= new PanelSeleccionCatalogo(BCE.getCatalogo(),CatalogLabel,OpenCatalogLabel,Yo);
+							PSC.showRelativeTo(BCE);
+
+						}
+					});
+					BC.setStyleName("gwt-ButtonBotton");
+					BC.addMouseOutHandler(new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+						}
+					});
+					BC.addMouseOverHandler(new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+						}
+					});
+					BC.addMouseDownHandler(new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 						}
 					});
 				}
@@ -415,8 +470,8 @@ public class EditorActivity extends PopupPanel {
 				.getLanguages(new AsyncCallback<ArrayList<Language>>() {
 
 					public void onSuccess(ArrayList<Language> result) {
-						for (Language language : result) {
-							Botonlanguage BC = new Botonlanguage(language);
+						for (int i = 0; i < result.size()-1; i++) {
+							Botonlanguage BC = new Botonlanguage(result.get(i));
 							BC.setWidth("100%");
 							LanguagePanel.add(BC);
 							BC.addClickHandler(new ClickHandler() {
@@ -428,6 +483,55 @@ public class EditorActivity extends PopupPanel {
 											+ BCE.getLanguage().getName());
 									SelectedLanguage = BCE.getLanguage();
 
+								}
+							});
+							BC.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+								}
+							});
+							BC.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+								}
+							});
+							BC.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+								}
+							});
+							BC.setStyleName("gwt-ButtonTOP");
+
+						}
+						if(!result.isEmpty()) {
+							Botonlanguage BC = new Botonlanguage(result.get(result.size()-1));
+							BC.setWidth("100%");
+							LanguagePanel.add(BC);
+							BC.addClickHandler(new ClickHandler() {
+
+								public void onClick(ClickEvent event) {
+									Botonlanguage BCE = (Botonlanguage) event
+											.getSource();
+									LanguageLabel.setText("Language : "
+											+ BCE.getLanguage().getName());
+									SelectedLanguage = BCE.getLanguage();
+
+								}
+							});
+							BC.setStyleName("gwt-ButtonBotton");
+							BC.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							BC.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							BC.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 								}
 							});
 
@@ -448,8 +552,8 @@ public class EditorActivity extends PopupPanel {
 	private void Generatepanelsbooks() {
 
 		ArrayList<String> result = ActualUser.getUser().getBookIds();
-		for (String string : result) {
-			Botonbooks BC = new Botonbooks(string);
+		for (int i = 0; i < result.size()-1; i++) {
+			Botonbooks BC = new Botonbooks(result.get(i));
 			BC.setWidth("100%");
 			BooksPanel.add(BC);
 			BC.addClickHandler(new ClickHandler() {
@@ -459,6 +563,52 @@ public class EditorActivity extends PopupPanel {
 					BooksLabel.setText("Book : " + BCE.getBook());
 					SelectedBook = BCE.getBook();
 
+				}
+			});
+			BC.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+				}
+			});
+			BC.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				}
+			});
+			BC.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+				}
+			});
+			BC.setStyleName("gwt-ButtonTOP");
+		}
+		if(!result.isEmpty()) {
+			Botonbooks BC = new Botonbooks(result.get(result.size()-1));
+			BC.setWidth("100%");
+			BooksPanel.add(BC);
+			BC.addClickHandler(new ClickHandler() {
+
+				public void onClick(ClickEvent event) {
+					Botonbooks BCE = (Botonbooks) event.getSource();
+					BooksLabel.setText("Book : " + BCE.getBook());
+					SelectedBook = BCE.getBook();
+
+				}
+			});
+			BC.setStyleName("gwt-ButtonBotton");
+			BC.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+				}
+			});
+			BC.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+				}
+			});
+			BC.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 				}
 			});
 		}
@@ -471,8 +621,8 @@ public class EditorActivity extends PopupPanel {
 				.getGroups(new AsyncCallback<ArrayList<GroupApp>>() {
 
 					public void onSuccess(ArrayList<GroupApp> result) {
-						for (GroupApp group : result) {
-							Botongroups BC = new Botongroups(group);
+						for (int i = 0; i < result.size()-1; i++) {
+							Botongroups BC = new Botongroups(result.get(i));
 							BC.setWidth("100%");
 							GroupsPanel.add(BC);
 							BC.addClickHandler(new ClickHandler() {
@@ -483,6 +633,53 @@ public class EditorActivity extends PopupPanel {
 									GroupsLabel.setText("Groups : "
 											+ BCE.getGrupo().getName());
 									SelectedGroup = BCE.getGrupo();
+								}
+							});
+							BC.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+								}
+							});
+							BC.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+								}
+							});
+							BC.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+								}
+							});
+							BC.setStyleName("gwt-ButtonTOP");
+						}
+						if(!result.isEmpty()) {
+							Botongroups BC = new Botongroups(result.get(result.size()-1));
+							BC.setWidth("100%");
+							GroupsPanel.add(BC);
+							BC.addClickHandler(new ClickHandler() {
+
+								public void onClick(ClickEvent event) {
+									Botongroups BCE = (Botongroups) event
+											.getSource();
+									GroupsLabel.setText("Groups : "
+											+ BCE.getGrupo().getName());
+									SelectedGroup = BCE.getGrupo();
+								}
+							});
+							BC.setStyleName("gwt-ButtonBotton");
+							BC.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							BC.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							BC.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 								}
 							});
 						}

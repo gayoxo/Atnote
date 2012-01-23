@@ -17,6 +17,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -66,17 +72,6 @@ public class Browser implements EntryPoint {
 		Selected = new VerticalPanel();
 		BrowserSelectPanel.addSouth(Selected, 200.0);
 		Selected.setWidth("100%");
-		
-		btnNewButton = new Button(ActualLang.getFilterButtonBrowser());
-		btnNewButton.setStyleName("gwt-MenuItemMio");
-		btnNewButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				refresh(); 
-			}
-		});
-		btnNewButton.setVisible(false);
-		Selected.add(btnNewButton);
-		btnNewButton.setWidth("100%");
 		SelectedB = new VerticalPanel();
 		Selected.add(SelectedB);
 		SelectedB.setWidth("100%");
@@ -117,6 +112,33 @@ public class Browser implements EntryPoint {
 		FinderPanel.add(FinderButton);
 		FinderButton.setButtonTipo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), SelectedB));
+		
+		btnNewButton = new Button(ActualLang.getFilterButtonBrowser());
+		Selected.add(btnNewButton);
+		btnNewButton.setStyleName("gwt-MenuItemMio");
+		btnNewButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				refresh(); 
+			}
+		});
+		btnNewButton.setStyleName("gwt-ButtonBotton");
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+			}
+		});
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+			}
+		});
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+			}
+		});
+		btnNewButton.setVisible(false);
+		btnNewButton.setWidth("100%");
 		
 		
 		FinderButton.setBotonClick(new ClickHandler() {

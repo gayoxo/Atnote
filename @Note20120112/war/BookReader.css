@@ -191,18 +191,7 @@ height: 100%;
 	color: #C00;
 	text-align: right;
 }
-.gwt-ButtonBotton  {
- background: transparent url('BotonAbajo.jpg') no-repeat center center;
- display: block;
-    float: left;
-    font: normal 12px arial, sans-serif;
-     background-size:  100% 100%;
-	color: White;
-	text-decoration: none;
-	border: 0px solid;
-	font-size: 24px;
 
-}
 .gwt-ButtonTOP {
  background: transparent url('BotonArriba.jpg') no-repeat center center;
  display: block;
@@ -225,6 +214,19 @@ height: 100%;
 	text-decoration: none;
 		border: 0px solid;
 }
+
+.gwt-ButtonTOPSelect {
+background: transparent url('BotonArriba.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
 .gwt-ButtonPush {
  display: block;
     float: left;
@@ -236,6 +238,21 @@ height: 100%;
 	text-decoration: none;
 	background-color: White;
 }
+
+
+.gwt-ButtonBotton  {
+ background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+
+}
+
 .gwt-ButtonBottonOver {
 background: transparent url('BotonAbajo.jpg') no-repeat center center;
  display: block;
@@ -258,14 +275,22 @@ background: transparent url('BotonAbajo.jpg') no-repeat center center;
 	background-color: White;
 	  background-size:  100% 100%;
 }
-.gwt-ButtonTOP2 {
-background: url(BotonArriba.jpg) no-repeat center center;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
 
+
+.gwt-ButtonBottonSelect {
+background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
 }
+
+
+
 .gwt-ButtonBottonSave {
  background: transparent url('BotonAbajo.jpg') no-repeat center center;
  display: block;

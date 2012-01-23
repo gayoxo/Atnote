@@ -315,7 +315,7 @@ public class Administrador implements EntryPoint {
 		});
 		
 		btnNewButton_4 = new Button("Return to the Activity");
-		btnNewButton_4.setStyleName("gwt-ButtonBottonSaveOver");
+		btnNewButton_4.setStyleName("gwt-ButtonBotton");
 		btnNewButton_4.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
