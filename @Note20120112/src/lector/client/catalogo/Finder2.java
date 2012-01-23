@@ -132,7 +132,7 @@ public class Finder2 extends Composite {
 				
 				ActualRama.removeItems();
 				for (Entity entity : result) {
-					entity.setFather(ActualRama.getEntidad());
+					entity.setActualFather(ActualRama.getEntidad());
 				}
 				for (Entity entitynew : result) {
 					Node A=new Node(entitynew);
@@ -169,7 +169,7 @@ public class Finder2 extends Composite {
 				
 				ActualRama.removeItems();
 				for (Entity entity : result) {
-					entity.setFather(ActualRama.getEntidad());
+					entity.setActualFather(ActualRama.getEntidad());
 				}
 				for (Entity entitynew : result) {
 					Node A=new Node(entitynew);

@@ -1,5 +1,7 @@
 package lector.client.admin.tagstypes;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -28,12 +30,12 @@ public class NewTypeRename extends PopupPanel {
     private PopupPanel Yo;
     private  final TextBox textBox; 
     private final Entity Nombre;
-    private Entity Father;
+    private ArrayList<Entity> Father;
 
-    public NewTypeRename(final Entity renombrar, Entity father) {
+    public NewTypeRename(final Entity renombrar, ArrayList<Entity> arrayList) {
         super(false);
         setGlassEnabled(true);
-        Father=father;
+        Father=arrayList;
         String Tipo;
         if (renombrar instanceof File) Tipo="Type"; else Tipo="Type Category";
         String Titulo = "Write the new "+ Tipo +" for rename the " + Tipo + " " + '"' + renombrar.getName() + '"';
@@ -140,15 +142,15 @@ public class NewTypeRename extends PopupPanel {
 		    					LoadingPanel.getInstance().center();
                                 if (Nombre instanceof File){
                                 	File file = new File(textBox.getText(),null,Nombre.getCatalogId());
-                                	file.setFather(Nombre.getFather());
-                                	bookReaderServiceHolder.saveFile(file, callback);
+                                	file.setFathers(Nombre.getFathers());
+                                	bookReaderServiceHolder.saveFile(file, file.getFathers().get(0).getID(),callback);
                                 }
                                 else {
                                 	LoadingPanel.getInstance().setLabelTexto("Saving...");
 			    					LoadingPanel.getInstance().center();
                                 	Folder folder = new Folder(textBox.getText(),null,Nombre.getCatalogId());
-                                	folder.setFather(Nombre.getFather());
-                                	bookReaderServiceHolder.saveFolder(folder, callback); 
+                                	folder.setFathers(Nombre.getFathers());
+                                	bookReaderServiceHolder.saveFolder(folder,folder.getFathers().get(0).getID(), callback); 
                                 }
                         } else {
                             Window.alert("The new type is empty");

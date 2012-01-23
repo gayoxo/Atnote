@@ -312,7 +312,7 @@ public class TextComentEdit extends DialogBox {
 						FileDB resulttmp=result.get(i);
 						Antiguos.add(resulttmp.getId());
 						File F=new File(resulttmp.getName(), resulttmp.getId(), resulttmp.getCatalogId());
-						F.setFather(null);
+						F.setFathers(null);
 						if (F.getCatalogId().equals(ActualUser.getReadingactivity().getCatalogId()))
 						{
 							ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog1.getTexto(),PanelTexto.getPenelBotonesTipo());

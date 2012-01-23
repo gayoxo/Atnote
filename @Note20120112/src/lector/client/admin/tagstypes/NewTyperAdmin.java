@@ -93,14 +93,12 @@ public class NewTyperAdmin extends PopupPanel {
 						LoadingPanel.getInstance().setLabelTexto("Saving...");
     					LoadingPanel.getInstance().center();
 						if (WNCopy==whatsthenew.Type){
-						File F=new File(textBox.getText(),null,catalog.getId());
-						F.setFather(Father);						
-						bookReaderServiceHolder.saveFile(F, callback);
+						File F=new File(textBox.getText(),null,catalog.getId());					
+						bookReaderServiceHolder.saveFile(F,Father.getID(), callback);
 						}
 						else {
 							Folder F=new Folder(textBox.getText(),null,catalog.getId());
-							F.setFather(Father);
-							bookReaderServiceHolder.saveFolder(F, callback);
+							bookReaderServiceHolder.saveFolder(F,Father.getID(), callback);
 							
 						}
 						Yo.hide();
