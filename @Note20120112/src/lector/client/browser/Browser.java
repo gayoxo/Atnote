@@ -2,7 +2,6 @@ package lector.client.browser;
 
 import java.util.ArrayList;
 
-import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder2;
@@ -12,7 +11,6 @@ import lector.client.controler.Controlador;
 import lector.client.language.Language;
 import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;
-import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -23,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalSplitPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Button;
@@ -31,7 +28,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.sun.java.swing.plaf.windows.resources.windows;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Browser implements EntryPoint {
