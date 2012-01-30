@@ -6,7 +6,6 @@ import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder2;
-import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
@@ -38,6 +37,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.sun.java.swing.plaf.windows.resources.windows;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Browser implements EntryPoint {
@@ -93,21 +93,14 @@ public class Browser implements EntryPoint {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
 			
-				if ((FinderButton2.getTopPath()==null)&&(BS.getEntidad().getFathers().isEmpty())) 
+				if ((FinderButton2.getTopPath()==null)&&(BS.getEntidad().getFather()==null)) 
 					BS.Swap();
-				else if (EqualsFinderButton(BS))
+				else if (FinderButton2.getTopPath().getID().equals(BS.getEntidad().getFather().getID())) 
 					BS.Swap();
 				
 				if (SelectedB.getWidgetCount()==0)btnNewButton.setVisible(false);
 				else btnNewButton.setVisible(true);
 				
-			}
-
-			private boolean EqualsFinderButton(BotonesStackPanelBrowser bS) {
-				for (Entity entity : bS.getEntidad().getFathers()) {
-					if (FinderButton2.getTopPath().getID().equals(entity.getID())) return true;
-				}		
-				return false;
 			}
 		});
 		
@@ -158,20 +151,13 @@ public class Browser implements EntryPoint {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
 			
-				if ((FinderButton.getTopPath()==null)&&(BS.getEntidad().getFathers().isEmpty())) 
+				if ((FinderButton.getTopPath()==null)&&(BS.getEntidad().getFather()==null)) 
 					BS.Swap();
-				else if (EqualsFinderButton(BS))
+				else if (FinderButton.getTopPath().getID().equals(BS.getEntidad().getFather().getID())) 
 					BS.Swap();
 				
 				if (SelectedB.getWidgetCount()==0)btnNewButton.setVisible(false);
 				else btnNewButton.setVisible(true);
-			}
-
-			private boolean EqualsFinderButton(BotonesStackPanelBrowser bS) {
-				for (Entity entity : bS.getEntidad().getFathers()) {
-					if (FinderButton.getTopPath().getID().equals(entity.getID())) return true;
-				}		
-				return false;
 			}
 		});
 

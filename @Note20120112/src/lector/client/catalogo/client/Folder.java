@@ -28,7 +28,7 @@ public class Folder extends Entity implements Serializable {
     }
 
     public void addSon(Entity entity) throws FileException {
-        entity.getFathers().add(this);
+        entity.setFather(this);
         Sons.add(entity);
 
     }
@@ -46,7 +46,7 @@ public class Folder extends Entity implements Serializable {
             sons = new ArrayList<Entity>();
         }
         for (Entity entity : sons) {
-            entity.getFathers().add(this);
+            entity.setFather(this);
         }
         Sons = sons;
     }

@@ -1,5 +1,8 @@
 package lector.client.browser;
 
+import java.util.ArrayList;
+
+import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;
@@ -10,7 +13,9 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;

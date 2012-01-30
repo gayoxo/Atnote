@@ -174,7 +174,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 			private void RenameTypos(Entity entity) {
 
-				NewTypeRename TR = new NewTypeRename(entity, entity.getFathers());
+				NewTypeRename TR = new NewTypeRename(entity, entity.getFather());
 				TR.setModal(true);
 				TR.center();
 			}
@@ -214,11 +214,11 @@ public class EditorTagsAndTypes implements EntryPoint {
 					}
 				};
 				if (delete instanceof Folder)
-					bookReaderServiceHolder.deleteFolder(delete.getID(),finder.getTopPath().getID(),
+					bookReaderServiceHolder.deleteFolder(delete.getID(),
 							callback);
 				else
 					
-					bookReaderServiceHolder.deleteFile(delete.getID(),finder.getTopPath().getID(), callback);
+					bookReaderServiceHolder.deleteFile(delete.getID(), callback);
 
 			}
 

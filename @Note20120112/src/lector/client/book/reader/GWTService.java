@@ -26,7 +26,6 @@ import lector.client.reader.Book;
 import lector.client.reader.BookNotFoundException;
 import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
-
 import lector.client.reader.NullParameterException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -71,44 +70,25 @@ public interface GWTService extends RemoteService {
 	public int fusionFiles(Long fFromId, Long fToId) throws GeneralException,
 			NullParameterException;
 
-	public void fusionFolder(Long fFromId, Long fToId)
-			throws IlegalFolderFusionException, GeneralException;
-
 	public ArrayList<Annotation> getAnnotationsByAnnotationTypeAndBook(
 			String annotationType, String bookId, Integer pageNumber)
 			throws GeneralException, AnnotationNotFoundException,
 			NullParameterException, BookNotFoundException;
 
-	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(
-			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity);
+	public void moveFile(Long fileId, Long fToId);
 
-	public ArrayList<FileDB> getEntriesIdsByIdsRec(ArrayList<Long> Ids);
+	public void moveFolder(Long fFromId, Long fToId);
 
-	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids);
+	public void fusionFolder(Long fFromId, Long fToId) throws IlegalFolderFusionException;
 
-	public ArrayList<Annotation> getAnnotationsByIdsStudent(
-			ArrayList<Long> ids, Long Student);
+	public void deleteFolder(Long folderId) throws GeneralException;
 
-	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(
-			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity,
-			Long Student);
-
-	public void moveFile(Long fatherFromId, Long fileId, Long fToId)
-			throws GeneralException;
-
-	public void moveFolder(Long fatherFromId, Long fFromId, Long fToId)
-			throws GeneralException;
-
-	public void deleteFolder(Long folderId, Long fatherId)
-			throws GeneralException;
-
-	public void deleteFile(Long fileId, Long fatherId) throws GeneralException,
+	public void deleteFile(Long fileId) throws GeneralException,
 			NullParameterException;
 
-	public Long saveFile(File filesys, Long fatherId) throws FileException;
+	public Long saveFile(File filesys) throws FileException;
 
-	public Long saveFolder(Folder folderSys, Long fatherId)
-			throws FileException;
+	public Long saveFolder(Folder folderSys) throws FileException;
 
 	public ArrayList<Entity> getSons(Long fatherId, Long catalogId);
 
@@ -202,16 +182,22 @@ public interface GWTService extends RemoteService {
 	public ReadingActivity loadReadingActivityById(Long id);
 
 	public void removeFileFromAnnotation(Long annotationId, Long fileId);
-
+	
 	public ArrayList<FileDB> getFilesByIds(ArrayList<Long> ids);
-
-	public ArrayList<FileDB> getFilesByNameAndCatalogId(
-			ArrayList<String> names, Long catalogId);
+	
+	public ArrayList<FileDB> getFilesByNameAndCatalogId(ArrayList<String> names, Long catalogId);
+	
 
 	public ArrayList<Long> getEntriesIdsByNames(ArrayList<String> names,
 			Long catalogTeacher, Long catalogOpen);
-
-	public ArrayList<Annotation> getAnnotationsByIds(ArrayList<Long> ids);
-
-	public void addFather(Long sonId, Long fatherId) throws FileException;
+	
+	public ArrayList<Annotation> getAnnotationsByIdsStudent(ArrayList<Long> ids,Long student);
+	
+	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids);
+	
+	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(ArrayList<Long> ids, ArrayList<Long> authorIds,Long Activity,Long Student);
+	
+	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(ArrayList<Long> ids, ArrayList<Long> authorIds,Long Activity);
+	
+	public ArrayList<FileDB> getEntriesIdsByIdsRec(ArrayList<Long> ids);
 }

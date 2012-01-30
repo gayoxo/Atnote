@@ -8,9 +8,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.Collection;
 import java.util.Date;
-
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -31,6 +30,7 @@ import lector.client.catalogo.server.Catalogo;
 import lector.client.catalogo.server.Entry;
 import lector.client.catalogo.server.FileDB;
 import lector.client.catalogo.server.FolderDB;
+import lector.client.controler.Constants;
 import lector.client.language.Language;
 import lector.client.language.LanguageNotFoundException;
 import lector.client.login.GroupApp;
@@ -495,6 +495,62 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return listAnnotations;
 	}
 
+	public int fusionFiles(Long fFromId, Long fToId) throws GeneralException,
+			NullParameterException {
+		EntityManager entityManager = EMF.get().createEntityManager();
+
+		if (fFromId == null || fToId == null) {
+			throw new NullParameterException(
+					"Parameter cant be null in method deleteDnServices");
+		}
+		int total = 0;
+		int annotationsToFileTo = 0;
+		FileDB fileFrom = loadFileById(fFromId);
+		ArrayList<Long> annotationFromIds = fileFrom.getAnnotationsIds();
+
+		try {
+
+			FileDB fileTo = loadFileById2(fToId);
+			if (annotationFromIds != null) {
+				total = annotationFromIds.size();
+				for (int i = 0; i < annotationFromIds.size(); i++) {
+					if (!(fileTo.getAnnotationsIds().contains(annotationFromIds
+							.get(i)))) {
+						annotationsToFileTo++;
+						fileTo.getAnnotationsIds()
+								.add(annotationFromIds.get(i));
+					}
+				}
+			}
+			if (annotationsToFileTo > 0) {
+				saveFile(fileTo);
+			}
+			for (int i = 0; i < total; i++) {
+				int a = 0;
+				Annotation annotation = loadAnnotationById(annotationFromIds
+						.get(i));
+				if (!annotation.getFileIds().contains(fileTo)) {
+					a++;
+					annotation.getFileIds().add(fToId);
+				}
+				if (a > 0) {
+					saveAnnotation(annotation);
+				}
+			}
+
+			deleteFileForFusion(fFromId);
+		} catch (Exception e) {
+			entityTransaction.rollback();
+			throw new GeneralException("Exception in method saveFileName: "
+					+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+		return total;
+	}
+
 	// private void setFileAndAnnotationRelation(Long annotationId, FileDB
 	// fileTo) {
 	// EntityManager entityManager = EMF.get().createEntityManager();
@@ -518,12 +574,18 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// }
 	// }
 
+	private void deleteFileForFusion(Long fileId) {
+		FileDB file = loadFileById2(fileId);
+		deleteFileFromParent(file);
+		deletePlainFile(file);
+	}
+
 	private FileDB swapFileDB(FileDB fileDB) {
 		FileDB fileAux = new FileDB();
 		fileAux.setId(fileDB.getId());
 		fileAux.setCatalogId(fileDB.getCatalogId());
 		fileAux.setName(fileDB.getName());
-		fileAux.setFathers(fileDB.getFathers());
+		fileAux.setFatherId(fileDB.getFatherId());
 		fileAux.setAnnotationsIds(fileDB.getAnnotationsIds());
 		return fileAux;
 	}
@@ -708,63 +770,107 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// }
 
 	// METODOS NECESARIOS PARA LA RESOLUCIÃ“N DE LOS TIPOS POR RBOL
-	public void moveFile(Long fatherFromId, Long fileId, Long fToId)
-			throws GeneralException {
+	public void moveFile(Long fileId, Long fToId) {
 		FileDB file = loadFileById2(fileId);
-		deleteFileFromParent(file, fatherFromId);
-		deleteFatherFromFile(fileId, fatherFromId);
+		deleteFileFromParent(file);
 		if (loadFolderById(fToId) != null) {
-			try {
-				addFather(fileId, fToId);
-			} catch (FileException fe) {
-
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
+			file.setFatherId(fToId);
+			if (file.getCatalogId() != null) {
+				file.setCatalogId(null);
 			}
-
+		} else {
+			file.setCatalogId(fToId);
+			if (file.getFatherId() != null) {
+				file.setFatherId(null);
+			}
 		}
-		// savePlainFile(file);
-
+		saveFile(file);
+		addChildToParent(fileId, fToId);
 	}
 
-	public void moveFolder(Long fatherFromId, Long fFromId, Long fToId)
-			throws GeneralException {
+	public void moveFolder(Long fFromId, Long fToId) {
 		FolderDB fFrom = loadFolderById(fFromId);
-		deleteFolderFromParent(fFrom, fatherFromId);
-		deleteFatherFromFolder(fFromId, fatherFromId);
+		deleteFolderFromParent(fFrom);
 		if (loadFolderById(fToId) != null) {
-			try {
-				addFather(fFromId, fToId);
+			fFrom.setFatherId(fToId);
 
-			} catch (FileException fe) {
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
+		} else {
+			fFrom.setCatalogId(fToId);
+			if (fFrom.getFatherId() != null) {
+				fFrom.setFatherId(null);
 			}
 		}
-		// updateFolder(fFrom);
-
+		saveFolder(fFrom);
+		addChildToParent(fFromId, fToId);
 	}
 
-	private void deleteFolderFromParent(FolderDB folder, Long fatherId) {
-		if (fatherId != null) {
-			FolderDB folderAux = loadFolderById(fatherId);
+	private void addChildToParent(Long childId, Long parentId) {
+
+		Catalogo catalog = loadCatalogById2(parentId);
+		if (catalog != null) {
+			if (!(catalog.getEntryIds().contains(childId))) {
+				catalog.getEntryIds().add(childId);
+				saveCatalog(catalog);
+			}
+		} else {
+			FolderDB folder = loadFolderById(parentId);
+			if (!(folder.getEntryIds().contains(childId))) {
+				folder.getEntryIds().add(childId);
+			}
+			saveFolder(folder);
+		}
+	}
+
+	public void fusionFolder(Long fFromId, Long fToId)
+			throws IlegalFolderFusionException {
+		FolderDB fFrom = loadFolderById(fFromId);
+		FolderDB fTo = loadFolderById(fToId);
+		if (isFolderDestinationDecendant(fFromId, fTo)) {
+			throw new IlegalFolderFusionException(
+					"Sorry, no merge is possible from a parent to a child category");
+		}
+		ArrayList<FolderDB> foldersChildren = getFolderChildren(fFrom);
+		if (!foldersChildren.isEmpty()) {
+			setNewFatherToFolder(foldersChildren, fToId);
+		}
+		ArrayList<FileDB> fileChildren = getFileChildren(fFrom);
+		if (!fileChildren.isEmpty()) {
+			setNewFatherToFiles(fileChildren, fToId);
+		}
+		deleteFolderFromParent(fFrom);
+		deletePlainFolder(fFrom);
+	}
+
+	private boolean isFolderDestinationDecendant(Long folderFromId,
+			FolderDB folderTo) {
+		boolean isDecendant = false;
+		FolderDB folderToFather = loadFolderById(folderTo.getFatherId());
+		while (!isDecendant && (folderToFather != null)) {
+			if (folderToFather.getId().equals(folderFromId)) {
+				isDecendant = true;
+			} else {
+				if (folderToFather.getFatherId() != null) {
+					folderToFather = loadFolderById(folderToFather
+							.getFatherId());
+				} else {
+					folderToFather = null;
+				}
+
+			}
+		}
+		return isDecendant;
+	}
+
+	private void deleteFolderFromParent(FolderDB folder) {
+		if (folder.getFatherId() != null) {
+			FolderDB folderAux = loadFolderById(folder.getFatherId());
 			folderAux.getEntryIds().remove(folder.getId());
-			updateFolder(folderAux);
+			saveFolder(folderAux);
 
 		} else {
 			Catalogo catalogo = loadCatalogById2(folder.getCatalogId());
 			catalogo.getEntryIds().remove(folder.getId());
 			saveCatalog(catalogo);
-		}
-	}
-
-	private void deleteFatherFromFolder(Long folderId, Long fatherId) {
-		if (fatherId != null) {
-			FolderDB folderAux = loadFolderById(folderId);
-			folderAux.getFathers().remove(fatherId);
-			updateFolder(folderAux);
 		}
 	}
 
@@ -782,18 +888,15 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	// TODO: NO CONSIDERA CUANDO EL FILE SE MUEVE AL ROOT
-	// todo: modificado el 25-12.
+
 	private void setNewFatherToFiles(ArrayList<FileDB> fileChildren,
-			Long newFather) throws GeneralException {
+			Long newFather) {
 		for (int i = 0; i < fileChildren.size(); i++) {
-			try {
-				addFather(fileChildren.get(i).getId(), newFather);
-			} catch (FileException fe) {
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
-			}
+			FileDB fileAux = swapFile(fileChildren.get(i));
+			fileAux.setFatherId(newFather);
+			saveFile(fileAux);
 		}
+
 	}
 
 	private ArrayList<FileDB> getFileChildren(FolderDB folder) {
@@ -801,29 +904,26 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		List<FileDB> files;
 		ArrayList<FileDB> fileList;
 		entityManager = EMF.get().createEntityManager();
-		String sql = "SELECT a FROM FileDB a WHERE a.fathers=" + folder.getId();
+		String sql = "SELECT a FROM FileDB a WHERE a.fatherId="
+				+ folder.getId();
 		files = entityManager.createQuery(sql).getResultList();
 		fileList = new ArrayList<FileDB>(files);
 		return fileList;
 	}
 
-	private void setNewFatherToFolders(ArrayList<FolderDB> folderChildren,
-			Long newFather) throws GeneralException {
+	private void setNewFatherToFolder(ArrayList<FolderDB> folderChildren,
+			Long newFather) {
 		for (int i = 0; i < folderChildren.size(); i++) {
-			try {
-				addFather(folderChildren.get(i).getId(), newFather);
-			} catch (FileException fe) {
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
-			}
+			FolderDB folderAux = swapFolder(folderChildren.get(i));
+			folderAux.setFatherId(newFather);
+			saveFolder(folderAux);
 		}
 	}
 
 	private FileDB swapFile(FileDB file) {
 		FileDB fileAux = new FileDB();
 		fileAux.setId(file.getId());
-		fileAux.setFathers(file.getFathers());
+		fileAux.setFatherId(file.getFatherId());
 		fileAux.setName(file.getName());
 		return fileAux;
 	}
@@ -831,11 +931,12 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	private FolderDB swapFolder(FolderDB folder) {
 		FolderDB folderAux = new FolderDB();
 		folderAux.setId(folder.getId());
-		folderAux.setFathers(folder.getFathers());
+		folderAux.setFatherId(folder.getFatherId());
 		folderAux.setName(folder.getName());
 		for (Long entryId : folder.getEntryIds()) {
 			folderAux.getEntryIds().add(entryId);
 		}
+
 		return folderAux;
 	}
 
@@ -844,23 +945,18 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		List<FolderDB> folders;
 		ArrayList<FolderDB> folderList;
 		entityManager = EMF.get().createEntityManager();
-		String sql = "SELECT a FROM FolderDB a WHERE a.fathers="
+		String sql = "SELECT a FROM FolderDB a WHERE a.fatherId="
 				+ folder.getId();
 		folders = entityManager.createQuery(sql).getResultList();
 		folderList = new ArrayList<FolderDB>(folders);
 		return folderList;
 	}
 
-	// todo: CAMBIADO EL 25-12
-	public void deleteFile(Long fileId, Long fatherId) {
+	public void deleteFile(Long fileId) {
 		FileDB fileDB = loadFileById2(fileId);
-		deleteFileFromParent(fileDB, fatherId);
-		fileDB.getFathers().remove(fatherId);
-		if (fileDB.getFathers().isEmpty()) {
-			int aux = deleteFilesInAnnotations(fileId);
-			deletePlainFile(fileDB);
-		}
-
+		int aux = deleteFilesInAnnotations(fileId);
+		deleteFileFromParent(fileDB);
+		deletePlainFile(fileDB);
 	}
 
 	private int deleteFilesInAnnotations(Long fileId) {
@@ -931,25 +1027,18 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// entityTransaction.commit();
 	// }
 	// }
-	/* modified on graph. */
-	private void deleteFileFromParent(FileDB file, Long father) {
-		if (father == null) {
+
+	private void deleteFileFromParent(FileDB file) {
+		if (file.getFatherId() == null) {
 			Catalogo catalogo = loadCatalogById2(file.getCatalogId());
 			catalogo.getEntryIds().remove(file.getId());
 			saveCatalog(catalogo);
 		} else {
-			FolderDB folder = loadFolderById(father);
+			FolderDB folder = loadFolderById(file.getFatherId());
 			folder.getEntryIds().remove(file.getId());
-			updateFolder(folder);
+			saveFolder(folder);
 		}
-	}
 
-	private void deleteFatherFromFile(Long fileId, Long fatherId) {
-		if (fatherId != null) {
-			FileDB file = loadFileById2(fileId);
-			file.getFathers().remove(fatherId);
-			savePlainFile(file);
-		}
 	}
 
 	private void deletePlainFile(FileDB file) {
@@ -969,18 +1058,21 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	// NUEVO JULIO Busca el id del catalogo dado el padre.
-	// todo: cambiado al 25-12.
 	private Long loadCatalogIdByFatherId(Long id) {
 		FolderDB fatherFolder = loadFolderById(id);
-		while (!fatherFolder.getFathers().isEmpty()) {
-			fatherFolder = loadFolderById(fatherFolder.getFathers().get(0));
+		while (fatherFolder.getFatherId() != null) {
+			fatherFolder = loadFolderById(fatherFolder.getFatherId());
 		}
 		return fatherFolder.getCatalogId();
 	}
 
-	public Long saveFile(File filesys, Long fatherId) throws FileException {
+	public Long saveFile(File filesys) throws FileException {
 		Long catalogId;
-		catalogId = filesys.getCatalogId();
+		if (filesys.getFather() == null) {
+			catalogId = filesys.getCatalogId();
+		} else {
+			catalogId = loadCatalogIdByFatherId(filesys.getFather().getID());
+		}
 
 		if (isFileNameInDB(filesys.getName(), catalogId)
 				&& filesys.getID() == null) {
@@ -990,8 +1082,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		FileDB file = cloneFile(filesys);
 		savePlainFile(file);
 
-		if (fatherId != null) {
-			FolderDB fatherFolder = loadFolderById(fatherId);
+		if (filesys.getFather() != null) {
+			FolderDB fatherFolder = loadFolderById(file.getFatherId());
 			if (fatherFolder != null) {
 				if (!(fatherFolder.getEntryIds().contains(file.getId()))) {
 					fatherFolder.getEntryIds().add(file.getId());
@@ -1033,17 +1125,17 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	private void cloneFileSys(FileDB fileDB, File file) {
-		// if (file.getFather() != null) {
-		// file.getFather().setID(fileDB.getFatherId());
-		// }
-		// file.setID(fileDB.getId());
+		if (file.getFather() != null) {
+			file.getFather().setID(fileDB.getFatherId());
+		}
+		file.setID(fileDB.getId());
 
 	}
 
-	private void saveFile(FileDB file, Long fatherId) {
+	private void saveFile(FileDB file) {
 		savePlainFile(file);
-		if (fatherId != null) {
-			FolderDB fatherFolder = loadFolderById(fatherId);
+		if (file.getFatherId() != null) {
+			FolderDB fatherFolder = loadFolderById(file.getFatherId());
 			if (!(fatherFolder.getEntryIds().contains(file.getId()))) {
 				fatherFolder.getEntryIds().add(file.getId());
 				updateFolder(fatherFolder);
@@ -1061,14 +1153,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	private FileDB cloneFile(File f) {
 		FileDB fileDB = new FileDB();
 		fileDB.setId(f.getID());
-		ArrayList<Long> fileDbs = new ArrayList<Long>();
-		if (f.getFathers() != null) {
-			for (Entity e : f.getFathers()) {
-				fileDbs.add(e.getID());
-			}
-			fileDB.setFathers(fileDbs);
-
+		if (f.getFather() != null) {
+			fileDB.setFatherId(f.getFather().getID());
 		}
+
 		fileDB.setCatalogId(f.getCatalogId());
 		fileDB.setName(f.getName());
 		return fileDB;
@@ -1107,11 +1195,11 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	}
 
-	public Long saveFolder(Folder folderSys, Long fatherId)
-			throws FileException {
+	public Long saveFolder(Folder folderSys) throws FileException {
 		Long folderId = 0l;
-		if (fatherId != null) {
-			if (hasTwinBrother(folderSys.getName(), fatherId, false)) {
+		if (folderSys.getFather() != null) {
+			if (hasTwinBrother(folderSys.getName(), folderSys.getFather()
+					.getID(), false)) {
 				throw new FileException(
 						"El Tipo de AnotaciÃ³n que intenta guardar ya lo ha utilizado, por favor cÃ¡mbielo");
 			}
@@ -1126,8 +1214,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			FolderDB folder = cloneFolder(folderSys);
 			savePlainFolder(folder);
 			folderId = folder.getId();
-			if (fatherId != null) {
-				FolderDB fatherFolder = loadFolderById(fatherId);
+			if (folderSys.getFather() != null) {
+				FolderDB fatherFolder = loadFolderById(folder.getFatherId());
 				if (fatherFolder != null) {
 					if (!(fatherFolder.getEntryIds().contains(folder.getId()))) {
 						fatherFolder.getEntryIds().add(folder.getId());
@@ -1143,7 +1231,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 					}
 				}
 			}
-			// cloneFolderSys(folder, folderSys);
+			cloneFolderSys(folder, folderSys);
 		} catch (FileException fe) {
 		}
 		return folderId;
@@ -1164,7 +1252,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				flag = false;
 			}
 		} else {
-			if (!(list.get(0).getFathers().contains(fatherId))) {
+			if (!(list.get(0).getFatherId().equals(fatherId))) {
 				flag = false;
 			}
 		}
@@ -1175,22 +1263,22 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	private void cloneFolderSys(FolderDB folderDB, Folder folder) {
-		// if (folder.getFather() != null) {
-		// folder.getFather().setID(folderDB.getFatherId());
-		// }
-		// folder.setID(folderDB.getId());
+		if (folder.getFather() != null) {
+			folder.getFather().setID(folderDB.getFatherId());
+		}
+		folder.setID(folderDB.getId());
 	}
 
-	private void saveFolder(FolderDB folder, Long fatherId) {
+	private void saveFolder(FolderDB folder) {
 		savePlainFolder(folder);
-		if (fatherId == null) {
+		if (folder.getFatherId() == null) {
 			Catalogo catalog = loadCatalogById2(folder.getCatalogId());
 			if (!(catalog.getEntryIds().contains(folder.getId()))) {
 				catalog.getEntryIds().add(folder.getId());
 				saveCatalog(catalog);
 			}
 		} else {
-			FolderDB fatherFolder = loadFolderById(fatherId);
+			FolderDB fatherFolder = loadFolderById(folder.getFatherId());
 			if (!(fatherFolder.getEntryIds().contains(folder.getId()))) {
 				fatherFolder.getEntryIds().add(folder.getId());
 				updateFolder(fatherFolder);
@@ -1201,19 +1289,15 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	private FolderDB cloneFolder(Folder f) throws FileException {
 		FolderDB folderDB = new FolderDB();
 		folderDB.setId(f.getID());
-		ArrayList<Long> folderDbs = new ArrayList<Long>();
-		if (f.getFathers() != null) {
-			for (Entity e : f.getFathers()) {
-				folderDbs.add(e.getID());
-			}
-			folderDB.setFathers(folderDbs);
+		if (f.getFather() != null) {
+			folderDB.setFatherId(f.getFather().getID());
 		}
 		folderDB.setCatalogId(f.getCatalogId());
 		folderDB.setName(f.getName());
 		for (int i = 0; i < f.getSons().size(); i++) {
 			folderDB.getEntryIds().add(f.getSons().get(i).getID());
 		}
-		return folderDB; 
+		return folderDB;
 	}
 
 	private void savePlainFolder(FolderDB folder) {
@@ -1236,9 +1320,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		entityManager = EMF.get().createEntityManager();
 		List<FolderDB> list;
 		ArrayList<FolderDB> folders;
+		if (id==null) return null;
 		String sql = "SELECT r FROM FolderDB r WHERE r.id=" + id;
-		if (id == null)
-			return null;
 		list = entityManager.createQuery(sql).getResultList();
 		folders = new ArrayList<FolderDB>(list);
 
@@ -1441,9 +1524,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		String sql;
 		if (fatherId == null) {
 			sql = "SELECT f FROM FolderDB f WHERE f.catalogId=" + catalogId
-					+ " AND f.fathers=NULL";
+					+ " AND f.fatherId=NULL";
 		} else {
-			sql = "SELECT f FROM FolderDB f WHERE f.fathers=" + fatherId;
+			sql = "SELECT f FROM FolderDB f WHERE f.fatherId=" + fatherId;
 		}
 		list = entityManager.createQuery(sql).getResultList();
 		listEntries = new ArrayList<Entry>(list);
@@ -1451,9 +1534,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 		if (fatherId == null) {
 			sql = "SELECT f FROM FileDB f WHERE f.catalogId=" + catalogId
-					+ " AND f.fathers=NULL";
+					+ " AND f.fatherId=NULL";
 		} else {
-			sql = "SELECT f FROM FileDB f WHERE f.fathers=" + fatherId;
+			sql = "SELECT f FROM FileDB f WHERE f.fatherId=" + fatherId;
 		}
 
 		list = entityManager.createQuery(sql).getResultList();
@@ -1462,10 +1545,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	}
 
-	/*
-	 * chequear, esta comentado el cloneFolderSys, esperando modificación de
-	 * FolderSys
-	 */
 	private ArrayList<Entity> buildEntities(ArrayList<Entry> listEntitys) {
 		ArrayList<Entity> sons = new ArrayList<Entity>();
 		for (int i = 0; i < listEntitys.size(); i++) {
@@ -1473,12 +1552,12 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (son instanceof FolderDB) {
 				Folder sonF = new Folder(son.getName(), son.getId(),
 						son.getCatalogId());
-				// cloneFolderSys((FolderDB) son, sonF);
+				cloneFolderSys((FolderDB) son, sonF);
 				sons.add(sonF);
 			} else {
 				File sonf = new File(son.getName(), son.getId(),
 						son.getCatalogId());
-				// cloneFileSys((FileDB) son, sonf);
+				cloneFileSys((FileDB) son, sonf);
 				sons.add(sonf);
 			}
 		}
@@ -1499,38 +1578,24 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 	}
 
-	/* Modified graph */
-	public void deleteFolder(Long folderId, Long fatherId)
-			throws GeneralException {
+	public void deleteFolder(Long folderId) throws GeneralException {
 		ids = new ArrayList<Long>();
-		// sonsFatherMap = new HashMap<Long, ArrayList<Long>>();
-		FolderDB folder = loadFolderById(folderId);
-		folder.getFathers().remove(fatherId);
-		deleteFolderFromParent(folder, fatherId);
-		if (folder.getFathers().isEmpty()) {
-			deepFolderDeletion(folderId);
-			deleteEntries(ids, folderId);
-			deletePlainFolder(folder);
-
-		} else {
-
-			updateFolder(folder);
-		}
+		deepFolderDeletion(folderId);
+		deleteEntries(ids);
 
 	}
 
-	/* tiene que cambiar por deleteEntries2 */
-	private void deleteEntries(ArrayList<Long> entriesIds, Long fatherId)
+	private void deleteEntries(ArrayList<Long> entriesIds)
 			throws GeneralException {
 		FolderDB folder;
 		for (int i = 0; i < entriesIds.size(); i++) {
 			folder = loadFolderById(entriesIds.get(i));
 			if (folder != null) {
-				deleteFolder(folder.getId(), fatherId);
+				deleteFolderFromParent(folder);
 				// deleteFolder(folder.getId());
 				deletePlainFolder(folder);
 			} else {
-				deleteFile(entriesIds.get(i), fatherId);
+				deleteFile(entriesIds.get(i));
 			}
 		}
 	}
@@ -1541,9 +1606,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		for (int i = 0; i < catalogChildren.size(); i++) {
 			folder = loadFolderById(catalogChildren.get(i));
 			if (folder != null) {
-				deleteFolder(catalogChildren.get(i), null);
+				deleteFolder(catalogChildren.get(i));
 			} else {
-				deleteFile(catalogChildren.get(i), null);
+				deleteFile(catalogChildren.get(i));
 			}
 		}
 
@@ -1554,7 +1619,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (folder != null) {
 			ArrayList<FolderDB> foldersChildren = getFolderChildren(folder);
 			for (int i = 0; i < foldersChildren.size(); i++) {
-				ids.add(foldersChildren.get(i).getId());
+				deepFolderDeletion(foldersChildren.get(i).getId());
 			}
 			ArrayList<FileDB> filesChildren = getFileChildren(folder);
 			for (int i = 0; i < filesChildren.size(); i++) {
@@ -2799,20 +2864,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	}
 
-	public ArrayList<Annotation> getAnnotationsByIds(ArrayList<Long> ids) {
-		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-		for (int i = 0; i < ids.size(); i++) {
-			Annotation annotation = loadAnnotationById(ids.get(i));
-			if (annotation != null) {
-				annotations.add(annotation);
-			}
-
-		}
-		return annotations;
-	}
-
-	public ArrayList<Annotation> getAnnotationsByIdsStudent(
-			ArrayList<Long> ids, Long Student) {
+	public ArrayList<Annotation> getAnnotationsByIdsStudent(ArrayList<Long> ids,Long Student) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
 			Annotation annotation = loadAnnotationById(ids.get(i));
@@ -2833,112 +2885,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 							.getUpdatableGroupIds()));
 			annotations.get(i).setFileIds(
 					new ArrayList<Long>(annotations.get(i).getFileIds()));
-		}
-		return annotations;
-	}
-
-	public ArrayList<Annotation> getAnnotationsByAuthors(
-			ArrayList<Long> authorsIds) {
-		ArrayList<Annotation> Annotations = new ArrayList<Annotation>();
-		for (int i = 0; i < authorsIds.size(); i++) {
-			ArrayList<Annotation> Annotation = getAnnotationsByAuthorId(authorsIds
-					.get(i));
-			if (Annotation != null) {
-				Annotations.addAll(Annotation);
-			}
-
-		}
-		return Annotations;
-	}
-
-	public ArrayList<Annotation> getAnnotationsByAuthorId(Long id) {
-		EntityManager entityManager;
-		entityManager = EMF.get().createEntityManager();
-		List<Annotation> list;
-		ArrayList<Annotation> annotations;
-		String sql = "SELECT r FROM Annotation r WHERE r.userId=" + id;
-		list = entityManager.createQuery(sql).getResultList();
-		annotations = new ArrayList<Annotation>(list);
-
-		if (entityManager.isOpen()) {
-			entityManager.close();
-		}
-		ArrayList<Annotation> annotationReturnArra = new ArrayList<Annotation>();
-		for (Annotation annotation : annotations) {
-
-			Annotation annotationReturn = annotation;
-			if (annotationReturn != null) {
-				annotationReturn.setFileIds(new ArrayList<Long>(
-						annotationReturn.getFileIds()));
-				annotationReturn.setVisibilityGroupIds(new ArrayList<Long>(
-						annotationReturn.getVisibilityGroupIds()));
-				annotationReturn.setUpdatableGroupIds(new ArrayList<Long>(
-						annotationReturn.getUpdatableGroupIds()));
-			}
-			annotationReturnArra.add(annotationReturn);
-		}
-		return annotationReturnArra;
-
-	}
-
-	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(
-			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity) {
-		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids);
-		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-		if (!annotationsAux.isEmpty() && annotationsAux != null) {
-			annotations.addAll(annotationsAux);
-		}
-		if (ids.isEmpty()) {
-			annotationsAux = getAnnotationsByAuthors(authorIds);
-			if (!annotationsAux.isEmpty() && annotationsAux != null) {
-				for (int i = 0; i < annotationsAux.size(); i++) {
-					if (!ids.contains(annotationsAux.get(i).getId())) {
-						annotations.add(annotationsAux.get(i));
-					}
-				}
-			}
-		} else {
-			if (!authorIds.isEmpty()) {
-				annotationsAux = new ArrayList<Annotation>();
-				for (Annotation annotation : annotations) {
-					if (IsIn(annotation, authorIds))
-						annotationsAux.add(annotation);
-				}
-				annotations = annotationsAux;
-			}
-
-		}
-		return annotations;
-	}
-
-	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(
-			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity,
-			Long Student) {
-		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsStudent(ids,
-				Student);
-		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
-		if (!annotationsAux.isEmpty() && annotationsAux != null) {
-			annotations.addAll(annotationsAux);
-		}
-		if (ids.isEmpty()) {
-			annotationsAux = getAnnotationsByAuthors(authorIds);
-			if (!annotationsAux.isEmpty() && annotationsAux != null) {
-				for (int i = 0; i < annotationsAux.size(); i++) {
-					if (!ids.contains(annotationsAux.get(i).getId())) {
-						annotations.add(annotationsAux.get(i));
-					}
-				}
-			}
-		} else {
-			if (!authorIds.isEmpty()) {
-				annotationsAux = new ArrayList<Annotation>();
-				for (Annotation annotation : annotations) {
-					if (IsIn(annotation, authorIds))
-						annotationsAux.add(annotation);
-				}
-				annotations = annotationsAux;
-			}
-
 		}
 		return annotations;
 	}
@@ -2965,11 +2911,132 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 		return annotations;
 	}
+	
+	public ArrayList<Annotation> getAnnotationsByAuthors(
+			ArrayList<Long> authorsIds) {
+		ArrayList<Annotation> Annotations = new ArrayList<Annotation>();
+		for (int i = 0; i < authorsIds.size(); i++) {
+			ArrayList<Annotation> Annotation = loadAnnotationByAuthorId(authorsIds.get(i));
+			if (Annotation != null) {
+				Annotations.addAll(Annotation);
+			}
 
+		}
+		return Annotations;
+	}
+
+	public ArrayList<Annotation> loadAnnotationByAuthorId(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> list;
+		ArrayList<Annotation> annotations;
+		String sql = "SELECT r FROM Annotation r WHERE r.userId=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		annotations = new ArrayList<Annotation>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			//annotations.add(null);
+		}
+		ArrayList<Annotation> annotationReturnArra=new ArrayList<Annotation>();
+		for (Annotation annotation : annotations){
+		Annotation annotationReturn = annotation;
+		if (annotationReturn != null) {
+			annotationReturn.setFileIds(new ArrayList<Long>(annotationReturn
+					.getFileIds()));
+			annotationReturn.setVisibilityGroupIds(new ArrayList<Long>(
+					annotationReturn.getVisibilityGroupIds()));
+			annotationReturn.setUpdatableGroupIds(new ArrayList<Long>(
+					annotationReturn.getUpdatableGroupIds()));
+		}
+		annotationReturnArra.add(annotationReturn);
+		}
+
+		return annotationReturnArra;
+
+	}
+
+//	public ArrayList<Annotation> getAnnotationsByIdsAndAuthors(
+//			ArrayList<Long> ids, ArrayList<Long> authorIds) {
+//		ArrayList<Annotation> annotationsAux = getAnnotationsByIds(ids);
+//		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+//		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+//			annotations.addAll(annotationsAux);
+//		}
+//		annotationsAux = getAnnotationsByAuthors(authorIds);
+//		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+//			for (int i = 0; i < annotationsAux.size(); i++) {
+//				if (!ids.contains(annotationsAux.get(i).getId())) {
+//					annotations.add(annotationsAux.get(i));
+//				}
+//			}
+//		}
+//		return annotations;
+//	}
+	
+	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(
+			ArrayList<Long> ids, ArrayList<Long> authorIds,Long Activity) {
+		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids);
+		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			annotations.addAll(annotationsAux);
+		}
+		if (ids.isEmpty()){
+		annotationsAux = getAnnotationsByAuthors(authorIds);
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			for (int i = 0; i < annotationsAux.size(); i++) {
+				if (!ids.contains(annotationsAux.get(i).getId())) {
+					annotations.add(annotationsAux.get(i));
+				}
+			}
+		}}
+		else {
+			if (!authorIds.isEmpty()){
+			annotationsAux=new ArrayList<Annotation>();
+			for (Annotation annotation : annotations) {
+				if (IsIn(annotation,authorIds)) annotationsAux.add(annotation);
+			}
+			annotations=annotationsAux;
+			}
+			
+		}
+		return annotations;
+	}
+	
+	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(
+			ArrayList<Long> ids, ArrayList<Long> authorIds,Long Activity,Long Student) {
+		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsStudent(ids, Student);
+		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			annotations.addAll(annotationsAux);
+		}
+		if (ids.isEmpty()){
+		annotationsAux = getAnnotationsByAuthors(authorIds);
+		if (!annotationsAux.isEmpty() && annotationsAux != null) {
+			for (int i = 0; i < annotationsAux.size(); i++) {
+				if (!ids.contains(annotationsAux.get(i).getId())) {
+					annotations.add(annotationsAux.get(i));
+				}
+			}
+		}}
+		else {
+			if (!authorIds.isEmpty()){
+			annotationsAux=new ArrayList<Annotation>();
+			for (Annotation annotation : annotations) {
+				if (IsIn(annotation,authorIds)) annotationsAux.add(annotation);
+			}
+			annotations=annotationsAux;
+			}
+			
+		}
+		return annotations;
+	}
+	
 	private boolean IsIn(Annotation annotation, ArrayList<Long> authorIds) {
 		for (Long long1 : authorIds) {
-			if (annotation.getUserId().equals(long1))
-				return true;
+			if (annotation.getUserId().equals(long1)) return true;
 		}
 		return false;
 	}
@@ -2995,34 +3062,36 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				listFolder.add((FolderDB) inputFolder);
 
 			}
-
+			
 		}
 
 		listFiles.addAll(getChildrenFilesIdsByFoldersRec(listFolder));
 
-		ArrayList<FileDB> Salida = new ArrayList<FileDB>();
+		ArrayList<FileDB> Salida=new ArrayList<FileDB>();
 		for (FileDB fileDB : listFiles) {
 			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
 					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
 			fileDB.getAnnotationsIds().clear();
-			if (annotationsIds.isEmpty()) {
+			if (annotationsIds.isEmpty()) 
+				{
 				annotationsIds = new java.util.ArrayList<Long>();
-				FileDB A = new FileDB();
+				FileDB A=new FileDB();
 				A.setAnnotationsIds(annotationsIds);
 				A.setCatalogId(fileDB.getCatalogId());
-				A.setFathers(fileDB.getFathers());
+				A.setFatherId(fileDB.getFatherId());
 				A.setId(fileDB.getId());
 				A.setName(fileDB.getName());
 				Salida.add(A);
-			} else {
-				fileDB.setAnnotationsIds(annotationsIds);
+				}
+			else {
+				fileDB.setAnnotationsIds(annotationsIds);			
 				Salida.add(fileDB);
 			}
 		}
 		return Salida;
 
 	}
-
+	
 	private ArrayList<FileDB> getChildrenFilesIdsByFoldersRec(
 			ArrayList<FolderDB> folderIds) {
 		ArrayList<Entry> entryChildren = new ArrayList<Entry>();
@@ -3037,7 +3106,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (entry instanceof FileDB) {
 				FileDB fileDB = (FileDB) entry;
 				fileSons.add(fileDB);
-
+				
 			} else {
 
 				folderSons.add((FolderDB) entry);
@@ -3048,174 +3117,30 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			fileSons.addAll(recursiveChildren);
 		}
 
-		ArrayList<FileDB> Salida = new ArrayList<FileDB>();
+		ArrayList<FileDB> Salida=new ArrayList<FileDB>();
 		for (FileDB fileDB : fileSons) {
 			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
 					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
 			fileDB.getAnnotationsIds().clear();
-			if (annotationsIds.isEmpty()) {
-				annotationsIds = new java.util.ArrayList<Long>();
-				FileDB A = new FileDB();
-				A.setAnnotationsIds(annotationsIds);
-				A.setCatalogId(fileDB.getCatalogId());
-				A.setFathers(fileDB.getFathers());
-				A.setId(fileDB.getId());
-				A.setName(fileDB.getName());
-				Salida.add(A);
-			} else {
-				fileDB.setAnnotationsIds(annotationsIds);
-				Salida.add(fileDB);
+			if (annotationsIds.isEmpty()) 
+			{
+			annotationsIds = new java.util.ArrayList<Long>();
+			FileDB A=new FileDB();
+			A.setAnnotationsIds(annotationsIds);
+			A.setCatalogId(fileDB.getCatalogId());
+			A.setFatherId(fileDB.getFatherId());
+			A.setId(fileDB.getId());
+			A.setName(fileDB.getName());
+			Salida.add(A);
 			}
+		else {
+			fileDB.setAnnotationsIds(annotationsIds);			
+			Salida.add(fileDB);
 		}
-
+		}
+		
 		return fileSons;
 	}
 
-	/* añade la relación padre - hijo */
-	public void addFather(Long sonId, Long fatherId) throws FileException {
-		FileDB sonFile = loadFileById(sonId);
-		if (fatherId != null) {
-			FolderDB folder = loadFolderById(fatherId);
-			if (!(folder.getEntryIds().contains(sonId))) {
-				folder.getEntryIds().add(sonId);
-				updateFolder(folder);
-			}
-		} else {
-			Long catalogId;
-			if (sonFile != null) {
-				catalogId = sonFile.getCatalogId();
-			} else {
-				catalogId = loadFolderById(sonId).getCatalogId();
-			}
-			Catalogo catalog = loadCatalogById2(catalogId);
-			if (!(catalog.getEntryIds().contains(sonId))) {
-				catalog.getEntryIds().add(sonId);
-				saveCatalog(catalog);
-			}
-		}
-		if (sonFile != null) {
-			if (!(sonFile.getFathers().contains(fatherId))) {
-				sonFile.getFathers().add(fatherId);
-				savePlainFile(sonFile);
-			}
-		} else {
-			FolderDB sonFolder = loadFolderById(sonId);
-			if (sonFolder != null) {
-				if (!(sonFolder.getFathers().contains(fatherId))) {
-					sonFolder.getFathers().add(fatherId);
-					updateFolder(sonFolder);
-				}
-			} else {
-				throw new FileException(
-						"Error while loading the folder, found: NULL ");
-			}
-		}
-	}
-
-	/*
-	 * modified for graph - eliminar cuando se haya desarrollado el catalogo
-	 * grafo
-	 */
-
-	private int addAnnotationsFromFileToAnother(FileDB fFrom, FileDB fTo) {
-		ArrayList<Long> annotationFromIds = fFrom.getAnnotationsIds();
-		int total = 0;
-		int annotationsToFileTo = 0;
-		if (annotationFromIds != null) {
-			total = annotationFromIds.size();
-			for (int i = 0; i < total; i++) {
-				if (!(fTo.getAnnotationsIds()
-						.contains(annotationFromIds.get(i)))) {
-					annotationsToFileTo++;
-					fTo.getAnnotationsIds().add(annotationFromIds.get(i));
-				}
-			}
-
-			if (annotationsToFileTo > 0) {
-				savePlainFile(fTo);
-			}
-
-			for (int i = 0; i < total; i++) {
-				int a = 0;
-				Annotation annotation = loadAnnotationById(annotationFromIds
-						.get(i));
-				annotation.getFileIds().remove(fFrom.getId());
-				if (!annotation.getFileIds().contains(fTo.getId())) {
-					a++;
-					annotation.getFileIds().add(fTo.getId());
-				}
-				if (a > 0) {
-					saveAnnotation(annotation);
-				}
-			}
-		}
-		return total;
-	}
-
-	public int fusionFiles(Long fFromId, Long fToId) throws GeneralException,
-			NullParameterException {
-		EntityManager entityManager = EMF.get().createEntityManager();
-		if (fFromId == null || fToId == null) {
-			throw new NullParameterException(
-					"Parameter cant be null in method deleteDnServices");
-		}
-		int total = 0;
-		FileDB fileFrom = loadFileById(fFromId);
-		try {
-
-			FileDB fileTo = loadFileById2(fToId);
-			total = addAnnotationsFromFileToAnother(fileFrom, fileTo);
-			for (int i = 0; i < fileFrom.getFathers().size(); i++) {
-				deleteFileFromParent(fileFrom, fileFrom.getFathers().get(i));
-				addFather(fToId, fileFrom.getFathers().get(i)); // que pasa
-																// cuando uno de
-																// sus padres es
-																// el catalogo,
-																// no se ha
-																// considerado.
-			}
-
-			deletePlainFile(fileFrom);
-		} catch (Exception e) {
-			entityTransaction.rollback();
-			throw new GeneralException("Exception in method saveFileName: "
-					+ e.getMessage());
-		} finally {
-			if (entityManager.isOpen()) {
-				entityManager.close();
-			}
-		}
-		return total;
-	}
-
-	public void fusionFolder(Long fFromId, Long fToId)
-			throws IlegalFolderFusionException, GeneralException {
-		FolderDB fFrom = loadFolderById(fFromId);
-		FolderDB fTo = loadFolderById(fToId);
-		// if (isFolderDestinationDecendant(fFromId, fTo)) {
-		// throw new IlegalFolderFusionException(
-		// "Sorry, no merge is possible from a parent to a child category");
-		// }
-		try {
-			ArrayList<FolderDB> foldersChildren = getFolderChildren(fFrom);
-			if (!foldersChildren.isEmpty()) {
-				setNewFatherToFolders(foldersChildren, fToId);
-			}
-			ArrayList<FileDB> fileChildren = getFileChildren(fFrom);
-			if (!fileChildren.isEmpty()) {
-				setNewFatherToFiles(fileChildren, fToId);
-			}
-
-			for (int i = 0; i < fFrom.getFathers().size(); i++) {
-				deleteFolderFromParent(fFrom, fFrom.getFathers().get(i));
-				addFather(fToId, fFrom.getFathers().get(i));
-			}
-			deletePlainFolder(fFrom);
-		} catch (Exception e) {
-			entityTransaction.rollback();
-			throw new GeneralException("Exception in method saveFileName: "
-					+ e.getMessage());
-		}
-	}
 
 }

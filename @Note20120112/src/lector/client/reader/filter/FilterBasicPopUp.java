@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.catalogo.Finder;
+import lector.client.catalogo.client.Entity;
+import lector.client.catalogo.client.Folder;
+import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.language.Language;
 import lector.client.login.ActualUser;
@@ -18,11 +22,15 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.TextBox;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class FilterBasicPopUp extends PopupPanel {
 	private HorizontalPanel horizontalPanel;

@@ -21,11 +21,11 @@ public class FileDB extends Entry implements Serializable, IsSerializable {
 	}
 
 	public FileDB(String name) {
-		super(name);
+		super(10000L, name);
 	}
 
-	public FileDB(ArrayList<Long> fathers, String name) {
-		super(fathers, name);
+	public FileDB(Long fatherId, String name) {
+		super(fatherId, name);
 	}
 
 	@Override

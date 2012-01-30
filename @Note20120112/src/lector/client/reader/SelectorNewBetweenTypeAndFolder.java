@@ -85,12 +85,13 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 				
 				if (Seleccion.equals("Type")){
 				File F=new File(textBox.getText(),null, finder.getCatalogo().getId());
-		
-				bookReaderServiceHolder.saveFile(F,finder.getTopPath().getID(), callback);
+				F.setFather(finder.getTopPath());
+				bookReaderServiceHolder.saveFile(F, callback);
 				}
 				else {
 					Folder F=new Folder(textBox.getText(),null,finder.getCatalogo().getId());
-					bookReaderServiceHolder.saveFolder(F,finder.getTopPath().getID(), callback);
+					F.setFather(finder.getTopPath());
+					bookReaderServiceHolder.saveFolder(F, callback);
 				}
 				hide();
 				
