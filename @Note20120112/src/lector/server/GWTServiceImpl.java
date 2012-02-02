@@ -988,6 +988,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 					"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
 		}
 		FileDB file = cloneFile(filesys);
+		if (!(file.getFathers().contains(fatherId))) {
+			file.getFathers().add(fatherId);
+		}
 		savePlainFile(file);
 
 		if (fatherId != null) {
@@ -1110,6 +1113,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	public Long saveFolder(Folder folderSys, Long fatherId)
 			throws FileException {
 		Long folderId = 0l;
+		
 		if (fatherId != null) {
 			if (hasTwinBrother(folderSys.getName(), fatherId, false)) {
 				throw new FileException(
@@ -1123,7 +1127,11 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			}
 		}
 		try {
+			
 			FolderDB folder = cloneFolder(folderSys);
+			if (!(folder.getFathers().contains(fatherId))) {
+				folder.getFathers().add(fatherId);
+			}
 			savePlainFolder(folder);
 			folderId = folder.getId();
 			if (fatherId != null) {
@@ -1561,7 +1569,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				ids.add(filesChildren.get(i).getId());
 			}
 		}
-		ids.add(folderId);
+		// ids.add(folderId);
 	}
 
 	// servicios de usuarios.

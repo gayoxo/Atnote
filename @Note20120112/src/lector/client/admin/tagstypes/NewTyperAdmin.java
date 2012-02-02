@@ -31,14 +31,15 @@ public class NewTyperAdmin extends PopupPanel {
 	private String WN;
 	private whatsthenew WNCopy;
 	private static Catalog catalog;
-	
+
 	public NewTyperAdmin(Entity father, whatsthenew WNin) {
 		super(false);
-		WNCopy=WNin;
-		if (WNin==whatsthenew.TypeCategory) 
-			WN ="Type Category";
-			else WN ="Type";	
-		Father=father;
+		WNCopy = WNin;
+		if (WNin == whatsthenew.TypeCategory)
+			WN = "Type Category";
+		else
+			WN = "Type";
+		Father = father;
 		String Titulo = "Write the new " + WN;
 		Yo = this;
 		VerticalPanel verticalPanel = new VerticalPanel();
@@ -75,51 +76,63 @@ public class NewTyperAdmin extends PopupPanel {
 			public void onClick(ClickEvent event) {
 				if (!textBox.getText().isEmpty()) {
 					// Window.alert("Generar Tag de Tipo Revisando si existe, si ya existe se recupera");
-						AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 
-							public void onFailure(Throwable caught) {
+						public void onFailure(Throwable caught) {
 							Window.alert("The file could not be saved");
 							LoadingPanel.getInstance().hide();
-								Yo.hide();
-							
-							}
+							Yo.hide();
 
-							public void onSuccess(Long result) {
-								LoadingPanel.getInstance().hide();
-								EditorTagsAndTypes.LoadBasicTypes();
-								Yo.hide();
-							}
-						};
-						LoadingPanel.getInstance().setLabelTexto("Saving...");
-    					LoadingPanel.getInstance().center();
-						if (WNCopy==whatsthenew.Type){
-						File F=new File(textBox.getText(),null,catalog.getId());					
-						bookReaderServiceHolder.saveFile(F,Father.getID(), callback);
 						}
-						else {
-							Folder F=new Folder(textBox.getText(),null,catalog.getId());
-							bookReaderServiceHolder.saveFolder(F,Father.getID(), callback);
-							
+
+						public void onSuccess(Long result) {
+							LoadingPanel.getInstance().hide();
+							EditorTagsAndTypes.LoadBasicTypes();
+							Yo.hide();
 						}
-						Yo.hide();
+					};
+					LoadingPanel.getInstance().setLabelTexto("Saving...");
+					LoadingPanel.getInstance().center();
+					if (WNCopy == whatsthenew.Type) {
+						File F = new File(textBox.getText(), null, catalog
+								.getId());
+						if (Father == null) {
+							bookReaderServiceHolder.saveFile(F, null, callback);
+						} else {
+							bookReaderServiceHolder.saveFile(F, Father.getID(),
+									callback);
+						}
+
+					} else {
+						Folder F = new Folder(textBox.getText(), null, catalog
+								.getId());
+						if (Father == null)
+							bookReaderServiceHolder.saveFolder(F, null,
+									callback);
+						else
+							bookReaderServiceHolder.saveFolder(F,
+									Father.getID(), callback);
+
 					}
-					// Generado = new TypeAnotation(textBox.getText()); // o el
-					// antiguo
-					// Window.alert("La Anotacion sera de Tipo :" +
-					// Generado.getName());
-					// 
-					// Salvar_Anotacio();
-					// Yo.hide();
+					Yo.hide();
+				}
+				// Generado = new TypeAnotation(textBox.getText()); // o el
+				// antiguo
+				// Window.alert("La Anotacion sera de Tipo :" +
+				// Generado.getName());
+				//
+				// Salvar_Anotacio();
+				// Yo.hide();
 
 				else {
 					Window.alert("The new type is empty");
-					NewTyperAdmin NT = new NewTyperAdmin(Father,WNCopy);
+					NewTyperAdmin NT = new NewTyperAdmin(Father, WNCopy);
 					NT.isModal();
 					NT.center();
 					Yo.hide();
 				}
 			}
-			
+
 		});
 		verticalPanel.setCellHorizontalAlignment(btnNewButton,
 				HasHorizontalAlignment.ALIGN_CENTER);
@@ -131,7 +144,7 @@ public class NewTyperAdmin extends PopupPanel {
 		CancelButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Yo.hide();
-			//	Window.alert("Esconder");
+				// Window.alert("Esconder");
 			}
 		});
 	}
@@ -139,9 +152,9 @@ public class NewTyperAdmin extends PopupPanel {
 	public static void setCatalog(Catalog catalog) {
 		NewTyperAdmin.catalog = catalog;
 	}
-	
+
 	public static Catalog getCatalog() {
 		return catalog;
 	}
-	
+
 }

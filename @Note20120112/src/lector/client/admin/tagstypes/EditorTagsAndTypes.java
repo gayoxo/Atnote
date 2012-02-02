@@ -214,10 +214,16 @@ public class EditorTagsAndTypes implements EntryPoint {
 					}
 				};
 				if (delete instanceof Folder)
-					bookReaderServiceHolder.deleteFolder(delete.getID(),finder.getTopPath().getID(),
+					if(finder.getTopPath()== null)
+						bookReaderServiceHolder.deleteFolder(delete.getID(),null,
+								callback);
+					else bookReaderServiceHolder.deleteFolder(delete.getID(),finder.getTopPath().getID(),
 							callback);
 				else
-					
+					if(finder.getTopPath()== null)
+						bookReaderServiceHolder.deleteFile(delete.getID(),null,
+								callback);
+					else 
 					bookReaderServiceHolder.deleteFile(delete.getID(),finder.getTopPath().getID(), callback);
 
 			}
