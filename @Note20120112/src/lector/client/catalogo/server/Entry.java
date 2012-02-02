@@ -2,6 +2,8 @@ package lector.client.catalogo.server;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import java.io.Serializable;
+import java.util.ArrayList;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,54 +20,62 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Entry implements Serializable, IsSerializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Long fatherId;
-    private String name;
-    private Long catalogId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private ArrayList<Long> fathers;
+	private String name;
+	private Long catalogId;
 
-    public Entry() {
-    }
+	public Entry() {
+		this.fathers = new ArrayList<Long>();
+	}
 
-    public Entry(Long fatherId, String name) {
-        this.fatherId = fatherId;
-        this.name = name;
-    }
+	public Entry(ArrayList<Long> fathers, String name) {
+		this();
+		this.fathers = fathers;
+		this.name = name;
+	}
 
-    public Long getFatherId() {
-        return fatherId;
-    }
+	public Entry(String name) {
+		this();
+		this.name = name;
+	}
 
-    public void setFatherId(Long fatherId) {
-        this.fatherId = fatherId;
-    }
+	public ArrayList<Long> getFathers() {
+		return fathers;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setFathers(ArrayList<Long> fathers) {
+		this.fathers = fathers;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Long getCatalogId() {
-        return catalogId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setCatalogId(Long catalogId) {
-        this.catalogId = catalogId;
-    }
-    
+	public Long getCatalogId() {
+		return catalogId;
+	}
+
+	public void setCatalogId(Long catalogId) {
+		this.catalogId = catalogId;
+	}
+
 	private String uppercaseName;
+
 	@PrePersist
 	@PreUpdate
 	public void prePersist() {

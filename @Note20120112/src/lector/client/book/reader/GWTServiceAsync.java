@@ -20,7 +20,6 @@ import lector.client.login.UserApp;
 import lector.client.reader.Annotation;
 import lector.client.reader.Book;
 
-
 /**
  * 
  * @author Cesar y Gayoso.
@@ -29,7 +28,6 @@ public interface GWTServiceAsync {
 
 	public void getAnnotationsByBookId(String bookId,
 			AsyncCallback<ArrayList<Annotation>> asyncCallback);
-
 
 	public void getBooks(String query,
 			AsyncCallback<ArrayList<Book>> asyncCallback);
@@ -50,17 +48,11 @@ public interface GWTServiceAsync {
 	public void saveAnnotation(Annotation annotation,
 			AsyncCallback<Long> asyncCallback);
 
-	public void moveFile(Long fileId, Long fToId,
+	public void moveFile(Long fatherFromId, Long fileId, Long fToId,
 			AsyncCallback<Void> asyncCallback);
 
-	public void moveFolder(Long fFromId, Long fToId,
+	public void deleteFolder(Long folderId, Long fatherId,
 			AsyncCallback<Void> asyncCallback);
-
-	public void fusionFolder(Long fFromId, Long fToId,AsyncCallback<Void> asyncCallback);
-
-	public void deleteFolder(Long folderId, AsyncCallback<Void> asyncCallback);
-
-	public void deleteFile(Long fileId, AsyncCallback<Void> asyncCallback);
 
 	public void isRecentToSave(Annotation annotation,
 			AsyncCallback<java.lang.Boolean> asyncCallback);
@@ -71,9 +63,8 @@ public interface GWTServiceAsync {
 	public void fusionFiles(Long fFromId, Long fToId,
 			AsyncCallback<java.lang.Integer> asyncCallback);
 
-	public void saveFile(File filesys, AsyncCallback<Long> asyncCallback);
-
-	public void saveFolder(Folder folderSys, AsyncCallback<Long> asyncCallback);
+	public void saveFile(File filesys, Long fatherId,
+			AsyncCallback<Long> asyncCallback);
 
 	void saveCatalog(Catalogo catalog, AsyncCallback<Void> callback);
 
@@ -166,51 +157,54 @@ public interface GWTServiceAsync {
 			Long readingActivityId,
 			AsyncCallback<ArrayList<Annotation>> callback);
 
-
 	void removeReadingActivityFromAnnotations(Long readingActivity,
 			AsyncCallback<Integer> callback);
-
 
 	void loadReadingActivityById(Long id,
 			AsyncCallback<ReadingActivity> callback);
 
-
 	void removeFileFromAnnotation(Long annotationId, Long fileId,
 			AsyncCallback<Void> callback);
-
 
 	void getFilesByNameAndCatalogId(ArrayList<String> names, Long catalogId,
 			AsyncCallback<ArrayList<FileDB>> callback);
 
-
 	void getFilesByIds(ArrayList<Long> ids,
 			AsyncCallback<ArrayList<FileDB>> callback);
-
 
 	void getEntriesIdsByNames(ArrayList<String> names, Long catalogTeacher,
 			Long catalogOpen, AsyncCallback<ArrayList<Long>> callback);
 
-
-	void getAnnotationsByIdsStudent(ArrayList<Long> ids,Long student,
+	void getAnnotationsByIds(ArrayList<Long> ids,
 			AsyncCallback<ArrayList<Annotation>> callback);
 
+	void addFather(Long sonId, Long fatherId, AsyncCallback<Void> callback);
+
+	void deleteFile(Long fileId, Long fatherId, AsyncCallback<Void> callback);
+
+	void saveFolder(Folder folderSys, Long fatherId,
+			AsyncCallback<Long> callback);
+
+	void moveFolder(Long fatherFromId, Long fFromId, Long fToId,
+			AsyncCallback<Void> callback);
 
 	void getAnnotationsByIdsAndAuthorsTeacher(ArrayList<Long> ids,
 			ArrayList<Long> authorIds, Long Activity,
 			AsyncCallback<ArrayList<Annotation>> callback);
-	
 
-
-	void getEntriesIdsByIdsRec(ArrayList<Long> ids,
+	void getEntriesIdsByIdsRec(ArrayList<Long> Ids,
 			AsyncCallback<ArrayList<FileDB>> callback);
-
 
 	void getAnnotationsByIdsTeacher(ArrayList<Long> ids,
 			AsyncCallback<ArrayList<Annotation>> callback);
 
+	void getAnnotationsByIdsStudent(ArrayList<Long> ids, Long Student,
+			AsyncCallback<ArrayList<Annotation>> callback);
 
 	void getAnnotationsByIdsAndAuthorsStudent(ArrayList<Long> ids,
 			ArrayList<Long> authorIds, Long Activity, Long Student,
 			AsyncCallback<ArrayList<Annotation>> callback);
+
+	void fusionFolder(Long fFromId, Long fToId, AsyncCallback<Void> callback);
 
 }
