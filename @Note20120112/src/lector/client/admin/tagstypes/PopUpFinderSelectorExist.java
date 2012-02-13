@@ -1,12 +1,19 @@
 package lector.client.admin.tagstypes;
 
+
 import lector.client.admin.BotonesStackPanelAdministracionMio;
+import lector.client.book.reader.GWTService;
+import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder2;
 import lector.client.catalogo.client.Catalog;
+import lector.client.catalogo.client.Entity;
+import lector.client.controler.Constants;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -14,15 +21,20 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 
 public class PopUpFinderSelectorExist extends PopupPanel {
 
 	private Finder2 finder;
+	static GWTServiceAsync bookReaderServiceHolder = GWT
+			.create(GWTService.class);
+	private Entity father;
 
-	public PopUpFinderSelectorExist(Catalog CatalogoIn) {
+	public PopUpFinderSelectorExist(Catalog CatalogoIn, Entity entity) {
 		super(false);
 		setModal(true);
 		setGlassEnabled(true);
+		father=entity;
 		finder = new Finder2();
 		SimplePanel S= new SimplePanel();
 		S.setSize("100%", "100%");
@@ -32,7 +44,23 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		finder.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-				//TODO Resolver que hago al pulsar.
+				Entity E=((BotonesStackPanelAdministracionMio)event.getSource()).getEntidad();
+				AsyncCallback<Void> LLamada=new AsyncCallback<Void>() {
+					
+					public void onSuccess(Void result) {
+						
+						
+					}
+					
+					public void onFailure(Throwable caught) {
+						Window.alert("Error in copy in folder");
+						
+					}
+				};
+				if (father==null)
+				bookReaderServiceHolder.addFather(E.getID(), Constants.CATALOGID, LLamada);
+				else 
+					bookReaderServiceHolder.addFather(E.getID(), father.getID(), LLamada);
 				
 			}
 		});

@@ -7,6 +7,7 @@ package lector.client.controler;
 public class Constants {
 
 	public static Long ALL = Long.MIN_VALUE;
+	public static final Long CATALOGID = -1l;
 	// USERS
 	public static String PROFESSOR = "Professor";
 	public static String STUDENT = "Student";

@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class Entry implements Serializable, IsSerializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Basic
 	private ArrayList<Long> fathers;
 	private String name;
 	private Long catalogId;

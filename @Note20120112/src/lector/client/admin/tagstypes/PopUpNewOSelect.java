@@ -41,7 +41,7 @@ public class PopUpNewOSelect extends PopupPanel {
 		Button btnNewButton_1 = new Button("From Exist");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				PopUpFinderSelectorExist PAFSE=new PopUpFinderSelectorExist(Catalogo);
+				PopUpFinderSelectorExist PAFSE=new PopUpFinderSelectorExist(Catalogo,Entity);
 				PAFSE.center();
 				PAFSE.setModal(true);
 				hide();

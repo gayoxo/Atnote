@@ -9,6 +9,7 @@ import lector.client.catalogo.Tree.Node;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.Folder;
+import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
 
@@ -78,7 +79,7 @@ public class Finder2 extends Composite {
 		scrollPanel.setWidget(ArbolDeNavegacion);
 		ArbolDeNavegacion.setSize("100%", "100%");
 		
-		trtmNewItem = new Node(null);
+		trtmNewItem = new Node(new Folder("Catalogo", Constants.CATALOGID, Constants.CATALOGID));
 		trtmNewItem.setText("\\");
 		ArbolDeNavegacion.addItem(trtmNewItem);
 		trtmNewItem.setState(true);
@@ -147,9 +148,9 @@ public class Finder2 extends Composite {
 		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
 		else LoadingPanel.getInstance().setLabelTexto("Loading...");
 		Long IdPathActual = 0l;
-		if (ActualRama.getEntidad()==null)
+/*		if (ActualRama.getEntidad().getID())
 			IdPathActual = null;
-		else
+		else*/
 			IdPathActual = ActualRama.getEntidad().getID();
 		bookReaderServiceHolder.getSons(IdPathActual, C
 				.getId(), callback1);
@@ -185,9 +186,9 @@ public class Finder2 extends Composite {
 		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
 		else LoadingPanel.getInstance().setLabelTexto("Loading...");
 		Long IdPathActual = 0l;
-		if (ActualRama.getEntidad()==null)
+/*		if (ActualRama.getEntidad()==null)
 			IdPathActual = null;
-		else
+		else*/
 			IdPathActual = ActualRama.getEntidad().getID();
 		bookReaderServiceHolder.getSons(IdPathActual, C
 				.getId(), callback1);

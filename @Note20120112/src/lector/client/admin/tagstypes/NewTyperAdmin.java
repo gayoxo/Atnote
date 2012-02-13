@@ -20,6 +20,7 @@ import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
+import lector.client.controler.Constants;
 import lector.client.reader.LoadingPanel;
 
 public class NewTyperAdmin extends PopupPanel {
@@ -97,7 +98,7 @@ public class NewTyperAdmin extends PopupPanel {
 						File F = new File(textBox.getText(), null, catalog
 								.getId());
 						if (Father == null) {
-							bookReaderServiceHolder.saveFile(F, null, callback);
+							bookReaderServiceHolder.saveFile(F, Constants.CATALOGID, callback);
 						} else {
 							bookReaderServiceHolder.saveFile(F, Father.getID(),
 									callback);
@@ -107,7 +108,7 @@ public class NewTyperAdmin extends PopupPanel {
 						Folder F = new Folder(textBox.getText(), null, catalog
 								.getId());
 						if (Father == null)
-							bookReaderServiceHolder.saveFolder(F, null,
+							bookReaderServiceHolder.saveFolder(F, Constants.CATALOGID,
 									callback);
 						else
 							bookReaderServiceHolder.saveFolder(F,

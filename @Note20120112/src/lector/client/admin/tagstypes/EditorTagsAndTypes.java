@@ -106,19 +106,25 @@ public class EditorTagsAndTypes implements EntryPoint {
 		MenuItem mntmNewItem_3 = new MenuItem("New", false, new Command() {
 
 			public void execute() {
+				if (finder.getTopPath() instanceof Folder){
+				
+				
+				
 				PopUpNewOSelect PPP=new PopUpNewOSelect(catalogo, finder.getTopPath());
 				PPP.center();
 //					SelectBetweenFileOrFolderInNew.setCatalog(catalogo);
 //					SelectBetweenFileOrFolderInNew SBFF=new SelectBetweenFileOrFolderInNew(finder.getTopPath());
 //					SBFF.center();
 //					SBFF.setModal(true);
-				
+				}
+				else Window.alert("Type cannot have subtypes");
 			}
+			
 		});
 		mntmNewItem_3.setHTML("Create");
 		menuBar.addItem(mntmNewItem_3);
 
-		MenuItem mntmMove = new MenuItem("Move", false, new Command() {
+		MenuItem mntmMove = new MenuItem("Merge", false, new Command() {
 
 			//TODO Cambia de sentido
 			
