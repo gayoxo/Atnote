@@ -749,7 +749,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	private void deleteFolderFromParent(FolderDB folder, Long fatherId) {
-		if (fatherId != null) {
+		if (!fatherId.equals(Constants.CATALOGID)) {
 			FolderDB folderAux = loadFolderById(fatherId);
 			folderAux.getEntryIds().remove(folder.getId());
 			updateFolder(folderAux);
@@ -859,8 +859,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		deleteFileFromParent(fileDB, fatherId);
 		fileDB.getFathers().remove(fatherId);
 		if (fileDB.getFathers().isEmpty()) {
-			int aux = deleteFilesInAnnotations(fileId);
+			deleteFilesInAnnotations(fileId);
 			deletePlainFile(fileDB);
+		} else {
+			savePlainFile(fileDB);
 		}
 
 	}
@@ -935,7 +937,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// }
 	/* modified on graph. */
 	private void deleteFileFromParent(FileDB file, Long father) {
-		if (father == null) {
+		if (father.equals(Constants.CATALOGID)) {
 			Catalogo catalogo = loadCatalogById2(file.getCatalogId());
 			catalogo.getEntryIds().remove(file.getId());
 			saveCatalog(catalogo);
@@ -1551,9 +1553,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		for (int i = 0; i < catalogChildren.size(); i++) {
 			folder = loadFolderById(catalogChildren.get(i));
 			if (folder != null) {
-				deleteFolder(catalogChildren.get(i), null);
+				deleteFolder(catalogChildren.get(i), Constants.CATALOGID);
 			} else {
-				deleteFile(catalogChildren.get(i), null);
+				deleteFile(catalogChildren.get(i), Constants.CATALOGID);
 			}
 		}
 
@@ -3085,10 +3087,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	public void addFather(Long sonId, Long fatherId) throws FileException {
 		FileDB sonFile = loadFileById(sonId);
 		FolderDB folder = null;
-		
+
 		if (fatherId != Constants.CATALOGID)
 			folder = loadFolderById(fatherId);
-		
+
 		if (!isFolderDestinationDecendant(sonId, folder)) {
 
 			if (fatherId != Constants.CATALOGID) {
@@ -3135,8 +3137,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	 * modified for graph - eliminar cuando se haya desarrollado el catalogo
 	 * grafo
 	 */
-
-	
 
 	private int addAnnotationsFromFileToAnother(FileDB fFrom, FileDB fTo) {
 		ArrayList<Long> annotationFromIds = fFrom.getAnnotationsIds();
@@ -3212,7 +3212,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	public void fusionFolder(Long fFromId, Long fToId)
 			throws IlegalFolderFusionException, GeneralException {
 		FolderDB fFrom = loadFolderById(fFromId);
-		//FolderDB fTo = loadFolderById(fToId);
+		// FolderDB fTo = loadFolderById(fToId);
 		// if (isFolderDestinationDecendant(fFromId, fTo)) {
 		// throw new IlegalFolderFusionException(
 		// "Sorry, no merge is possible from a parent to a child category");

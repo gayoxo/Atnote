@@ -48,7 +48,7 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 				AsyncCallback<Void> LLamada=new AsyncCallback<Void>() {
 					
 					public void onSuccess(Void result) {
-						
+						hide();
 						
 					}
 					
