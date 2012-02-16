@@ -207,4 +207,9 @@ public interface GWTServiceAsync {
 
 	void fusionFolder(Long fFromId, Long fToId, AsyncCallback<Void> callback);
 
+	void renameFile(Long fileId, String newName, AsyncCallback<Void> callback);
+
+	void renameFolder(Long folderId, String newName,
+			AsyncCallback<Void> callback);
+
 }

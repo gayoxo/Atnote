@@ -214,4 +214,8 @@ public interface GWTService extends RemoteService {
 	public ArrayList<Annotation> getAnnotationsByIds(ArrayList<Long> ids);
 
 	public void addFather(Long sonId, Long fatherId) throws FileException;
+	
+	public void renameFile(Long fileId, String newName) throws FileException;
+	
+	public void renameFolder(Long folderId, String newName) throws FileException;
 }

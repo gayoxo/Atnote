@@ -786,9 +786,12 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// TODO: NO CONSIDERA CUANDO EL FILE SE MUEVE AL ROOT
 	// todo: modificado el 25-12.
 	private void setNewFatherToFiles(ArrayList<FileDB> fileChildren,
-			Long newFather) throws GeneralException {
+			Long oldFather, Long newFather) throws GeneralException {
 		for (int i = 0; i < fileChildren.size(); i++) {
 			try {
+				FileDB file = fileChildren.get(i);
+				file.getFathers().remove(oldFather);
+				savePlainFile(file);
 				addFather(fileChildren.get(i).getId(), newFather);
 			} catch (FileException fe) {
 				throw new GeneralException(
@@ -806,13 +809,17 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		String sql = "SELECT a FROM FileDB a WHERE a.fathers=" + folder.getId();
 		files = entityManager.createQuery(sql).getResultList();
 		fileList = new ArrayList<FileDB>(files);
+		if (entityManager.isOpen())
+			entityManager.close();
 		return fileList;
 	}
 
 	private void setNewFatherToFolders(ArrayList<FolderDB> folderChildren,
-			Long newFather) throws GeneralException {
+			Long oldFather, Long newFather) throws GeneralException {
 		for (int i = 0; i < folderChildren.size(); i++) {
 			try {
+				folderChildren.get(i).getFathers().remove(oldFather);
+				updateFolder(folderChildren.get(i));
 				addFather(folderChildren.get(i).getId(), newFather);
 			} catch (FileException fe) {
 				throw new GeneralException(
@@ -850,6 +857,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				+ folder.getId();
 		folders = entityManager.createQuery(sql).getResultList();
 		folderList = new ArrayList<FolderDB>(folders);
+
+		if (entityManager.isOpen())
+			entityManager.close();
+
 		return folderList;
 	}
 
@@ -1039,6 +1050,24 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return flag;
 	}
 
+	private boolean isFolderBrotherNameInDB(String fileName, Long fatherId, Long catalogId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<FileDB> list;
+		boolean flag = true;
+		String sql = "SELECT a FROM FolderDB a WHERE a.name='" + fileName
+				+ "' AND a.catalogId=" + catalogId + " AND a.fathers=" + fatherId;
+		list = entityManager.createQuery(sql).getResultList();
+
+		if (list.isEmpty()) {
+			flag = false;
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		return flag;
+	}
+	
 	private void cloneFileSys(FileDB fileDB, File file) {
 		// if (file.getFather() != null) {
 		// file.getFather().setID(fileDB.getFatherId());
@@ -1118,7 +1147,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			throws FileException {
 		Long folderId = 0l;
 
-		if (fatherId != null) {
+		if (!fatherId.equals(Constants.CATALOGID)) {
 			if (hasTwinBrother(folderSys.getName(), fatherId, false)) {
 				throw new FileException(
 						"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
@@ -1138,7 +1167,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			}
 			savePlainFolder(folder);
 			folderId = folder.getId();
-			if (fatherId != null) {
+			if (!fatherId.equals(Constants.CATALOGID)) {
 				FolderDB fatherFolder = loadFolderById(fatherId);
 				if (fatherFolder != null) {
 					if (!(fatherFolder.getEntryIds().contains(folder.getId()))) {
@@ -3220,11 +3249,12 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		try {
 			ArrayList<FolderDB> foldersChildren = getFolderChildren(fFrom);
 			if (!foldersChildren.isEmpty()) {
-				setNewFatherToFolders(foldersChildren, fToId);
+				setNewFatherToFolders(foldersChildren, fFromId, fToId);
 			}
 			ArrayList<FileDB> fileChildren = getFileChildren(fFrom);
 			if (!fileChildren.isEmpty()) {
-				setNewFatherToFiles(fileChildren, fToId);
+
+				setNewFatherToFiles(fileChildren, fFromId, fToId);
 			}
 
 			for (int i = 0; i < fFrom.getFathers().size(); i++) {
@@ -3264,6 +3294,31 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			i++;
 		}
 		return isDecendant;
+	}
+
+	public void renameFile(Long fileId, String newName) throws FileException {
+		FileDB fileDB = loadFileById(fileId);
+		if (isFileNameInDB(newName, fileDB.getCatalogId())) {
+			throw new FileException(
+					"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
+		}
+		fileDB.setName(newName);
+		savePlainFile(fileDB);
+
+	}
+
+	public void renameFolder(Long folderId, String newName)
+			throws FileException {
+		FolderDB folderDB = loadFolderById(folderId);
+		for (int i = 0; i < folderDB.getFathers().size(); i++) {
+			if (isFolderBrotherNameInDB(newName, folderDB.getFathers().get(i), folderDB.getCatalogId())) {
+				throw new FileException(
+						"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
+			}
+		}
+		folderDB.setName(newName);
+		updateFolder(folderDB);
+
 	}
 
 }

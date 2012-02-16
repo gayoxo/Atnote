@@ -80,77 +80,103 @@ public class NewTypeRename extends PopupPanel {
                     public void onClick(ClickEvent event) {
                     	
                         	if (!textBox.getText().isEmpty()) {
-                        		AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+                        		
+                        		
+//                        		
+//                        		AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+//
+//                                    public void onFailure(Throwable caught) {
+//                                    	LoadingPanel.getInstance().hide();
+//                                    	Yo.hide();
+//                                        throw new UnsupportedOperationException("Not supported yet.");
+//                                        
+//                                    }
+//
+//                                    public void onSuccess(Long result) {
+//                                       
+//                                    	LoadingPanel.getInstance().hide();
+//                                    	AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+//
+//                                            public void onFailure(Throwable caught) {
+//                                            	LoadingPanel.getInstance().hide();
+//                                            	if (caught instanceof IlegalFolderFusionException) {
+//                        							Window.alert(((IlegalFolderFusionException) caught)
+//                        									.getErrorMessage());
+//                        						} else {
+//                        							Window.alert("Error in Merge");
+//                        						}
+//
+//                                                    Yo.hide();
+//                                              
+//                                              
+//                                            }
+//
+//                                            public void onSuccess(Void result) {
+//                                            	LoadingPanel.getInstance().hide();
+//                                            	EditorTagsAndTypes.LoadBasicTypes();
+//                                            	 	Yo.hide();
+//                                               
+//                                            }
+//                                        };
+//                                        
+//                                        AsyncCallback<Integer> callback2=new AsyncCallback<Integer>() {
+//											
+//											public void onSuccess(Integer result) {
+//												LoadingPanel.getInstance().hide();
+//												EditorTagsAndTypes.LoadBasicTypes();
+//                                        	 	Yo.hide();
+//												
+//											}
+//											
+//											public void onFailure(Throwable caught) {
+//												Window.alert("Error in Merge");
+//												LoadingPanel.getInstance().hide();
+//                                                Yo.hide();
+//												
+//											}
+//										};
+//										
+//									
+//										LoadingPanel.getInstance().setLabelTexto("Saving...");
+//				    					LoadingPanel.getInstance().center();
+//										if (Nombre instanceof File)
+//                                        	bookReaderServiceHolder.fusionFiles( Nombre.getID(),result, callback2);
+//                                        else bookReaderServiceHolder.fusionFolder(Nombre.getID(),result,  callback);
+//                                    }
+//                                };
+//                                
+//                                
+                                
+                        		
+                        		AsyncCallback<Void> callback=new AsyncCallback<Void>(){
 
-                                    public void onFailure(Throwable caught) {
-                                    	LoadingPanel.getInstance().hide();
-                                    	Yo.hide();
-                                        throw new UnsupportedOperationException("Not supported yet.");
-                                        
-                                    }
+									public void onFailure(Throwable caught) {
+										Window.alert("Error in Merge");
+										LoadingPanel.getInstance().hide();
+                                        Yo.hide();
+										
+									}
 
-                                    public void onSuccess(Long result) {
-                                       
-                                    	LoadingPanel.getInstance().hide();
-                                    	AsyncCallback<Void> callback = new AsyncCallback<Void>() {
-
-                                            public void onFailure(Throwable caught) {
-                                            	LoadingPanel.getInstance().hide();
-                                            	if (caught instanceof IlegalFolderFusionException) {
-                        							Window.alert(((IlegalFolderFusionException) caught)
-                        									.getErrorMessage());
-                        						} else {
-                        							Window.alert("Error in Merge");
-                        						}
-
-                                                    Yo.hide();
-                                              
-                                              
-                                            }
-
-                                            public void onSuccess(Void result) {
-                                            	LoadingPanel.getInstance().hide();
-                                            	EditorTagsAndTypes.LoadBasicTypes();
-                                            	 	Yo.hide();
-                                               
-                                            }
-                                        };
-                                        AsyncCallback<Integer> callback2=new AsyncCallback<Integer>() {
-											
-											public void onSuccess(Integer result) {
-												LoadingPanel.getInstance().hide();
-												EditorTagsAndTypes.LoadBasicTypes();
-                                        	 	Yo.hide();
-												
-											}
-											
-											public void onFailure(Throwable caught) {
-												Window.alert("Error in Merge");
-												LoadingPanel.getInstance().hide();
-                                                Yo.hide();
-												
-											}
-										};
-										LoadingPanel.getInstance().setLabelTexto("Saving...");
-				    					LoadingPanel.getInstance().center();
-										if (Nombre instanceof File)
-                                        	bookReaderServiceHolder.fusionFiles( Nombre.getID(),result, callback2);
-                                        else bookReaderServiceHolder.fusionFolder(Nombre.getID(),result,  callback);
-                                    }
-                                };
+									public void onSuccess(Void result) {
+										LoadingPanel.getInstance().hide();
+										EditorTagsAndTypes.LoadBasicTypes();
+                                	 	Yo.hide();
+										
+									}};
+									
                                 LoadingPanel.getInstance().setLabelTexto("Saving...");
 		    					LoadingPanel.getInstance().center();
                                 if (Nombre instanceof File){
-                                	File file = new File(textBox.getText(),null,Nombre.getCatalogId());
-                                	file.setFathers(Nombre.getFathers());
-                                	bookReaderServiceHolder.saveFile(file, file.getFathers().get(0).getID(),callback);
+                                	bookReaderServiceHolder.renameFile(Nombre.getID(), textBox.getText(),callback );
+//                                	File file = new File(textBox.getText(),null,Nombre.getCatalogId());
+//                                	file.setFathers(Nombre.getFathers());
+//                                	bookReaderServiceHolder.saveFile(file, file.getFathers().get(0).getID(),callback);
                                 }
                                 else {
-                                	LoadingPanel.getInstance().setLabelTexto("Saving...");
-			    					LoadingPanel.getInstance().center();
-                                	Folder folder = new Folder(textBox.getText(),null,Nombre.getCatalogId());
-                                	folder.setFathers(Nombre.getFathers());
-                                	bookReaderServiceHolder.saveFolder(folder,folder.getFathers().get(0).getID(), callback); 
+                                	bookReaderServiceHolder.renameFolder(Nombre.getID(), textBox.getText(),callback );
+//                                	Folder folder = new Folder(textBox.getText(),null,Nombre.getCatalogId());
+//                                	folder.setFathers(Nombre.getFathers());
+//                                	bookReaderServiceHolder.saveFolder(folder,folder.getFathers().get(0).getID(), callback); 
                                 }
                         } else {
                             Window.alert("The new type is empty");

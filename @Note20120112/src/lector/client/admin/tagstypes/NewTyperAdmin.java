@@ -97,20 +97,20 @@ public class NewTyperAdmin extends PopupPanel {
 					if (WNCopy == whatsthenew.Type) {
 						File F = new File(textBox.getText(), null, catalog
 								.getId());
-						if (Father == null) {
+						/*if (Father == null) {
 							bookReaderServiceHolder.saveFile(F, Constants.CATALOGID, callback);
-						} else {
+						} else {*/
 							bookReaderServiceHolder.saveFile(F, Father.getID(),
 									callback);
-						}
+						//}
 
 					} else {
 						Folder F = new Folder(textBox.getText(), null, catalog
 								.getId());
-						if (Father == null)
+						/*if (Father == null)
 							bookReaderServiceHolder.saveFolder(F, Constants.CATALOGID,
 									callback);
-						else
+						else*/
 							bookReaderServiceHolder.saveFolder(F,
 									Father.getID(), callback);
 
