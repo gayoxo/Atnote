@@ -33,6 +33,7 @@ public class VariosEditor extends PanelDecorador {
     private Texto E_typeFilter;
     private Texto E_filteringmesagetypes;
     private Texto E_filteringmesageAnnotations;
+    private Texto E_Saving;
 	
 	public VariosEditor(Language LenguajeActualin) {
 		ChangeHandler CH=new ChangeHandler() {
@@ -127,6 +128,10 @@ public class VariosEditor extends PanelDecorador {
 		E_filteringmesageAnnotations = new Texto(LenguajeActual.getE_filteringmesageAnnotations());
 		E_filteringmesageAnnotations.getTextBox().addChangeHandler(CH);
 		add(E_filteringmesageAnnotations);
+		
+		E_Saving = new Texto(LenguajeActual.getE_Saving());
+		E_Saving.getTextBox().addChangeHandler(CH);
+		add(E_Saving);
 
 	}
 
@@ -213,6 +218,10 @@ public class VariosEditor extends PanelDecorador {
 		if (!E_filteringmesageAnnotations.getText().isEmpty())
 			if (E_filteringmesageAnnotations.getText().length()<2 ) Window.alert(E_filteringmesageAnnotations.getLabel() + " lengh need to be more lenght tham two");
 				else LenguajeActual.setE_filteringmesageAnnotations(E_filteringmesageAnnotations.getText());
+		
+		if (!E_Saving.getText().isEmpty())
+			if (E_Saving.getText().length()<2 ) Window.alert(E_Saving.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setE_Saving(E_Saving.getText());
 		
 		saveLanguage(LenguajeActual);
 		saved=true;

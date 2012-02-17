@@ -1,4 +1,4 @@
-package lector.client.admin.tagstypes;
+package lector.client.reader;
 
 
 import lector.client.admin.BotonesStackPanelAdministracionMio;
@@ -8,6 +8,7 @@ import lector.client.catalogo.Finder2;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.controler.Constants;
+import lector.client.login.ActualUser;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -23,19 +24,21 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
-public class PopUpFinderSelectorExist extends PopupPanel {
+public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 
 	private Finder2 finder;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private Entity father;
+	private Finder2 finderrefresh;
 
-	public PopUpFinderSelectorExist(Catalog CatalogoIn, Entity entity) {
+	public PopUpFinderSelectorExistAnnotation(Catalog CatalogoIn, Entity entity, Finder2 finderin) {
 		super(false);
 		setModal(true);
 		setGlassEnabled(true);
 		father=entity;
 		finder = new Finder2();
+		finderrefresh=finderin;
 		SimplePanel S= new SimplePanel();
 		S.setSize("100%", "100%");
 		S.add(finder);
@@ -48,13 +51,18 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 				AsyncCallback<Void> LLamada=new AsyncCallback<Void>() {
 					
 					public void onSuccess(Void result) {
-						EditorTagsAndTypes.LoadBasicTypes();
+//						finderrefresh.RefrescaLosDatos();
+//						//	scrollPanel.setWidget(finder);
+//						finderrefresh.setSize("100%","100%");
+						finderrefresh.RefrescaLosDatos();
+						//	scrollPanel.setWidget(finder);
+						//finderrefresh.setSize("100%","100%");
 						hide();
 						
 					}
 					
 					public void onFailure(Throwable caught) {
-						Window.alert("Error in copy in folder");
+						Window.alert(ActualUser.getLanguage().getE_Saving());
 						
 					}
 				};
@@ -75,7 +83,7 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		MenuBar menuBar = new MenuBar(false);
 		DLP.addNorth(menuBar, 1.9);
 		
-		MenuItem mntmClose = new MenuItem("Close", false, new Command() {
+		MenuItem mntmClose = new MenuItem(ActualUser.getLanguage().getClose(), false, new Command() {
 			public void execute() {
 				hide();
 			}

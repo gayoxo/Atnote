@@ -124,7 +124,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		mntmNewItem_3.setHTML("Create");
 		menuBar.addItem(mntmNewItem_3);
 
-		MenuItem mntmMove = new MenuItem("Merge", false, new Command() {
+		MenuItem mntmMerge = new MenuItem("Merge", false, new Command() {
 
 			//TODO Cambia de sentido
 			
@@ -152,17 +152,17 @@ public class EditorTagsAndTypes implements EntryPoint {
 			}
 
 		});
+		mntmMerge.setEnabled(true);
+		menuBar.addItem(mntmMerge);
+		
+		MenuItem mntmMove = new MenuItem("Move", false, new Command() {
+			public void execute() {
+				Window.alert("Not implemented");
+			}
+		});
 		mntmMove.setHTML("Move");
 		mntmMove.setEnabled(true);
 		menuBar.addItem(mntmMove);
-		
-		MenuItem mntmCopy = new MenuItem("Copy", false, new Command() {
-			public void execute() {
-				//TODO Funcion Move cambiada
-			}
-		});
-		mntmCopy.setEnabled(true);
-		menuBar.addItem(mntmCopy);
 
 		MenuItem mntmRename = new MenuItem("Rename", false, new Command() {
 

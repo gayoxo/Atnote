@@ -43,9 +43,9 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         dockPanel.add(menuBar, DockPanel.NORTH);
         menuBar.setSize("100%", "100%");
         
-        mntmNewItem = new MenuItem("New", false, new Command() {
+        mntmNewItem = new MenuItem(ActualUser.getLanguage().getNew(), false, new Command() {
         	public void execute() {
-        		SelectorNewBetweenTypeAndFolder SBTF=new SelectorNewBetweenTypeAndFolder(finder);
+        		PopUpNewOSelect SBTF=new PopUpNewOSelect(finder.getCatalogo(),finder.getTopPath(),finder);
         		SBTF.center();
         	}
         });
@@ -57,7 +57,7 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         		hide();
         	}
         });
-        mntmNewItem_1.setHTML("Cancel");
+        mntmNewItem_1.setHTML(ActualUser.getLanguage().getCancel());
         menuBar.addItem(mntmNewItem_1);
         
         ScrollPanel scrollPanel = new ScrollPanel();

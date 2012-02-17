@@ -58,6 +58,8 @@ public class Language implements Serializable, IsSerializable {
 	private String SetTypesPublic = "SetTypes Publico";
     private String Visibility = "Visibility";
     private String Upgradeable = "Upgradeable";
+    private String New="New";
+    private String FromExist="From Exist";
     //Varios
     private String E_Page_Dont_Exist="Error: Page does not exist";
     private String E_Not_a_number="Error: Page number could not be a letter";
@@ -80,6 +82,7 @@ public class Language implements Serializable, IsSerializable {
     private String E_UserLoad="Error: Users can't be load";
     private String E_filteringmesagetypes="Error filtering Message: Load Types";
     private String E_filteringmesageAnnotations="Error filtering Message: Load Annotations";
+    private String E_Saving="Error: Error Saving";
    //Browser
     private String Close="Close";
     private String FilterButtonBrowser="Filter";
@@ -398,8 +401,24 @@ public class Language implements Serializable, IsSerializable {
     public void setUpgradeable(String upgradeable) {
         Upgradeable = upgradeable;
     }
+    
+    public String getNew() {
+		return New;
+	}
+    
+    public void setNew(String new1) {
+		New = new1;
+	}
 
-    //Varios
+    public String getFromExist() {
+		return FromExist;
+	}
+
+	public void setFromExist(String fromExist) {
+		FromExist = fromExist;
+	}
+
+	//Varios
 	public String getE_Page_Dont_Exist() {
 		return E_Page_Dont_Exist;
 	}
@@ -581,6 +600,14 @@ public void setE_filteringmesagetypes(String e_filteringmesagetypes) {
 }
 
 //Browser
+
+public String getE_Saving() {
+	return E_Saving;
+}
+
+public void setE_Saving(String e_Saving) {
+	E_Saving = e_Saving;
+}
 
 public String getClose() {
 	return Close;

@@ -8,6 +8,7 @@ import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
 import lector.client.login.ActualUser;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -32,6 +33,7 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 
 	public SelectorNewBetweenTypeAndFolder(Finder2 finderin) {
 		super(true);
+		setGlassEnabled(true);
 		this.finder=finderin;
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -39,12 +41,13 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 		setWidget(verticalPanel);
 		verticalPanel.setSize("237px", "170px");
 		
-		Label lblNewLabel = new Label("Select Between Tag Or Folder an type the new object");
+		Label lblNewLabel = new Label("Select Between \"Type Category\" or  \"Type\" to create the new object");
 		verticalPanel.add(lblNewLabel);
 		
 		comboBox = new ListBox();
+		comboBox.addItem("Type Category");
 		comboBox.addItem("Type");
-		comboBox.addItem("Folder");
+
 		verticalPanel.add(comboBox);
 		comboBox.setWidth("98px");
 		
@@ -67,7 +70,8 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 
 					public void onFailure(Throwable caught) {
-						
+						LoadingPanel.getInstance().hide();
+						Window.alert(ActualUser.getLanguage().getE_Saving());
 						hide();
 						
 
@@ -79,9 +83,13 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 
 					public void onSuccess(Long result) {
 						finder.RefrescaLosDatos();
+						LoadingPanel.getInstance().hide();
 						hide();
 					}
 				};
+				
+				LoadingPanel.getInstance().setLabelTexto("Saving...");
+				LoadingPanel.getInstance().center();
 				
 				if (Seleccion.equals("Type")){
 				File F=new File(textBox.getText(),null, finder.getCatalogo().getId());
