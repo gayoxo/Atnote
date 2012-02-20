@@ -1,0 +1,99 @@
+package lector.client.reader.annotthread;
+
+import com.google.appengine.api.datastore.Text;
+import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
+import java.util.ArrayList;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "annotation_thread")
+public class AnnotationThread implements Serializable, IsSerializable {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long threadFatherId;
+	private Long annotationId;
+	private ArrayList<Long> threadIds;
+	@Basic
+	private Text comment;
+
+	public AnnotationThread() {
+		super();
+		this.threadIds = new ArrayList<Long>();
+		
+	}
+
+	public AnnotationThread(Long threadFatherId, Long annotationId,
+			ArrayList<Long> threadIds, Text comment) {
+		
+		this();
+		this.threadFatherId = threadFatherId;
+		this.annotationId = annotationId;
+		this.threadIds = threadIds;
+		this.comment = comment;
+	}
+
+
+	public Text getComment() {
+		return comment;
+	}
+
+	public void setComment(Text comment) {
+		this.comment = comment;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public Long getThreadFatherId() {
+		return threadFatherId;
+	}
+
+
+
+	public void setThreadFatherId(Long threadFatherId) {
+		this.threadFatherId = threadFatherId;
+	}
+
+
+
+	public Long getAnnotationId() {
+		return annotationId;
+	}
+
+
+
+	public void setAnnotationId(Long annotationId) {
+		this.annotationId = annotationId;
+	}
+
+
+
+	public ArrayList<Long> getThreadIds() {
+		return threadIds;
+	}
+
+
+
+	public void setThreadIds(ArrayList<Long> threadIds) {
+		this.threadIds = threadIds;
+	}
+
+	
+}

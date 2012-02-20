@@ -52,8 +52,8 @@ public class Searcher implements EntryPoint, HistoryListener {
 	private Button searchNext = new Button(">");
 	private Button searchPrevious = new Button("<");
 	private static int pos = 0;
-	private final Image image_1 = new Image("logo_ucm.jpg");
-	private final Image image_2 = new Image("logo_ucm.jpg");
+	private final Image image_1 = new Image("logo.jpg");
+	private final Image image_2 = new Image("logo.jpg");
 	private final Label lblNewLabel = new Label("");
 	private final SimplePanel simplePanel = new SimplePanel();
 	private MenuBar menuBar = new MenuBar(false);

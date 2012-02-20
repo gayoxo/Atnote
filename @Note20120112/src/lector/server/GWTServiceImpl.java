@@ -23,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import lector.client.admin.activity.ReadingActivity;
 import lector.client.book.reader.GWTService;
 import lector.client.catalogo.client.Catalog;
+import lector.client.catalogo.client.DecendanceException;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.FileException;
@@ -714,7 +715,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		FileDB file = loadFileById2(fileId);
 		deleteFileFromParent(file, fatherFromId);
 		deleteFatherFromFile(fileId, fatherFromId);
-		if (loadFolderById(fToId) != null) {
+
 			try {
 				addFather(fileId, fToId);
 			} catch (FileException fe) {
@@ -724,25 +725,28 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 								+ fe.getMessage());
 			}
 
-		}
 		// savePlainFile(file);
 
 	}
 
 	public void moveFolder(Long fatherFromId, Long fFromId, Long fToId)
-			throws GeneralException {
-		FolderDB fFrom = loadFolderById(fFromId);
-		deleteFolderFromParent(fFrom, fatherFromId);
-		deleteFatherFromFolder(fFromId, fatherFromId);
-		if (loadFolderById(fToId) != null) {
-			try {
-				addFather(fFromId, fToId);
+			throws GeneralException, DecendanceException {
+		FolderDB folderTo = loadFolderById(fToId);
+		if (!isFolderDestinationDecendant(fFromId, folderTo)) {
+			FolderDB fFrom = loadFolderById(fFromId);
+			deleteFolderFromParent(fFrom, fatherFromId);
+			deleteFatherFromFolder(fFromId, fatherFromId);
+				try {
+					addFather(fFromId, fToId);
 
-			} catch (FileException fe) {
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
-			}
+				} catch (FileException fe) {
+					throw new GeneralException(
+							"Internal error in addFather method: "
+									+ fe.getMessage());
+				}
+		}else{
+			throw new DecendanceException("The file you are trying to move is decentant in its herarchy, the action will be not take place ");
+			
 		}
 		// updateFolder(fFrom);
 
@@ -784,7 +788,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	// TODO: NO CONSIDERA CUANDO EL FILE SE MUEVE AL ROOT
-	// todo: modificado el 25-12.
+
 	private void setNewFatherToFiles(ArrayList<FileDB> fileChildren,
 			Long oldFather, Long newFather) throws GeneralException {
 		for (int i = 0; i < fileChildren.size(); i++) {
@@ -1050,12 +1054,14 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return flag;
 	}
 
-	private boolean isFolderBrotherNameInDB(String fileName, Long fatherId, Long catalogId) {
+	private boolean isFolderBrotherNameInDB(String fileName, Long fatherId,
+			Long catalogId) {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		List<FileDB> list;
 		boolean flag = true;
 		String sql = "SELECT a FROM FolderDB a WHERE a.name='" + fileName
-				+ "' AND a.catalogId=" + catalogId + " AND a.fathers=" + fatherId;
+				+ "' AND a.catalogId=" + catalogId + " AND a.fathers="
+				+ fatherId;
 		list = entityManager.createQuery(sql).getResultList();
 
 		if (list.isEmpty()) {
@@ -1067,7 +1073,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 		return flag;
 	}
-	
+
 	private void cloneFileSys(FileDB fileDB, File file) {
 		// if (file.getFather() != null) {
 		// file.getFather().setID(fileDB.getFatherId());
@@ -3311,7 +3317,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			throws FileException {
 		FolderDB folderDB = loadFolderById(folderId);
 		for (int i = 0; i < folderDB.getFathers().size(); i++) {
-			if (isFolderBrotherNameInDB(newName, folderDB.getFathers().get(i), folderDB.getCatalogId())) {
+			if (isFolderBrotherNameInDB(newName, folderDB.getFathers().get(i),
+					folderDB.getCatalogId())) {
 				throw new FileException(
 						"El Tipo de Anotación que intenta guardar ya lo ha utilizado, por favor cámbielo");
 			}

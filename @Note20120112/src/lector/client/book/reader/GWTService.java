@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import lector.client.admin.activity.ReadingActivity;
 import lector.client.catalogo.client.Catalog;
+import lector.client.catalogo.client.DecendanceException;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.FileException;
@@ -97,7 +98,7 @@ public interface GWTService extends RemoteService {
 			throws GeneralException;
 
 	public void moveFolder(Long fatherFromId, Long fFromId, Long fToId)
-			throws GeneralException;
+			throws GeneralException, DecendanceException;
 
 	public void deleteFolder(Long folderId, Long fatherId)
 			throws GeneralException;

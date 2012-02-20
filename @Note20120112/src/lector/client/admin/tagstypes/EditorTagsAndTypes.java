@@ -8,7 +8,9 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder2;
 import lector.client.catalogo.StackPanelMio;
 import lector.client.catalogo.client.Catalog;
+import lector.client.catalogo.client.DecendanceException;
 import lector.client.catalogo.client.Entity;
+import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
 import lector.client.controler.Controlador;
 import com.google.gwt.core.client.EntryPoint;
@@ -157,7 +159,38 @@ public class EditorTagsAndTypes implements EntryPoint {
 		
 		MenuItem mntmMove = new MenuItem("Move", false, new Command() {
 			public void execute() {
-				Window.alert("Not implemented");
+				int mover = Selected.getWidgetCount();
+				for (int i = 1; i < mover; i++) {
+
+					BotonesStackPanelAdministracionMio Delete = ((BotonesStackPanelAdministracionMio) Selected
+							.getWidget(i));
+
+						moverTypos(Delete.getEntidad());
+
+
+				}
+			}
+
+			private void moverTypos(Entity entidad) {
+				AsyncCallback<Void> callback=new AsyncCallback<Void>() {
+
+					public void onFailure(Throwable caught) {
+					if (caught instanceof DecendanceException){
+						Window.alert(((DecendanceException) caught).getMessage());
+					}else{
+						Window.alert("Error on move");
+					}
+					}
+
+					public void onSuccess(Void result) {
+						LoadBasicTypes();
+						
+					}
+				};
+				if (entidad instanceof File)
+				bookReaderServiceHolder.moveFile(entidad.getActualFather().getID(), entidad.getID(), finder.getTopPath().getID(), callback);
+				else bookReaderServiceHolder.moveFolder(entidad.getActualFather().getID(), entidad.getID(), finder.getTopPath().getID(), callback);
+				 
 			}
 		});
 		mntmMove.setHTML("Move");
@@ -224,14 +257,14 @@ public class EditorTagsAndTypes implements EntryPoint {
 						bookReaderServiceHolder.deleteFolder(delete.getID(),null,
 								callback);
 					else */
-						bookReaderServiceHolder.deleteFolder(delete.getID(),finder.getTopPath().getID(),
+						bookReaderServiceHolder.deleteFolder(delete.getID(),delete.getActualFather().getID(),
 							callback);
 				else
 					/*if(finder.getTopPath()== null)
 						bookReaderServiceHolder.deleteFile(delete.getID(),null,
 								callback);
 					else*/ 
-					bookReaderServiceHolder.deleteFile(delete.getID(),finder.getTopPath().getID(), callback);
+					bookReaderServiceHolder.deleteFile(delete.getID(),delete.getActualFather().getID(), callback);
 
 			}
 

@@ -103,6 +103,12 @@ public class Welcome implements EntryPoint {
 								
 								Image image_3 = new Image("ISLA.jpg");
 								horizontalPanel_2.add(image_3);
+								image_3.addClickHandler(new ClickHandler() {
+									public void onClick(ClickEvent event) {
+										Window.open("http://ilsa.fdi.ucm.es/", "_blank",null);
+										
+									}
+								});
 								image_3.setSize("201px", "69px");
 				
 						Label lblNewLabel_1 = new Label(
