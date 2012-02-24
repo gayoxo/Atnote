@@ -1,19 +1,22 @@
 package lector.client.reader.hilocomentarios;
 
-import lector.client.reader.Annotation;
-import lector.client.reader.SelectorPanel;
+import java.text.SimpleDateFormat;
+
+import lector.client.book.reader.GWTService;
+import lector.client.book.reader.GWTServiceAsync;
+import lector.client.login.ActualUser;
+import lector.client.reader.MainEntryPoint;
 import lector.client.reader.annotthread.AnnotationThread;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -36,6 +39,8 @@ public class Respuesta extends Composite {
     private MenuItem mntmNewItem_1;
     private final MenuItemSeparator separator = new MenuItemSeparator();
     private MenuItem mntmNewItem_2;
+    static GWTServiceAsync bookReaderServiceHolder = GWT
+			.create(GWTService.class);
     
     
 	public Respuesta(AnnotationThread annotationin) {
@@ -51,8 +56,8 @@ public class Respuesta extends Composite {
 	        horizontalPanel.setHeight("28px");
 
 	        String Showbutton= annotation.getComment().toString();
-	        if (Showbutton.length()>15){
-	        	Showbutton=Showbutton.substring(0,15);
+	        if (Showbutton.length()>20){
+	        	Showbutton=Showbutton.substring(0,20);
 	        	Showbutton=Showbutton+" ...";
 	        }
 	        button = new Button(Showbutton);
@@ -153,11 +158,23 @@ public class Respuesta extends Composite {
 	        
 	        mntmNewItem_1 = new MenuItem("New item", false, new Command() {
 	        	public void execute() {
-	        		Window.alert("Borrar");
+	        		bookReaderServiceHolder.deleteAnnotationThread(annotation.getId(), new AsyncCallback<Void>() {
+						
+						public void onSuccess(Void result) {
+							MainEntryPoint.refreshP();
+							
+						}
+						
+						public void onFailure(Throwable caught) {
+							Window.alert("Error en borrado");
+							//TODO Error
+							
+						}
+					});
 	        	}
 	        });
 	        menuBar.setVisible(false);
-	        mntmNewItem_1.setEnabled(false);
+	       if (!ActualUser.getUser().getId().equals(annotation.getUserId()))  mntmNewItem_1.setEnabled(false);
 	        mntmNewItem_1.setHTML("Delete");
 	        menuBar.addItem(mntmNewItem_1);
 	        
@@ -166,7 +183,10 @@ public class Respuesta extends Composite {
 	        mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
 	        menuBar.addItem(mntmNewItem_2);
 	       
-	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +annotation.getCreatedDate().toGMTString());
+	        
+	        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+	        
+	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +sdf.format(annotation.getCreatedDate()));
 	        richTextArea.setVisible(false);
 
 

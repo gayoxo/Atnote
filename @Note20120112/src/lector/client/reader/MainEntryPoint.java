@@ -75,7 +75,7 @@ public class MainEntryPoint implements EntryPoint {
 	private static MenuItem mntmShowAllComments;
 	private static MenuItem mntmShowSelectedComments;
 	private static MenuItem mntmBlockedComments;
-	private final ScrollPanel ScrollAnnotationsPanel = new ScrollPanel();
+	private static ScrollPanel ScrollAnnotationsPanel = new ScrollPanel();
 	private static VerticalPanel verticalAnnotationsPanel = new VerticalPanel();
 	private static TechnicalSpecs technicalSpecs;
 	private MenuItem mntmRefresh;
@@ -389,7 +389,7 @@ public class MainEntryPoint implements EntryPoint {
 		
 		ScrollAnnotationsPanel.setWidget(verticalAnnotationsPanel);
 		ScrollAnnotationsPanel.setHeight("875px");
-		ScrollAnnotationsPanel.setWidth("110%");
+		ScrollAnnotationsPanel.setWidth("");
 		//verticalAnnotationsPanel.setSize("100%", "100%");
 		//ScrollAnnotationsPanel.setSize("340px", "875px");
 		ScrollAnnotationsPanel.setVisible(false);
@@ -935,4 +935,8 @@ public class MainEntryPoint implements EntryPoint {
 		
 		originalBook.setUrl(URL);
 	}
+	
+//	public static void setPorcentScrollAnnotationsPanel() {
+//		ScrollAnnotationsPanel.setWidth("120%");
+//	}
 }

@@ -18,8 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class Arbitro {
 
 	private Stack<ParesLlamada> Pllamada;
-	private GWTServiceAsync bookReaderServiceHolder = GWT
-	.create(GWTService.class);
 	private boolean activo;
 
 	
@@ -45,8 +43,7 @@ public class Arbitro {
 		{
 		activo=true;
 		ParesLlamada P=Pllamada.pop();
-		get(P);
-		
+		new ProcesoCarga(P);
 		}
 //		Long L=-1l;
 //		AnnotationThread A=new AnnotationThread(L, L1.getIDPadre(), new ArrayList<Long>(), new Text("Reply1"),ActualUser.getUser().getId(),ActualUser.getUser().getEmail());
@@ -58,34 +55,13 @@ public class Arbitro {
 	}
 
 
-	private void get(ParesLlamada P) {
-		if (P.getIDThread().equals(Constants.THREADFATHERNULLID))
-			bookReaderServiceHolder.getAnnotationThreadsByItsFather(P.getIDPadre(),P.getIDThread(),new AsyncCallback<ArrayList<AnnotationThread>>() {
-				
-				public void onSuccess(ArrayList<AnnotationThread> result) {
-					
-					for (AnnotationThread annotationThread : result) {
-						Respuesta R=new Respuesta(annotationThread);
-						P.getVP().add(R);
-					}
-					
-					
-					if (!Pllamada.isEmpty())
-					{
-						ParesLlamada P2=Pllamada.pop();
-						get(P2);
-					}
-					activo=false;
-					
-				}
-				
-				public void onFailure(Throwable caught) {
-					Window.alert("Error Mensaje");
-					//TODO error mensaje cambiar
-					
-				}
-			});
-		
+	
+	public Stack<ParesLlamada> getPllamada() {
+		return Pllamada;
 	}
 	
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
 }
+

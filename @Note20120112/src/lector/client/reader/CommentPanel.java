@@ -1,10 +1,13 @@
 package lector.client.reader;
 
+
+
+import java.text.SimpleDateFormat;
+
 import lector.client.controler.Constants;
 import lector.client.reader.hilocomentarios.ReplyDialog;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -55,8 +58,8 @@ public class CommentPanel extends Composite {
         horizontalPanel.setHeight("28px");
 
         String Showbutton= annotation.getComment().toString();
-        if (Showbutton.length()>15){
-        	Showbutton=Showbutton.substring(0,15);
+        if (Showbutton.length()>20){
+        	Showbutton=Showbutton.substring(0,20);
         	Showbutton=Showbutton+" ...";
         }
         button = new Button(Showbutton);
@@ -204,7 +207,10 @@ public class CommentPanel extends Composite {
         mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
         menuBar.addItem(mntmNewItem_2);
        
-       mntmNewItem_2.setText(annotation.getUserName() + " --- " +annotation.getCreatedDate().toGMTString());
+        
+        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+        
+       mntmNewItem_2.setText(annotation.getUserName() + " --- " +sdf.format(annotation.getCreatedDate()));
         richTextArea.setVisible(false);
 
 

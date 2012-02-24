@@ -326,3 +326,8 @@ display: block;
 	background-color: White;
 	  background-size:  100% 100%;
 }
+.gwt-MenuItemPanel {
+font-size: 11px;
+}
+.gwt-MenuItem {
+}

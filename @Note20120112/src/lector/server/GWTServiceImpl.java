@@ -3391,7 +3391,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			father.getThreadIds().add(annotationThreadSon);
 		}
 
-		entityManager.merge(annotationThreadFather);
+		entityManager.merge(father);
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.close();
@@ -3403,6 +3403,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		annotationThreadIds = new ArrayList<Long>();
 		getAllDeepThreadIds(annotationThreadId);
 		deleteThreads(annotationThreadIds);
+		
 
 	}
 
@@ -3445,7 +3446,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			
 			if(threadFatherId.equals(Constants.THREADFATHERNULLID)){
 				sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
-						+ annotationId;	
+						+ annotationId + "AND a.threadFatherId=" + Constants.THREADFATHERNULLID;	
+				//TODO TOcado
 			}else{
 				sql = "SELECT a FROM AnnotationThread a WHERE a.threadFatherId="
 						+ threadFatherId;	
@@ -3464,8 +3466,17 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			}
 		}
 		if (list.isEmpty()) {
-			return null;
+			return new ArrayList<AnnotationThread>();
 		}
+		
+		for (int i = 0; i < listAnnotationThreads.size(); i++) {
+			ArrayList<Long> L=new ArrayList<Long>();
+			for (int j = 0; j < listAnnotationThreads.get(i).getThreadIds().size(); j++) {
+				L.add(listAnnotationThreads.get(i).getThreadIds().get(j));
+			}
+			listAnnotationThreads.get(i).setThreadIds(L);
+		}
+		
 		return listAnnotationThreads;
 	}
 
