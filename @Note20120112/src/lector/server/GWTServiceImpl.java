@@ -293,7 +293,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (entityManager.isOpen()) {
 				entityManager.close();
 			}
-			deleteAnnotationThreads(getAnnotationThreadsByItsFather(id,Constants.THREADFATHERNULLID));
+			deleteAnnotationThreads(getAnnotationThreadsByItsFather(id,
+					Constants.THREADFATHERNULLID));
 		}
 		return 1;
 	}
@@ -1770,7 +1771,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	// NO PROBADO
-	public int deleteUserApp(Long userId) throws GeneralException, NullParameterException {
+	public int deleteUserApp(Long userId) throws GeneralException,
+			NullParameterException {
 		int total = 0;
 		EntityManager entityManager = EMF.get().createEntityManager();
 		UserApp userAppDeleted = entityManager.find(UserApp.class, userId);
@@ -3370,7 +3372,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			entityManager.close();
 		}
 
-		if (!isUpdate && !annotationThread.getThreadFatherId().equals(Constants.THREADFATHERNULLID)) {
+		if (!isUpdate
+				&& !annotationThread.getThreadFatherId().equals(
+						Constants.THREADFATHERNULLID)) {
 			addSonToAnnotationThread(annotationThread.getThreadFatherId(),
 					annotationThreadId);
 
@@ -3400,11 +3404,33 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	public void deleteAnnotationThread(Long annotationThreadId)
 			throws GeneralException {
+		removeThreadFromFather(annotationThreadId);
 		annotationThreadIds = new ArrayList<Long>();
 		getAllDeepThreadIds(annotationThreadId);
 		deleteThreads(annotationThreadIds);
-		
 
+	}
+
+	private void removeThreadFromFather(Long annotationThreadId) {
+		AnnotationThread thread = loadAnnotationThread(annotationThreadId);
+		if (!thread.getThreadFatherId().equals(Constants.THREADFATHERNULLID)) {
+
+			EntityManager entityManager = EMF.get().createEntityManager();
+			EntityTransaction entityTransaction = entityManager
+					.getTransaction();
+			entityTransaction.begin();
+			Long fatherId = thread.getThreadFatherId();
+			AnnotationThread father = entityManager.find(
+					AnnotationThread.class, fatherId);
+			if (father.getThreadIds().contains(annotationThreadId)) {
+				father.getThreadIds().remove(annotationThreadId);
+			}
+			entityManager.merge(father);
+			entityManager.flush();
+			entityTransaction.commit();
+			entityManager.close();
+
+		}
 	}
 
 	private void getAllDeepThreadIds(Long annotationThreadId) {
@@ -3440,19 +3466,20 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		entityManager = EMF.get().createEntityManager();
 		List<AnnotationThread> list;
 		ArrayList<AnnotationThread> listAnnotationThreads;
-	
+
 		try {
-			String sql; 
-			
-			if(threadFatherId.equals(Constants.THREADFATHERNULLID)){
+			String sql;
+
+			if (threadFatherId.equals(Constants.THREADFATHERNULLID)) {
 				sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
-						+ annotationId + "AND a.threadFatherId=" + Constants.THREADFATHERNULLID;	
-				//TODO TOcado
-			}else{
-				sql = "SELECT a FROM AnnotationThread a WHERE a.threadFatherId="
-						+ threadFatherId;	
-			}
+						+ annotationId + "AND a.threadFatherId="
+						+ Constants.THREADFATHERNULLID;
 			
+			} else {
+				sql = "SELECT a FROM AnnotationThread a WHERE a.threadFatherId="
+						+ threadFatherId;
+			}
+
 			list = entityManager.createQuery(sql).getResultList();
 			listAnnotationThreads = new ArrayList<AnnotationThread>(list);
 		} catch (Exception e) {
@@ -3468,15 +3495,16 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (list.isEmpty()) {
 			return new ArrayList<AnnotationThread>();
 		}
-		
+
 		for (int i = 0; i < listAnnotationThreads.size(); i++) {
-			ArrayList<Long> L=new ArrayList<Long>();
-			for (int j = 0; j < listAnnotationThreads.get(i).getThreadIds().size(); j++) {
-				L.add(listAnnotationThreads.get(i).getThreadIds().get(j));
+			ArrayList<Long> provisionalLongs = new ArrayList<Long>();
+			for (int j = 0; j < listAnnotationThreads.get(i).getThreadIds()
+					.size(); j++) {
+				provisionalLongs.add(listAnnotationThreads.get(i).getThreadIds().get(j));
 			}
-			listAnnotationThreads.get(i).setThreadIds(L);
+			listAnnotationThreads.get(i).setThreadIds(provisionalLongs);
 		}
-		
+
 		return listAnnotationThreads;
 	}
 

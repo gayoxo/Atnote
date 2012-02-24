@@ -11,6 +11,7 @@ import lector.client.reader.annotthread.AnnotationThread;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -184,9 +185,8 @@ public class Respuesta extends Composite {
 	        menuBar.addItem(mntmNewItem_2);
 	       
 	        
-	        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
-	        
-	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +sdf.format(annotation.getCreatedDate()));
+	      
+	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
 	        richTextArea.setVisible(false);
 
 

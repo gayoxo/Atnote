@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class CommentPanel extends Composite {
 
@@ -208,9 +209,9 @@ public class CommentPanel extends Composite {
         menuBar.addItem(mntmNewItem_2);
        
         
-        SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
-        
-       mntmNewItem_2.setText(annotation.getUserName() + " --- " +sdf.format(annotation.getCreatedDate()));
+
+//tocado        
+       mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
         richTextArea.setVisible(false);
 
 
