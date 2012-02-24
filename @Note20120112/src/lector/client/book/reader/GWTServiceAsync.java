@@ -19,6 +19,7 @@ import lector.client.login.GroupApp;
 import lector.client.login.UserApp;
 import lector.client.reader.Annotation;
 import lector.client.reader.Book;
+import lector.client.reader.annotthread.AnnotationThread;
 
 /**
  * 
@@ -210,6 +211,12 @@ public interface GWTServiceAsync {
 	void renameFile(Long fileId, String newName, AsyncCallback<Void> callback);
 
 	void renameFolder(Long folderId, String newName,
+			AsyncCallback<Void> callback);
+
+	void saveAnnotationThread(AnnotationThread annotationThread,
+			AsyncCallback<Long> callback);
+
+	void deleteAnnotationThread(Long annotationThread,
 			AsyncCallback<Void> callback);
 
 }

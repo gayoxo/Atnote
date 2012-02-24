@@ -29,6 +29,7 @@ import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
 
 import lector.client.reader.NullParameterException;
+import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -123,7 +124,7 @@ public interface GWTService extends RemoteService {
 
 	public ArrayList<UserApp> getUsersApp() throws UserNotFoundException;
 
-	public int deleteUserApp(Long userId);
+	public int deleteUserApp(Long userId)throws GeneralException, NullParameterException;
 
 	public void removeUserAndGroupRelation(Long userId, Long groupId);
 
@@ -219,4 +220,10 @@ public interface GWTService extends RemoteService {
 	public void renameFile(Long fileId, String newName) throws FileException;
 	
 	public void renameFolder(Long folderId, String newName) throws FileException;
+	
+	public Long saveAnnotationThread(AnnotationThread annotationThread);
+	
+	public void deleteAnnotationThread(Long annotationThread) throws GeneralException;
+
+
 }

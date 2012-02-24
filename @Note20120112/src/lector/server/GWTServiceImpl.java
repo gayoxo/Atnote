@@ -46,6 +46,7 @@ import lector.client.reader.BookNotFoundException;
 import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
 import lector.client.reader.NullParameterException;
+import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -55,7 +56,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	private static ArrayList<Long> ids;
-	private static ArrayList<Long> entryIds;
+	private static ArrayList<Long> annotationThreadIds;
 	@PersistenceContext(name = "BookReader11Abr01PU")
 	private EntityManager entityManager;
 	private EntityTransaction entityTransaction;
@@ -276,14 +277,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			throws GeneralException, NullParameterException,
 			AnnotationNotFoundException {
 		entityManager = EMF.get().createEntityManager();
-
-		if (annotationId == null) {
-			throw new NullParameterException(
-					"Parameter annotation cant be null in method saveAnnotation");
-		}
+		Long id = annotationId.getId();
 		try {
 			Annotation annotationDeleted = entityManager.find(Annotation.class,
-					annotationId.getId());
+					id);
 			entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
 			entityManager.remove(annotationDeleted);
@@ -296,6 +293,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (entityManager.isOpen()) {
 				entityManager.close();
 			}
+			deleteAnnotationThreads(getAnnotationThreadsByAnnotationId(id));
 		}
 		return 1;
 	}
@@ -716,14 +714,13 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		deleteFileFromParent(file, fatherFromId);
 		deleteFatherFromFile(fileId, fatherFromId);
 
-			try {
-				addFather(fileId, fToId);
-			} catch (FileException fe) {
+		try {
+			addFather(fileId, fToId);
+		} catch (FileException fe) {
 
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
-			}
+			throw new GeneralException("Internal error in addFather method: "
+					+ fe.getMessage());
+		}
 
 		// savePlainFile(file);
 
@@ -736,17 +733,18 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			FolderDB fFrom = loadFolderById(fFromId);
 			deleteFolderFromParent(fFrom, fatherFromId);
 			deleteFatherFromFolder(fFromId, fatherFromId);
-				try {
-					addFather(fFromId, fToId);
+			try {
+				addFather(fFromId, fToId);
 
-				} catch (FileException fe) {
-					throw new GeneralException(
-							"Internal error in addFather method: "
-									+ fe.getMessage());
-				}
-		}else{
-			throw new DecendanceException("The file you are trying to move is decentant in its herarchy, the action will be not take place ");
-			
+			} catch (FileException fe) {
+				throw new GeneralException(
+						"Internal error in addFather method: "
+								+ fe.getMessage());
+			}
+		} else {
+			throw new DecendanceException(
+					"The file you are trying to move is decentant in its herarchy, the action will be not take place ");
+
 		}
 		// updateFolder(fFrom);
 
@@ -1772,7 +1770,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	// NO PROBADO
-	public int deleteUserApp(Long userId) {
+	public int deleteUserApp(Long userId) throws GeneralException, NullParameterException {
 		int total = 0;
 		EntityManager entityManager = EMF.get().createEntityManager();
 		UserApp userAppDeleted = entityManager.find(UserApp.class, userId);
@@ -1783,6 +1781,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			}
 		}
 		deletePrivateAnnotationsOfUser(userId);
+		deleteAnnotationThreads(getAnnotationThreadsByUserId(userId));
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(userAppDeleted);
@@ -3325,6 +3324,186 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 		folderDB.setName(newName);
 		updateFolder(folderDB);
+
+	}
+
+	private AnnotationThread loadAnnotationThread(Long id) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<AnnotationThread> list;
+		ArrayList<AnnotationThread> annotationThreads;
+		String sql = "SELECT r FROM AnnotationThread r WHERE r.id=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		annotationThreads = new ArrayList<AnnotationThread>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			annotationThreads.add(null);
+		}
+		AnnotationThread annotationThread = annotationThreads.get(0);
+		return annotationThread;
+	}
+
+	public Long saveAnnotationThread(AnnotationThread annotationThread) {
+		boolean isUpdate = false;
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		now = calendar.getTime();
+		annotationThread.setCreatedDate(now);
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (annotationThread.getId() == null) {
+			entityManager.persist(annotationThread);
+
+		} else {
+			isUpdate = true;
+			entityManager.merge(annotationThread);
+
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		Long annotationThreadId = annotationThread.getId();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		if (!isUpdate && annotationThread.getThreadFatherId() != null) {
+			addSonToAnnotationThread(annotationThread.getThreadFatherId(),
+					annotationThreadId);
+
+		}
+
+		return annotationThreadId;
+	}
+
+	private void addSonToAnnotationThread(Long annotationThreadFather,
+			Long annotationThreadSon) {
+
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		AnnotationThread father = entityManager.find(AnnotationThread.class,
+				annotationThreadFather);
+		if (!father.getThreadIds().contains(annotationThreadSon)) {
+			father.getThreadIds().add(annotationThreadSon);
+		}
+
+		entityManager.merge(annotationThreadFather);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.close();
+
+	}
+
+	public void deleteAnnotationThread(Long annotationThreadId)
+			throws GeneralException {
+		annotationThreadIds = new ArrayList<Long>();
+		getAllDeepThreadIds(annotationThreadId);
+		deleteThreads(annotationThreadIds);
+
+	}
+
+	private void getAllDeepThreadIds(Long annotationThreadId) {
+		AnnotationThread annotationThread = loadAnnotationThread(annotationThreadId);
+
+		for (int i = 0; i < annotationThread.getThreadIds().size(); i++) {
+			getAllDeepThreadIds(annotationThread.getThreadIds().get(i));
+		}
+		annotationThreadIds.add(annotationThreadId);
+	}
+
+	private void deletePlainAnnotationThread(Long annotationThreadId) {
+
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		AnnotationThread annotationThread = entityManager.find(
+				AnnotationThread.class, annotationThreadId);
+		entityManager.remove(annotationThread);
+		entityTransaction.commit();
+	}
+
+	private void deleteThreads(ArrayList<Long> annotationThreadIds) {
+		if (annotationThreadIds != null) {
+			for (int i = 0; i < annotationThreadIds.size(); i++) {
+				deletePlainAnnotationThread(annotationThreadIds.get(i));
+			}
+		}
+	}
+
+	private ArrayList<AnnotationThread> getAnnotationThreadsByAnnotationId(
+			Long annotationId) throws GeneralException, NullParameterException {
+		entityManager = EMF.get().createEntityManager();
+		List<AnnotationThread> list;
+		ArrayList<AnnotationThread> listAnnotationThreads;
+		if (annotationId == null) {
+			throw new NullParameterException(
+					"Parameter aniId cant be null in method loadAnnotationThreadById");
+		}
+		try {
+			String sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
+					+ annotationId;
+			list = entityManager.createQuery(sql).getResultList();
+			listAnnotationThreads = new ArrayList<AnnotationThread>(list);
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method loadAnnotationThreadById: "
+							+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+
+			}
+		}
+		if (list.isEmpty()) {
+			return null;
+		}
+		return listAnnotationThreads;
+	}
+
+	private ArrayList<AnnotationThread> getAnnotationThreadsByUserId(Long userId)
+			throws GeneralException, NullParameterException {
+		entityManager = EMF.get().createEntityManager();
+		List<AnnotationThread> list;
+		ArrayList<AnnotationThread> listAnnotationThreads;
+		if (userId == null) {
+			throw new NullParameterException(
+					"Parameter aniId cant be null in method loadAnnotationThreadById");
+		}
+		try {
+			String sql = "SELECT a FROM AnnotationThread a WHERE a.userId="
+					+ userId;
+			list = entityManager.createQuery(sql).getResultList();
+			listAnnotationThreads = new ArrayList<AnnotationThread>(list);
+		} catch (Exception e) {
+			throw new GeneralException(
+					"Exception in method loadAnnotationThreadById: "
+							+ e.getMessage());
+		} finally {
+			if (entityManager.isOpen()) {
+				entityManager.close();
+
+			}
+		}
+		if (list.isEmpty()) {
+			return null;
+		}
+		return listAnnotationThreads;
+	}
+
+	private void deleteAnnotationThreads(ArrayList<AnnotationThread> threadIds)
+			throws GeneralException {
+		for (int i = 0; i < threadIds.size(); i++) {
+			try {
+				deleteAnnotationThread(threadIds.get(i).getId());
+			} catch (GeneralException e) {
+				throw new GeneralException(
+						"There was an error while trying to remove the treads");
+			}
+		}
 
 	}
 
