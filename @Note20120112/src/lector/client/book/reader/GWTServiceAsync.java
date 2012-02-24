@@ -219,7 +219,7 @@ public interface GWTServiceAsync {
 	void deleteAnnotationThread(Long annotationThread,
 			AsyncCallback<Void> callback);
 
-	void getAnnotationThreadsByItsFather(Long annotationId,
+	void getAnnotationThreadsByItsFather(Long annotationId,Long threadFatherId,
 			AsyncCallback<ArrayList<AnnotationThread>> callback);
 
 }

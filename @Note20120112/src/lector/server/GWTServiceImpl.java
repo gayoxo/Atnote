@@ -293,7 +293,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (entityManager.isOpen()) {
 				entityManager.close();
 			}
-			deleteAnnotationThreads(getAnnotationThreadsByItsFather(id));
+			deleteAnnotationThreads(getAnnotationThreadsByItsFather(id,Constants.THREADFATHERNULLID));
 		}
 		return 1;
 	}
@@ -3435,20 +3435,20 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public ArrayList<AnnotationThread> getAnnotationThreadsByItsFather(
-			Long annotationId) throws GeneralException {
+			Long annotationId, Long threadFatherId) throws GeneralException {
 		entityManager = EMF.get().createEntityManager();
 		List<AnnotationThread> list;
 		ArrayList<AnnotationThread> listAnnotationThreads;
 	
 		try {
-			String sql;
+			String sql; 
 			
-			if(annotationId == null){
+			if(threadFatherId.equals(Constants.THREADFATHERNULLID)){
 				sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
 						+ annotationId;	
 			}else{
 				sql = "SELECT a FROM AnnotationThread a WHERE a.threadFatherId="
-						+ annotationId;	
+						+ threadFatherId;	
 			}
 			
 			list = entityManager.createQuery(sql).getResultList();
