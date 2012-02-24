@@ -8,6 +8,7 @@ public class Constants {
 
 	public static Long ALL = Long.MIN_VALUE;
 	public static final Long CATALOGID = -1l;
+	public static final Long THREADFATHERNULLID = -1l;
 	// USERS
 	public static String PROFESSOR = "Professor";
 	public static String STUDENT = "Student";

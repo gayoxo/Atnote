@@ -316,7 +316,7 @@ public class TextComentEdit extends DialogBox {
 						if (F.getCatalogId().equals(ActualUser.getReadingactivity().getCatalogId()))
 						{
 							ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog1.getTexto(),PanelTexto.getPenelBotonesTipo());
-							if (annotation.isEditable()) {
+//							if (annotation.isEditable()) {
 								B.addClickHandler(new ClickHandler() {
 								
 								public void onClick(ClickEvent event) {
@@ -325,12 +325,12 @@ public class TextComentEdit extends DialogBox {
 									
 								}
 								});
-							}
+//							}
 							PanelTexto.getPenelBotonesTipo().add(B);
 						}
 							else{
 								ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog2.getTexto(),PanelTexto.getPenelBotonesTipo());
-								if (annotation.isEditable()) {
+//								if (annotation.isEditable()) {
 									B.addClickHandler(new ClickHandler() {
 
 										public void onClick(ClickEvent event) {
@@ -340,7 +340,7 @@ public class TextComentEdit extends DialogBox {
 
 										}
 									});
-								}
+//								}
 								PanelTexto.getPenelBotonesTipo().add(B);
 							}
 						}
@@ -362,20 +362,20 @@ public class TextComentEdit extends DialogBox {
 			PanelTexto.getChckbxNewCheckBox().setVisible(true);
 		} 
 
-		if (!annotation.isEditable()) {
-			mntmGuardar.setVisible(false);
-			mntmDeleteAnnootation.setVisible(false);
-			PanelTexto.getRichTextArea().setEnabled(false);
-			PanelTexto.getComboBox().setVisible(false);
-			PanelTexto.getToolbar().setVisible(false);
-			PanelTexto.getChckbxNewCheckBox().setVisible(false);
-			PanelTexto.getBotonSelectType().setVisible(false);
-			PanelTexto.getLabelPrivPub().setVisible(false);
-			PanelTexto.getBotonSelectTypePublic().setVisible(false);
-			PanelTexto.getRichTextArea().setEnabled(false);
-			mntmClear.setVisible(false);
-
-		}
+//		if (!annotation.isEditable()) {
+//			mntmGuardar.setVisible(false);
+//			mntmDeleteAnnootation.setVisible(false);
+//			PanelTexto.getRichTextArea().setEnabled(false);
+//			PanelTexto.getComboBox().setVisible(false);
+//			PanelTexto.getToolbar().setVisible(false);
+//			PanelTexto.getChckbxNewCheckBox().setVisible(false);
+//			PanelTexto.getBotonSelectType().setVisible(false);
+//			PanelTexto.getLabelPrivPub().setVisible(false);
+//			PanelTexto.getBotonSelectTypePublic().setVisible(false);
+//			PanelTexto.getRichTextArea().setEnabled(false);
+//			mntmClear.setVisible(false);
+//
+//		}
 		
 
 	}

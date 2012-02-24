@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -34,6 +35,9 @@ import lector.client.controler.Controlador;
 import lector.client.language.Language;
 import lector.client.login.ActualUser;
 import lector.client.reader.filter.FilterBasicPopUp;
+import lector.client.reader.hilocomentarios.Arbitro;
+import lector.client.reader.hilocomentarios.JeraquiaSimulada;
+import lector.client.reader.hilocomentarios.ParesLlamada;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
@@ -72,7 +76,7 @@ public class MainEntryPoint implements EntryPoint {
 	private static MenuItem mntmShowSelectedComments;
 	private static MenuItem mntmBlockedComments;
 	private final ScrollPanel ScrollAnnotationsPanel = new ScrollPanel();
-	private final static VerticalPanel verticalAnnotationsPanel = new VerticalPanel();
+	private static VerticalPanel verticalAnnotationsPanel = new VerticalPanel();
 	private static TechnicalSpecs technicalSpecs;
 	private MenuItem mntmRefresh;
 	private MenuItem Annotacion;
@@ -376,13 +380,20 @@ public class MainEntryPoint implements EntryPoint {
 		}
 
 		selectorPageBox.setSize("44px", "16px");
-
-		RootAnnotation.add(ScrollAnnotationsPanel);
-
+		
+		SimplePanel SP=new SimplePanel();
+		SP.setHeight("875px");
+		//SP.setSize("1000px", "875px");
+		SP.add(ScrollAnnotationsPanel);
+		RootAnnotation.add(SP);
+		
 		ScrollAnnotationsPanel.setWidget(verticalAnnotationsPanel);
-		verticalAnnotationsPanel.setSize("100%", "100%");
-		ScrollAnnotationsPanel.setSize("340px", "875px");
+		ScrollAnnotationsPanel.setHeight("875px");
+		ScrollAnnotationsPanel.setWidth("110%");
+		//verticalAnnotationsPanel.setSize("100%", "100%");
+		//ScrollAnnotationsPanel.setSize("340px", "875px");
 		ScrollAnnotationsPanel.setVisible(false);
+		//ScrollAnnotationsPanel.setAlwaysShowScrollBars(true);
 		selectorPageBox.setVisible(false);
 		pageForward.setVisible(false);
 		pageBack.setVisible(false);
@@ -479,7 +490,10 @@ public class MainEntryPoint implements EntryPoint {
 			for (int i = 0; i < List.size(); i++) {
 				CommentPanel commentPanel = new CommentPanel(List.get(i),
 						originalBook);
+				JeraquiaSimulada JS=new JeraquiaSimulada();
+				Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), List.get(i).getId()));
 				verticalAnnotationsPanel.add(commentPanel);
+				verticalAnnotationsPanel.add(JS);
 			}
 		}
 	}

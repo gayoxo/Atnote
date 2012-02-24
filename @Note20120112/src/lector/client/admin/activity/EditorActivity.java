@@ -138,16 +138,17 @@ public class EditorActivity extends PopupPanel {
 					}
 					}
 				else{
-					if (SelectedCatalog.getId()==SelectedCatalogPublic.getId()) Window.alert("The open catalog and the teachers catalog can't be the same");
-					else SaveacActivitytoServer();
+//					if (SelectedCatalog.getId()==SelectedCatalogPublic.getId()) Window.alert("The open catalog and the teachers catalog can't be the same");
+//					else 
+						SaveacActivitytoServer();
 				}
 					
 
 			}
 
 			private boolean checkcatalog() {
-				return ((SelectedCatalogOld != null) && (SelectedCatalog != null) && (SelectedCatalog.getId()!=SelectedCatalogOld.getId())
-						|| (SelectedCatalogOldPublic != null) && (SelectedCatalogPublic != null) && (SelectedCatalogPublic.getId()!=SelectedCatalogOldPublic.getId()));
+				return ((SelectedCatalogOld != null) && (SelectedCatalog != null) && (SelectedCatalog.getId().equals(SelectedCatalogOld.getId()))
+						|| (SelectedCatalogOldPublic != null) && (SelectedCatalogPublic != null) && (SelectedCatalogPublic.getId().equals(SelectedCatalogOldPublic.getId())));
 				
 			}
 

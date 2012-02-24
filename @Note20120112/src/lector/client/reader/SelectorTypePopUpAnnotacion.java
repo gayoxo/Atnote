@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -32,16 +33,17 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	public SelectorTypePopUpAnnotacion(HorizontalPanel penelBotonesTipo,Catalog Cata, CatalogTipo catalog2) {
 		super(true);
 		CT=catalog2;
-		VerticalPanel verticalPanel = new VerticalPanel();
+		SimplePanel verticalPanel = new SimplePanel();
 		setWidget(verticalPanel);
-		verticalPanel.setSize("604px", "558px");
+		verticalPanel.setSize("690px", "611px");
         DockPanel dockPanel = new DockPanel();
         verticalPanel.add(dockPanel);
         dockPanel.setSize("100%", "100%");
         
         menuBar = new MenuBar(false);
         dockPanel.add(menuBar, DockPanel.NORTH);
-        menuBar.setSize("100%", "100%");
+        dockPanel.setCellHeight(menuBar, "15px");
+        menuBar.setSize("100%", "20px");
         
         mntmNewItem = new MenuItem(ActualUser.getLanguage().getNew(), false, new Command() {
         	public void execute() {
@@ -62,12 +64,12 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         
         ScrollPanel scrollPanel = new ScrollPanel();
         dockPanel.add(scrollPanel, DockPanel.CENTER);
-        scrollPanel.setSize("100%", "529px");
+        scrollPanel.setSize("100%", "100%");
         
         finder= new Finder2();
         finder.setCatalogo(Cata);
         scrollPanel.setWidget(finder);
-        finder.setSize("100%", "528px");
+        finder.setSize("100%", "575px");
         finder.RefrescaLosDatos();
         finder.setButtonTipo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),penelBotonesTipo));
         
