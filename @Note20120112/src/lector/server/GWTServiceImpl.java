@@ -293,7 +293,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (entityManager.isOpen()) {
 				entityManager.close();
 			}
-			deleteAnnotationThreads(getAnnotationThreadsByAnnotationId(id));
+			deleteAnnotationThreads(getAnnotationThreadsByItsFather(id));
 		}
 		return 1;
 	}
@@ -3434,18 +3434,23 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 	}
 
-	private ArrayList<AnnotationThread> getAnnotationThreadsByAnnotationId(
-			Long annotationId) throws GeneralException, NullParameterException {
+	public ArrayList<AnnotationThread> getAnnotationThreadsByItsFather(
+			Long annotationId) throws GeneralException {
 		entityManager = EMF.get().createEntityManager();
 		List<AnnotationThread> list;
 		ArrayList<AnnotationThread> listAnnotationThreads;
-		if (annotationId == null) {
-			throw new NullParameterException(
-					"Parameter aniId cant be null in method loadAnnotationThreadById");
-		}
+	
 		try {
-			String sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
-					+ annotationId;
+			String sql;
+			
+			if(annotationId == null){
+				sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
+						+ annotationId;	
+			}else{
+				sql = "SELECT a FROM AnnotationThread a WHERE a.threadFatherId="
+						+ annotationId;	
+			}
+			
 			list = entityManager.createQuery(sql).getResultList();
 			listAnnotationThreads = new ArrayList<AnnotationThread>(list);
 		} catch (Exception e) {

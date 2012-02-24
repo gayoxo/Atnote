@@ -225,5 +225,7 @@ public interface GWTService extends RemoteService {
 	
 	public void deleteAnnotationThread(Long annotationThread) throws GeneralException;
 
+	public ArrayList<AnnotationThread> getAnnotationThreadsByItsFather(
+			Long annotationId) throws GeneralException;
 
 }
