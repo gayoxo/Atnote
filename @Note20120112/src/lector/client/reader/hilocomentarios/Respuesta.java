@@ -29,7 +29,7 @@ public class Respuesta extends Composite {
     private VerticalPanel verticalPanel = new VerticalPanel();
     private Button button_1 = new Button("+");
 //    private RichTextArea richTextAreaBoton = new RichTextArea();
-    private SelectorPanel SE;
+//    private SelectorPanel SE;
     private Button button;
     private final MenuBar menuBar = new MenuBar(false);
     private MenuItem mntmNewItem;
@@ -166,8 +166,7 @@ public class Respuesta extends Composite {
 	        mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
 	        menuBar.addItem(mntmNewItem_2);
 	       
-	        //TODO incluir padre en thread
-	       // mntmNewItem_2.setText(annotation.getUserName());
+	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +annotation.getCreatedDate().toGMTString());
 	        richTextArea.setVisible(false);
 
 
@@ -177,8 +176,8 @@ public class Respuesta extends Composite {
 	    }
 	    
 	    
-	    public void hideSelectorPanel() {
-			SE.hide();
-		}
+//	    public void hideSelectorPanel() {
+//			SE.hide();
+//		}
 
 }

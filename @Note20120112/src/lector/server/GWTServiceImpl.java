@@ -3370,7 +3370,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			entityManager.close();
 		}
 
-		if (!isUpdate && annotationThread.getThreadFatherId() != null) {
+		if (!isUpdate && !annotationThread.getThreadFatherId().equals(Constants.THREADFATHERNULLID)) {
 			addSonToAnnotationThread(annotationThread.getThreadFatherId(),
 					annotationThreadId);
 

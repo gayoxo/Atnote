@@ -6,12 +6,14 @@ public class ParesLlamada {
 
 	private VerticalPanel VP;
 	private Long IDPadre;
+	private Long IDThread;
 	
 	
-	public ParesLlamada(VerticalPanel vP, Long iDPadre) {
+	public ParesLlamada(VerticalPanel vP, Long iDPadre,Long IDThreadin) {
 		super();
 		VP = vP;
 		IDPadre = iDPadre;
+		IDThread = IDThreadin;
 	}
 	
 	public Long getIDPadre() {
@@ -30,4 +32,11 @@ public class ParesLlamada {
 		VP = vP;
 	}
 	
+	public Long getIDThread() {
+		return IDThread;
+	}
+	
+	public void setIDThread(Long iDThread) {
+		IDThread = iDThread;
+	}
 }

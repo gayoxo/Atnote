@@ -491,7 +491,7 @@ public class MainEntryPoint implements EntryPoint {
 				CommentPanel commentPanel = new CommentPanel(List.get(i),
 						originalBook);
 				JeraquiaSimulada JS=new JeraquiaSimulada();
-				Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), List.get(i).getId()));
+				Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), List.get(i).getId(),null));
 				verticalAnnotationsPanel.add(commentPanel);
 				verticalAnnotationsPanel.add(JS);
 			}
@@ -574,7 +574,7 @@ public class MainEntryPoint implements EntryPoint {
 		}
 	}
 	
-	protected static void refreshP() {
+	public static void refreshP() {
 		if (popUpSelector != null) {
 			popUpSelector.hide();
 		}

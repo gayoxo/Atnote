@@ -29,6 +29,7 @@ public class AnnotationThread implements Serializable, IsSerializable {
 	@Basic
 	private Text comment;
 	private Long userId;
+	private String userName;
 	@Temporal(javax.persistence.TemporalType.DATE)
 	private Date createdDate;
 
@@ -39,13 +40,15 @@ public class AnnotationThread implements Serializable, IsSerializable {
 	}
 
 	public AnnotationThread(Long threadFatherId, Long annotationId,
-			ArrayList<Long> threadIds, Text comment, Long userId) {
+			ArrayList<Long> threadIds, Text comment, Long userId,
+			String userName) {
 		super();
 		this.threadFatherId = threadFatherId;
 		this.annotationId = annotationId;
 		this.threadIds = threadIds;
 		this.comment = comment;
 		this.userId = userId;
+		this.userName = userName;
 	}
 
 	public Date getCreatedDate() {
@@ -104,4 +107,11 @@ public class AnnotationThread implements Serializable, IsSerializable {
 		this.threadIds = threadIds;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+	
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }

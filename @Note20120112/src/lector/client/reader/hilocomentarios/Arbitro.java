@@ -1,6 +1,7 @@
 package lector.client.reader.hilocomentarios;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Stack;
 
 import lector.client.book.reader.GWTService;
@@ -39,10 +40,11 @@ public class Arbitro {
 	if (!activo)
 		{
 		ParesLlamada P=Pllamada.pop();
-		Long L=-1l;
-		AnnotationThread A=new AnnotationThread(L, L1.getIDPadre(), new ArrayList<Long>(), new Text("Reply1"),ActualUser.getUser().getId());
-		Respuesta R=new Respuesta(A);
-		L1.getVP().add(R);
+//		Long L=-1l;
+//		AnnotationThread A=new AnnotationThread(L, L1.getIDPadre(), new ArrayList<Long>(), new Text("Reply1"),ActualUser.getUser().getId(),ActualUser.getUser().getEmail());
+//		A.setCreatedDate(new Date());
+//		Respuesta R=new Respuesta(A);
+//		L1.getVP().add(R);
 		}
 		
 	}
