@@ -49,7 +49,7 @@ public class ReplyDialog extends DialogBox {
 		
 		Guardar = new MenuItem(ActualLang.getSave(), false, new Command() {
 			public void execute() {
-				AnnotationThread AT=new AnnotationThread(Padre, AnotPadre, new ArrayList<Long>(), new Text(richTextArea.getText()));
+				AnnotationThread AT=new AnnotationThread(Padre, AnotPadre, new ArrayList<Long>(), new Text(richTextArea.getText()),ActualUser.getUser().getId());
 				//TODO Insertar añadir
 				hide();
 			}

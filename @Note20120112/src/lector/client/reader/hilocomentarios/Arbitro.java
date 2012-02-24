@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.login.ActualUser;
 import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.appengine.api.datastore.Text;
@@ -39,7 +40,7 @@ public class Arbitro {
 		{
 		ParesLlamada P=Pllamada.pop();
 		Long L=-1l;
-		AnnotationThread A=new AnnotationThread(L, L1.getIDPadre(), new ArrayList<Long>(), new Text("Reply1"));
+		AnnotationThread A=new AnnotationThread(L, L1.getIDPadre(), new ArrayList<Long>(), new Text("Reply1"),ActualUser.getUser().getId());
 		Respuesta R=new Respuesta(A);
 		L1.getVP().add(R);
 		}
