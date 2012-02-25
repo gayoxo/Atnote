@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.catalogo.Finder;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.Folder;
 import lector.client.controler.Constants;
@@ -18,6 +17,12 @@ import lector.client.reader.MainEntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -91,6 +96,23 @@ public class FilterBasicPopUp extends PopupPanel {
 		}
 	});
 	horizontalPanel.add(All);
+	All.setSize("100%", "100%");
+	All.setStyleName("gwt-ButtonCenter");
+	All.addMouseOutHandler(new MouseOutHandler() {
+		public void onMouseOut(MouseOutEvent event) {
+			((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+	All.addMouseOverHandler(new MouseOverHandler() {
+		public void onMouseOver(MouseOverEvent event) {
+			((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+		}
+	});
+	All.addMouseDownHandler(new MouseDownHandler() {
+		public void onMouseDown(MouseDownEvent event) {
+			((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+		}
+	});
 	
 	Advance = new Button(Lang.getAdvance());
 	Advance.addClickHandler(new ClickHandler() {
@@ -98,8 +120,42 @@ public class FilterBasicPopUp extends PopupPanel {
 			Controlador.change2FilterAdvance();
 		}
 	});
+	Advance.setSize("100%", "100%");
+	Advance.setStyleName("gwt-ButtonCenter");
+	Advance.addMouseOutHandler(new MouseOutHandler() {
+		public void onMouseOut(MouseOutEvent event) {
+			((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+	Advance.addMouseOverHandler(new MouseOverHandler() {
+		public void onMouseOver(MouseOverEvent event) {
+			((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+		}
+	});
+	Advance.addMouseDownHandler(new MouseDownHandler() {
+		public void onMouseDown(MouseDownEvent event) {
+			((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+		}
+	});
 	horizontalPanel.add(Advance);
 
+	btnNewButton.setSize("100%", "100%");
+		btnNewButton.setStyleName("gwt-ButtonCenter");
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
 		btnNewButton.addClickHandler(new ClickHandler() {
 
 

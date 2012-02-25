@@ -133,7 +133,7 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 		for (int i = 0; i < CatalogMostrar.size()-1; i++) {
 			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(i));
 			BottonCatalog nue=new BottonCatalog(Actual,new VerticalPanel(),C);
-			nue.setWidth("100%");
+			nue.setSize("100%", "100%");
 
 			nue.addClickHandler(new ClickHandler() {
 				
@@ -163,7 +163,7 @@ bookReaderServiceHolder.getVisbibleCatalogsByProfessorId(ActualUser.getUser().ge
 		{
 			Catalog C=Catalog.cloneCatalogo(CatalogMostrar.get(CatalogMostrar.size()-1));
 			BottonCatalog nue=new BottonCatalog(Actual,new VerticalPanel(),C);
-			nue.setWidth("100%");
+			nue.setSize("100%", "100%");
 
 			nue.addClickHandler(new ClickHandler() {
 				

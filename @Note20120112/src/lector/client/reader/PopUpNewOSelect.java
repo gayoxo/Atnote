@@ -1,6 +1,6 @@
 package lector.client.reader;
 
-import lector.client.catalogo.Finder2;
+import lector.client.catalogo.Finder;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.login.ActualUser;
@@ -16,9 +16,9 @@ public class PopUpNewOSelect extends PopupPanel {
 
 	private Catalog Catalogo;
 	private Entity Entity;
-	private Finder2 finder;
+	private Finder finder;
 	
-	public PopUpNewOSelect(Catalog CatalogoIn,Entity EntityIn, Finder2 finderin) {
+	public PopUpNewOSelect(Catalog CatalogoIn,Entity EntityIn, Finder finderin) {
 		super(false);
 		setModal(true);
 		Catalogo=CatalogoIn;

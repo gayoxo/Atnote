@@ -25,6 +25,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class Rule extends Composite {
@@ -69,7 +75,24 @@ public class Rule extends Composite {
 			}
 		});
 		flowPanel.add(btnNewButton);
-		btnNewButton.setWidth("80%");
+		btnNewButton.setSize("80%", "100%");
+		
+		btnNewButton.setStyleName("gwt-ButtonIzquierda");
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+			}
+		});
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+			}
+		});
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+			}
+		});
 		
 		Button btnNewButton_1 = new Button(ActualUser.getLanguage().getRemove());
 		btnNewButton_1.addClickHandler(new ClickHandler() {
@@ -80,7 +103,22 @@ public class Rule extends Composite {
 		flowPanel.add(btnNewButton_1);
 		btnNewButton_1.setWidth("20%");
 		
-		
+		btnNewButton_1.setStyleName("gwt-ButtonDerecha");
+		btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
+		btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+			}
+		});
+		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+			}
+		});
 		
 		SimplePanel simplePanel = new SimplePanel();
 		dockPanel.add(simplePanel, DockPanel.CENTER);

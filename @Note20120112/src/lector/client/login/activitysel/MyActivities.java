@@ -192,22 +192,12 @@ public class MyActivities implements EntryPoint {
 		for (int i = 0; i < BooksIDs.size()-1; i++) {
 
 			ButtonActivityReader button = new ButtonActivityReader(BooksIDs.get(i));
-			button.setStyleName("gwt-ButtonTOP");
-			button.setWidth("100%");
+			button.setSize("100%", "100%");
 			if (!buttonexist(button)) {
 				if (CheckCompleta(button))
 				{
 				verticalPanel.add(button);
-				}else
-				{
-					if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))	
-					{
-						verticalPanel.add(button);
-						button.setEnabled(false);
-						button.setTitle("Inclomplete Activity Data");
-					}
-				}
-	
+				button.setStyleName("gwt-ButtonTOP");
 				button.addMouseDownHandler(new MouseDownHandler() {
 					public void onMouseDown(MouseDownEvent event) {
 						((Button)event.getSource()).setStyleName("gwt-ButtonPush");
@@ -223,6 +213,33 @@ public class MyActivities implements EntryPoint {
 						((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
 					}
 				});
+				}else
+				{
+					if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))	
+					{
+						verticalPanel.add(button);
+						button.setEnabled(false);
+						button.setTitle("Inclomplete Activity Data");
+						button.setStyleName("gwt-ButtonGris");
+						button.addMouseDownHandler(new MouseDownHandler() {
+							public void onMouseDown(MouseDownEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonGrisPush");
+							}
+						});
+						button.addMouseOutHandler(new MouseOutHandler() {
+							public void onMouseOut(MouseOutEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonGris");
+							}
+						});
+						button.addMouseOverHandler(new MouseOverHandler() {
+							public void onMouseOver(MouseOverEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonGrisOver");
+							}
+						});
+					}
+				}
+	
+				
 				button.addClickHandler(new ClickHandler() {
 					private AsyncCallback<Book> callback;
 
@@ -284,21 +301,11 @@ public class MyActivities implements EntryPoint {
 		if (!BooksIDs.isEmpty())
 		{
 			ButtonActivityReader button = new ButtonActivityReader(BooksIDs.get(BooksIDs.size()-1));
-			button.setWidth("100%");
+			button.setSize("100%", "100%");
 			if (!buttonexist(button)) {
 				if (CheckCompleta(button))
 				{
 				verticalPanel.add(button);
-				}else
-				{
-					if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))	
-					{
-						verticalPanel.add(button);
-						button.setEnabled(false);
-						button.setTitle("Inclomplete Activity Data");
-					}
-				}
-				
 				button.setStyleName("gwt-ButtonBotton");
 				button.addMouseOutHandler(new MouseOutHandler() {
 					public void onMouseOut(MouseOutEvent event) {
@@ -315,6 +322,33 @@ public class MyActivities implements EntryPoint {
 						((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 					}
 				});
+				}else
+				{
+					if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))	
+					{
+						verticalPanel.add(button);
+						button.setEnabled(false);
+						button.setTitle("Inclomplete Activity Data");
+						button.setStyleName("gwt-ButtonGrisDown");
+						button.addMouseOutHandler(new MouseOutHandler() {
+							public void onMouseOut(MouseOutEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonGrisDown");
+							}
+						});
+						button.addMouseOverHandler(new MouseOverHandler() {
+							public void onMouseOver(MouseOverEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonGrisDownOver");
+							}
+						});
+						button.addMouseDownHandler(new MouseDownHandler() {
+							public void onMouseDown(MouseDownEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonGrisDownPush");
+							}
+						});
+					}
+				}
+				
+				
 				button.addClickHandler(new ClickHandler() {
 					private AsyncCallback<Book> callback;
 

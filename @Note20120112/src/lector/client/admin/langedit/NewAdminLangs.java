@@ -117,7 +117,7 @@ public class NewAdminLangs implements EntryPoint {
 				for (int i = 0; i < result.size()-1; i++) {
 
 					BottonLang nue=new BottonLang(Actual,new VerticalPanel(),result.get(i));
-					nue.setWidth("100%");
+					nue.setSize("100%", "100%");
 
 					nue.addClickHandler(new ClickHandler() {
 						
@@ -148,7 +148,7 @@ public class NewAdminLangs implements EntryPoint {
 				if (!result.isEmpty()) {
 
 					BottonLang nue=new BottonLang(Actual,new VerticalPanel(),result.get(result.size()-1));
-					nue.setWidth("100%");
+					nue.setSize("100%", "100%");
 
 					nue.addClickHandler(new ClickHandler() {
 						
@@ -201,7 +201,7 @@ bookReaderServiceHolder.getLanguages(new AsyncCallback<ArrayList<Language>>() {
 				for (int i = 0; i < result.size()-1; i++) {
 
 					BottonLang nue=new BottonLang(Actual,new VerticalPanel(),result.get(i));
-					nue.setWidth("100%");
+					nue.setSize("100%", "100%");
 
 					nue.addClickHandler(new ClickHandler() {
 						
@@ -232,7 +232,7 @@ bookReaderServiceHolder.getLanguages(new AsyncCallback<ArrayList<Language>>() {
 				if (!result.isEmpty()) {
 
 					BottonLang nue=new BottonLang(Actual,new VerticalPanel(),result.get(result.size()-1));
-					nue.setWidth("100%");
+					
 
 					nue.addClickHandler(new ClickHandler() {
 						
@@ -241,6 +241,7 @@ bookReaderServiceHolder.getLanguages(new AsyncCallback<ArrayList<Language>>() {
 							panel.showRelativeTo((BottonLang)event.getSource());
 						}
 					});
+					nue.setSize("100%", "100%");
 					nue.setStyleName("gwt-ButtonBotton");
 					nue.addMouseOutHandler(new MouseOutHandler() {
 						public void onMouseOut(MouseOutEvent event) {

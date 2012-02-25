@@ -97,7 +97,6 @@ public class NewAdminActivities implements EntryPoint {
 				Actual = new VerticalPanel();
 				horizontalPanel.add(Actual);
 				Actual.setWidth("400px");
-				Actual.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				
 				VerticalPanel verticalPanel_1 = new VerticalPanel();
 				verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -132,6 +131,7 @@ public class NewAdminActivities implements EntryPoint {
 							BottonActivity nue = new BottonActivity(Actual,
 									new VerticalPanel(), ActivityMostrar.get(i));
 							nue.setWidth("100%");
+							nue.setHeight("100%");
 							nue.addMouseDownHandler(new MouseDownHandler() {
 								public void onMouseDown(MouseDownEvent event) {
 									((Button)event.getSource()).setStyleName("gwt-ButtonPush");
@@ -165,6 +165,7 @@ public class NewAdminActivities implements EntryPoint {
 							BottonActivity nue = new BottonActivity(Actual,
 									new VerticalPanel(), ActivityMostrar.get(ActivityMostrar.size()-1));
 							nue.setWidth("100%");
+							nue.setHeight("100%");
 							nue.setStyleName("gwt-ButtonBotton");
 							nue.addMouseOutHandler(new MouseOutHandler() {
 								public void onMouseOut(MouseOutEvent event) {
@@ -219,7 +220,7 @@ for (int i = 0; i < ActivityMostrar.size()-1; i++) {
 							
 							BottonActivity nue = new BottonActivity(Actual,
 									new VerticalPanel(), ActivityMostrar.get(i));
-							nue.setWidth("100%");
+							nue.setSize("100%", "100%");
 							nue.addMouseDownHandler(new MouseDownHandler() {
 								public void onMouseDown(MouseDownEvent event) {
 									((Button)event.getSource()).setStyleName("gwt-ButtonPush");

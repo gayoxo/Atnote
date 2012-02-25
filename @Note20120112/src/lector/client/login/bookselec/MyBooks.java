@@ -16,6 +16,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -25,6 +31,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
@@ -133,8 +140,47 @@ public class MyBooks implements EntryPoint {
 							callback);
 				}
 			});
+			button.setSize("100%", "100%");
+			button.setStyleName("gwt-ButtonTOP");
+			button.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				}
+			});
+			button.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+				}
+			});
+			button.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+				}
+			});
 		}
 		
+	}
+		if (verticalPanel.getWidgetCount()>0)
+		{
+		Widget W=verticalPanel.getWidget(verticalPanel.getWidgetCount()-1);
+		Button B=(Button)W;
+		B.setSize("100%", "100%");
+		B.setStyleName("gwt-ButtonBotton");
+		B.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+				}
+			});
+		B.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+				}
+			});
+		B.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+				}
+			});
 	}
 	}
 

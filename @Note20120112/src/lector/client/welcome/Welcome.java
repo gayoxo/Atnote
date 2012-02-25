@@ -20,6 +20,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
@@ -78,7 +84,7 @@ public class Welcome implements EntryPoint {
 						
 						HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
 						horizontalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-						horizontalPanel_2.setSpacing(7);
+						horizontalPanel_2.setSpacing(10);
 						verticalPanel_1.add(horizontalPanel_2);
 						
 								Image image = new Image("logo_ucm.jpg");
@@ -98,8 +104,14 @@ public class Welcome implements EntryPoint {
 										
 									}
 								});
+								
+								HorizontalPanel horizontalPanel_4 = new HorizontalPanel();
+								horizontalPanel_2.add(horizontalPanel_4);
 								horizontalPanel_2.add(image_2);
 								image_2.setSize("164px", "72px");
+								
+								HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
+								horizontalPanel_2.add(horizontalPanel_5);
 								
 								Image image_3 = new Image("ISLA.jpg");
 								horizontalPanel_2.add(image_3);
@@ -164,6 +176,42 @@ public class Welcome implements EntryPoint {
 						});
 						btnNewButton.setText("Log In");
 						btnNewButton.setSize("164px", "50px");
+						btnNewButton.addClickHandler(new ClickHandler() {
+							
+							public void onClick(ClickEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								
+							}
+						});
+					
+						btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+							public void onMouseDown(MouseDownEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+							}
+						});
+						
+	
+						btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+							public void onMouseOut(MouseOutEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+						}
+					});
+						
+
+						btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+							public void onMouseOver(MouseOverEvent event) {
+								
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+							
+						}
+					});
+
+						btnNewButton.setStyleName("gwt-ButtonCenter");
+
+						
+						
+						
+						
 						/*
 						 * Anchor A = new Anchor("Sign In");
 						 * A.setHref(ActualUser.getUser().getLoginUrl()); Anchor
@@ -210,6 +258,37 @@ public class Welcome implements EntryPoint {
 												// ActualUser.getUser().setIsAuthenticated(true);
 											}
 										});
+								btnNewButton.addClickHandler(new ClickHandler() {
+									
+									public void onClick(ClickEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+										
+									}
+								});
+							
+								btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+									public void onMouseDown(MouseDownEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+									}
+								});
+								
+			
+								btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+									public void onMouseOut(MouseOutEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								}
+							});
+								
+
+								btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+									public void onMouseOver(MouseOverEvent event) {
+										
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+									
+								}
+							});
+
+								btnNewButton.setStyleName("gwt-ButtonCenter");
 
 							}
 

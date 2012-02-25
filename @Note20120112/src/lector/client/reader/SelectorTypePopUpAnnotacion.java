@@ -1,7 +1,6 @@
 package lector.client.reader;
 
 import lector.client.catalogo.Finder;
-import lector.client.catalogo.Finder2;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
@@ -25,7 +24,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 
 public class SelectorTypePopUpAnnotacion extends PopupPanel {
-	private static Finder2 finder;
+	private static Finder finder;
 	protected MenuItem mntmNewItem;
 	protected MenuBar menuBar;
 	private CatalogTipo CT;
@@ -66,7 +65,7 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         dockPanel.add(scrollPanel, DockPanel.CENTER);
         scrollPanel.setSize("100%", "100%");
         
-        finder= new Finder2();
+        finder= new Finder();
         finder.setCatalogo(Cata);
         scrollPanel.setWidget(finder);
         finder.setSize("100%", "575px");

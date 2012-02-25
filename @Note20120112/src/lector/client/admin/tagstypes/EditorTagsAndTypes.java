@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.catalogo.Finder2;
+import lector.client.catalogo.Finder;
 import lector.client.catalogo.StackPanelMio;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.DecendanceException;
@@ -40,7 +40,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 			.create(GWTService.class);
 	private static MenuBar menuBar_3;
 	private static MenuBar menuBar_2;
-	private static Finder2 finder;
+	private static Finder finder;
 	private static Catalog catalogo;
 
 	public EditorTagsAndTypes() {
@@ -64,7 +64,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		mntmSelected.setEnabled(false);
 		menuBar_3.addItem(mntmSelected);
 		
-		finder = new Finder2();
+		finder = new Finder();
 		SimplePanel S= new SimplePanel();
 		S.setSize("100%", "97%");
 		S.add(finder);

@@ -193,7 +193,7 @@ height: 100%;
 }
 
 .gwt-ButtonTOP {
- background: transparent url('BotonArriba.jpg') no-repeat center center;
+ background: transparent url('/BotonesLista/BotonArriba.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -204,7 +204,7 @@ height: 100%;
 	font-size: 24px;
 }
 .gwt-ButtonTOPOver {
- background: transparent url('BotonArriba.jpg') no-repeat  center center;
+ background: transparent url('/BotonesLista/BotonArriba.jpg') no-repeat  center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -216,7 +216,7 @@ height: 100%;
 }
 
 .gwt-ButtonTOPSelect {
-background: transparent url('BotonArriba.jpg') no-repeat center center;
+background: transparent url('/BotonesLista/BotonArriba.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -241,7 +241,7 @@ background: transparent url('BotonArriba.jpg') no-repeat center center;
 
 
 .gwt-ButtonBotton  {
- background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -254,7 +254,7 @@ background: transparent url('BotonArriba.jpg') no-repeat center center;
 }
 
 .gwt-ButtonBottonOver {
-background: transparent url('BotonAbajo.jpg') no-repeat center center;
+background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -278,7 +278,7 @@ background: transparent url('BotonAbajo.jpg') no-repeat center center;
 
 
 .gwt-ButtonBottonSelect {
-background: transparent url('BotonAbajo.jpg') no-repeat center center;
+background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -292,7 +292,7 @@ background: transparent url('BotonAbajo.jpg') no-repeat center center;
 
 
 .gwt-ButtonBottonSave {
- background: transparent url('BotonAbajo.jpg') no-repeat center center;
+ background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -305,7 +305,7 @@ background: transparent url('BotonAbajo.jpg') no-repeat center center;
 }
 .gwt-ButtonBottonSaveOver {
 
-	 background: transparent url('BotonAbajo.jpg') no-repeat center center;
+	 background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center center;
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
@@ -330,4 +330,240 @@ display: block;
 font-size: 11px;
 }
 .gwt-MenuItem {
+}
+
+
+.gwt-ButtonCenter {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+}
+.gwt-ButtonCenterOver {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonCenterSelect {
+background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonCenterPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+}
+
+.gwt-ButtonGris {
+ background: transparent url('/BotonesLista/BotonArribaGris.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+}
+.gwt-ButtonGrisOver {
+ background: transparent url('/BotonesLista/BotonArribaGris.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonGrisSelect {
+background: transparent url('/BotonesLista/BotonArribaGris.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonGrisPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+}
+
+.gwt-ButtonGrisDown {
+ background: transparent url('/BotonesLista/BotonAbajoGris.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+}
+.gwt-ButtonGrisDownOver {
+ background: transparent url('/BotonesLista/BotonAbajoGris.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonGrisDownSelect {
+background: transparent url('/BotonesLista/BotonAbajoGris.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonGrisDownPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+}
+
+.gwt-ButtonDerecha {
+ background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+}
+.gwt-ButtonDerechaOver {
+ background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonDerechaSelect {
+background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonDerechaPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
+}
+
+.gwt-ButtonIzquierda {
+ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 24px;
+}
+.gwt-ButtonIzquierdaOver {
+ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 35px;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonIzquierdaSelect {
+background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 24px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonIzquierdaPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 35px;
+	text-decoration: none;
+	background-color: White;
 }

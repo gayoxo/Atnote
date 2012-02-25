@@ -135,7 +135,7 @@ public class NewAdminAdministrator implements EntryPoint {
 				btnNewButton_1.setHTML("<img src=\"Admin.gif\">" + textBox.getText());
 				verticalPanel_1.add(btnNewButton_1);
 				textBox.setText("");
-				btnNewButton_1.setWidth("100%");
+				btnNewButton_1.setSize("100%", "100%");
 				SaveAdmins.setVisible(true);
 				}else Window.alert("The User need to be a valid reference");
 			}
@@ -230,7 +230,7 @@ public class NewAdminAdministrator implements EntryPoint {
 		SaveAdmins.setStyleName("gwt-ButtonBottonSave");
 		//SaveAdmins.setStyleName("gwt-MenuItemMio");
 		verticalPanel.add(SaveAdmins);
-		SaveAdmins.setWidth("100%");
+		SaveAdmins.setSize("100%", "100%");
 		
 		
 		

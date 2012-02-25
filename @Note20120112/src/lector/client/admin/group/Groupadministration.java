@@ -129,7 +129,7 @@ public class Groupadministration implements EntryPoint {
 						}
 					});
 					Panel_de_grupos.add(btnNewButton);
-					btnNewButton.setWidth("100%");
+					btnNewButton.setSize("100%", "100%");
 					btnNewButton.addMouseOutHandler(new MouseOutHandler() {
 						public void onMouseOut(MouseOutEvent event) {
 							if (ActualSelect!=(Button)event.getSource()) 
@@ -185,7 +185,7 @@ public class Groupadministration implements EntryPoint {
 					}
 				});
 				Panel_de_grupos.add(btnNewButton);
-				btnNewButton.setWidth("100%");
+				btnNewButton.setSize("100%", "100%");
 				btnNewButton.addMouseOutHandler(new MouseOutHandler() {
 					public void onMouseOut(MouseOutEvent event) {
 						if (ActualSelect!=(Button)event.getSource()) 
@@ -261,7 +261,7 @@ bookReaderServiceHolder.getGroups(new AsyncCallback<ArrayList<GroupApp>>() {
 						}
 					});
 					Panel_de_grupos.add(btnNewButton);
-					btnNewButton.setWidth("100%");
+					btnNewButton.setSize("100%", "100%");
 					btnNewButton.addMouseOutHandler(new MouseOutHandler() {
 						public void onMouseOut(MouseOutEvent event) {
 							if (ActualSelect!=(Button)event.getSource()) 
@@ -317,7 +317,7 @@ bookReaderServiceHolder.getGroups(new AsyncCallback<ArrayList<GroupApp>>() {
 					}
 				});
 				Panel_de_grupos.add(btnNewButton);
-				btnNewButton.setWidth("100%");
+				btnNewButton.setSize("100%", "100%");
 				btnNewButton.addMouseOutHandler(new MouseOutHandler() {
 					public void onMouseOut(MouseOutEvent event) {
 						if (ActualSelect!=(Button)event.getSource()) 

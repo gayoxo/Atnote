@@ -11,6 +11,12 @@ import lector.client.reader.annotthread.AnnotationThread;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -67,6 +73,22 @@ public class Respuesta extends Composite {
 	        button.setEnabled(true);
 	        button.setVisible(true);
 	        button.setSize("254px", "30px");
+	        button.setStyleName("gwt-ButtonIzquierda");
+	        button.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				}
+			});
+	        button.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+				}
+			});
+	        button.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+				}
+			});
 
 //	        richTextAreaBoton.addClickHandler(new ClickHandler() {
 	//
@@ -139,6 +161,22 @@ public class Respuesta extends Composite {
 	            }
 	        });
 	        horizontalPanel.add(button_1);
+	        button_1.setStyleName("gwt-ButtonDerecha");
+	        button_1.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				}
+			});
+	        button_1.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+				}
+			});
+	        button_1.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+				}
+			});
 	        button_1.setSize("52px", "30px");
 
 	        richTextArea.setHTML(annotation.getComment().toString());

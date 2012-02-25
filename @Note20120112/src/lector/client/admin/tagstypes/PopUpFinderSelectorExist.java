@@ -4,7 +4,7 @@ package lector.client.admin.tagstypes;
 import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.catalogo.Finder2;
+import lector.client.catalogo.Finder;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.controler.Constants;
@@ -25,7 +25,7 @@ import com.google.gwt.user.client.Window;
 
 public class PopUpFinderSelectorExist extends PopupPanel {
 
-	private Finder2 finder;
+	private Finder finder;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private Entity father;
@@ -35,7 +35,7 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		setModal(true);
 		setGlassEnabled(true);
 		father=entity;
-		finder = new Finder2();
+		finder = new Finder();
 		SimplePanel S= new SimplePanel();
 		S.setSize("100%", "100%");
 		S.add(finder);

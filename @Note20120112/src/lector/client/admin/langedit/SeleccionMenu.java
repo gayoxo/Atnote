@@ -42,7 +42,7 @@ public class SeleccionMenu extends PopupPanel {
 			}
 		});
 		//verticalPanel.add(btnNewButton);
-		btnNewButton.setWidth("100%");
+		btnNewButton.setSize("100%", "100%");
 		
 		Button btnNewButton_1 = new Button("Delete");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
@@ -80,7 +80,7 @@ public class SeleccionMenu extends PopupPanel {
 		});
 		btnNewButton_1.setStyleName("gwt-ButtonTOP");
 		verticalPanel.add(btnNewButton_1);
-		btnNewButton_1.setWidth("100%");
+		btnNewButton_1.setSize("100%", "100%");
 		
 		Button btnNewButton_2 = new Button("Edit");
 		btnNewButton_2.addClickHandler(new ClickHandler() {
@@ -107,7 +107,7 @@ public class SeleccionMenu extends PopupPanel {
 			}
 		});
 		verticalPanel.add(btnNewButton_2);
-		btnNewButton_2.setWidth("100%");
+		btnNewButton_2.setSize("100%", "100%");
 	}
 
 }

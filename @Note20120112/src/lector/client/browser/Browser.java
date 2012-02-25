@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.catalogo.Finder2;
+import lector.client.catalogo.Finder;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
@@ -43,9 +43,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Browser implements EntryPoint {
 
-	private Finder2 FinderButton;
+	private Finder FinderButton;
 	private VerticalPanel Selected;
-	private Finder2 FinderButton2;
+	private Finder FinderButton2;
 	private VerticalPanel SelectedB;
 	private Language ActualLang;
 	private Button btnNewButton;
@@ -81,7 +81,7 @@ public class Browser implements EntryPoint {
 		Selected.add(SelectedB);
 		SelectedB.setWidth("100%");
 		
-		FinderButton2 = new Finder2();
+		FinderButton2 = new Finder();
 		SimplePanel simplePanel= new SimplePanel();
 		simplePanel.setSize("100%", "100%");
 		simplePanel.add(FinderButton2);
@@ -118,7 +118,7 @@ public class Browser implements EntryPoint {
 		
 		
 		
-		FinderButton = new Finder2();
+		FinderButton = new Finder();
 		SimplePanel FinderPanel= new SimplePanel();
 		FinderPanel.setSize("100%", "100%");
 		FinderPanel.add(FinderButton);

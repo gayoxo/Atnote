@@ -1,80 +1,126 @@
 package lector.client.catalogo;
 
+
 import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.catalogo.Tree.Node;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
-import lector.client.catalogo.client.FileException;
+import lector.client.catalogo.client.Folder;
+import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public class Finder extends Composite {
 
-	private ArrayList<Entity> Path;
+	private Node ActualRama;
 	private Catalog C;
-	private StackPanelMio SPmio;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
-	private HorizontalPanel horizontalPanel;
-	private ArrayList<Entity> AMostrar;
-	private Button button;
 	
 	//el finder del reading activity tiene lenguaje asociado
-	private boolean InReadingActivity=false;
-
+		private boolean InReadingActivity=false;
+	private StackPanelMio SPmio;
+	private SplitLayoutPanel horizontalSplitPanel;
+	private SimplePanel simplePanel;
+	private Node trtmNewItem;
+	private ScrollPanel scrollPanel;
+	
 	public Finder() {
-
-		Path = new ArrayList<Entity>();
-		VerticalPanel verticalPanel = new VerticalPanel();
-		initWidget(verticalPanel);
-		verticalPanel.setSize("100%", "100%");
-
-		horizontalPanel = new HorizontalPanel();
-		verticalPanel.add(horizontalPanel);
-
-		button = new Button("<");
-		button.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if (!Path.isEmpty()) {
-					Entity Rem = Path.get(Path.size() - 1);
-					Path.remove(Rem);
-					RefrescaLosDatos();
-					if (Path.isEmpty())
-						button.setVisible(false);
-				}
+		
+		simplePanel = new SimplePanel();
+		initWidget(simplePanel);
+		
+		horizontalSplitPanel = new SplitLayoutPanel();
+		simplePanel.add(horizontalSplitPanel);
+		simplePanel.setSize("100%", "100%");
+	//	simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
+		horizontalSplitPanel.setSize("100%", "100%");
+	//	horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
+		scrollPanel = new ScrollPanel();
+		horizontalSplitPanel.addWest(scrollPanel, 200.0);
+		scrollPanel.setSize("100%", "100%");
+		
+		
+		
+		Tree ArbolDeNavegacion = new Tree();
+		ArbolDeNavegacion.addSelectionHandler(new SelectionHandler<TreeItem>() {
+			public void onSelection(SelectionEvent<TreeItem> event) {
+				ActualRama=(Node)event.getSelectedItem();
+				cargaLaRamaYLaSeleccion();
+				
 			}
 		});
-		horizontalPanel.add(button);
-		button.setVisible(false);
-
-		for (int j = 0; ((j < Path.size()) && j < 3); j++) {
-			int i;
-			if (Path.size() <= 3)
-				i = j;
-			else
-				i = Path.size() - 3 + j;
-			Button buttonnew = new Button(Path.get(i).getName());
-			horizontalPanel.add(buttonnew);
-		}
-
+		ArbolDeNavegacion.addOpenHandler(new OpenHandler<TreeItem>() {
+			public void onOpen(OpenEvent<TreeItem> event) {
+				cargaLaRama();
+			}
+		});
+		scrollPanel.setWidget(ArbolDeNavegacion);
+		ArbolDeNavegacion.setSize("100%", "100%");
+		
+		trtmNewItem = new Node(new Folder("Catalogo", Constants.CATALOGID, Constants.CATALOGID));
+		trtmNewItem.setText("\\");
+		ArbolDeNavegacion.addItem(trtmNewItem);
+		trtmNewItem.setState(true);
+		ActualRama=trtmNewItem;
+		
+		
+		SimplePanel simplePanel_1 = new SimplePanel();
+		horizontalSplitPanel.add(simplePanel_1);
+		simplePanel_1.setSize("100%", "100%");
+		
+		VerticalPanel verticalPanel = new VerticalPanel();
+		simplePanel_1.setWidget(verticalPanel);
+		verticalPanel.setSize("100%", "100%");
 		SPmio = new StackPanelMio();
 		verticalPanel.add(SPmio);
 		SPmio.setWidth("100%");
-
+		
+		
+		
 	}
 
-	public void RefrescaLosDatos() {
+	protected void SeleccionaLaRama() {
+		
+		ArrayList<Entity>AMostrar = new ArrayList<Entity>();
+		for (int i = 0; i < ActualRama.getChildCount(); i++) {
+			AMostrar.add(((Node)ActualRama.getChild(i)).getEntidad()); 
+		}
+
+		SPmio.Clear();
+		for (Entity entitynew : AMostrar) {
+			if (AMostrar.size() <= 10)
+				SPmio.addBotonLessTen(entitynew);
+			else
+				SPmio.addBoton(entitynew);
+		}
+		SPmio.ClearEmpty();
+		LoadingPanel.getInstance().hide();
+		
+	}
+
+	protected void cargaLaRama() {
 		AsyncCallback<ArrayList<Entity>> callback1 = new AsyncCallback<ArrayList<Entity>>() {
 
 			public void onFailure(Throwable caught) {
@@ -84,59 +130,17 @@ public class Finder extends Composite {
 			}
 
 			public void onSuccess(ArrayList<Entity> result) {
-				try {
-
-					if (Path.isEmpty()) {
-						C.setSons(result);
-					} else {
-						Path.get(Path.size() - 1).setSons(result);
-						button.setVisible(true);
+				
+				ActualRama.removeItems();
+				for (Entity entity : result) {
+					entity.setActualFather(ActualRama.getEntidad());
+				}
+				for (Entity entitynew : result) {
+					Node A=new Node(entitynew);
+					if (entitynew instanceof Folder) A.setHTML("Folder.gif",entitynew.getName());					
+					else A.setHTML("File.gif",entitynew.getName());
+					ActualRama.addItem(A);
 					}
-
-				} catch (FileException e1) {
-					e1.printStackTrace();
-				}
-
-				horizontalPanel.clear();
-				horizontalPanel.add(button);
-
-				for (int j = 0; ((j < Path.size()) && j < 3); j++) {
-					int i;
-					if (Path.size() <= 3)
-						i = j;
-					else
-						i = Path.size() - 3 + j;
-					ButtonNavigator buttonnew = new ButtonNavigator(Path.get(i)
-							.getName());
-					buttonnew.setElemento(Path.get(i));
-					buttonnew.addClickHandler(new ClickHandler() {
-
-						public void onClick(ClickEvent event) {
-							ButtonNavigator BN = (ButtonNavigator) event
-									.getSource();
-							int start = Path.size() - 1;
-							while (!Path.isEmpty() && start >= 0
-									&& Path.get(start) != BN.getElemento()) {
-								Path.remove(start);
-								start--;
-							}
-							RefrescaLosDatos();
-
-						}
-					});
-					horizontalPanel.add(buttonnew);
-				}
-
-				AMostrar = result;
-
-				SPmio.Clear();
-				for (Entity entitynew : AMostrar) {
-					if (AMostrar.size() <= 10)
-						SPmio.addBotonLessTen(entitynew);
-					else
-						SPmio.addBoton(entitynew);
-				}
-				SPmio.ClearEmpty();
 				LoadingPanel.getInstance().hide();
 			}
 		};
@@ -144,70 +148,59 @@ public class Finder extends Composite {
 		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
 		else LoadingPanel.getInstance().setLabelTexto("Loading...");
 		Long IdPathActual = 0l;
-		if (Path.isEmpty())
+/*		if (ActualRama.getEntidad().getID())
 			IdPathActual = null;
-		else
-			IdPathActual = Path.get(Path.size() - 1).getID();
+		else*/
+			IdPathActual = ActualRama.getEntidad().getID();
 		bookReaderServiceHolder.getSons(IdPathActual, C
 				.getId(), callback1);
+		
 	}
 
-	public void setButtonClick(ClickHandler botonClick, String NameEntity) {
-		SPmio.setBotonClick(botonClick);
-	}
+	protected void cargaLaRamaYLaSeleccion() {
+		AsyncCallback<ArrayList<Entity>> callback1 = new AsyncCallback<ArrayList<Entity>>() {
 
-	public void add2Pad(Entity E) {
-		Path.add(E);
-		button.setVisible(true);
-	}
-
-//	private void remove2Pad(Entity E) {
-//		Path.remove(E);
-//		if (Path.isEmpty())
-//			button.setVisible(false);
-//	}
-
-	public ArrayList<Entity> getSonPathActual() {
-		if (Path.isEmpty())
-			return C.getSons();
-		else
-			try {
-				return Path.get(Path.size() - 1).getSons();
-			} catch (FileException e) {
-				
-					Window.alert("Server Error : I try to get sons from a file refresh page");
+			public void onFailure(Throwable caught) {
+				if (InReadingActivity)  Window.alert(ActualUser.getLanguage().getE_Types_refresh());
+				else Window.alert("Error : I can't refresh the types");
+				LoadingPanel.getInstance().hide();
 			}
-		return new ArrayList<Entity>();
+
+			public void onSuccess(ArrayList<Entity> result) {
+				
+				ActualRama.removeItems();
+				for (Entity entity : result) {
+					entity.setActualFather(ActualRama.getEntidad());
+				}
+				for (Entity entitynew : result) {
+					Node A=new Node(entitynew);
+					if (entitynew instanceof Folder) A.setHTML("Folder.gif",entitynew.getName());					
+					else A.setHTML("File.gif",entitynew.getName());
+					ActualRama.addItem(A);
+					}
+				SeleccionaLaRama();
+				LoadingPanel.getInstance().hide();
+			}
+		};
+		LoadingPanel.getInstance().center();
+		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
+		else LoadingPanel.getInstance().setLabelTexto("Loading...");
+		Long IdPathActual = 0l;
+/*		if (ActualRama.getEntidad()==null)
+			IdPathActual = null;
+		else*/
+			IdPathActual = ActualRama.getEntidad().getID();
+		bookReaderServiceHolder.getSons(IdPathActual, C
+				.getId(), callback1);
+		
 	}
-
-	public void setBotonClick(ClickHandler clickHandler) {
-		SPmio.setBotonClick(clickHandler);
-
+	
+	public boolean isInReadingActivity() {
+		return InReadingActivity;
 	}
-
-	public Entity getSonbyName(String html) {
-		ArrayList<Entity> PathActual = getSonPathActual();
-		boolean found = false;
-		int counter = 0;
-		while (!found && counter < PathActual.size()) {
-			found = PathActual.get(counter).getName().equals(html);
-			counter++;
-		}
-		if (found)
-			return PathActual.get(counter - 1);
-		else
-			return null;
-	}
-
-	public void setButtonTipo(BotonesStackPanelMio buttonMio) {
-		SPmio.setBotonTipo(buttonMio);
-
-	}
-
-	public Entity getTopPath() {
-		if (Path.isEmpty())
-			return null;
-		return Path.get(Path.size() - 1);
+	
+	public void setInReadingActivity(boolean inReadingActivity) {
+		InReadingActivity = inReadingActivity;
 	}
 	
 	public Catalog getCatalogo() {
@@ -216,9 +209,30 @@ public class Finder extends Composite {
 	
 	public void setCatalogo(Catalog c) {
 		C = c;
+		ActualRama=trtmNewItem;
+		cargaLaRamaYLaSeleccion();
 	}
 	
-	public void setInReadingActivity(boolean inReadingActivity) {
-		InReadingActivity = inReadingActivity;
+	public void setButtonTipo(BotonesStackPanelMio buttonMio) {
+		SPmio.setBotonTipo(buttonMio);
+
 	}
+
+	public void setBotonClick(ClickHandler clickHandler) {
+		SPmio.setBotonClick(clickHandler);
+
+	}
+
+	public Entity getTopPath() {
+				return ActualRama.getEntidad();
+	}
+	
+	public void RefrescaLosDatos()
+	{
+		cargaLaRamaYLaSeleccion();
+		//simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
+		//horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
+	}
+
+
 }

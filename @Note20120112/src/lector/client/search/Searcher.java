@@ -15,6 +15,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
@@ -52,8 +58,8 @@ public class Searcher implements EntryPoint, HistoryListener {
 	private Button searchNext = new Button(">");
 	private Button searchPrevious = new Button("<");
 	private static int pos = 0;
-	private final Image image_1 = new Image("logo.jpg");
-	private final Image image_2 = new Image("logo.jpg");
+	private final Image image_1 = new Image("Logo.jpg");
+	private final Image image_2 = new Image("IconoLogo.JPG");
 	private final Label lblNewLabel = new Label("");
 	private final SimplePanel simplePanel = new SimplePanel();
 	private MenuBar menuBar = new MenuBar(false);
@@ -62,6 +68,23 @@ public class Searcher implements EntryPoint, HistoryListener {
 	private MenuItem mntmNewItem;
 
 	public Searcher() {
+		searchNext.setSize("100%", "100%");
+		searchNext.setStyleName("gwt-ButtonCenter");
+		searchNext.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		searchNext.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		searchNext.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
 		searchNext.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
@@ -111,6 +134,23 @@ public class Searcher implements EntryPoint, HistoryListener {
 				};
 				bookReaderServiceHolder.getBooks(searcherField.getText(), pos,
 						callback);
+			}
+		});
+		searchPrevious.setSize("100%", "100%");
+		searchPrevious.setStyleName("gwt-ButtonCenter");
+		searchPrevious.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		searchPrevious.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		searchPrevious.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
 			}
 		});
 		searchPrevious.addClickHandler(new ClickHandler() {
@@ -165,7 +205,23 @@ public class Searcher implements EntryPoint, HistoryListener {
 						callback);
 			}
 		});
-		
+		searchButton.setSize("100%", "100%");
+		searchButton.setStyleName("gwt-ButtonCenter");
+		searchButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		searchButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		searchButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
 		searchButton.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
@@ -314,7 +370,7 @@ public class Searcher implements EntryPoint, HistoryListener {
 		bookSearcherWidget
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		bookSearcherWidget.add(image_2);
-		image_2.setSize("26px", "25px");
+		image_2.setSize("25px", "25px");
 		image_2.setVisible(false);
 		bookSearcherWidget.add(searcherField);
 		searcherField.setWidth("617px");
@@ -326,7 +382,7 @@ public class Searcher implements EntryPoint, HistoryListener {
 		Panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		Panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		Panel.add(image_1);
-		image_1.setSize("235px", "258px");
+		image_1.setSize("462px", "258px");
 		image_1.setVisible(true);
 
 		menuBar = new MenuBar(false);

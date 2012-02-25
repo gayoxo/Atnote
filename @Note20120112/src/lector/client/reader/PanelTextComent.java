@@ -8,6 +8,12 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -92,6 +98,25 @@ public class PanelTextComent extends Composite {
 				finder.setModal(true);
 			}
 		});
+
+		BotonSelectType.setSize("100%", "100%");
+		BotonSelectType.setStyleName("gwt-ButtonCenter");
+		BotonSelectType.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		BotonSelectType.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		BotonSelectType.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
 		horizontalPanel_1.add(BotonSelectType);
 		
 		horizontalPanel_2 = new HorizontalPanel();
@@ -111,6 +136,25 @@ public class PanelTextComent extends Composite {
 				finder.setModal(true);
 			}
 		});
+		
+		BotonSelectTypePublic.setSize("100%", "100%");
+		BotonSelectTypePublic.setStyleName("gwt-ButtonCenter");
+		BotonSelectTypePublic.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		BotonSelectTypePublic.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		BotonSelectTypePublic.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
 		horizontalPanel_2.add(BotonSelectTypePublic);
 
 		

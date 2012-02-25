@@ -392,7 +392,7 @@ public class EditorActivity extends PopupPanel {
 
 					Catalog catalog = Catalog.cloneCatalogo(result.get(i));
 					Botoncatalogo BC = new Botoncatalogo(catalog);
-					BC.setWidth("100%");
+					BC.setSize("100%", "100%");
 					CatalogPanel.add(BC);
 					BC.addClickHandler(new ClickHandler() {
 
@@ -424,7 +424,7 @@ public class EditorActivity extends PopupPanel {
 				if (!result.isEmpty()) {
 					Catalog catalog = Catalog.cloneCatalogo(result.get(result.size()-1));
 					Botoncatalogo BC = new Botoncatalogo(catalog);
-					BC.setWidth("100%");
+					BC.setSize("100%", "100%");
 					CatalogPanel.add(BC);
 					BC.addClickHandler(new ClickHandler() {
 
@@ -473,7 +473,7 @@ public class EditorActivity extends PopupPanel {
 					public void onSuccess(ArrayList<Language> result) {
 						for (int i = 0; i < result.size()-1; i++) {
 							Botonlanguage BC = new Botonlanguage(result.get(i));
-							BC.setWidth("100%");
+							BC.setSize("100%", "100%");
 							LanguagePanel.add(BC);
 							BC.addClickHandler(new ClickHandler() {
 
@@ -506,7 +506,7 @@ public class EditorActivity extends PopupPanel {
 						}
 						if(!result.isEmpty()) {
 							Botonlanguage BC = new Botonlanguage(result.get(result.size()-1));
-							BC.setWidth("100%");
+							BC.setSize("100%", "100%");
 							LanguagePanel.add(BC);
 							BC.addClickHandler(new ClickHandler() {
 
@@ -555,7 +555,7 @@ public class EditorActivity extends PopupPanel {
 		ArrayList<String> result = ActualUser.getUser().getBookIds();
 		for (int i = 0; i < result.size()-1; i++) {
 			Botonbooks BC = new Botonbooks(result.get(i));
-			BC.setWidth("100%");
+			BC.setSize("100%", "100%");
 			BooksPanel.add(BC);
 			BC.addClickHandler(new ClickHandler() {
 
@@ -585,7 +585,7 @@ public class EditorActivity extends PopupPanel {
 		}
 		if(!result.isEmpty()) {
 			Botonbooks BC = new Botonbooks(result.get(result.size()-1));
-			BC.setWidth("100%");
+			BC.setSize("100%", "100%");
 			BooksPanel.add(BC);
 			BC.addClickHandler(new ClickHandler() {
 
@@ -624,7 +624,7 @@ public class EditorActivity extends PopupPanel {
 					public void onSuccess(ArrayList<GroupApp> result) {
 						for (int i = 0; i < result.size()-1; i++) {
 							Botongroups BC = new Botongroups(result.get(i));
-							BC.setWidth("100%");
+							BC.setSize("100%", "100%");
 							GroupsPanel.add(BC);
 							BC.addClickHandler(new ClickHandler() {
 
@@ -655,7 +655,7 @@ public class EditorActivity extends PopupPanel {
 						}
 						if(!result.isEmpty()) {
 							Botongroups BC = new Botongroups(result.get(result.size()-1));
-							BC.setWidth("100%");
+							BC.setSize("100%", "100%");
 							GroupsPanel.add(BC);
 							BC.addClickHandler(new ClickHandler() {
 

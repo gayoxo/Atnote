@@ -133,22 +133,22 @@ public class BookAdministration implements EntryPoint {
 				((BotonesStackPanelAdministracionMio) event.getSource()).Swap();
 			}
 		});
-		stackPanel_1.setMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
-			}
-		});
-		stackPanel_1.setMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
-			}
-		});
-		stackPanel_1.setMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
-			}
-		});
-		stackPanel_1.setStyleNameBotton("gwt-ButtonTOP");
+//		stackPanel_1.setMouseDownHandler(new MouseDownHandler() {
+//			public void onMouseDown(MouseDownEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+//			}
+//		});
+//		stackPanel_1.setMouseOutHandler(new MouseOutHandler() {
+//			public void onMouseOut(MouseOutEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+//			}
+//		});
+//		stackPanel_1.setMouseOverHandler(new MouseOverHandler() {
+//			public void onMouseOver(MouseOverEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+//			}
+//		});
+//		stackPanel_1.setStyleNameBotton("gwt-ButtonTOP");
 		ArrayList<String> ListaBooks = ActualUser.getUser().getBookIds();
 		if (ListaBooks.size() < 10) {
 			Long IDi = 0l;

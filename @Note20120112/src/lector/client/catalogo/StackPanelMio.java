@@ -360,14 +360,14 @@ public class StackPanelMio extends StackPanel {
 			Act.addClickHandler(new ClickHandler() {
 				
 				public void onClick(ClickEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 					
 				}
 			});
 			if (BotonDown==null) {
 				BotonDown=new MouseDownHandler() {
 					public void onMouseDown(MouseDownEvent event) {
-						((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
 					}
 				};
 			}
@@ -377,7 +377,7 @@ public class StackPanelMio extends StackPanel {
 				{
 				BotonOut=new MouseOutHandler() {
 					public void onMouseOut(MouseOutEvent event) {
-							((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 					}
 				};
 				}
@@ -388,7 +388,7 @@ public class StackPanelMio extends StackPanel {
 				BotonOver=new MouseOverHandler() {
 					public void onMouseOver(MouseOverEvent event) {
 						
-							((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
 						
 					}
 				};
@@ -397,7 +397,7 @@ public class StackPanelMio extends StackPanel {
 			
 			
 			if (StileName==null){
-				StileName="gwt-ButtonTOP";
+				StileName="gwt-ButtonCenter";
 			} 
 			Act.setStyleName(StileName);
 			
@@ -425,14 +425,14 @@ public class StackPanelMio extends StackPanel {
 		Act.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 				
 			}
 		});
 		if (BotonDown==null) {
 			BotonDown=new MouseDownHandler() {
 				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
 				}
 			};
 		}
@@ -442,7 +442,7 @@ public class StackPanelMio extends StackPanel {
 			{
 			BotonOut=new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
-						((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 				}
 			};
 			}
@@ -453,7 +453,7 @@ public class StackPanelMio extends StackPanel {
 			BotonOver=new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
 					
-						((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
 					
 				}
 			};
@@ -462,7 +462,7 @@ public class StackPanelMio extends StackPanel {
 		
 		
 		if (StileName==null){
-			StileName="gwt-ButtonTOP";
+			StileName="gwt-ButtonCenter";
 		} 
 		Act.setStyleName(StileName);
 		

@@ -139,7 +139,7 @@ public class NewUserAdministrator implements EntryPoint {
 					btnNewButton_1.setHTML("<img src=\"Users.gif\">" + textBox.getText());
 					verticalPanel_1.add(btnNewButton_1);
 					textBox.setText("");
-					btnNewButton_1.setWidth("100%");
+					btnNewButton_1.setSize("100%", "100%");
 					SaveNewUsers.setVisible(true);
 				} else
 					Window.alert("The User need to be a valid reference");
@@ -231,7 +231,7 @@ public class NewUserAdministrator implements EntryPoint {
 		SaveNewUsers.setStyleName("gwt-ButtonBottonSave");
 	//	SaveNewUsers.setStyleName("gwt-MenuItemMio");
 		verticalPanel.add(SaveNewUsers);
-		SaveNewUsers.setWidth("100%");
+		SaveNewUsers.setSize("100%", "100%");
 
 		ScrollPanel scrollPanel = new ScrollPanel();
 		horizontalSplitPanel.setRightWidget(scrollPanel);

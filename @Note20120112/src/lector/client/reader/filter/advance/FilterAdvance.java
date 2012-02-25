@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.browser.BotonesStackPanelBrowser;
-import lector.client.catalogo.Finder2;
+import lector.client.catalogo.Finder;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
@@ -15,7 +15,14 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -24,6 +31,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -36,8 +44,8 @@ public class FilterAdvance implements EntryPoint{
 	private VerticalPanel AlumnosYProfesores;
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
-	private Finder2 FinderButton2;
-	private Finder2 FinderButton1;
+	private Finder FinderButton2;
+	private Finder FinderButton1;
 	private static VerticalPanel AnotacionesResultado;
 	
 	public FilterAdvance() {
@@ -94,7 +102,7 @@ public class FilterAdvance implements EntryPoint{
 		
 		SimplePanel Catalogo2 = new SimplePanel();
 		splitLayoutPanel.addNorth(Catalogo2, 200.0);
-		FinderButton2 = new Finder2();
+		FinderButton2 = new Finder();
 		Catalogo2.add(FinderButton2);
 		FinderButton2.setButtonTipo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), new VerticalPanel()));
@@ -138,7 +146,7 @@ public class FilterAdvance implements EntryPoint{
 		Catalogo1.setSize("100%", "100%");
 		
 		
-		FinderButton1 = new Finder2();
+		FinderButton1 = new Finder();
 		Catalogo1.add(FinderButton1);
 		FinderButton1.setButtonTipo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), new VerticalPanel()));
@@ -185,8 +193,26 @@ public class FilterAdvance implements EntryPoint{
 								}
 						}
 					});
+					B.setSize("100%", "100%");
+					B.setStyleName("gwt-ButtonTOP");
+					B.addMouseOutHandler(new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+						}
+					});
+					B.addMouseOverHandler(new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+						}
+					});
+					B.addMouseDownHandler(new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+						}
+					});
 					AlumnosYProfesores.add(B);
 				}
+				
 				bookReaderServiceHolder.loadUserById(ActualUser.getReadingactivity().getProfessorId(), new AsyncCallback<UserApp>() {
 					
 					public void onSuccess(UserApp result) {
@@ -204,6 +230,45 @@ public class FilterAdvance implements EntryPoint{
 							}
 						});
 						AlumnosYProfesores.add(B);
+						B.setSize("100%", "100%");
+						B.setStyleName("gwt-ButtonTOP");
+						B.addMouseOutHandler(new MouseOutHandler() {
+							public void onMouseOut(MouseOutEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+							}
+						});
+						B.addMouseOverHandler(new MouseOverHandler() {
+							public void onMouseOver(MouseOverEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+							}
+						});
+						B.addMouseDownHandler(new MouseDownHandler() {
+							public void onMouseDown(MouseDownEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+							}
+						});
+						if (AlumnosYProfesores.getWidgetCount()>0)
+						 {
+							Widget W= AlumnosYProfesores.getWidget(AlumnosYProfesores.getWidgetCount()-1);
+							Button B2=(Button)W;
+							B2.setSize("100%", "100%");
+							B2.setStyleName("gwt-ButtonBotton");
+							B2.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
+								}
+							});
+							B2.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonBottonOver");
+								}
+							});
+							B2.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
+								}
+							});
+						 }
 					}
 					
 					public void onFailure(Throwable caught) {

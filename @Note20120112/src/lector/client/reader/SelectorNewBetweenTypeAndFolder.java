@@ -3,7 +3,6 @@ package lector.client.reader;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
-import lector.client.catalogo.Finder2;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
 import lector.client.login.ActualUser;
@@ -28,10 +27,10 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 	.create(GWTService.class);
 	private ListBox comboBox;
-	private Finder2 finder;
+	private Finder finder;
 	private TextBox textBox;
 
-	public SelectorNewBetweenTypeAndFolder(Finder2 finderin) {
+	public SelectorNewBetweenTypeAndFolder(Finder finderin) {
 		super(true);
 		setGlassEnabled(true);
 		this.finder=finderin;

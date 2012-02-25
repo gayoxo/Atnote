@@ -46,7 +46,7 @@ public class SeleccionMenuCatalog extends PopupPanel {
 			}
 		});
 		//verticalPanel.add(btnNewButton);
-		btnNewButton.setWidth("100%");
+		btnNewButton.setSize("100%", "100%");
 		
 		Button btnNewButton_1 = new Button("Delete");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
@@ -88,7 +88,7 @@ public class SeleccionMenuCatalog extends PopupPanel {
 		});
 		btnNewButton_1.setStyleName("gwt-ButtonTOP");
 		verticalPanel.add(btnNewButton_1);
-		btnNewButton_1.setWidth("100%");
+		btnNewButton_1.setSize("100%", "100%");
 		
 		Button btnNewButton_2 = new Button("Edit");
 		btnNewButton_2.addClickHandler(new ClickHandler() {
@@ -115,7 +115,7 @@ public class SeleccionMenuCatalog extends PopupPanel {
 		});
 		btnNewButton_2.setStyleName("gwt-ButtonTOP");
 		verticalPanel.add(btnNewButton_2);
-		btnNewButton_2.setWidth("100%");
+		btnNewButton_2.setSize("100%", "100%");
 		
 		Button btnNewButton_3 = new Button("Change Visibility");
 		btnNewButton_3.addClickHandler(new ClickHandler() {
@@ -124,7 +124,9 @@ public class SeleccionMenuCatalog extends PopupPanel {
 				Nuevo.center();
 			}
 		});
+		
 		btnNewButton_3.setStyleName("gwt-ButtonBotton");
+		btnNewButton_3.setSize("100%", "100%");
 		btnNewButton_3.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonBotton");
