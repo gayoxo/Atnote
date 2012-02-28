@@ -35,6 +35,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 public class MyBooks implements EntryPoint {
 
@@ -86,10 +88,20 @@ public class MyBooks implements EntryPoint {
 		SimplePanel simplePanel = new SimplePanel();
 		horizontalPanel.add(simplePanel);
 		simplePanel.setSize("655px", "655px");
-
-		Image image = new Image("logo_ucm.jpg");
-		simplePanel.setWidget(image);
-		image.setSize("100%", "100%");
+		
+		VerticalPanel verticalPanel_1 = new VerticalPanel();
+		verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		simplePanel.setWidget(verticalPanel_1);
+		verticalPanel_1.setSize("100%", "100%");
+				
+				HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
+				horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				verticalPanel_1.add(horizontalPanel_1);
+		
+				Image image = new Image("Logo.jpg");
+				horizontalPanel_1.add(image);
 		BooksIDs = new ArrayList<String>();
 
 	}

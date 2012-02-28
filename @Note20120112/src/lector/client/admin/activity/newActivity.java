@@ -108,6 +108,23 @@ public class newActivity extends PopupPanel {
 		horizontalPanel.add(btnNewButton);
 
 		Button btnNewButton_1 = new Button("Cancel");
+		btnNewButton_1.setSize("100%", "100%");
+		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		btnNewButton_1.setStyleName("gwt-ButtonCenter");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Me.hide();
