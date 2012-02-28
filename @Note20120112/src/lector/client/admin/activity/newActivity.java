@@ -17,6 +17,12 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 
 public class newActivity extends PopupPanel {
 
@@ -51,6 +57,23 @@ public class newActivity extends PopupPanel {
 		horizontalPanel.setWidth("100%");
 
 		Button btnNewButton = new Button("Create");
+		btnNewButton.setSize("100%", "100%");
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+		});
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			}
+		});
+		btnNewButton.setStyleName("gwt-ButtonCenter");
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 
