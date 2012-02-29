@@ -71,6 +71,7 @@ public class BotonesStackPanelAdministracionMio extends BotonesStackPanelMio{
 		for (int i = 1; i < Selected.getWidgetCount(); i++) {
 			BotonesStackPanelAdministracionMio BSM= (BotonesStackPanelAdministracionMio)Selected.getWidget(i);
 			if (BSM.getEntidad().getID().intValue()==super.getEntidad().getID().intValue()) return true;
+			if (!BSM.getEntidad().getActualFather().equals(super.getEntidad().getActualFather())) return true;
 		}
 		return false;
 	}
