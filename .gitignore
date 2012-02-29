@@ -1,0 +1,14 @@
+
+/@Note20120112/.gwt
+/@Note20120112/war/WEB-INF/lib/datanucleus-appengine-1.0.10.final.jar
+/@Note20120112/war/WEB-INF/lib/datanucleus-core-1.1.5.jar
+/@Note20120112/war/WEB-INF/lib/datanucleus-jpa-1.1.5.jar
+/@Note20120112/war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.1.1.jar
+/@Note20120112/war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
+/@Note20120112/war/WEB-INF/lib/gwt-servlet.jar
+/@Note20120112/war/WEB-INF/lib/jdo2-api-2.3-eb.jar
+/@Note20120112/war/WEB-INF/lib/jsr107cache-1.1.jar
+/@Note20120112/war/WEB-INF/lib/appengine-api-1.0-sdk-1.6.0.jar
+/@Note20120112/war/WEB-INF/lib/appengine-api-labs-1.6.0.jar
+/@Note20120112/war/WEB-INF/lib/appengine-jsr107cache-1.6.0.jar
+/@Note20120112/war/WEB-INF/classes
