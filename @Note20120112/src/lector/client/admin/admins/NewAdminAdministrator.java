@@ -299,23 +299,7 @@ public class NewAdminAdministrator implements EntryPoint {
 
 			
 		});
-		stackPanel_1.setMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
-			}
-		});
-		stackPanel_1.setMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
-			}
-		});
-		stackPanel_1.setMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
-			}
-		});
-		stackPanel_1.setStyleNameBotton("gwt-ButtonTOP");
-		
+				
 		// Profesores
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
