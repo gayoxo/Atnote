@@ -86,9 +86,11 @@ public class newLang extends PopupPanel {
 					bookReaderServiceHolder.getLanguagesNames(new AsyncCallback<ArrayList<String>>() {
 						
 						public void onSuccess(ArrayList<String> result) {
+							LoadingPanel.getInstance().hide();
 							String S=textBox.getText();
 							Language L=new Language(S);
-							if (S.isEmpty()|| S.length()<2) Window.alert("The Name can be more lenght or equal than two");
+							if (S.isEmpty()|| S.length()<2) 
+								Window.alert("The Name can be more lenght or equal than two");
 							else {
 							ArrayList<String> LL =result;
 							boolean encontrado=false;
@@ -97,7 +99,13 @@ public class newLang extends PopupPanel {
 								if (encontrado) break;
 							}
 							
-							if (!encontrado) bookReaderServiceHolder.saveLanguage(L, new AsyncCallback<Void>(){
+							
+							if (!encontrado) 
+								{
+								LoadingPanel.getInstance().center();
+								LoadingPanel.getInstance().setLabelTexto("Saving...");
+								bookReaderServiceHolder.saveLanguage(L, new AsyncCallback<Void>(){
+								
 
 								public void onFailure(Throwable caught) {
 									LoadingPanel.getInstance().hide();
@@ -111,7 +119,9 @@ public class newLang extends PopupPanel {
 									Me.hide();
 									
 								}
+								
 							});
+								}
 							else{ Window.alert("This Language exist previusly");
 							LoadingPanel.getInstance().hide();
 							}

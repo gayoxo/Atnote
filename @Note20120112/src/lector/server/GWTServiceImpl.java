@@ -2836,11 +2836,11 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		ArrayList<Entry> listEntries;
 		entityManager = EMF.get().createEntityManager();
 		String sql;
-		sql = "SELECT f FROM FolderDB f WHERE f.fatherId=" + fatherId;
+		sql = "SELECT f FROM FolderDB f WHERE f.fathers=" + fatherId;
 		list = entityManager.createQuery(sql).getResultList();
 		listEntries = new ArrayList<Entry>(list);
 		entityManager = EMF.get().createEntityManager();
-		sql = "SELECT f FROM FileDB f WHERE f.fatherId=" + fatherId;
+		sql = "SELECT f FROM FileDB f WHERE f.fathers=" + fatherId;
 		list = entityManager.createQuery(sql).getResultList();
 		listEntries.addAll(list);
 		return listEntries;
@@ -3107,11 +3107,20 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				A.setAnnotationsIds(annotationsIds);
 				A.setCatalogId(fileDB.getCatalogId());
 				A.setFathers(fileDB.getFathers());
+				ArrayList<Long> Listapadres=new ArrayList<Long>();
+				for (Long ff:fileDB.getFathers())
+					Listapadres.add(ff);
+				A.setFathers(Listapadres);
 				A.setId(fileDB.getId());
 				A.setName(fileDB.getName());
 				Salida.add(A);
 			} else {
 				fileDB.setAnnotationsIds(annotationsIds);
+				ArrayList<Long> Listapadres=new ArrayList<Long>();
+				for (Long ff:fileDB.getFathers())
+					Listapadres.add(ff);
+				fileDB.getFathers().clear();
+				fileDB.setFathers(Listapadres);
 				Salida.add(fileDB);
 			}
 		}

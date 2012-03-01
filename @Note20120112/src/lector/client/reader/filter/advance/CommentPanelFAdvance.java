@@ -4,6 +4,7 @@ import lector.client.reader.Annotation;
 import lector.client.reader.SelectorPanel;
 import lector.client.reader.hilocomentarios.ReplyDialog;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Image;
@@ -36,7 +37,7 @@ public class CommentPanelFAdvance extends Composite {
     private final VerticalPanel verticalPanel_1 = new VerticalPanel();
     private final MenuBar menuBar = new MenuBar(false);
 	private MenuItem mntmNewItem;
-	private DialogBox mntmNewItem_2;
+	private MenuItem mntmNewItem_2;
     
 
     public CommentPanelFAdvance(Annotation annotationin, Image originalBook) {
@@ -64,7 +65,7 @@ public class CommentPanelFAdvance extends Composite {
         }
         button = new Button(Showbutton);
         verticalPanel_1.add(button);
-        button.setText(annotation.getUserName());
+        button.setText(Showbutton);
         button.setEnabled(true);
         button.setVisible(false);
         button.setSize("100%", "42px");
@@ -157,14 +158,18 @@ public class CommentPanelFAdvance extends Composite {
         menuBar.setVisible(false);
 //        mntmNewItem_1.setEnabled(false);
 //        mntmNewItem_1.setHTML("Delete");
-//        menuBar.addItem(mntmNewItem_1);
         
-
+        
+        
+        
+        mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
+        menuBar.addItem(mntmNewItem_2);
        
         
 
 //tocado        
        mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
+        richTextArea.setVisible(false);
 
 
 

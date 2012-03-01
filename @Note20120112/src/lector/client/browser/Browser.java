@@ -94,7 +94,7 @@ public class Browser implements EntryPoint {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
 			
-				if ((FinderButton2.getTopPath()==null)&&(BS.getEntidad().getFathers().isEmpty())) 
+				if ((FinderButton2.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
 					BS.Swap();
 				else if (EqualsFinderButton(BS))
 					BS.Swap();
@@ -150,7 +150,7 @@ public class Browser implements EntryPoint {
 			}
 		});
 		btnNewButton.setVisible(false);
-		btnNewButton.setWidth("100%");
+		btnNewButton.setSize("100%", "100%");
 		
 		
 		FinderButton.setBotonClick(new ClickHandler() {
@@ -158,8 +158,8 @@ public class Browser implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
-			
-				if ((FinderButton.getTopPath()==null)&&(BS.getEntidad().getFathers().isEmpty())) 
+			//TODO REvisar Despierto.
+				if ((FinderButton.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
 					BS.Swap();
 				else if (EqualsFinderButton(BS))
 					BS.Swap();
