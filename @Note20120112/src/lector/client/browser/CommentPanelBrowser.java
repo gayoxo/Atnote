@@ -16,10 +16,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 public class CommentPanelBrowser extends Composite {
@@ -40,34 +43,45 @@ public class CommentPanelBrowser extends Composite {
     	 annotation = annotationin;
          Imagen = originalBook;
          DecoratorPanel decoratorPanel = new DecoratorPanel();
-         decoratorPanel.setHeight("38px");
+         decoratorPanel.setSize("100%", "38px");
          initWidget(decoratorPanel);
 
          decoratorPanel.setWidget(verticalPanel);
+         verticalPanel.setWidth("100%");
 
          final HorizontalPanel horizontalPanel = new HorizontalPanel();
+         horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
          verticalPanel.add(horizontalPanel);
-         horizontalPanel.setHeight("28px");
-         
-         
-        horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        verticalPanel.add(horizontalPanel);
-        horizontalPanel.setWidth("100%");
-        horizontalPanel.add(verticalPanel_1);
-        verticalPanel_1.setSize("100%", "100%");
+         horizontalPanel.setWidth("100%");
+         horizontalPanel.add(verticalPanel_1);
+         verticalPanel_1.setSize("100%", "100%");
 
-        String Showbutton= annotation.getComment().toString();
-        if (Showbutton.length()>20){
-        	Showbutton=Showbutton.substring(0,20);
-        	Showbutton=Showbutton+" ...";
-        }
+         String Showbutton= annotation.getComment().toString();
+         if (Showbutton.length()>20){
+         	Showbutton=Showbutton.substring(0,20);
+         	Showbutton=Showbutton+" ...";
+         }
         button = new Button(Showbutton);
         button.setHTML(Showbutton);
         verticalPanel_1.add(button);
-        button.setText(annotation.getUserName());
         button.setEnabled(true);
-        button.setVisible(false);
         button.setSize("100%", "42px");
+        button.setStyleName("gwt-ButtonIzquierda");
+        button.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+			}
+		});
+        button.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+			}
+		});
+        button.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+			}
+		});
 
 
         button_1.addClickHandler(new ClickHandler() {
@@ -97,15 +111,23 @@ public class CommentPanelBrowser extends Composite {
             }
         });
         horizontalPanel.add(button_1);
+        button_1.setStyleName("gwt-ButtonDerecha");
+        button_1.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
+        button_1.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+			}
+		});
+        button_1.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+			}
+		});
         button_1.setSize("100%", "42px");
-
-        richTextArea.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-            	  VisualBookPanel TCE = new VisualBookPanel(annotation,Imagen);
-                  TCE.show();
-            }
-        });
 
         richTextArea.setHTML(annotation.getComment().toString());
         richTextArea.setSize("99%", "174px");
@@ -131,7 +153,7 @@ verticalPanel.add(menuBar);
         mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
         menuBar.addItem(mntmNewItem_2);
 
-
+        mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
 
 
     }
