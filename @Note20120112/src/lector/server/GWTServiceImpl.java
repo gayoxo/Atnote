@@ -3107,8 +3107,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				A.setAnnotationsIds(annotationsIds);
 				A.setCatalogId(fileDB.getCatalogId());
 				A.setFathers(fileDB.getFathers());
-				ArrayList<Long> Listapadres=new ArrayList<Long>();
-				for (Long ff:fileDB.getFathers())
+				ArrayList<Long> Listapadres = new ArrayList<Long>();
+				for (Long ff : fileDB.getFathers())
 					Listapadres.add(ff);
 				A.setFathers(Listapadres);
 				A.setId(fileDB.getId());
@@ -3116,8 +3116,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				Salida.add(A);
 			} else {
 				fileDB.setAnnotationsIds(annotationsIds);
-				ArrayList<Long> Listapadres=new ArrayList<Long>();
-				for (Long ff:fileDB.getFathers())
+				ArrayList<Long> Listapadres = new ArrayList<Long>();
+				for (Long ff : fileDB.getFathers())
 					Listapadres.add(ff);
 				fileDB.getFathers().clear();
 				fileDB.setFathers(Listapadres);
@@ -3483,7 +3483,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				sql = "SELECT a FROM AnnotationThread a WHERE a.annotationId="
 						+ annotationId + "AND a.threadFatherId="
 						+ Constants.THREADFATHERNULLID;
-			
+
 			} else {
 				sql = "SELECT a FROM AnnotationThread a WHERE a.threadFatherId="
 						+ threadFatherId;
@@ -3509,7 +3509,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			ArrayList<Long> provisionalLongs = new ArrayList<Long>();
 			for (int j = 0; j < listAnnotationThreads.get(i).getThreadIds()
 					.size(); j++) {
-				provisionalLongs.add(listAnnotationThreads.get(i).getThreadIds().get(j));
+				provisionalLongs.add(listAnnotationThreads.get(i)
+						.getThreadIds().get(j));
 			}
 			listAnnotationThreads.get(i).setThreadIds(provisionalLongs);
 		}

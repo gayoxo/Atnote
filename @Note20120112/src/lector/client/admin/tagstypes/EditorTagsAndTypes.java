@@ -11,8 +11,11 @@ import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.DecendanceException;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
+import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
 import lector.client.controler.Controlador;
+import lector.client.reader.GeneralException;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -47,8 +50,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		menuBar_2 = new MenuBar(false);
 		Actual.add(menuBar_2);
 		menuBar_2.setWidth("100%");
-		
-		
+
 		MenuItem mntmNewItem_2 = new MenuItem("Avariable", false,
 				(Command) null);
 		mntmNewItem_2.setEnabled(false);
@@ -63,25 +65,25 @@ public class EditorTagsAndTypes implements EntryPoint {
 		mntmSelected.setHTML("Selected");
 		mntmSelected.setEnabled(false);
 		menuBar_3.addItem(mntmSelected);
-		
+
 		finder = new Finder();
-		SimplePanel S= new SimplePanel();
+		SimplePanel S = new SimplePanel();
 		S.setSize("100%", "97%");
 		S.add(finder);
 		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
-				"prototipo", new VerticalPanel(), Selected,finder));
+				"prototipo", new VerticalPanel(), Selected, finder));
 		finder.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				BotonesStackPanelAdministracionMio BS = ((BotonesStackPanelAdministracionMio) event
 						.getSource());
 				BS.Swap();
-				
+
 			}
 		});
 
 		finder.setSize("100%", "100%");
-		
+
 		Actual.add(S);
 	}
 
@@ -96,41 +98,42 @@ public class EditorTagsAndTypes implements EntryPoint {
 		finder.setCatalogo(catalogo);
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
-		
-		MenuItem mntmTypesTags = new MenuItem("Types & Tags Administration for Catalog: " + catalogo.getCatalogName(), false, (Command) null);
+
+		MenuItem mntmTypesTags = new MenuItem(
+				"Types & Tags Administration for Catalog: "
+						+ catalogo.getCatalogName(), false, (Command) null);
 		mntmTypesTags.setEnabled(false);
 		mntmTypesTags.setHTML("Types & Tags Administration\r\n");
 		menuBar.addItem(mntmTypesTags);
-		
+
 		MenuItemSeparator separator_1 = new MenuItemSeparator();
 		menuBar.addSeparator(separator_1);
 
 		MenuItem mntmNewItem_3 = new MenuItem("New", false, new Command() {
 
 			public void execute() {
-				if (finder.getTopPath() instanceof Folder){
-				
-				
-				
-				PopUpNewOSelect PPP=new PopUpNewOSelect(catalogo, finder.getTopPath());
-				PPP.center();
-//					SelectBetweenFileOrFolderInNew.setCatalog(catalogo);
-//					SelectBetweenFileOrFolderInNew SBFF=new SelectBetweenFileOrFolderInNew(finder.getTopPath());
-//					SBFF.center();
-//					SBFF.setModal(true);
-				}
-				else Window.alert("Type cannot have subtypes");
+				if (finder.getTopPath() instanceof Folder) {
+
+					PopUpNewOSelect PPP = new PopUpNewOSelect(catalogo,
+							finder.getTopPath());
+					PPP.center();
+					// SelectBetweenFileOrFolderInNew.setCatalog(catalogo);
+					// SelectBetweenFileOrFolderInNew SBFF=new
+					// SelectBetweenFileOrFolderInNew(finder.getTopPath());
+					// SBFF.center();
+					// SBFF.setModal(true);
+				} else
+					Window.alert("Type cannot have subtypes");
 			}
-			
+
 		});
 		mntmNewItem_3.setHTML("Create");
 		menuBar.addItem(mntmNewItem_3);
 
 		MenuItem mntmMerge = new MenuItem("Merge", false, new Command() {
 
-			//TODO Cambia de sentido
-			
-			
+			// TODO Cambia de sentido
+
 			public void execute() {
 				int Unir = Selected.getWidgetCount();
 				if (Unir >= 3) {
@@ -156,7 +159,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		});
 		mntmMerge.setEnabled(true);
 		menuBar.addItem(mntmMerge);
-		
+
 		MenuItem mntmMove = new MenuItem("Move", false, new Command() {
 			public void execute() {
 				int mover = Selected.getWidgetCount();
@@ -165,32 +168,42 @@ public class EditorTagsAndTypes implements EntryPoint {
 					BotonesStackPanelAdministracionMio Delete = ((BotonesStackPanelAdministracionMio) Selected
 							.getWidget(i));
 
-						moverTypos(Delete.getEntidad());
-
+					moverTypos(Delete.getEntidad());
 
 				}
 			}
 
 			private void moverTypos(Entity entidad) {
-				AsyncCallback<Void> callback=new AsyncCallback<Void>() {
+				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 
 					public void onFailure(Throwable caught) {
-					if (caught instanceof DecendanceException){
-						Window.alert(((DecendanceException) caught).getMessage());
-					}else{
-						Window.alert("Error on move");
-					}
+						if (caught instanceof DecendanceException) {
+							Window.alert(((DecendanceException) caught)
+									.getMessage());
+						} else if (caught instanceof GeneralException) {
+							Window.alert(((GeneralException) caught)
+									.getMessage());
+						} else if (caught instanceof FileException) {
+							Window.alert(((FileException) caught).getMessage());
+						} else {
+							Window.alert("Error on move");
+						}
 					}
 
 					public void onSuccess(Void result) {
 						LoadBasicTypes();
-						
+
 					}
 				};
 				if (entidad instanceof File)
-				bookReaderServiceHolder.moveFile(entidad.getActualFather().getID(), entidad.getID(), finder.getTopPath().getID(), callback);
-				else bookReaderServiceHolder.moveFolder(entidad.getActualFather().getID(), entidad.getID(), finder.getTopPath().getID(), callback);
-				 
+					bookReaderServiceHolder.moveFile(entidad.getActualFather()
+							.getID(), entidad.getID(), finder.getTopPath()
+							.getID(), callback);
+				else
+					bookReaderServiceHolder.moveFolder(entidad
+							.getActualFather().getID(), entidad.getID(), finder
+							.getTopPath().getID(), callback);
+
 			}
 		});
 		mntmMove.setHTML("Move");
@@ -205,7 +218,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 					BotonesStackPanelAdministracionMio Renombrar = ((BotonesStackPanelAdministracionMio) Selected
 							.getWidget(i));
-						RenameTypos(Renombrar.getEntidad());
+					RenameTypos(Renombrar.getEntidad());
 
 				}
 
@@ -213,7 +226,8 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 			private void RenameTypos(Entity entity) {
 
-				NewTypeRename TR = new NewTypeRename(entity, entity.getFathers());
+				NewTypeRename TR = new NewTypeRename(entity, entity
+						.getFathers());
 				TR.setModal(true);
 				TR.center();
 			}
@@ -224,15 +238,14 @@ public class EditorTagsAndTypes implements EntryPoint {
 		MenuItem mntmNewItem = new MenuItem("Delete", false, new Command() {
 
 			public void execute() {
-				//TODO Cambiar el delete
+				// TODO Cambiar el delete
 				int Borrar = Selected.getWidgetCount();
 				for (int i = 1; i < Borrar; i++) {
 
 					BotonesStackPanelAdministracionMio Delete = ((BotonesStackPanelAdministracionMio) Selected
 							.getWidget(i));
 
-						BorrarTypos(Delete.getEntidad());
-
+					BorrarTypos(Delete.getEntidad());
 
 				}
 
@@ -253,82 +266,84 @@ public class EditorTagsAndTypes implements EntryPoint {
 					}
 				};
 				if (delete instanceof Folder)
-					/*if(finder.getTopPath()== null)
-						bookReaderServiceHolder.deleteFolder(delete.getID(),null,
-								callback);
-					else */
-						bookReaderServiceHolder.deleteFolder(delete.getID(),delete.getActualFather().getID(),
-							callback);
+					/*
+					 * if(finder.getTopPath()== null)
+					 * bookReaderServiceHolder.deleteFolder(delete.getID(),null,
+					 * callback); else
+					 */
+					bookReaderServiceHolder.deleteFolder(delete.getID(), delete
+							.getActualFather().getID(), callback);
 				else
-					/*if(finder.getTopPath()== null)
-						bookReaderServiceHolder.deleteFile(delete.getID(),null,
-								callback);
-					else*/ 
-					bookReaderServiceHolder.deleteFile(delete.getID(),delete.getActualFather().getID(), callback);
+					/*
+					 * if(finder.getTopPath()== null)
+					 * bookReaderServiceHolder.deleteFile(delete.getID(),null,
+					 * callback); else
+					 */
+					bookReaderServiceHolder.deleteFile(delete.getID(), delete
+							.getActualFather().getID(), callback);
 
 			}
 
-			});
+		});
 		menuBar.addItem(mntmNewItem);
 
 		MenuItemSeparator separator = new MenuItemSeparator();
 		menuBar.addSeparator(separator);
-//		MenuBar menuBar_1 = new MenuBar(true);
+		// MenuBar menuBar_1 = new MenuBar(true);
 
-//		mntmMenuTipos = new MenuItem("Types", false, menuBar_1);
-//		mntmMenuTipos.setEnabled(false);
-//		mntmMenuTipos.setHTML("Types");
-//
-//		mntmTypes = new MenuItem("Types", false, new Command() {
-//
-//			public void execute() {
-//				myState = state.Typos;
-//				mntmMenuTipos.setHTML("Types");
-//				LoadBasicTypes();
-//				mntmNewItem_1.setEnabled(true);
-//				mntmTypes.setEnabled(false);
-//			}
-//		});
-//
-//		menuBar_1.addItem(mntmTypes);
-//		mntmTypes.setEnabled(false);
-//
-//		mntmNewItem_1 = new MenuItem("Tags", false, new Command() {
-//
-//			public void execute() {
-//				myState = state.Tags;
-//				mntmMenuTipos.setHTML("Tags");
-//				LoadBasicTags();
-//				mntmNewItem_1.setEnabled(false);
-//				mntmTypes.setEnabled(true);
-//			}
-//		});
-//
-//		menuBar_1.addItem(mntmNewItem_1);
-//		menuBar.addItem(mntmMenuTipos);
+		// mntmMenuTipos = new MenuItem("Types", false, menuBar_1);
+		// mntmMenuTipos.setEnabled(false);
+		// mntmMenuTipos.setHTML("Types");
+		//
+		// mntmTypes = new MenuItem("Types", false, new Command() {
+		//
+		// public void execute() {
+		// myState = state.Typos;
+		// mntmMenuTipos.setHTML("Types");
+		// LoadBasicTypes();
+		// mntmNewItem_1.setEnabled(true);
+		// mntmTypes.setEnabled(false);
+		// }
+		// });
+		//
+		// menuBar_1.addItem(mntmTypes);
+		// mntmTypes.setEnabled(false);
+		//
+		// mntmNewItem_1 = new MenuItem("Tags", false, new Command() {
+		//
+		// public void execute() {
+		// myState = state.Tags;
+		// mntmMenuTipos.setHTML("Tags");
+		// LoadBasicTags();
+		// mntmNewItem_1.setEnabled(false);
+		// mntmTypes.setEnabled(true);
+		// }
+		// });
+		//
+		// menuBar_1.addItem(mntmNewItem_1);
+		// menuBar.addItem(mntmMenuTipos);
 
 		MenuItem mntmSearcher = new MenuItem("Back", false, new Command() {
 
 			public void execute() {
 				Controlador.change2CatalogAdmin();
-//				if (BeforeBook == null) {
-//					Controlador.change2Searcher();
-//				} else {
-//					Controlador.change2Reader();
-//					MainEntryPoint.SetBook(BeforeBook);
-//					MainEntryPoint.getTechnicalSpecs().setBook(BeforeBook);
-//				}
+				// if (BeforeBook == null) {
+				// Controlador.change2Searcher();
+				// } else {
+				// Controlador.change2Reader();
+				// MainEntryPoint.SetBook(BeforeBook);
+				// MainEntryPoint.getTechnicalSpecs().setBook(BeforeBook);
+				// }
 			}
 		});
 		mntmSearcher.setHTML("Back");
 		menuBar.addItem(mntmSearcher);
 
 		SimplePanel simplePanel_2 = new SimplePanel();
-		RootTXOriginal.add(simplePanel_2,0,20);
-		//RootTXOriginal.add(simplePanel_2);
+		RootTXOriginal.add(simplePanel_2, 0, 20);
+		// RootTXOriginal.add(simplePanel_2);
 		simplePanel_2.setSize("100%", "97%");
 
-		
 		SplitLayoutPanel splitLayoutPanel = new SplitLayoutPanel();
 		simplePanel_2.setWidget(splitLayoutPanel);
 		splitLayoutPanel.setSize("100%", "100%");
@@ -345,10 +360,8 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 		Selected.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		Selected.setWidth("100%");
-		
-	
+
 		LoadBasicTypes();
-		
 
 	}
 
@@ -358,22 +371,20 @@ public class EditorTagsAndTypes implements EntryPoint {
 		Selected.clear();
 		Selected.add(menuBar_3);
 		finder.RefrescaLosDatos();
-	//	scrollPanel.setWidget(finder);
-		finder.setSize("100%","100%");
+		// scrollPanel.setWidget(finder);
+		finder.setSize("100%", "100%");
 	}
 
-
-	
 	public static VerticalPanel getSelected() {
 		return Selected;
 	}
-	
+
 	public static Catalog getCatalogo() {
 		return catalogo;
 	}
-	
+
 	public static void setCatalogo(Catalog catalogo) {
 		EditorTagsAndTypes.catalogo = catalogo;
 	}
-	
+
 }
