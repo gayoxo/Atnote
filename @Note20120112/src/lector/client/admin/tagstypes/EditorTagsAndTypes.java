@@ -69,7 +69,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		S.setSize("100%", "97%");
 		S.add(finder);
 		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
-				"prototipo", new VerticalPanel(), Selected));
+				"prototipo", new VerticalPanel(), Selected,finder));
 		finder.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {

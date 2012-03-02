@@ -86,7 +86,7 @@ public class Browser implements EntryPoint {
 		simplePanel.setSize("100%", "100%");
 		simplePanel.add(FinderButton2);
 		FinderButton2.setButtonTipo(new BotonesStackPanelBrowser(
-				"prototipo", new VerticalPanel(), SelectedB));
+				"prototipo", new VerticalPanel(), SelectedB,FinderButton2));
 		FinderButton2.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
@@ -123,7 +123,7 @@ public class Browser implements EntryPoint {
 		FinderPanel.setSize("100%", "100%");
 		FinderPanel.add(FinderButton);
 		FinderButton.setButtonTipo(new BotonesStackPanelBrowser(
-				"prototipo", new VerticalPanel(), SelectedB));
+				"prototipo", new VerticalPanel(), SelectedB,FinderButton));
 		
 		btnNewButton = new Button(ActualLang.getFilterButtonBrowser());
 		Selected.add(btnNewButton);

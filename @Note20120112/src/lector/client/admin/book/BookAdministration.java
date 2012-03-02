@@ -125,7 +125,7 @@ public class BookAdministration implements EntryPoint {
 		scrollPanel.setWidget(stackPanel_1);
 		// simplePanel.add(stackPanel_1);
 
-		stackPanel_1.setBotonTipo(new BotonesStackPanelAdministracionMio(
+		stackPanel_1.setBotonTipo(new BotonesStackPanelAdministracionSimple(
 				"prototipo", new VerticalPanel(), Selected));
 		stackPanel_1.setBotonClick(new ClickHandler() {
 

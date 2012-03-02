@@ -3,21 +3,27 @@ package lector.client.admin;
 
 
 import lector.client.catalogo.BotonesStackPanelMio;
+import lector.client.catalogo.Finder;
+import lector.client.catalogo.client.Entity;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class BotonesStackPanelAdministracionMio extends BotonesStackPanelMio{
 
-	private VerticalPanel Selected;
-	private VerticalPanel Normal;
+	protected VerticalPanel Selected;
+	protected VerticalPanel Normal;
+	private Finder F;
 	
-	public BotonesStackPanelAdministracionMio(String HTML,VerticalPanel Normal, VerticalPanel Selected) {
+	public BotonesStackPanelAdministracionMio(String HTML,VerticalPanel Normal, VerticalPanel Selected, Finder Fin) {
 		super(HTML);
 		this.Normal=Normal;
 		this.Selected=Selected;
 		this.Actual=Normal;
+		F=Fin;
 		Actual.add(this);
 	}
 	
+
 	public void Swap() {
 		Actual.remove(this);
 		if (Actual==Normal)
@@ -29,15 +35,25 @@ public class BotonesStackPanelAdministracionMio extends BotonesStackPanelMio{
 			Actual=Normal;
 			}
 		if((this.getEntidad()!=null)&&!EstainSelected())
-			Actual.add(this);
+			if (Actual==Normal)
+			{
+				if (checkFamilia())
+					Actual.add(this);
+			}
+			else Actual.add(this);
 	}
 	
 	
 	
 
+	private boolean checkFamilia() {
+		
+		return F.getTopPath().equals(super.getEntidad().getActualFather());
+	}
+
 	public BotonesStackPanelMio Clone()
 	{
-	BotonesStackPanelAdministracionMio New=new BotonesStackPanelAdministracionMio(getHTML(), Normal, Selected);	
+	BotonesStackPanelAdministracionMio New=new BotonesStackPanelAdministracionMio(getHTML(), Normal, Selected,F);	
 	New.setActual(getActual());
 	return New;
 	}
@@ -67,14 +83,16 @@ public class BotonesStackPanelAdministracionMio extends BotonesStackPanelMio{
 	
 	}
 
-	private boolean EstainSelected() {
+	protected boolean EstainSelected() {
 		for (int i = 1; i < Selected.getWidgetCount(); i++) {
 			BotonesStackPanelAdministracionMio BSM= (BotonesStackPanelAdministracionMio)Selected.getWidget(i);
 			if (BSM.getEntidad().getID().intValue()==super.getEntidad().getID().intValue()) return true;
-			if (!BSM.getEntidad().getActualFather().equals(super.getEntidad().getActualFather())) return true;
 		}
 		return false;
 	}
 
+	public Finder getF() {
+		return F;
+	}
 
 }

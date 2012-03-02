@@ -17,7 +17,8 @@ public abstract class BotonesStackPanelMio extends Button {
 		Text=HTML;
 	}
 	
-	
+
+
 	public abstract BotonesStackPanelMio Clone();
 	
 	

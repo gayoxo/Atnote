@@ -105,7 +105,7 @@ public class FilterAdvance implements EntryPoint{
 		FinderButton2 = new Finder();
 		Catalogo2.add(FinderButton2);
 		FinderButton2.setButtonTipo(new BotonesStackPanelBrowser(
-				"prototipo", new VerticalPanel(), new VerticalPanel()));
+				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton2));
 		FinderButton2.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
@@ -149,7 +149,7 @@ public class FilterAdvance implements EntryPoint{
 		FinderButton1 = new Finder();
 		Catalogo1.add(FinderButton1);
 		FinderButton1.setButtonTipo(new BotonesStackPanelBrowser(
-				"prototipo", new VerticalPanel(), new VerticalPanel()));
+				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton1));
 		FinderButton1.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {

@@ -43,7 +43,7 @@ public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 		S.setSize("100%", "100%");
 		S.add(finder);
 		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
-				"prototipo", new VerticalPanel(), new VerticalPanel()));
+				"prototipo", new VerticalPanel(), new VerticalPanel(),finder));
 		finder.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
