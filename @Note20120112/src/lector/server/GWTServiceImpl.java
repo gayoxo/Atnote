@@ -1600,7 +1600,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (folder != null) {
 			ArrayList<FolderDB> foldersChildren = getFolderChildren(folder);
 			for (int i = 0; i < foldersChildren.size(); i++) {
-				ids.add(foldersChildren.get(i).getId());
+				ids.add(foldersChildren.get(i).getId());  // TODO revisar esta función no esta recorriendo profundidad
 			}
 			ArrayList<FileDB> filesChildren = getFileChildren(folder);
 			for (int i = 0; i < filesChildren.size(); i++) {

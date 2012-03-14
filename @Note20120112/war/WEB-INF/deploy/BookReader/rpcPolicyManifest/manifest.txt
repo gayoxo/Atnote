@@ -1,3 +1,2 @@
 # Module BookReader
 # RPC service class, partial path of RPC policy file
-lector.client.book.reader.GWTService, 161FE5D567732205E0CCE7BCECCCBB3B.gwt.rpc
