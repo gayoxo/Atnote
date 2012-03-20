@@ -32,6 +32,7 @@ import lector.client.login.UserApp;
 import lector.client.login.UserNotFoundException;
 import lector.client.reader.Annotation;
 import lector.client.reader.Book;
+import lector.client.service.AnnotationSchema;
 import lector.server.EMF;
 import lector.server.GWTServiceImpl;
 import lector.server.JSONArray;

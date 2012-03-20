@@ -5,18 +5,21 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-utils-client-1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-utils-server-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="libs/jackson-core-asl-1.1.1.jar"/>
-	<classpathentry kind="lib" path="libs/jersey-client-1.1.5.1.jar"/>
-	<classpathentry kind="lib" path="libs/jersey-core-1.1.5.1.jar"/>
-	<classpathentry kind="lib" path="libs/jersey-json-1.1.5.1.jar"/>
-	<classpathentry kind="lib" path="libs/jersey-server-1.1.5.1.jar"/>
-	<classpathentry kind="lib" path="libs/jersey-spring-1.1.5.1.jar"/>
-	<classpathentry kind="lib" path="libs/jettison-1.1.jar"/>
-	<classpathentry kind="lib" path="libs/jsr311-api-1.1.1.jar"/>
-	<classpathentry kind="lib" path="libs/oauth-client-1.1.5.1.jar"/>
-	<classpathentry kind="lib" path="libs/oauth-signature-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-core-asl-1.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-core-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-json-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-server-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-spring-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jettison-1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/oauth-client-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/oauth-signature-1.1.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/activation.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr173_api.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (1)"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

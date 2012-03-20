@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 import lector.client.controler.Constants;
 import lector.client.reader.AnnotationConfig;
 import lector.client.reader.filter.FilterConfig;
