@@ -5,6 +5,8 @@
 package lector.client.book.reader;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.service.AnnotationSchema;
+
 import java.util.ArrayList;
 
 import lector.client.admin.activity.ReadingActivity;
@@ -221,5 +223,10 @@ public interface GWTServiceAsync {
 
 	void getAnnotationThreadsByItsFather(Long annotationId,Long threadFatherId,
 			AsyncCallback<ArrayList<AnnotationThread>> callback);
+
+	void getJSONServiceTODrawGraph(String url, AsyncCallback<String> callback);
+
+	void getSchemaByCatalogId(Long catalogId,
+			AsyncCallback<ArrayList<AnnotationSchema>> callback);
 
 }

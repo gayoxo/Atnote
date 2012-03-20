@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 
 import java.util.Date;
 
@@ -19,6 +20,8 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+
+import org.mortbay.util.ajax.JSON;
 
 import lector.client.admin.activity.ReadingActivity;
 import lector.client.book.reader.GWTService;
@@ -52,11 +55,13 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.service.AnnotationSchema;
 
 public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	private static ArrayList<Long> ids;
 	private static ArrayList<Long> annotationThreadIds;
+	private static List<Long> sonIds; // used in schema generator
 	@PersistenceContext(name = "BookReader11Abr01PU")
 	private EntityManager entityManager;
 	private EntityTransaction entityTransaction;
@@ -1600,7 +1605,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (folder != null) {
 			ArrayList<FolderDB> foldersChildren = getFolderChildren(folder);
 			for (int i = 0; i < foldersChildren.size(); i++) {
-				ids.add(foldersChildren.get(i).getId());  // TODO revisar esta función no esta recorriendo profundidad
+				ids.add(foldersChildren.get(i).getId()); // TODO revisar esta
+															// función no esta
+															// recorriendo
+															// profundidad
 			}
 			ArrayList<FileDB> filesChildren = getFileChildren(folder);
 			for (int i = 0; i < filesChildren.size(); i++) {
@@ -3558,7 +3566,88 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 						"There was an error while trying to remove the treads");
 			}
 		}
+	}
 
+	public String getJSONServiceTODrawGraph(String query) {
+		URL url;
+		URLConnection connection;
+		String line;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader;
+		JSONObject json = new JSONObject();
+		try {
+			url = new URL(query);
+			connection = url.openConnection();
+			connection.addRequestProperty("Referer",
+					"http://a-note.appspot.com/");
+			reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+
+			json = new JSONObject(builder.toString());
+
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (JSONException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return json.toString();
+	}
+
+	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId) {
+		ArrayList<AnnotationSchema> schema = new ArrayList<AnnotationSchema>();
+		sonIds = new ArrayList<Long>();
+		Catalogo catalogo = loadCatalogById(catalogId);
+		AnnotationSchema annotationSchema = new AnnotationSchema(catalogId,
+				catalogo.getCatalogName(), catalogo.getEntryIds());
+		schema.add(annotationSchema);
+		for (int j = 0; j < catalogo.getEntryIds().size(); j++) {
+			deepingRoot(catalogo.getEntryIds().get(j));
+		}
+
+		schema.addAll(buildCatalogue(sonIds));
+		return schema;
+	}
+
+	private void deepingRoot(Long folderId) {
+		FolderDB folder = loadFolderById(folderId);
+		if (folder != null) {
+			List<FolderDB> foldersChildren = getFolderChildren(folder);
+			for (int i = 0; i < foldersChildren.size(); i++) {
+				deepingRoot(foldersChildren.get(i).getId());
+			}
+			List<FileDB> filesChildren = getFileChildren(folder);
+			for (int i = 0; i < filesChildren.size(); i++) {
+				sonIds.add(filesChildren.get(i).getId());
+			}
+		}
+		sonIds.add(folderId);
+	}
+
+	private ArrayList<AnnotationSchema> buildCatalogue(List<Long> idsDuplicate) { // pueden
+		// venir
+		// duplicados
+		HashSet<Long> hashSet = new HashSet<Long>(idsDuplicate);
+		List<Long> ids = new ArrayList<Long>(hashSet);
+		ArrayList<AnnotationSchema> schema = new ArrayList<AnnotationSchema>();
+
+		for (Long id : ids) {
+			FolderDB folder = loadFolderById(id);
+			if (folder != null) {
+				AnnotationSchema son = new AnnotationSchema(id,
+						folder.getName(), folder.getEntryIds());
+				schema.add(son);
+			}
+		}
+
+		return schema;
 	}
 
 }

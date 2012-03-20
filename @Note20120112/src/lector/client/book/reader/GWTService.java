@@ -33,6 +33,7 @@ import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.service.AnnotationSchema;
 
 /**
  * 
@@ -228,4 +229,7 @@ public interface GWTService extends RemoteService {
 	public ArrayList<AnnotationThread> getAnnotationThreadsByItsFather(
 			Long annotationId, Long threadFatherId) throws GeneralException;
 
+	public String getJSONServiceTODrawGraph(String url);
+	
+	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId);
 }
