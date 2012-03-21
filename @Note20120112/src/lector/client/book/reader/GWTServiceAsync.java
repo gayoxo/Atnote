@@ -5,7 +5,7 @@
 package lector.client.book.reader;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.service.AnnotationSchema;
+import lector.client.service.AnnotationSchema;
 
 import java.util.ArrayList;
 

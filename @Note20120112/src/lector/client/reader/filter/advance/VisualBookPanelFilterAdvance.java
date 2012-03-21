@@ -2,7 +2,6 @@ package lector.client.reader.filter.advance;
 
 import java.util.ArrayList;
 
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;

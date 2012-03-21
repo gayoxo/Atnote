@@ -55,7 +55,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.service.AnnotationSchema;
+import lector.client.service.AnnotationSchema;
 
 public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 

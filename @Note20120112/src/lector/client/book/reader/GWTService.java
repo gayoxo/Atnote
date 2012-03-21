@@ -33,7 +33,7 @@ import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.service.AnnotationSchema;
+import lector.client.service.AnnotationSchema;
 
 /**
  * 

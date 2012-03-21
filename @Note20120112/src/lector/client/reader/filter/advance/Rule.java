@@ -3,7 +3,6 @@ package lector.client.reader.filter.advance;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
@@ -31,7 +30,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class Rule extends Composite {
 
