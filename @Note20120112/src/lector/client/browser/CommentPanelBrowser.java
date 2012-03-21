@@ -129,6 +129,14 @@ public class CommentPanelBrowser extends Composite {
 		});
         button_1.setSize("100%", "42px");
 
+        richTextArea.addClickHandler(new ClickHandler() {
+
+            public void onClick(ClickEvent event) {
+            	VisualBookPanel TCE = new VisualBookPanel(annotation,Imagen);
+                  TCE.show();
+            }
+        });
+        
         richTextArea.setHTML(annotation.getComment().toString());
         richTextArea.setSize("99%", "174px");
         verticalPanel.add(richTextArea);

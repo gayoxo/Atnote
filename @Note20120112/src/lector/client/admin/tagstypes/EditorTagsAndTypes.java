@@ -108,6 +108,15 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 		MenuItemSeparator separator_1 = new MenuItemSeparator();
 		menuBar.addSeparator(separator_1);
+		
+		MenuItem mntmNewItem_1 = new MenuItem("New item", false, new Command() {
+			public void execute() {
+				VisualizeGraph VG=new VisualizeGraph(catalogo.getId());
+				VG.center();
+			}
+		});
+		mntmNewItem_1.setHTML("Show Graph");
+		menuBar.addItem(mntmNewItem_1);
 
 		MenuItem mntmNewItem_3 = new MenuItem("New", false, new Command() {
 
@@ -386,5 +395,4 @@ public class EditorTagsAndTypes implements EntryPoint {
 	public static void setCatalogo(Catalog catalogo) {
 		EditorTagsAndTypes.catalogo = catalogo;
 	}
-
 }

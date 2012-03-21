@@ -12,8 +12,8 @@
 
 	<!-- Other module inherits                                      -->
 
-	<!-- Specify the app entry point class.                         -->
-	<entry-point class='lector.client.controler.Controlador' />
+	<!-- Specify the app entry point class.                    -->
+	 <entry-point class='lector.client.controler.Controlador' />    
 
 	<!-- Specify the paths for translatable code                    -->
 	<source path='client' />
@@ -21,6 +21,12 @@
 	<!--   -->
 	<entry-point class="lector.client.login.Generador_Basico"/>  
 	<!-- -->
+	
+	 <inherits name='com.google.gwt.widgetideas.GWTCanvas'/>
+
+  <!-- Other module inherits                                      -->
+
+  <!-- Specify the app entry point class.                         -->
 	
 
 </module>

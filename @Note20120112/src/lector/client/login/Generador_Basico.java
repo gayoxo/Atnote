@@ -17,20 +17,20 @@ public class Generador_Basico implements EntryPoint {
 	.create(GWTService.class);
 	
 	public void onModuleLoad() {
-		UserApp adminUser = new UserApp();
-		adminUser.setEmail("root");
-		adminUser.setProfile(Constants.PROFESSOR);
-		bookReaderServiceHolder.saveUser(adminUser, new AsyncCallback<Boolean>() {
-
-			public void onSuccess(Boolean result) {
-
-			}
-
-			public void onFailure(Throwable caught) {
-				Window.alert("Ha fallado La carga de root");
-
-			}
-		});
+//		UserApp adminUser = new UserApp();
+//		adminUser.setEmail("root");
+//		adminUser.setProfile(Constants.PROFESSOR);
+//		bookReaderServiceHolder.saveUser(adminUser, new AsyncCallback<Boolean>() {
+//
+//			public void onSuccess(Boolean result) {
+//
+//			}
+//
+//			public void onFailure(Throwable caught) {
+//				Window.alert("Ha fallado La carga de root");
+//
+//			}
+//		});
 	}
 
 }

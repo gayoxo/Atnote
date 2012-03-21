@@ -2,4 +2,7 @@ eclipse.preferences.version=1
 filesCopiedToWebInfLib=appengine-api-1.0-sdk-1.6.3.jar|appengine-api-labs-1.6.3.jar|appengine-jsr107cache-1.6.3.jar|jsr107cache-1.1.jar|datanucleus-appengine-1.0.10.final.jar|datanucleus-core-1.1.5.jar|datanucleus-jpa-1.1.5.jar|geronimo-jpa_3.0_spec-1.1.1.jar|geronimo-jta_1.1_spec-1.1.1.jar|jdo2-api-2.3-eb.jar
 gaeDeployDialogSettings=
 gaeHrdEnabled=true
+gaeIsEclipseDefaultInstPath=true
+googleCloudSqlEnabled=false
+localDevMySqlEnabled=true
 ormEnhancementInclusions=src/lector/server/|test/|src/lector/client/catalogo/server/|src/lector/client/catalogo/client/|src/lector/client/reader/Annotation.java|src/lector/client/login/|src/lector/client/admin/activity/ReadingActivity.java|src/lector/client/language/Language.java|src/lector/client/reader/Book.java|src/lector/client/reader/Tag.java|src/lector/client/reader/TextSelector.java|gwt-dnd-3.1.1.jar|src/lector/client/reader/AnnotationConfig.java|src/lector/client/reader/fltertype/FilterConfig.java|src/lector/client/reader/annotthread/AnnotationThread.java
