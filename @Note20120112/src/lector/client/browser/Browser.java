@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.sun.java.swing.plaf.windows.resources.windows;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Browser implements EntryPoint {

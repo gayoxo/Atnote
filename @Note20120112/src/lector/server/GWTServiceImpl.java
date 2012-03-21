@@ -50,12 +50,12 @@ import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
 import lector.client.reader.NullParameterException;
 import lector.client.reader.annotthread.AnnotationThread;
-import lector.client.service.AnnotationSchema;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.service.AnnotationSchema;
 
 public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
@@ -3574,7 +3574,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		String line;
 		StringBuilder builder = new StringBuilder();
 		BufferedReader reader;
-	//	JSONObject json = new JSONObject();
+		JSONObject json = new JSONObject();
 		try {
 			url = new URL(query);
 			connection = url.openConnection();
@@ -3586,9 +3586,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				builder.append(line);
 			}
 
-			
-			
-			//json = new JSONObject(builder.toString());
+			json = new JSONObject(builder.toString());
 
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
@@ -3596,13 +3594,11 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		} catch (IOException ex) {
 			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
 					null, ex);
-		} 
-//			catch (JSONException ex) {
-//			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
-//					null, ex);
-//		}
-//		return json.toString();
-		return builder.toString();
+		} catch (JSONException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return json.toString();
 	}
 
 	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId) {
@@ -3623,11 +3619,11 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	private void deepingRoot(Long folderId) {
 		FolderDB folder = loadFolderById(folderId);
 		if (folder != null) {
-			ArrayList<FolderDB> foldersChildren = getFolderChildren(folder);
+			List<FolderDB> foldersChildren = getFolderChildren(folder);
 			for (int i = 0; i < foldersChildren.size(); i++) {
 				deepingRoot(foldersChildren.get(i).getId());
 			}
-			ArrayList<FileDB> filesChildren = getFileChildren(folder);
+			List<FileDB> filesChildren = getFileChildren(folder);
 			for (int i = 0; i < filesChildren.size(); i++) {
 				sonIds.add(filesChildren.get(i).getId());
 			}
@@ -3644,13 +3640,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 		for (Long id : ids) {
 			FolderDB folder = loadFolderById(id);
-			ArrayList<Long> Save=new ArrayList<Long>();
 			if (folder != null) {
-				for (Long long1 : folder.getEntryIds()) {
-					Save.add(long1);
-				}
 				AnnotationSchema son = new AnnotationSchema(id,
-						folder.getName(), Save);
+						folder.getName(), folder.getEntryIds());
 				schema.add(son);
 			}
 		}

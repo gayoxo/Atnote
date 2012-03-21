@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import lector.client.service.AnnotationSchema;
-
 @Entity
 @XmlRootElement
 public class ListOfSchema implements Serializable {
