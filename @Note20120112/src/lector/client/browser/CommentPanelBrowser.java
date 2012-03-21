@@ -2,6 +2,7 @@ package lector.client.browser;
 
 import lector.client.reader.Annotation;
 import lector.client.reader.SelectorPanel;
+import lector.client.reader.filter.advance.VisualBookPanelFilterAdvance;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
@@ -129,6 +130,13 @@ public class CommentPanelBrowser extends Composite {
 		});
         button_1.setSize("100%", "42px");
 
+        richTextArea.addClickHandler(new ClickHandler() {
+
+            public void onClick(ClickEvent event) {
+            	VisualBookPanel TCE = new VisualBookPanel(annotation,Imagen);
+                  TCE.show();
+            }
+        });
         richTextArea.setHTML(annotation.getComment().toString());
         richTextArea.setSize("99%", "174px");
         verticalPanel.add(richTextArea);

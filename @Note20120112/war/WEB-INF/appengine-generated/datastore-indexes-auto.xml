@@ -1,11 +1,4 @@
-<!-- Indices written at Wed, 14 Mar 2012 12:52:38 UTC -->
+<!-- Indices written at Tue, 20 Mar 2012 20:26:01 UTC -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="annotation" ancestor="false" source="auto">
-        <property name="bookId" direction="asc"/>
-        <property name="pageNumber" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>
