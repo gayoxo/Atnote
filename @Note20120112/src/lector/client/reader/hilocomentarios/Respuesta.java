@@ -17,6 +17,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -53,7 +55,7 @@ public class Respuesta extends Composite {
     
 	public Respuesta(AnnotationThread annotationin) {
 		 annotation = annotationin;
-	        DecoratorPanel decoratorPanel = new DecoratorPanel();
+	        SimplePanel decoratorPanel = new SimplePanel();
 	        decoratorPanel.setHeight("");
 	        initWidget(decoratorPanel);
 
@@ -83,11 +85,6 @@ public class Respuesta extends Composite {
 	        button.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
 					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
-				}
-			});
-	        button.addMouseDownHandler(new MouseDownHandler() {
-				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
 				}
 			});
 
@@ -178,6 +175,11 @@ public class Respuesta extends Composite {
 					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
 				}
 			});
+	        button_1.addMouseUpHandler(new MouseUpHandler() {
+				public void onMouseUp(MouseUpEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				}
+			});
 	        button_1.setSize("52px", "30px");
 
 	        richTextArea.setHTML(annotation.getComment().toString());
@@ -221,6 +223,7 @@ public class Respuesta extends Composite {
 	        menuBar.addSeparator(separator);
 	        
 	        mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
+	        mntmNewItem_2.setStyleName("gwt-MenuItemPanel");
 	        menuBar.addItem(mntmNewItem_2);
 	       
 	        

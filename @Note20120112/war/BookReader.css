@@ -329,10 +329,6 @@ display: block;
 .gwt-MenuItemPanel {
 font-size: 11px;
 }
-.gwt-MenuItem {
-}
-
-
 .gwt-ButtonCenter {
  background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
  display: block;
@@ -492,7 +488,7 @@ background: transparent url('/BotonesLista/BotonAbajoGris.jpg') no-repeat center
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 }
@@ -516,7 +512,7 @@ background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat center cen
 		    background-size:  100% 100%;
 	color: royalblue;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 }
@@ -539,7 +535,7 @@ background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat center cen
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 }
@@ -563,7 +559,7 @@ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center cen
 		    background-size:  100% 100%;
 	color: royalblue;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 }

@@ -26,6 +26,8 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -51,7 +53,7 @@ public class CommentPanel extends Composite {
 
         annotation = annotationin;
         Imagen = originalBook;
-        DecoratorPanel decoratorPanel = new DecoratorPanel();
+        SimplePanel decoratorPanel = new SimplePanel();
         decoratorPanel.setHeight("");
         initWidget(decoratorPanel);
 
@@ -105,11 +107,7 @@ public class CommentPanel extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
 			}
 		});
-        button.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
-			}
-		});
+
         horizontalPanel.add(button);
 //        button.setEnabled(true);
 //        button.setVisible(false);
@@ -209,6 +207,11 @@ public class CommentPanel extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
 			}
 		});
+        button_1.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
         horizontalPanel.add(button_1);
         button_1.setSize("52px", "30px");
 
@@ -241,6 +244,7 @@ public class CommentPanel extends Composite {
         menuBar.addSeparator(separator);
         
         mntmNewItem_2 = new MenuItem("New item", false, (Command) null);
+        mntmNewItem_2.setStyleName("gwt-MenuItemPanel");
         menuBar.addItem(mntmNewItem_2);
        
         

@@ -61,7 +61,7 @@ public class PopUpNewOSelect extends PopupPanel {
 		});
 		horizontalPanel.add(btnNewButton);
 		
-		Button btnNewButton_1 = new Button("From Exist");
+		Button btnNewButton_1 = new Button("Reuse");
 		btnNewButton_1.setSize("100%", "100%");
         btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {

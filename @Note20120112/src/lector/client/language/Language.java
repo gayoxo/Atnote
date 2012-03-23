@@ -54,12 +54,12 @@ public class Language implements Serializable, IsSerializable {
     private String ClearAnot = "Clear";
     private String Cancel = "Cancel";
     private String DeleteAnnotation = "Delete Annotation";
-    private String SetTypes = "SetTypes";
-	private String SetTypesPublic = "SetTypes Publico";
+    private String SetTypes = "Teacher Catalog";
+	private String SetTypesPublic = "Student Publico";
     private String Visibility = "Visibility";
-    private String Upgradeable = "Upgradeable";
+    private String Upgradeable = "Public Editable?";
     private String New="New";
-    private String FromExist="From Exist";
+    private String FromExist="Reuse";
     //Varios
     private String E_Page_Dont_Exist="Error: Page does not exist";
     private String E_Not_a_number="Error: Page number could not be a letter";
