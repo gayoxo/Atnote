@@ -3601,7 +3601,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		sonIds = new ArrayList<Long>();
 		Catalogo catalogo = loadCatalogById(catalogId);
 		AnnotationSchema annotationSchema = new AnnotationSchema(catalogId,
-				catalogo.getCatalogName(), catalogo.getEntryIds());
+				catalogo.getCatalogName(), catalogo.getEntryIds(),true);
 		schema.add(annotationSchema);
 		for (int j = 0; j < catalogo.getEntryIds().size(); j++) {
 			deepingRoot(catalogo.getEntryIds().get(j));
@@ -3641,7 +3641,16 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 					Al.add(long1);
 				}
 				AnnotationSchema son = new AnnotationSchema(id,
-						folder.getName(), Al);
+						folder.getName(), Al,true);
+				schema.add(son);
+			}
+		}
+		
+		for (Long id : ids) {
+			FileDB folder = loadFileById(id);
+			if (folder != null) {
+				AnnotationSchema son = new AnnotationSchema(id,
+						folder.getName(), new ArrayList<Long>(),false);
 				schema.add(son);
 			}
 		}

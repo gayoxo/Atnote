@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -81,7 +82,7 @@ public class MainEntryPoint implements EntryPoint {
 	private MenuItem mntmRefresh;
 	private MenuItem Annotacion;
 	private static MenuItem mntmNoAnnotacion;
-	private MenuItem Buscar;
+	private MenuItem AboutMenuButton;
 	private static MenuItem Ficha;
 	private final MenuItemSeparator separator = new MenuItemSeparator();
 	private final MenuItemSeparator separator_1 = new MenuItemSeparator();
@@ -209,12 +210,17 @@ public class MainEntryPoint implements EntryPoint {
 		menuBar.setAnimationEnabled(true);
 		RootMenu.add(menuBar);
 
-		Buscar = new MenuItem(ActualLang.getNamePage(), false, (Command) null);
-		Buscar.setEnabled(false);
+		AboutMenuButton = new MenuItem(ActualLang.getNamePage(), false, new Command() {
+			public void execute() {
+				PopupPanel About = new About();
+				About.showRelativeTo(AboutMenuButton);
+			}
+		});
+		AboutMenuButton.setEnabled(true);
 
-		Buscar.setHTML(ActualLang.getNamePage());
+		AboutMenuButton.setHTML(ActualLang.getNamePage());
 		
-		menuBar.addItem(Buscar);
+		menuBar.addItem(AboutMenuButton);
 		
 		menuBar.addSeparator(separator_3);
 

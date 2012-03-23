@@ -10,6 +10,7 @@ import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.Folder;
 import lector.client.catalogo.grafo.PanelGrafo;
+import lector.client.catalogo.server.Catalogo;
 import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
@@ -32,73 +33,23 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
-public class FinderGrafo extends Composite {
+public class FinderGrafo extends Finder {
 
-	private Node ActualRama;
-	private Catalog C;
-	static GWTServiceAsync bookReaderServiceHolder = GWT
-			.create(GWTService.class);
+
 	
 	//el finder del reading activity tiene lenguaje asociado
-		private boolean InReadingActivity=false;
-	private StackPanelMio SPmio;
-	private SplitLayoutPanel horizontalSplitPanel;
-	private SimplePanel simplePanel;
-	private Node trtmNewItem;
-	private ScrollPanel scrollPanel;
+	private PanelGrafo panelDelGrafo;
 	
-	public FinderGrafo() {
+	public FinderGrafo(Catalog C) {
 		
-		simplePanel = new SimplePanel();
-		initWidget(simplePanel);
-		
-		horizontalSplitPanel = new SplitLayoutPanel();
-		simplePanel.add(horizontalSplitPanel);
-		simplePanel.setSize("100%", "100%");
-	//	simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
-		horizontalSplitPanel.setSize("100%", "100%");
-	//	horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
-		scrollPanel = new ScrollPanel();
-		horizontalSplitPanel.addWest(scrollPanel, 200.0);
-		scrollPanel.setSize("100%", "100%");
-		
-		
-		
-		Tree ArbolDeNavegacion = new Tree();
-		ArbolDeNavegacion.addSelectionHandler(new SelectionHandler<TreeItem>() {
-			public void onSelection(SelectionEvent<TreeItem> event) {
-				ActualRama=(Node)event.getSelectedItem();
-				cargaLaRamaYLaSeleccion();
-				
-			}
-		});
-		ArbolDeNavegacion.addOpenHandler(new OpenHandler<TreeItem>() {
-			public void onOpen(OpenEvent<TreeItem> event) {
-				cargaLaRama();
-			}
-		});
-		scrollPanel.setWidget(ArbolDeNavegacion);
-		ArbolDeNavegacion.setSize("100%", "100%");
-		
-		trtmNewItem = new Node(new Folder("Catalogo", Constants.CATALOGID, Constants.CATALOGID));
-		trtmNewItem.setText("\\");
-		ArbolDeNavegacion.addItem(trtmNewItem);
-		trtmNewItem.setState(true);
-		ActualRama=trtmNewItem;
-		
-		
-		SimplePanel simplePanel_1 = new SimplePanel();
-		horizontalSplitPanel.add(simplePanel_1);
-		simplePanel_1.setSize("100%", "100%");
-		
-		ScrollPanel scrollPanel_1 = new ScrollPanel();
-		simplePanel_1.setWidget(scrollPanel_1);
-		scrollPanel_1.setSize("100%", "100%");
-		
-		PanelGrafo simplePanel_2 = new PanelGrafo(C.getId());
-		scrollPanel_1.setWidget(simplePanel_2);
-		SPmio = new StackPanelMio();
-		SPmio.setWidth("100%");
+		this.C=C;
+		panelSeleccion.clear();
+		ScrollPanel SP=new ScrollPanel();
+		SP.setSize("100%", "100%");
+		SP.setStyleName("Dialog");
+		panelDelGrafo = new PanelGrafo(C.getId());
+		panelSeleccion.setWidget(SP);
+		SP.setWidget(panelDelGrafo);
 		
 		
 		
@@ -106,19 +57,8 @@ public class FinderGrafo extends Composite {
 
 	protected void SeleccionaLaRama() {
 		
-		ArrayList<Entity>AMostrar = new ArrayList<Entity>();
-		for (int i = 0; i < ActualRama.getChildCount(); i++) {
-			AMostrar.add(((Node)ActualRama.getChild(i)).getEntidad()); 
-		}
+		panelDelGrafo.refresca(C.getId());
 
-		SPmio.Clear();
-		for (Entity entitynew : AMostrar) {
-			if (AMostrar.size() <= 10)
-				SPmio.addBotonLessTen(entitynew);
-			else
-				SPmio.addBoton(entitynew);
-		}
-		SPmio.ClearEmpty();
 		LoadingPanel.getInstance().hide();
 		
 	}
@@ -160,7 +100,12 @@ public class FinderGrafo extends Composite {
 		
 	}
 
+	
+	@Override
 	protected void cargaLaRamaYLaSeleccion() {
+		cargaLaRama();
+	}
+	protected void cargaLaRamaYLaSeleccionGrafo() {
 		AsyncCallback<ArrayList<Entity>> callback1 = new AsyncCallback<ArrayList<Entity>>() {
 
 			public void onFailure(Throwable caught) {
@@ -216,13 +161,13 @@ public class FinderGrafo extends Composite {
 		cargaLaRamaYLaSeleccion();
 	}
 	
-	public void setButtonTipo(BotonesStackPanelMio buttonMio) {
-		SPmio.setBotonTipo(buttonMio);
+	public static void setButtonTipoGrafo(BotonesStackPanelMio buttonMio) {
+		PanelGrafo.setBotonTipo(buttonMio);
 
 	}
 
-	public void setBotonClick(ClickHandler clickHandler) {
-		SPmio.setBotonClick(clickHandler);
+	public static void setBotonClickGrafo(ClickHandler clickHandler) {
+		PanelGrafo.setAccionAsociada(clickHandler);
 
 	}
 
@@ -230,12 +175,14 @@ public class FinderGrafo extends Composite {
 				return ActualRama.getEntidad();
 	}
 	
+
+
+
 	public void RefrescaLosDatos()
 	{
-		cargaLaRamaYLaSeleccion();
+		cargaLaRamaYLaSeleccionGrafo();
 		//simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
 		//horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
 	}
-
 
 }

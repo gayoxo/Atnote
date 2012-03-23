@@ -4,9 +4,22 @@ import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.catalogo.BotonesStackPanelMio;
+import lector.client.catalogo.BotonesStackPanelMioGrafo;
+import lector.client.catalogo.client.Entity;
+import lector.client.catalogo.client.File;
+import lector.client.catalogo.client.Folder;
 import lector.client.service.AnnotationSchema;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,9 +38,13 @@ public class PanelGrafo extends Composite {
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private ArrayList<AnnotationSchema> compare;
+	private static ClickHandler AccionAsociada;
+	private static Button ButonTipo;
+	private Long Catalogo;
 	
 	public PanelGrafo(Long Catalog) {
 		
+		Catalogo=Catalog;
 		absolutePanel = new AbsolutePanel();
 		initWidget(absolutePanel);
 		absolutePanel.setSize("400px", "400px");
@@ -36,7 +53,27 @@ public class PanelGrafo extends Composite {
 		absolutePanel.add(sPanel, 0, 0);
 		sPanel.setSize("100%", "100%");
 		
-		bookReaderServiceHolder.getSchemaByCatalogId(Catalog, new AsyncCallback<ArrayList<AnnotationSchema>>() {
+		bookReaderServiceHolder.getSchemaByCatalogId(Catalogo, new AsyncCallback<ArrayList<AnnotationSchema>>() {
+			
+			public void onSuccess(ArrayList<AnnotationSchema> result) {
+				compare=result;
+				LlamadaServicio();
+				
+			}
+			
+			public void onFailure(Throwable caught) {
+				Window.alert("Error Retriving Catalog");
+				
+			}
+		});
+		
+	}
+	
+	
+	public void refresca(Long Catalog){
+		absolutePanel.clear();
+		absolutePanel.add(sPanel);
+bookReaderServiceHolder.getSchemaByCatalogId(Catalog, new AsyncCallback<ArrayList<AnnotationSchema>>() {
 			
 			public void onSuccess(ArrayList<AnnotationSchema> result) {
 				compare=result;
@@ -76,15 +113,40 @@ public class PanelGrafo extends Composite {
 	private String generaString() {
 		StringBuffer SB=new StringBuffer();
 		for (AnnotationSchema AS : compare) {
-			Long Pa=AS.getId();
+			String Pa=AS.getId().toString();
+			String Name=AS.getName();
 			for (Long LL : AS.getSons()) {
+				
+				for (int i = 0; i < Name.length()-Pa.length(); i++) {
+					SB.append(0);
+				}
+				SB.append("000"); //icono 
 				SB.append(Pa);
 				SB.append("->");
-				SB.append(LL);
+				AnnotationSchema AST=getannotationSchema(LL);
+				String Pat=AST.getId().toString();
+				String Namet=AST.getName();
+				for (int i = 0; i < Namet.length()-Pat.length(); i++) {
+					SB.append(0);
+				}
+				SB.append("000"); //icono
+				SB.append(Pat);
 				SB.append(";");
 			}
 		}
 		return SB.toString();
+	}
+
+
+	private AnnotationSchema getannotationSchema(Long lL) {
+		int i=0;
+		while (i<compare.size()) {
+			AnnotationSchema temp=compare.get(i);
+			if (temp.getId().equals(lL))
+				return temp;
+			i++;
+		}
+		return null;
 	}
 
 
@@ -101,6 +163,8 @@ public class PanelGrafo extends Composite {
 			
 			ArrayList<Elemento> ListaElementos=new ArrayList<Elemento>();
 			StringBuffer SB=new StringBuffer();
+			Elemento.setLista(compare);
+			Elemento.setCatalogo(Catalogo);
 			
 			for (int c = 1; c < Datosplus.length; c++) {
 				
@@ -138,7 +202,59 @@ public class PanelGrafo extends Composite {
 				{
 					String[] coordenadas=E.getCoordenadas().split(",");
 					Rectangulo But=Calculaboton(coordenadas);
-				    Button sal=new Button(E.getName());
+					BotonesStackPanelMio sal;
+					if (ButonTipo!=null){
+				    sal=((BotonesStackPanelMio)ButonTipo).Clone();
+				    sal.setEntidad(E.getE());
+					}
+					else sal =new BotonesStackPanelMioGrafo("");
+					
+					sal.setHTML(E.getE().getName());
+					
+					Entity S=E.getE();
+					if (S instanceof File) 
+						sal.setIcon("File.gif",S.getName());
+					else 
+						if (S instanceof Folder)
+							sal.setIcon("Folder.gif",S.getName());
+					
+							
+					
+					if (AccionAsociada!=null)
+				    	sal.addClickHandler(AccionAsociada);
+				    
+				    sal.addClickHandler(new ClickHandler() {
+						
+						public void onClick(ClickEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+							
+						}
+					});
+				
+				    sal.addMouseDownHandler(new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+						}
+					});
+					
+
+				    sal.addMouseOutHandler(new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+					}
+				});
+					
+
+				    sal.addMouseOverHandler(new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+						
+					}
+				});
+
+				    sal.setStyleName("gwt-ButtonCenter");
+					
 				    sal.setWidth(But.getwhight()+"px");
 				    sal.setHeight(But.getheight()+"px");
 				    absolutePanel.add(sal,But.getXori(),But.getYori());
@@ -163,7 +279,7 @@ public class PanelGrafo extends Composite {
 				}
 			}
 		} catch (Exception e) {
-			Window.alert(e.getMessage());
+			Window.alert("Error Mostrando el Grafo");
 		}
 		
 	}
@@ -312,5 +428,19 @@ public class PanelGrafo extends Composite {
 		}
 
 		return Rec;
+	}
+	
+	public static void setAccionAsociada(ClickHandler accionAsociada) {
+		AccionAsociada = accionAsociada;
+	}
+	
+	public static ClickHandler getAccionAsociada() {
+		return AccionAsociada;
+	}
+
+
+	public static void setBotonTipo(BotonesStackPanelMio buttonMio) {
+		ButonTipo=buttonMio;
+		
 	}
 }

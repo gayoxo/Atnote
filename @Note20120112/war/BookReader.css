@@ -567,3 +567,21 @@ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center cen
 	text-decoration: none;
 	background-color: White;
 }
+.Dialog {
+max-width:600px;
+max-height:400px;
+}
+.panelSeleccion {
+min-width:300px;
+min-height:300px;
+max-width:690px;
+max-height:611px;
+}
+.gwt-TextAreaAbout {
+	color: #333333;
+	font-stretch: normal;
+	font-variant: normal;
+	font-style: italic;
+	font-family: sans-serif;
+	font-weight: bold;
+}

@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public class CommentPanel extends Composite {
 
@@ -51,7 +52,7 @@ public class CommentPanel extends Composite {
         annotation = annotationin;
         Imagen = originalBook;
         DecoratorPanel decoratorPanel = new DecoratorPanel();
-        decoratorPanel.setHeight("38px");
+        decoratorPanel.setHeight("");
         initWidget(decoratorPanel);
 
         decoratorPanel.setWidget(verticalPanel);

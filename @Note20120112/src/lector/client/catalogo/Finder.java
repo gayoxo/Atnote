@@ -33,18 +33,19 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public class Finder extends Composite {
 
-	private Node ActualRama;
-	private Catalog C;
+	protected Node ActualRama;
+	protected Catalog C;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	
 	//el finder del reading activity tiene lenguaje asociado
-		private boolean InReadingActivity=false;
+	protected boolean InReadingActivity=false;
 	private StackPanelMio SPmio;
-	private SplitLayoutPanel horizontalSplitPanel;
-	private SimplePanel simplePanel;
-	private Node trtmNewItem;
-	private ScrollPanel scrollPanel;
+	protected SplitLayoutPanel horizontalSplitPanel;
+	protected SimplePanel simplePanel;
+	protected Node trtmNewItem;
+	protected ScrollPanel scrollPanel;
+	protected SimplePanel panelSeleccion;
 	
 	public Finder() {
 		
@@ -67,13 +68,13 @@ public class Finder extends Composite {
 		ArbolDeNavegacion.addSelectionHandler(new SelectionHandler<TreeItem>() {
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				ActualRama=(Node)event.getSelectedItem();
-				cargaLaRamaYLaSeleccion();
+				cargaLaRama();
 				
 			}
 		});
 		ArbolDeNavegacion.addOpenHandler(new OpenHandler<TreeItem>() {
 			public void onOpen(OpenEvent<TreeItem> event) {
-				cargaLaRama();
+				cargaLaRamaYLaSeleccion();
 			}
 		});
 		scrollPanel.setWidget(ArbolDeNavegacion);
@@ -86,12 +87,12 @@ public class Finder extends Composite {
 		ActualRama=trtmNewItem;
 		
 		
-		SimplePanel simplePanel_1 = new SimplePanel();
-		horizontalSplitPanel.add(simplePanel_1);
-		simplePanel_1.setSize("100%", "100%");
+		panelSeleccion = new SimplePanel();
+		horizontalSplitPanel.add(panelSeleccion);
+		panelSeleccion.setSize("100%", "100%");
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
-		simplePanel_1.setWidget(verticalPanel);
+		panelSeleccion.setWidget(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
 		SPmio = new StackPanelMio();
 		verticalPanel.add(SPmio);

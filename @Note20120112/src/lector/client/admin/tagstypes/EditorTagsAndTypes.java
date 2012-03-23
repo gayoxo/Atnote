@@ -141,7 +141,6 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 		MenuItem mntmMerge = new MenuItem("Merge", false, new Command() {
 
-			// TODO Cambia de sentido
 
 			public void execute() {
 				int Unir = Selected.getWidgetCount();
@@ -247,7 +246,6 @@ public class EditorTagsAndTypes implements EntryPoint {
 		MenuItem mntmNewItem = new MenuItem("Delete", false, new Command() {
 
 			public void execute() {
-				// TODO Cambiar el delete
 				int Borrar = Selected.getWidgetCount();
 				for (int i = 1; i < Borrar; i++) {
 

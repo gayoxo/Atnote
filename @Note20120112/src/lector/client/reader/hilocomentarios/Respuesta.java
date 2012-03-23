@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Respuesta extends Composite {
 
@@ -53,7 +54,7 @@ public class Respuesta extends Composite {
 	public Respuesta(AnnotationThread annotationin) {
 		 annotation = annotationin;
 	        DecoratorPanel decoratorPanel = new DecoratorPanel();
-	        decoratorPanel.setHeight("38px");
+	        decoratorPanel.setHeight("");
 	        initWidget(decoratorPanel);
 
 	        decoratorPanel.setWidget(verticalPanel);

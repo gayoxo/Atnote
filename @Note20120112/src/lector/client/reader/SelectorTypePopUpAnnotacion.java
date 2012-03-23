@@ -1,6 +1,7 @@
 package lector.client.reader;
 
 import lector.client.catalogo.Finder;
+import lector.client.catalogo.FinderGrafo;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
@@ -11,6 +12,13 @@ import lector.client.reader.PanelTextComent.CatalogTipo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -24,7 +32,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 
 public class SelectorTypePopUpAnnotacion extends PopupPanel {
-	private static Finder finder;
+	private static FinderGrafo finder;
 	protected MenuItem mntmNewItem;
 	protected MenuBar menuBar;
 	private CatalogTipo CT;
@@ -33,6 +41,7 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 		super(true);
 		CT=catalog2;
 		SimplePanel verticalPanel = new SimplePanel();
+		verticalPanel.setStyleName("panelSeleccion");
 		setWidget(verticalPanel);
 		verticalPanel.setSize("690px", "611px");
         DockPanel dockPanel = new DockPanel();
@@ -61,19 +70,14 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         mntmNewItem_1.setHTML(ActualUser.getLanguage().getCancel());
         menuBar.addItem(mntmNewItem_1);
         
-        ScrollPanel scrollPanel = new ScrollPanel();
+        SimplePanel scrollPanel = new SimplePanel();
         dockPanel.add(scrollPanel, DockPanel.CENTER);
         scrollPanel.setSize("100%", "100%");
         
-        finder= new Finder();
-        finder.setCatalogo(Cata);
-        scrollPanel.setWidget(finder);
-        finder.setSize("100%", "575px");
-        finder.RefrescaLosDatos();
-        finder.setButtonTipo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),penelBotonesTipo));
+        FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),penelBotonesTipo));
         
         
-        finder.setBotonClick(new ClickHandler() {
+        FinderGrafo.setBotonClickGrafo(new ClickHandler() {
 
 	        public void onClick(ClickEvent event) {
 	        	BotonesStackPanelReaderSelectMio BS=((BotonesStackPanelReaderSelectMio) event.getSource());
@@ -85,8 +89,40 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	        	nuevo.addClickHandler(new ClickHandler() {
 					
 					public void onClick(ClickEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+						
+					}
+				});
+			
+	        	nuevo.addMouseDownHandler(new MouseDownHandler() {
+					public void onMouseDown(MouseDownEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+					}
+				});
+				
+
+	        	nuevo.addMouseOutHandler(new MouseOutHandler() {
+					public void onMouseOut(MouseOutEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				}
+			});
+				
+
+	        	nuevo.addMouseOverHandler(new MouseOverHandler() {
+					public void onMouseOver(MouseOverEvent event) {
+						
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+					
+				}
+			});
+
+	        	nuevo.setStyleName("gwt-ButtonCenter");
+	        	nuevo.addClickHandler(new ClickHandler() {
+					
+					public void onClick(ClickEvent event) {
 						ButtonTipo Yo=(ButtonTipo)event.getSource();
 						Yo.getPertenezco().remove(Yo);
+						
 						
 					}
 				});
@@ -106,6 +142,11 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 				return false;
 			}
 	        });
+        finder= new FinderGrafo(Cata);
+        scrollPanel.setWidget(finder);
+        finder.setSize("100%", "575px");
+        finder.RefrescaLosDatos();
+        
 	}
 
 	protected void setAllowCreate(boolean state)

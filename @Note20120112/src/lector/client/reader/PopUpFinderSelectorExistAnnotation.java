@@ -5,6 +5,7 @@ import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
+import lector.client.catalogo.FinderGrafo;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.controler.Constants;
@@ -26,7 +27,7 @@ import com.google.gwt.user.client.Window;
 
 public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 
-	private Finder finder;
+	private FinderGrafo finder;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private Entity father;
@@ -37,14 +38,9 @@ public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 		setModal(true);
 		setGlassEnabled(true);
 		father=entity;
-		finder = new Finder();
-		finderrefresh=finderin;
-		SimplePanel S= new SimplePanel();
-		S.setSize("100%", "100%");
-		S.add(finder);
-		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelAdministracionMio(
 				"prototipo", new VerticalPanel(), new VerticalPanel(),finder));
-		finder.setBotonClick(new ClickHandler() {
+		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				Entity E=((BotonesStackPanelAdministracionMio)event.getSource()).getEntidad();
@@ -73,6 +69,11 @@ public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 				
 			}
 		});
+		finder = new FinderGrafo(CatalogoIn);
+		finderrefresh=finderin;
+		SimplePanel S= new SimplePanel();
+		S.setSize("100%", "100%");
+		S.add(finder);
 
 		finder.setSize("100%", "100%");
 		

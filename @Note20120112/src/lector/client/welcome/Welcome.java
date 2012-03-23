@@ -6,11 +6,13 @@ import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
+import lector.client.reader.About;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -80,6 +82,12 @@ public class Welcome implements EntryPoint {
 		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 				
 				Image image_1 = new Image("Logo.jpg");
+				image_1.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						PopupPanel About = new About();
+						About.center();
+					}
+				});
 				horizontalPanel_1.add(image_1);
 						
 						HorizontalPanel horizontalPanel_2 = new HorizontalPanel();

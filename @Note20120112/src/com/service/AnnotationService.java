@@ -228,7 +228,7 @@ public class AnnotationService {
 		sonIds = new ArrayList<Long>();
 		Catalogo catalogo = loadCatalogById(catalogId);
 		AnnotationSchema annotationSchema = new AnnotationSchema(catalogId,
-				catalogo.getCatalogName(), catalogo.getEntryIds());
+				catalogo.getCatalogName(), catalogo.getEntryIds(),true);
 		schema.add(annotationSchema);
 		for (int j = 0; j < catalogo.getEntryIds().size(); j++) {
 			deepingRoot(catalogo.getEntryIds().get(j));
@@ -272,11 +272,12 @@ public class AnnotationService {
 			FolderDB folder = loadFolderById(id);
 			if (folder != null) {
 				AnnotationSchema son = new AnnotationSchema(id,
-						folder.getName(), folder.getEntryIds());
+						folder.getName(), folder.getEntryIds(),true);
 				schema.add(son);
 			}
 		}
 
+		
 		return schema;
 	}
 

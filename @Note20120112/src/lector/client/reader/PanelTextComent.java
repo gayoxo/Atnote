@@ -14,6 +14,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -96,6 +98,7 @@ public class PanelTextComent extends Composite {
 				finder = new SelectorTypePopUpAnnotacion(PenelBotonesTipo,ActualUser.getCatalogo(),CatalogTipo.Catalog1);
 				finder.center();
 				finder.setModal(true);
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 			}
 		});
 
@@ -116,7 +119,7 @@ public class PanelTextComent extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
 			}
 		});
-		
+
 		horizontalPanel_1.add(BotonSelectType);
 		
 		horizontalPanel_2 = new HorizontalPanel();
@@ -134,6 +137,7 @@ public class PanelTextComent extends Composite {
 				finder = new SelectorTypePopUpAnnotacionPublic(PenelBotonesTipo,ActualUser.getOpenCatalog(),CatalogTipo.Catalog2);
 				finder.center();
 				finder.setModal(true);
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 			}
 		});
 		
@@ -154,7 +158,6 @@ public class PanelTextComent extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
 			}
 		});
-		
 		horizontalPanel_2.add(BotonSelectTypePublic);
 
 		

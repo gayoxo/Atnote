@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.tools.ant.taskdefs.condition.IsFileSelected;
+
 @Entity
 @XmlRootElement
 public class AnnotationSchema implements Serializable {
@@ -15,17 +17,20 @@ public class AnnotationSchema implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
+	private Boolean file;
 	@Basic
 	private List<Long> sons;
 
 	public AnnotationSchema() {
 	}
 
-	public AnnotationSchema(Long id, String name, List<Long> sons) {
+	public AnnotationSchema(Long id, String name, List<Long> sons,Boolean Folder) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.sons = sons;
+		file=!Folder;
+		
 	}
 
 	public Long getId() {
@@ -77,6 +82,10 @@ public class AnnotationSchema implements Serializable {
 		}
 		output += "}";
 		return output;
+	}
+	
+	public Boolean getFile() {
+		return file;
 	}
 
 }

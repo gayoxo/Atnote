@@ -21,6 +21,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 
 public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 
@@ -61,6 +67,38 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 		verticalPanel.add(horizontalPanel);
 		
 		Button btnNewButton = new Button("Create");
+btnNewButton.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
+
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		btnNewButton.setStyleName("gwt-ButtonCenter");
+		
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				String Seleccion=comboBox.getItemText(comboBox.getSelectedIndex());
@@ -117,6 +155,37 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 				hide();
 			}
 		});
+		btnNewButton_1.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
+
+		btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		btnNewButton_1.setStyleName("gwt-ButtonCenter");
 		horizontalPanel.add(btnNewButton_1);
 	}
 
