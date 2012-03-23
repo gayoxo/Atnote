@@ -25,7 +25,7 @@ public class PopUpNewOSelect extends PopupPanel {
 	private Finder finder;
 	
 	public PopUpNewOSelect(Catalog CatalogoIn,Entity EntityIn, Finder finderin) {
-		super(false);
+		super(true);
 		setModal(true);
 		Catalogo=CatalogoIn;
 		Entity=EntityIn;

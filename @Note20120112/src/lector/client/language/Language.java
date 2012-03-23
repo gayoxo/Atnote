@@ -60,6 +60,7 @@ public class Language implements Serializable, IsSerializable {
     private String Upgradeable = "Public Editable?";
     private String New="New";
     private String FromExist="Reuse";
+	private String NewAdmin = "Admin";
     //Varios
     private String E_Page_Dont_Exist="Error: Page does not exist";
     private String E_Not_a_number="Error: Page number could not be a letter";
@@ -95,7 +96,7 @@ public class Language implements Serializable, IsSerializable {
     public Language() {
     }
 
-    //Generales
+    //TODO Generales
     public Language(String name) {
         nameId = name;
     }
@@ -108,7 +109,7 @@ public class Language implements Serializable, IsSerializable {
         this.nameId = name;
     }
 
-    //MainWindow
+    //TODO MainWindow
     public String getNamePage() {
     	return NamePage;
     }
@@ -189,7 +190,7 @@ public class Language implements Serializable, IsSerializable {
 		return FilterMainButton;
 	}
 
-    //Specifications
+    //TODO Specifications
     public String getID() {
         return ID;
     }
@@ -238,7 +239,7 @@ public class Language implements Serializable, IsSerializable {
         Front_Cover = front_Cover;
     }
 
-    //Filter
+    //TODO Filter
     public String getAdvance() {
         return Advance;
     }
@@ -329,7 +330,7 @@ public class Language implements Serializable, IsSerializable {
     }
 
 
-    //Annotation
+    //TODO Annotation
     public String getSave() {
         return Save;
     }
@@ -418,7 +419,11 @@ public class Language implements Serializable, IsSerializable {
 		FromExist = fromExist;
 	}
 
-	//Varios
+	public String getNewAdmin() {
+		return NewAdmin;
+	}
+	
+	//TODO Varios
 	public String getE_Page_Dont_Exist() {
 		return E_Page_Dont_Exist;
 	}
@@ -599,7 +604,7 @@ public void setE_filteringmesagetypes(String e_filteringmesagetypes) {
 	E_filteringmesagetypes = e_filteringmesagetypes;
 }
 
-//Browser
+//TODO Browser
 
 public String getE_Saving() {
 	return E_Saving;
@@ -648,6 +653,13 @@ public String getPage() {
 public void setPage(String page) {
 	Page = page;
 }
+
+public void setNewAdmint(String newAdmin) {
+	NewAdmin=newAdmin;
+	
+}
+
+
 
 
 

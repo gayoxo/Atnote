@@ -22,6 +22,7 @@ public class AnnotationEditor extends PanelDecorador {
 	private Texto Upgradeable;
 	private Texto New;
 	private Texto FromExist;
+	private Texto NewAdmin;
 	private static Language LenguajeActual;
 	
 	public AnnotationEditor(Language LenguajeActualin) {
@@ -68,6 +69,9 @@ public class AnnotationEditor extends PanelDecorador {
 		FromExist = new Texto(LenguajeActual.getFromExist());	
 		FromExist.getTextBox().addChangeHandler(CH);
 		add(FromExist);
+		NewAdmin = new Texto(LenguajeActual.getNewAdmin());	
+		NewAdmin.getTextBox().addChangeHandler(CH);
+		add(NewAdmin);
 		
 		
 
@@ -117,6 +121,11 @@ public class AnnotationEditor extends PanelDecorador {
 		if (!FromExist.getText().isEmpty())
 			if (FromExist.getText().length()<2 ) Window.alert(FromExist.getLabel() + " lengh need to be more lenght tham two");
 				else LenguajeActual.setFromExist(FromExist.getText());
+		
+		if (!NewAdmin.getText().isEmpty())
+			if (NewAdmin.getText().length()<2 ) Window.alert(NewAdmin.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setNewAdmint(NewAdmin.getText());
+		
 		
 		saveLanguage(LenguajeActual);
 		saved=true;

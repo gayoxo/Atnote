@@ -15,9 +15,16 @@ import com.google.appengine.api.datastore.Text;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -316,6 +323,37 @@ public class TextComentEdit extends DialogBox {
 						if (F.getCatalogId().equals(ActualUser.getReadingactivity().getCatalogId()))
 						{
 							ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog1.getTexto(),PanelTexto.getPenelBotonesTipo());
+							B.addClickHandler(new ClickHandler() {
+								
+								public void onClick(ClickEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+									
+								}
+							});
+						
+				        	B.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+								}
+							});
+							
+
+				        	B.addMouseOutHandler(new MouseOutHandler() {
+								public void onMouseOut(MouseOutEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+							}
+						});
+							
+
+				        	B.addMouseOverHandler(new MouseOverHandler() {
+								public void onMouseOver(MouseOverEvent event) {
+									
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+								
+							}
+						});
+
+				        	B.setStyleName("gwt-ButtonCenter");
 //							if (annotation.isEditable()) {
 								B.addClickHandler(new ClickHandler() {
 								

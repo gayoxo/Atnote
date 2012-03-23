@@ -79,7 +79,7 @@ public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 		
 		DockLayoutPanel DLP=new DockLayoutPanel(Unit.EM);
 		setWidget(DLP);
-		DLP.setSize("628px", "570px");
+		DLP.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
 		
 		MenuBar menuBar = new MenuBar(false);
 		DLP.addNorth(menuBar, 1.9);

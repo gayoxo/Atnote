@@ -65,8 +65,8 @@ public class MainEntryPoint implements EntryPoint {
 	};
 
 	private static Image originalBook = new Image("");
-	private static Button pageBack = new Button("-");
-	private static Button pageForward = new Button("+");
+	private static Button pageBack = new Button("<");
+	private static Button pageForward = new Button(">");
 	private static MenuBar menuBar = new MenuBar(false);
 	private static TextBox selectorPageBox = new TextBox();
 	private static DecoratorPanel decoratorPanel = new DecoratorPanel();

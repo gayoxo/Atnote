@@ -13,7 +13,7 @@ public class SelectorTypePopUpAnnotacionPublic extends
 
 	public SelectorTypePopUpAnnotacionPublic(HorizontalPanel penelBotonesTipo,Catalog Cata, CatalogTipo catalog2) {
 		super(penelBotonesTipo,Cata, catalog2);
-		if (ActualUser.getUser().getProfile().equals(Constants.STUDENT)) setAllowCreate(true);
+		setAllowCreate(true);
 	}
 
 }

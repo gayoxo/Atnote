@@ -6,6 +6,7 @@ import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
+import lector.client.catalogo.FinderGrafo;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
@@ -42,13 +43,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class Browser implements EntryPoint {
 
-	private Finder FinderButton;
+	private FinderGrafo FinderButton;
 	private VerticalPanel Selected;
-	private Finder FinderButton2;
+	private FinderGrafo FinderButton2;
 	private VerticalPanel SelectedB;
 	private Language ActualLang;
 	private Button btnNewButton;
-	private VerticalPanel AnnotationPanel;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private static ArrayList<Long> filtroResidual;
@@ -68,7 +68,7 @@ public class Browser implements EntryPoint {
 		WindowPanel.setSize("100%", "96%");
 		
 		SplitLayoutPanel BrowserSelectPanel = new SplitLayoutPanel();
-		WindowPanel.addWest(BrowserSelectPanel, 500.0);
+		WindowPanel.add(BrowserSelectPanel);
 		
 //		SimplePanel simplePanel = new SimplePanel();
 //		splitLayoutPanel_1.addNorth(simplePanel, 110.0);
@@ -80,13 +80,9 @@ public class Browser implements EntryPoint {
 		Selected.add(SelectedB);
 		SelectedB.setWidth("100%");
 		
-		FinderButton2 = new Finder();
-		SimplePanel simplePanel= new SimplePanel();
-		simplePanel.setSize("100%", "100%");
-		simplePanel.add(FinderButton2);
-		FinderButton2.setButtonTipo(new BotonesStackPanelBrowser(
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), SelectedB,FinderButton2));
-		FinderButton2.setBotonClick(new ClickHandler() {
+		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				
@@ -94,9 +90,13 @@ public class Browser implements EntryPoint {
 						.getSource());
 			
 				if ((FinderButton2.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
+					{
 					BS.Swap();
+					}
 				else if (EqualsFinderButton(BS))
+					{
 					BS.Swap();
+					}
 				
 				if (SelectedB.getWidgetCount()==0)btnNewButton.setVisible(false);
 				else btnNewButton.setVisible(true);
@@ -110,6 +110,11 @@ public class Browser implements EntryPoint {
 				return false;
 			}
 		});
+		FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
+		SimplePanel simplePanel= new SimplePanel();
+		simplePanel.setSize("100%", "100%");
+		simplePanel.add(FinderButton2);
+		
 		
 				FinderButton2.setSize("100%", "100%");
 				BrowserSelectPanel.addNorth(simplePanel, 200.0);
@@ -117,11 +122,16 @@ public class Browser implements EntryPoint {
 		
 		
 		
-		FinderButton = new Finder();
+		FinderButton = new FinderGrafo(ActualUser.getOpenCatalog());
+		
+		//FinderButton2.setCatalogo(ActualUser.getCatalogo());
+		
+		//FinderButton.setCatalogo(ActualUser.getOpenCatalog());
+		
 		SimplePanel FinderPanel= new SimplePanel();
 		FinderPanel.setSize("100%", "100%");
 		FinderPanel.add(FinderButton);
-		FinderButton.setButtonTipo(new BotonesStackPanelBrowser(
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), SelectedB,FinderButton));
 		
 		btnNewButton = new Button(ActualLang.getFilterButtonBrowser());
@@ -152,16 +162,20 @@ public class Browser implements EntryPoint {
 		btnNewButton.setSize("100%", "100%");
 		
 		
-		FinderButton.setBotonClick(new ClickHandler() {
+		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
 			//TODO REvisar Despierto.
 				if ((FinderButton.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
+					{
 					BS.Swap();
+					}
 				else if (EqualsFinderButton(BS))
+					{
 					BS.Swap();
+					}
 				
 				if (SelectedB.getWidgetCount()==0)btnNewButton.setVisible(false);
 				else btnNewButton.setVisible(true);
@@ -177,14 +191,7 @@ public class Browser implements EntryPoint {
 
 		FinderButton.setSize("100%", "100%");
 		
-		BrowserSelectPanel.add(FinderPanel);
-		
-		ScrollPanel scrollPanel = new ScrollPanel();
-		WindowPanel.add(scrollPanel);
-		
-		AnnotationPanel = new VerticalPanel();
-		scrollPanel.setWidget(AnnotationPanel);
-		AnnotationPanel.setSize("100%", "100%");;
+		BrowserSelectPanel.add(FinderPanel);;
 		
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
@@ -201,8 +208,7 @@ public class Browser implements EntryPoint {
 		menuBar.addItem(BotonClose);
 		BotonClose.setWidth("100%");
 		
-		FinderButton2.setCatalogo(ActualUser.getCatalogo());
-		FinderButton.setCatalogo(ActualUser.getOpenCatalog());
+		
 		
 		
 		LoadingPanel.getInstance().center();
@@ -261,12 +267,14 @@ public class Browser implements EntryPoint {
 		AsyncCallback<ArrayList<Annotation>> callback=new AsyncCallback<ArrayList<Annotation>>() {
 			
 			public void onSuccess(ArrayList<Annotation> result) {
+				VerticalPanel AnnotationPanel=new VerticalPanel();
 				AnnotationPanel.clear();
 				for (Annotation AIndiv : result) {
 					AnnotationPanel.add(new CommentPanelBrowser(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));
 				}
 				LoadingPanel.getInstance().hide();
-				
+				AnotationResultPanel APR=new AnotationResultPanel(AnnotationPanel);
+				APR.center();
 			}
 			
 			public void onFailure(Throwable caught) {

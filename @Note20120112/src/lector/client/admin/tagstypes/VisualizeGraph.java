@@ -2,6 +2,7 @@ package lector.client.admin.tagstypes;
 
 import lector.client.catalogo.grafo.PanelGrafo;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -14,11 +15,11 @@ public class VisualizeGraph extends DialogBox {
 		setHTML("Graph");
 		
 		ScrollPanel simplePanel = new ScrollPanel();
-		simplePanel.setStyleName("Dialog");
 		setWidget(simplePanel);
-		simplePanel.setSize("100%", "100%");
+		simplePanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
 		PanelGrafo PG=new PanelGrafo(long1);
 		simplePanel.add(PG);
+		
 		
 	}
 

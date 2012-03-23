@@ -10,6 +10,7 @@ import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
 import lector.client.reader.PanelTextComent.CatalogTipo;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -19,6 +20,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -27,6 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -36,26 +39,32 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	protected MenuItem mntmNewItem;
 	protected MenuBar menuBar;
 	private CatalogTipo CT;
+	private HorizontalPanel panelBotonesTipo;
+	private Catalog Cata;
+	private HorizontalPanel HP;
 
-	public SelectorTypePopUpAnnotacion(HorizontalPanel penelBotonesTipo,Catalog Cata, CatalogTipo catalog2) {
+	public SelectorTypePopUpAnnotacion(HorizontalPanel penelBotonesTipo,Catalog Catain, CatalogTipo catalog2) {
 		super(true);
 		CT=catalog2;
-		SimplePanel verticalPanel = new SimplePanel();
-		verticalPanel.setStyleName("panelSeleccion");
-		setWidget(verticalPanel);
-		verticalPanel.setSize("690px", "611px");
-        DockPanel dockPanel = new DockPanel();
-        verticalPanel.add(dockPanel);
+		panelBotonesTipo=penelBotonesTipo;
+		Cata=Catain;
+//		SimplePanel verticalPanel = new SimplePanel();
+//		
+//		
+//		verticalPanel.setSize("100%", "100%");
+		DockLayoutPanel dockPanel = new DockLayoutPanel(Unit.EM);
+//        verticalPanel.add(dockPanel);
         dockPanel.setSize("100%", "100%");
+        setWidget(dockPanel);
         
         menuBar = new MenuBar(false);
-        dockPanel.add(menuBar, DockPanel.NORTH);
-        dockPanel.setCellHeight(menuBar, "15px");
+        dockPanel.addNorth(menuBar, 1.9);
         menuBar.setSize("100%", "20px");
         
-        mntmNewItem = new MenuItem(ActualUser.getLanguage().getNew(), false, new Command() {
+       
+        mntmNewItem = new MenuItem(ActualUser.getLanguage().getNewAdmin(), false, new Command() {
         	public void execute() {
-        		PopUpNewOSelect SBTF=new PopUpNewOSelect(finder.getCatalogo(),finder.getTopPath(),finder);
+        		SelectorTypePopUpAnnotacionAdministracion SBTF=new SelectorTypePopUpAnnotacionAdministracion(panelBotonesTipo,Cata,CT,finder);
         		SBTF.center();
         	}
         });
@@ -64,17 +73,32 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         
         MenuItem mntmNewItem_1 = new MenuItem("New item", false, new Command() {
         	public void execute() {
+        		while(HP.getWidgetCount()!=0)
+        			panelBotonesTipo.add(HP.getWidget(0));
+//        		for (Widget widget : HP) {
+//					panelBotonesTipo.add(widget);				
+//        		}
         		hide();
         	}
         });
         mntmNewItem_1.setHTML(ActualUser.getLanguage().getCancel());
         menuBar.addItem(mntmNewItem_1);
         
-        SimplePanel scrollPanel = new SimplePanel();
-        dockPanel.add(scrollPanel, DockPanel.CENTER);
-        scrollPanel.setSize("100%", "100%");
+        ScrollPanel SP=new ScrollPanel();
+        dockPanel.addSouth(SP, 5.0);
         
-        FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),penelBotonesTipo));
+        SP.setSize("100%", "100%");
+        HP=new HorizontalPanel();
+        SP.add(HP);
+        
+        HP.setHeight("100%");
+        
+        SimplePanel scrollPanel = new SimplePanel();
+        scrollPanel.setSize("100%", "100%");
+        dockPanel.add(scrollPanel);
+        dockPanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
+        
+        FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),HP));
         
         
         FinderGrafo.setBotonClickGrafo(new ClickHandler() {
@@ -129,7 +153,6 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	        	if (!ExistPreview(BS.getLabeltypo(),Act))
 	        			BS.getLabeltypo().add(nuevo);
 	        	else Window.alert(ActualUser.getLanguage().getE_ExistBefore());
-	        	hide();
 	        }
 	        }
 
@@ -144,7 +167,7 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	        });
         finder= new FinderGrafo(Cata);
         scrollPanel.setWidget(finder);
-        finder.setSize("100%", "575px");
+        finder.setSize("100%", "100%");
         finder.RefrescaLosDatos();
         
 	}

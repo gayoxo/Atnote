@@ -72,15 +72,8 @@ public class EditorTagsAndTypes implements EntryPoint {
 		S.add(finder);
 		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
 				"prototipo", new VerticalPanel(), Selected, finder));
-		finder.setBotonClick(new ClickHandler() {
-
-			public void onClick(ClickEvent event) {
-				BotonesStackPanelAdministracionMio BS = ((BotonesStackPanelAdministracionMio) event
-						.getSource());
-				BS.Swap();
-
-			}
-		});
+		
+		finder.setBotonClick(new ClickHandlerMio());
 
 		finder.setSize("100%", "100%");
 

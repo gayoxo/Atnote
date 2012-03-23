@@ -10,6 +10,7 @@ import lector.client.reader.SelectorPanel;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -136,4 +137,18 @@ setWidget(SP);
 		this.annotation = annotation;
 	}
 
+	
+	@Override
+	protected void continueDragging(MouseMoveEvent event) {
+		// TODO Auto-generated method stub
+		super.continueDragging(event);
+		if (SE!=null) SE.hide();
+		SE=new SelectorPanel(annotation.getTextSelector().getX().intValue(),
+                annotation.getTextSelector().getY().intValue(),
+                image.getAbsoluteLeft(), image.getAbsoluteTop(),
+                annotation.getTextSelector().getWidth().intValue(),
+                annotation.getTextSelector().getHeight().intValue());
+        SE.show();
+		
+	}
 }

@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public class CommentPanelBrowser extends Composite {
 
@@ -42,8 +43,8 @@ public class CommentPanelBrowser extends Composite {
 
     	 annotation = annotationin;
          Imagen = originalBook;
-         DecoratorPanel decoratorPanel = new DecoratorPanel();
-         decoratorPanel.setSize("100%", "38px");
+         SimplePanel decoratorPanel = new SimplePanel();
+         decoratorPanel.setSize("", "");
          initWidget(decoratorPanel);
 
          decoratorPanel.setWidget(verticalPanel);
@@ -67,21 +68,21 @@ public class CommentPanelBrowser extends Composite {
         button.setEnabled(true);
         button.setSize("100%", "42px");
         button.setStyleName("gwt-ButtonIzquierda");
-        button.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
-			}
-		});
-        button.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
-			}
-		});
-        button.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
-			}
-		});
+//        button.addMouseOutHandler(new MouseOutHandler() {
+//			public void onMouseOut(MouseOutEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+//			}
+//		});
+//        button.addMouseOverHandler(new MouseOverHandler() {
+//			public void onMouseOver(MouseOverEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+//			}
+//		});
+//        button.addMouseDownHandler(new MouseDownHandler() {
+//			public void onMouseDown(MouseDownEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+//			}
+//		});
 
 
         button_1.addClickHandler(new ClickHandler() {

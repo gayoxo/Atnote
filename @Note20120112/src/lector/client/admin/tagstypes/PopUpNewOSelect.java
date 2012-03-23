@@ -22,7 +22,7 @@ public class PopUpNewOSelect extends PopupPanel {
 	private Entity Entity;
 	
 	public PopUpNewOSelect(Catalog CatalogoIn,Entity EntityIn) {
-		super(false);
+		super(true);
 		setModal(true);
 		Catalogo=CatalogoIn;
 		Entity=EntityIn;

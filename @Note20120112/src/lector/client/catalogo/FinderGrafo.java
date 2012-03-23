@@ -43,12 +43,11 @@ public class FinderGrafo extends Finder {
 	public FinderGrafo(Catalog C) {
 		
 		this.C=C;
-		panelSeleccion.clear();
+		simplePanel.clear();
 		ScrollPanel SP=new ScrollPanel();
 		SP.setSize("100%", "100%");
-		SP.setStyleName("Dialog");
 		panelDelGrafo = new PanelGrafo(C.getId());
-		panelSeleccion.setWidget(SP);
+		simplePanel.setWidget(SP);
 		SP.setWidget(panelDelGrafo);
 		
 		
@@ -63,85 +62,7 @@ public class FinderGrafo extends Finder {
 		
 	}
 
-	protected void cargaLaRama() {
-		AsyncCallback<ArrayList<Entity>> callback1 = new AsyncCallback<ArrayList<Entity>>() {
-
-			public void onFailure(Throwable caught) {
-				if (InReadingActivity)  Window.alert(ActualUser.getLanguage().getE_Types_refresh());
-				else Window.alert("Error : I can't refresh the types");
-				LoadingPanel.getInstance().hide();
-			}
-
-			public void onSuccess(ArrayList<Entity> result) {
-				
-				ActualRama.removeItems();
-				for (Entity entity : result) {
-					entity.setActualFather(ActualRama.getEntidad());
-				}
-				for (Entity entitynew : result) {
-					Node A=new Node(entitynew);
-					if (entitynew instanceof Folder) A.setHTML("Folder.gif",entitynew.getName());					
-					else A.setHTML("File.gif",entitynew.getName());
-					ActualRama.addItem(A);
-					}
-				LoadingPanel.getInstance().hide();
-			}
-		};
-		LoadingPanel.getInstance().center();
-		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
-		else LoadingPanel.getInstance().setLabelTexto("Loading...");
-		Long IdPathActual = 0l;
-/*		if (ActualRama.getEntidad().getID())
-			IdPathActual = null;
-		else*/
-			IdPathActual = ActualRama.getEntidad().getID();
-		bookReaderServiceHolder.getSons(IdPathActual, C
-				.getId(), callback1);
-		
-	}
-
 	
-	@Override
-	protected void cargaLaRamaYLaSeleccion() {
-		cargaLaRama();
-	}
-	protected void cargaLaRamaYLaSeleccionGrafo() {
-		AsyncCallback<ArrayList<Entity>> callback1 = new AsyncCallback<ArrayList<Entity>>() {
-
-			public void onFailure(Throwable caught) {
-				if (InReadingActivity)  Window.alert(ActualUser.getLanguage().getE_Types_refresh());
-				else Window.alert("Error : I can't refresh the types");
-				LoadingPanel.getInstance().hide();
-			}
-
-			public void onSuccess(ArrayList<Entity> result) {
-				
-				ActualRama.removeItems();
-				for (Entity entity : result) {
-					entity.setActualFather(ActualRama.getEntidad());
-				}
-				for (Entity entitynew : result) {
-					Node A=new Node(entitynew);
-					if (entitynew instanceof Folder) A.setHTML("Folder.gif",entitynew.getName());					
-					else A.setHTML("File.gif",entitynew.getName());
-					ActualRama.addItem(A);
-					}
-				SeleccionaLaRama();
-				LoadingPanel.getInstance().hide();
-			}
-		};
-		LoadingPanel.getInstance().center();
-		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
-		else LoadingPanel.getInstance().setLabelTexto("Loading...");
-		Long IdPathActual = 0l;
-/*		if (ActualRama.getEntidad()==null)
-			IdPathActual = null;
-		else*/
-			IdPathActual = ActualRama.getEntidad().getID();
-		bookReaderServiceHolder.getSons(IdPathActual, C
-				.getId(), callback1);
-		
-	}
 	
 	public boolean isInReadingActivity() {
 		return InReadingActivity;
@@ -158,7 +79,7 @@ public class FinderGrafo extends Finder {
 	public void setCatalogo(Catalog c) {
 		C = c;
 		ActualRama=trtmNewItem;
-		cargaLaRamaYLaSeleccion();
+		cargaLaRama();
 	}
 	
 	public static void setButtonTipoGrafo(BotonesStackPanelMio buttonMio) {
@@ -178,11 +99,5 @@ public class FinderGrafo extends Finder {
 
 
 
-	public void RefrescaLosDatos()
-	{
-		cargaLaRamaYLaSeleccionGrafo();
-		//simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
-		//horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
-	}
 
 }
