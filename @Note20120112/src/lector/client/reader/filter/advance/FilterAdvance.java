@@ -6,6 +6,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.browser.BotonesStackPanelBrowser;
 import lector.client.catalogo.Finder;
+import lector.client.catalogo.FinderGrafo;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
@@ -36,6 +37,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
 public class FilterAdvance implements EntryPoint{
 
@@ -44,9 +47,9 @@ public class FilterAdvance implements EntryPoint{
 	private VerticalPanel AlumnosYProfesores;
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
-	private Finder FinderButton2;
-	private Finder FinderButton1;
-	private static VerticalPanel AnotacionesResultado;
+	private FinderGrafo FinderButton2;
+	private FinderGrafo FinderButton1;
+//	private static VerticalPanel AnotacionesResultado;
 	
 	public FilterAdvance() {
 		Rules = new VerticalPanel();
@@ -85,28 +88,25 @@ public class FilterAdvance implements EntryPoint{
 			}
 		});
 		menuBar.addItem(mntmNewRule);
-		SplitLayoutPanel General = new SplitLayoutPanel();
+		SimplePanel General = new SimplePanel();
 		rootPanel.add(General,0,25);
 		General.setSize("100%", "96%");
-		
-		ScrollPanel scrollPanel_1 = new ScrollPanel();
-		General.addEast(scrollPanel_1, 400.0);
-		
-		AnotacionesResultado = new VerticalPanel();
-		scrollPanel_1.setWidget(AnotacionesResultado);
-		AnotacionesResultado.setSize("100%", "100%");
+//		
+//		ScrollPanel scrollPanel_1 = new ScrollPanel();
+//		General.addEast(scrollPanel_1, 400.0);
+//		
+//		AnotacionesResultado = new VerticalPanel();
+////		scrollPanel_1.setWidget(AnotacionesResultado);
+//		AnotacionesResultado.setSize("100%", "100%");
 		
 		SplitLayoutPanel splitLayoutPanel = new SplitLayoutPanel();
-		General.addWest(splitLayoutPanel, 400.0);
+		General.add(splitLayoutPanel);
+		splitLayoutPanel.setSize("100%", "100%");
 		
 		
-		SimplePanel Catalogo2 = new SimplePanel();
-		splitLayoutPanel.addNorth(Catalogo2, 200.0);
-		FinderButton2 = new Finder();
-		Catalogo2.add(FinderButton2);
-		FinderButton2.setButtonTipo(new BotonesStackPanelBrowser(
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton2));
-		FinderButton2.setBotonClick(new ClickHandler() {
+		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				Rule R=FilterAdvance.getActualRule();
@@ -122,15 +122,34 @@ public class FilterAdvance implements EntryPoint{
 				
 			}
 		});
-		
+//		FinderButton2.setCatalogo(ActualUser.getCatalogo());
+		FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
+//		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
+//				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton2));
+//		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
+//
+//			public void onClick(ClickEvent event) {
+//				Rule R=FilterAdvance.getActualRule();
+//				if (R!=null)
+//					{
+//					AssertRule A= new AssertRule(((BotonesStackPanelBrowser)event.getSource()).getEntidad().getName(),
+//							R.getRulePanel(),
+//							((BotonesStackPanelBrowser)event.getSource()).getEntidad().getID(),
+//							Tiposids.Tipo);
+//					R.addAssertRule(A);
+//					}
+//				
+//				
+//			}
+//		});
+//		
 		FinderButton2.setSize("100%", "100%");
 		
-		
-		FinderButton2.setCatalogo(ActualUser.getCatalogo());
-		Catalogo2.setSize("100%", "100%");
+		SplitLayoutPanel splitLayoutPanel_1 = new SplitLayoutPanel();
+		splitLayoutPanel.addSouth(splitLayoutPanel_1, 185.0);
 		
 		SimplePanel decoratorPanel = new SimplePanel();
-		splitLayoutPanel.addSouth(decoratorPanel, 200.0);
+		splitLayoutPanel_1.addWest(decoratorPanel, 298.0);
 		decoratorPanel.setSize("100%", "100%");
 		
 		ScrollPanel scrollPanel_3 = new ScrollPanel();
@@ -141,16 +160,17 @@ public class FilterAdvance implements EntryPoint{
 		scrollPanel_3.setWidget(AlumnosYProfesores);
 		AlumnosYProfesores.setSize("100%", "100%");
 		
-		SimplePanel Catalogo1 = new SimplePanel();
-		splitLayoutPanel.add(Catalogo1);
-		Catalogo1.setSize("100%", "100%");
+		ScrollPanel scrollPanel = new ScrollPanel();
+		splitLayoutPanel_1.add(scrollPanel);
+		scrollPanel.setSize("100%", "100%");
+		
+		scrollPanel.setWidget(Rules);
 		
 		
-		FinderButton1 = new Finder();
-		Catalogo1.add(FinderButton1);
-		FinderButton1.setButtonTipo(new BotonesStackPanelBrowser(
+		
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton1));
-		FinderButton1.setBotonClick(new ClickHandler() {
+		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				Rule R=FilterAdvance.getActualRule();
@@ -166,15 +186,35 @@ public class FilterAdvance implements EntryPoint{
 				
 			}
 		});
+	//	FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
+		FinderButton1 = new FinderGrafo(ActualUser.getOpenCatalog());
+		
 		
 		FinderButton1.setSize("100%", "100%");
-		FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
 		
-		ScrollPanel scrollPanel = new ScrollPanel();
-		General.add(scrollPanel);
-		scrollPanel.setSize("100%", "100%");
 		
-		scrollPanel.setWidget(Rules);
+		ScrollPanel scrollPanel_1 = new ScrollPanel();
+		splitLayoutPanel.add(scrollPanel_1);
+		
+		DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
+		scrollPanel_1.setWidget(decoratedTabPanel);
+		decoratedTabPanel.setSize("100%", "100%");
+		
+		SimplePanel Catalogo2 = new SimplePanel();
+		decoratedTabPanel.add(Catalogo2, ActualUser.getLanguage().getTeacherTypes(), false);
+		Catalogo2.add(FinderButton2);
+		Catalogo2.setSize("100%", "100%");
+		
+		decoratedTabPanel.selectTab(0);
+		
+		SimplePanel Catalogo1 = new SimplePanel();
+		decoratedTabPanel.add(Catalogo1, ActualUser.getLanguage().getOpenTypes(), false);
+		Catalogo1.setSize("100%", "100%");
+		Catalogo1.add(FinderButton1);
+		
+		
+		
+		
 		
 		bookReaderServiceHolder.getUsersByGroupId(ActualUser.getReadingactivity().getGroupId(), new AsyncCallback<ArrayList<UserApp>>() {
 			
@@ -305,13 +345,13 @@ public class FilterAdvance implements EntryPoint{
 		Rules = rules;
 	}
 	
-	public static VerticalPanel getAnotacionesResultado() {
-		return AnotacionesResultado;
-	}
-	
-	public static void setAnotacionesResultado(
-			VerticalPanel anotacionesResultado) {
-		AnotacionesResultado = anotacionesResultado;
-	}
-	
+//	public static VerticalPanel getAnotacionesResultado() {
+//		return AnotacionesResultado;
+//	}
+//	
+//	public static void setAnotacionesResultado(
+//			VerticalPanel anotacionesResultado) {
+//		AnotacionesResultado = anotacionesResultado;
+//	}
+//	
 }

@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 public class Rule extends Composite {
 
@@ -61,7 +62,7 @@ public class Rule extends Composite {
 		
 		FlowPanel flowPanel = new FlowPanel();
 		dockPanel.add(flowPanel, DockPanel.NORTH);
-		flowPanel.setWidth("100%");
+		flowPanel.setSize("100%", "100%");
 		
 		btnNewButton = new Button(ActualUser.getLanguage().getRule()+" : " + NameRule);
 		btnNewButton.setStyleName("gwt-ButtonBlack");
@@ -69,23 +70,14 @@ public class Rule extends Composite {
 			public void onClick(ClickEvent event) {
 				scrollPanel.setVisible(!scrollPanel.isVisible());
 				FilterAdvance.setActualRule(Yo);
-				btnNewButton.setStyleName("gwt-ButtonRed");
+				btnNewButton.setStyleName("gwt-ButtonIzquierdaSelect");
 			}
 		});
 		flowPanel.add(btnNewButton);
 		btnNewButton.setSize("80%", "100%");
 		
 		btnNewButton.setStyleName("gwt-ButtonIzquierda");
-		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
-			}
-		});
-		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
-			}
-		});
+		
 		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
@@ -99,9 +91,14 @@ public class Rule extends Composite {
 			}
 		});
 		flowPanel.add(btnNewButton_1);
-		btnNewButton_1.setWidth("20%");
+		btnNewButton_1.setSize("20%", "100%");
 		
 		btnNewButton_1.setStyleName("gwt-ButtonDerecha");
+		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+			}
+		});
 		btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
@@ -110,11 +107,6 @@ public class Rule extends Composite {
 		btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
-			}
-		});
-		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
 			}
 		});
 		
@@ -130,6 +122,7 @@ public class Rule extends Composite {
 		
 		
 		RulePanel = new VerticalPanel();
+		RulePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		scrollPanel.setWidget(RulePanel);
 		RulePanel.setSize("100%", "100%");
 		
@@ -145,7 +138,6 @@ public class Rule extends Composite {
 	public void addAssertRule(AssertRule AR)
 	{
 		AR.setParental(RulePanel);
-		AR.setWidth("100%");
 		RulePanel.add(AR);
 	}
 	
@@ -324,8 +316,8 @@ public class Rule extends Composite {
 	public void setActual(boolean estado)
 	{
 		scrollPanel.setVisible(estado);
-		if (estado) btnNewButton.setStyleName("gwt-ButtonRed");
-		else btnNewButton.setStyleName("gwt-ButtonBlack");
+		if (estado) btnNewButton.setStyleName("gwt-ButtonIzquierdaSelect");
+		else btnNewButton.setStyleName("gwt-ButtonIzquierda");
 		
 	}
 	

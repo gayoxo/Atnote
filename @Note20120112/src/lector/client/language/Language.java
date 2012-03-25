@@ -13,6 +13,10 @@ public class Language implements Serializable, IsSerializable {
 
 
 
+	
+
+
+
 	//Generales
     @Id
     private String nameId;
@@ -90,6 +94,8 @@ public class Language implements Serializable, IsSerializable {
     private String GO_To_Page="Go to Page";
     private String Comment_Area="Comment Area";
     private String Page="Page";
+    private String TeacherTypes = "Teacher Types";
+	private String OpenTypes = "Open Types";
 
     
     
@@ -423,6 +429,11 @@ public class Language implements Serializable, IsSerializable {
 		return NewAdmin;
 	}
 	
+	public void setNewAdmint(String newAdmin) {
+		NewAdmin=newAdmin;
+		
+	}
+	
 	//TODO Varios
 	public String getE_Page_Dont_Exist() {
 		return E_Page_Dont_Exist;
@@ -654,12 +665,22 @@ public void setPage(String page) {
 	Page = page;
 }
 
-public void setNewAdmint(String newAdmin) {
-	NewAdmin=newAdmin;
-	
+
+public String getTeacherTypes() {
+	return TeacherTypes;
 }
 
+public String getOpenTypes() {
+	return OpenTypes;
+}
 
+ public void setTeacherTypes(String teacherTypes) {
+	TeacherTypes = teacherTypes;
+}
+
+public void setOpenTypes(String openTypes) {
+	OpenTypes = openTypes;
+}
 
 
 

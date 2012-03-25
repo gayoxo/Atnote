@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import lector.client.browser.CommentPanelBrowser;
 import lector.client.login.ActualUser;
@@ -40,10 +41,12 @@ public class FilterAsyncSystem {
 	
 	private static void flitrado() {
 		generafiltroResidual();
-		FilterAdvance.getAnotacionesResultado().clear();
+		VerticalPanel resultado=new VerticalPanel();
 		for (Annotation AIndiv : Anotaciones) {
-			FilterAdvance.getAnotacionesResultado().add(new CommentPanelFAdvance(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));
+			resultado.add(new CommentPanelFAdvance(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));
 		}
+		AnotationFilterResultPanel Panel=new AnotationFilterResultPanel(resultado);
+		Panel.center();
 		LoadingPanel.getInstance().hide();
 		
 	}

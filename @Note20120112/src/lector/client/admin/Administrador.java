@@ -333,8 +333,14 @@ public class Administrador implements EntryPoint {
 		});
 		verticalPanel.add(btnNewButton_4);
 		btnNewButton_4.setSize("100%", "100%");
-		if (ActualUser.getReadingactivity()==null) btnNewButton_4.setEnabled(false);
-		else btnNewButton_4.setEnabled(true);
+		if (ActualUser.getReadingactivity()==null) {
+			btnNewButton_4.setEnabled(false);
+			btnNewButton_4.setStyleName("gwt-ButtonBottonSelect");
+		}
+		else {
+			btnNewButton_4.setEnabled(true);
+			btnNewButton_4.setStyleName("gwt-ButtonBotton");
+		}
 		btnNewButton_4.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				bookReaderServiceHolder.loadReadingActivityById(ActualUser.getReadingactivity().getId(), new AsyncCallback<ReadingActivity>() {

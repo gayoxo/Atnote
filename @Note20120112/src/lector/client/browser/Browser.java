@@ -40,6 +40,11 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.DecoratedTabPanel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.DecoratedTabBar;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 
 public class Browser implements EntryPoint {
 
@@ -111,26 +116,13 @@ public class Browser implements EntryPoint {
 			}
 		});
 		FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
-		SimplePanel simplePanel= new SimplePanel();
-		simplePanel.setSize("100%", "100%");
-		simplePanel.add(FinderButton2);
 		
 		
 				FinderButton2.setSize("100%", "100%");
-				BrowserSelectPanel.addNorth(simplePanel, 200.0);
-				simplePanel.setSize("100%", "100%");
 		
 		
 		
 		FinderButton = new FinderGrafo(ActualUser.getOpenCatalog());
-		
-		//FinderButton2.setCatalogo(ActualUser.getCatalogo());
-		
-		//FinderButton.setCatalogo(ActualUser.getOpenCatalog());
-		
-		SimplePanel FinderPanel= new SimplePanel();
-		FinderPanel.setSize("100%", "100%");
-		FinderPanel.add(FinderButton);
 		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), SelectedB,FinderButton));
 		
@@ -191,7 +183,27 @@ public class Browser implements EntryPoint {
 
 		FinderButton.setSize("100%", "100%");
 		
-		BrowserSelectPanel.add(FinderPanel);;
+		ScrollPanel scrollPanel = new ScrollPanel();
+		BrowserSelectPanel.add(scrollPanel);
+		scrollPanel.setSize("", "");
+		
+		DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
+		scrollPanel.setWidget(decoratedTabPanel);
+		decoratedTabPanel.setSize("100%", "100%");
+		SimplePanel CatalogoProf= new SimplePanel();
+		decoratedTabPanel.add(CatalogoProf, ActualLang.getTeacherTypes(), false);
+		CatalogoProf.setSize("100%", "98%");
+		CatalogoProf.add(FinderButton2);
+		
+		decoratedTabPanel.selectTab(0);
+		//FinderButton2.setCatalogo(ActualUser.getCatalogo());
+		
+		//FinderButton.setCatalogo(ActualUser.getOpenCatalog());
+		
+		SimplePanel CatalogoAbierto= new SimplePanel();
+		decoratedTabPanel.add(CatalogoAbierto, ActualLang.getOpenTypes(), false);
+		CatalogoAbierto.setSize("100%", "98%");
+		CatalogoAbierto.add(FinderButton);;
 		
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);

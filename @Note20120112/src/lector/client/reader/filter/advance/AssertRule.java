@@ -13,14 +13,16 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 
 public class AssertRule extends Composite {
 	private ButtonFilter AssertName;
 	private VerticalPanel Parental;
-	private Image image;
 	private boolean stateImage;
 	private final String Plus="Plus.gif";
 	private final String Less="Less.gif";
+	private Button btnNewButton;
 
 	public AssertRule(String Name,VerticalPanel Parentin,Long Id, Tiposids TI) {
 		
@@ -66,28 +68,41 @@ public class AssertRule extends Composite {
 			}
 		});
 		
-		image = new Image(Plus);
-//		image.addMouseDownHandler(new MouseDownHandler() {
-//			public void onMouseDown(MouseDownEvent event) {
-//				setStateImage(!isStateImage());
-//				if (stateImage) image.setUrl(Plus);
-//					else image.setUrl(Less);
-//			}
-//		});
+	
 		setStateImage(true);
-		image.addClickHandler(new ClickHandler() {
+		horizontalPanel.add(AssertName);
+		AssertName.setSize("80%", "100%");
+		
+		btnNewButton = new Button("New button");
+		btnNewButton.setHTML("<img src=\""+ Plus +"\">");
+		horizontalPanel.add(btnNewButton);
+		btnNewButton.setSize("20%", "100%");
+		btnNewButton.setStyleName("gwt-ButtonDerecha");
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+			}
+		});
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+			}
+		});
+		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				setStateImage(!isStateImage());
-				if (stateImage) image.setUrl(Plus);
-					else image.setUrl(Less);
+				if (stateImage) 
+					btnNewButton.setHTML("<img src=\""+ Plus +"\">");
+					else btnNewButton.setHTML("<img src=\""+ Less +"\">");
 				
 			}
 		});
-		image.setStyleName("image2");
-		horizontalPanel.add(image);
-		image.setSize("3%", "24px");
-		horizontalPanel.add(AssertName);
-		AssertName.setSize("97%", "100%");
+		
 	}
 
 	public void setAssertName(ButtonFilter assertName) {

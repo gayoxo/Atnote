@@ -19,6 +19,8 @@ public class BrowserEditor extends PanelDecorador {
 	    private Texto GO_To_Page;
 	    private Texto Comment_Area;
 	    private Texto Page;
+	    private Texto TeacherTypes;
+		private Texto OpenTypes;
 	
 	public BrowserEditor(Language LenguajeActualin) {
 		ChangeHandler CH=new ChangeHandler() {
@@ -54,6 +56,14 @@ public class BrowserEditor extends PanelDecorador {
 		Page.getTextBox().addChangeHandler(CH);
 		add(Page);
 		
+		OpenTypes = new Texto(LenguajeActual.getOpenTypes());		
+		OpenTypes.getTextBox().addChangeHandler(CH);
+		add(OpenTypes);
+		
+		TeacherTypes = new Texto(LenguajeActual.getTeacherTypes());		
+		TeacherTypes.getTextBox().addChangeHandler(CH);
+		add(TeacherTypes);
+		
 		
 	}
 
@@ -83,6 +93,13 @@ public class BrowserEditor extends PanelDecorador {
 			if (Page.getText().length()<2 ) Window.alert(Page.getLabel() + " lengh need to be more lenght tham two");
 				else LenguajeActual.setPage(Page.getText());
 		
+		if (!TeacherTypes.getText().isEmpty())
+			if (TeacherTypes.getText().length()<2 ) Window.alert(TeacherTypes.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setTeacherTypes(TeacherTypes.getText());
+		
+		if (!OpenTypes.getText().isEmpty())
+			if (OpenTypes.getText().length()<2 ) Window.alert(OpenTypes.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setOpenTypes(OpenTypes.getText());
 		
 		saveLanguage(LenguajeActual);
 		saved=true;
