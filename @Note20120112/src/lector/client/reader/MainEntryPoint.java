@@ -95,6 +95,9 @@ public class MainEntryPoint implements EntryPoint {
 	private final MenuItemSeparator separator_3 = new MenuItemSeparator();
 	private static Language ActualLang;
 	private MenuItem mntmBrowser;
+	private final MenuItemSeparator separator_4 = new MenuItemSeparator();
+	private final MenuItemSeparator separator_5 = new MenuItemSeparator();
+	private static MenuItem FilterInfo;
 
 	public MainEntryPoint() {
 
@@ -380,6 +383,21 @@ public class MainEntryPoint implements EntryPoint {
 		});
 		mntmManage2.setHTML(ActualLang.getBackUserButton());
 		menuBar.addItem(mntmManage2);
+		
+		menuBar.addSeparator(separator_4);
+		
+		menuBar.addSeparator(separator_5);
+		
+		FilterInfo = new MenuItem(ActualLang.getAnnotationsFiltering(), false, new Command() {
+			public void execute() {
+				AceptWindow A=new AceptWindow();
+				A.center();
+			}
+		});
+		FilterInfo.setEnabled(false);
+		FilterInfo.setVisible(false);
+		FilterInfo.setStyleName("gwt-MenuItemFiltering");
+		menuBar.addItem(FilterInfo);
 		if (!(ActualUser.getUser().getProfile().equals(Constants.STUDENT))) {
 			mntmManage2.setEnabled(false);
 			mntmManage2.setVisible(false);
@@ -757,6 +775,9 @@ public class MainEntryPoint implements EntryPoint {
 	}
 
 	public static void setFiltroTypes(ArrayList<Long> filtroTypes) {
+		if (filtroTypes.size()==1 && filtroTypes.get(0)==Long.MIN_VALUE)
+			setfilterinfo(false);
+		else setfilterinfo(true);
 		MainEntryPoint.filtroTypes = filtroTypes;
 		filtroAnotPar=new ArrayList<Long>();
 		filtroUsers=new ArrayList<Long>();
@@ -955,4 +976,11 @@ public class MainEntryPoint implements EntryPoint {
 //	public static void setPorcentScrollAnnotationsPanel() {
 //		ScrollAnnotationsPanel.setWidth("120%");
 //	}
+	
+	
+	public static void setfilterinfo(boolean estado)
+	{
+		FilterInfo.setEnabled(estado);
+		FilterInfo.setVisible(estado);
+	}
 }

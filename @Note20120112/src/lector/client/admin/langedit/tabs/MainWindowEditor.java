@@ -22,6 +22,10 @@ public class MainWindowEditor extends PanelDecorador {
 	private Texto BackUserButton;
     private Texto FilterMainButton;
     private Texto BrowserMainButton;
+    private Texto AnnotationsFiltering;
+    private Texto DOYOUFilterOUT;
+    private Texto AcceptFilter;
+    private Texto CancelFilter;
 	private static Language LenguajeActual;
 	
 	public MainWindowEditor(Language LenguajeActualin) {
@@ -68,6 +72,18 @@ public class MainWindowEditor extends PanelDecorador {
 		BrowserMainButton = new Texto(LenguajeActual.getBrowserMainButton());	
 		BrowserMainButton.getTextBox().addChangeHandler(CH);
 		add(BrowserMainButton);
+		AnnotationsFiltering = new Texto(LenguajeActual.getAnnotationsFiltering());	
+		AnnotationsFiltering.getTextBox().addChangeHandler(CH);
+		add(AnnotationsFiltering);
+		DOYOUFilterOUT = new Texto(LenguajeActual.getDOYOUFilterOUT());	
+		DOYOUFilterOUT.getTextBox().addChangeHandler(CH);
+		add(DOYOUFilterOUT);
+		AcceptFilter = new Texto(LenguajeActual.getAcceptFilter());	
+		AcceptFilter.getTextBox().addChangeHandler(CH);
+		add(AcceptFilter);
+		CancelFilter = new Texto(LenguajeActual.getCancelFilter());	
+		CancelFilter.getTextBox().addChangeHandler(CH);
+		add(CancelFilter);
 		
 
 	}
@@ -115,6 +131,22 @@ public class MainWindowEditor extends PanelDecorador {
 		if (!BrowserMainButton.getText().isEmpty())
 			if (BrowserMainButton.getText().length()<2 ) Window.alert(BrowserMainButton.getLabel() + " lengh need to be more lenght tham two");
 				else LenguajeActual.setBrowserMainButton(BrowserMainButton.getText());
+		
+		if (!AnnotationsFiltering.getText().isEmpty())
+			if (AnnotationsFiltering.getText().length()<2 ) Window.alert(AnnotationsFiltering.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setAnnotationsFiltering(AnnotationsFiltering.getText());
+		
+		if (!DOYOUFilterOUT.getText().isEmpty())
+			if (DOYOUFilterOUT.getText().length()<2 ) Window.alert(DOYOUFilterOUT.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setDOYOUFilterOUT(DOYOUFilterOUT.getText());
+		
+		if (!AcceptFilter.getText().isEmpty())
+			if (AcceptFilter.getText().length()<2 ) Window.alert(AcceptFilter.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setAcceptFilter(AcceptFilter.getText());
+		
+		if (!CancelFilter.getText().isEmpty())
+			if (CancelFilter.getText().length()<2 ) Window.alert(CancelFilter.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setCancelFilter(CancelFilter.getText());
 		
 		saveLanguage(LenguajeActual);
 		saved=true;

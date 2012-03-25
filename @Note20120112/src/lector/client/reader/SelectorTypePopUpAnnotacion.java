@@ -81,7 +81,7 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         		hide();
         	}
         });
-        mntmNewItem_1.setHTML(ActualUser.getLanguage().getCancel());
+        mntmNewItem_1.setHTML(ActualUser.getLanguage().getClose());
         menuBar.addItem(mntmNewItem_1);
         
         ScrollPanel SP=new ScrollPanel();

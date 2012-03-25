@@ -31,6 +31,10 @@ public class Language implements Serializable, IsSerializable {
     private String BackUserButton = "Back";
     private String FilterMainButton = "Filter";
     private String BrowserMainButton = "Browser";
+    private String AnnotationsFiltering="Active Filter";
+    private String DOYOUFilterOUT="Doy you want to desactivate the filter?";
+    private String AcceptFilter="Accept";
+    private String CancelFilter="Cancel";
     
     //Specifications
     private String ID = "ID";
@@ -65,6 +69,7 @@ public class Language implements Serializable, IsSerializable {
     private String New="New";
     private String FromExist="Reuse";
 	private String NewAdmin = "Admin";
+	private String Done="Done";
     //Varios
     private String E_Page_Dont_Exist="Error: Page does not exist";
     private String E_Not_a_number="Error: Page number could not be a letter";
@@ -195,7 +200,39 @@ public class Language implements Serializable, IsSerializable {
     public String getFilterMainButton() {
 		return FilterMainButton;
 	}
-
+    
+    public String getAnnotationsFiltering() {
+		return AnnotationsFiltering;
+	}
+    
+    public void setAnnotationsFiltering(String annotationsFiltering) {
+		AnnotationsFiltering = annotationsFiltering;
+	}
+    
+    public String getDOYOUFilterOUT() {
+		return DOYOUFilterOUT;
+	}
+    
+    public void setDOYOUFilterOUT(String dOYOUFilterOUT) {
+		DOYOUFilterOUT = dOYOUFilterOUT;
+	}
+    
+    public String getAcceptFilter() {
+		return AcceptFilter;
+	}
+    
+    public void setAcceptFilter(String acceptFilter) {
+		AcceptFilter = acceptFilter;
+	}
+    
+    public void setCancelFilter(String cancelFilter) {
+		CancelFilter = cancelFilter;
+	}
+    
+    public String getCancelFilter() {
+		return CancelFilter;
+	}
+    
     //TODO Specifications
     public String getID() {
         return ID;
@@ -432,6 +469,14 @@ public class Language implements Serializable, IsSerializable {
 	public void setNewAdmint(String newAdmin) {
 		NewAdmin=newAdmin;
 		
+	}
+	
+	public void setDone(String done) {
+		Done = done;
+	}
+	
+	public String getDone() {
+		return Done;
 	}
 	
 	//TODO Varios
