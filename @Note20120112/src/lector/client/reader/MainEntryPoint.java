@@ -722,6 +722,16 @@ public class MainEntryPoint implements EntryPoint {
 
 	public static void setCurrentPageNumber(int currentPageNumber) {
 		MainEntryPoint.currentPageNumber = currentPageNumber;
+		if (currentPageNumber <= book.getWebLinks().size() - 1) {
+				pageForward.setVisible(true);
+		}
+		else pageForward.setVisible(false);
+		if (currentPageNumber >= 0) {
+			pageBack.setVisible(true);
+		}
+		else pageBack.setVisible(false);
+		
+		
 	}
 
 	public static void SetBook(Book result) {

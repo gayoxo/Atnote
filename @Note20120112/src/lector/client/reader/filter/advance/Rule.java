@@ -139,6 +139,7 @@ public class Rule extends Composite {
 	{
 		AR.setParental(RulePanel);
 		RulePanel.add(AR);
+		RulePanel.setSize("100%", "100");
 	}
 	
 	public void evaluarReglas()

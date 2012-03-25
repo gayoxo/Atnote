@@ -20,18 +20,14 @@ public class AssertRule extends Composite {
 	private ButtonFilter AssertName;
 	private VerticalPanel Parental;
 	private boolean stateImage;
-	private final String Plus="Plus.gif";
-	private final String Less="Less.gif";
 	private Button btnNewButton;
 
 	public AssertRule(String Name,VerticalPanel Parentin,Long Id, Tiposids TI) {
-		
 		setStateImage(false);
 		Parental=Parentin;
 		FlowPanel horizontalPanel = new FlowPanel();
-		horizontalPanel.setStyleName("Root");
 		initWidget(horizontalPanel);
-		horizontalPanel.setSize("100%", "100%");
+		horizontalPanel.setSize("80%", "100%");
 		
 		AssertName = new ButtonFilter(Name,Id,TI);
 		AssertName.addClickHandler(new ClickHandler() {
@@ -69,14 +65,17 @@ public class AssertRule extends Composite {
 		});
 		
 	
+		AssertName.setSize("80%", "");
 		setStateImage(true);
 		horizontalPanel.add(AssertName);
-		AssertName.setSize("80%", "100%");
+		
+				
 		
 		btnNewButton = new Button("New button");
-		btnNewButton.setHTML("<img src=\""+ Plus +"\">");
+		btnNewButton.setHTML("+");
+		//btnNewButton.setHTML("+");
 		horizontalPanel.add(btnNewButton);
-		btnNewButton.setSize("20%", "100%");
+		btnNewButton.setSize("20%", "");
 		btnNewButton.setStyleName("gwt-ButtonDerecha");
 		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
@@ -97,8 +96,8 @@ public class AssertRule extends Composite {
 			public void onClick(ClickEvent event) {
 				setStateImage(!isStateImage());
 				if (stateImage) 
-					btnNewButton.setHTML("<img src=\""+ Plus +"\">");
-					else btnNewButton.setHTML("<img src=\""+ Less +"\">");
+					btnNewButton.setHTML("+");
+					else btnNewButton.setHTML("-");
 				
 			}
 		});

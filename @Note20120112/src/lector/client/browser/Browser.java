@@ -51,9 +51,9 @@ public class Browser implements EntryPoint {
 	private FinderGrafo FinderButton;
 	private VerticalPanel Selected;
 	private FinderGrafo FinderButton2;
-	private VerticalPanel SelectedB;
+	private static VerticalPanel SelectedB;
 	private Language ActualLang;
-	private Button btnNewButton;
+	private static Button btnNewButton;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private static ArrayList<Long> filtroResidual;

@@ -68,24 +68,23 @@ public class CommentPanelFAdvance extends Composite {
         verticalPanel_1.add(button);
         button.setText(Showbutton);
         button.setEnabled(true);
-        button.setVisible(false);
         button.setSize("100%", "42px");
         button.setStyleName("gwt-ButtonIzquierda");
-        button.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
-			}
-		});
-        button.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
-			}
-		});
-        button.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
-			}
-		});
+//        button.addMouseOutHandler(new MouseOutHandler() {
+//			public void onMouseOut(MouseOutEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+//			}
+//		});
+//        button.addMouseOverHandler(new MouseOverHandler() {
+//			public void onMouseOver(MouseOverEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+//			}
+//		});
+//        button.addMouseDownHandler(new MouseDownHandler() {
+//			public void onMouseDown(MouseDownEvent event) {
+//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+//			}
+//		});
 
 
         button_1.addClickHandler(new ClickHandler() {

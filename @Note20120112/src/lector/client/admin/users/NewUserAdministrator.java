@@ -101,10 +101,41 @@ public class NewUserAdministrator implements EntryPoint {
 		textBox = new TextBox();
 		textBox.setVisibleLength(50);
 		horizontalPanel.add(textBox);
-		textBox.setWidth("100%");
+		textBox.setWidth("90%");
 
 		Button btnNewButton = new Button("New button");
-		btnNewButton.setText("Plus.gif");
+		btnNewButton.setText("+");
+		btnNewButton.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
+
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		btnNewButton.setStyleName("gwt-ButtonCenter");
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				textBox.setText(ClearText(textBox.getText()));
@@ -156,7 +187,8 @@ public class NewUserAdministrator implements EntryPoint {
 			}
 		});
 		horizontalPanel.add(btnNewButton);
-		btnNewButton.setHTML("<img src=\"Plus.gif\">");
+		btnNewButton.setWidth("66px");
+		btnNewButton.setHTML("+");
 
 		verticalPanel_1 = new VerticalPanel();
 		verticalPanel.add(verticalPanel_1);
