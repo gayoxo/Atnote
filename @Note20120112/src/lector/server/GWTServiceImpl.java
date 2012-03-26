@@ -716,20 +716,23 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// METODOS NECESARIOS PARA LA RESOLUCIÓN DE LOS TIPOS POR RBOL
 	public void moveFile(Long fatherFromId, Long fileId, Long fToId)
 			throws GeneralException {
-		FileDB file = loadFileById2(fileId);
-		deleteFileFromParent(file, fatherFromId);
-		deleteFatherFromFile(fileId, fatherFromId);
+		if (!fatherFromId.equals(fToId)) {
+			FileDB file = loadFileById2(fileId);
+			deleteFileFromParent(file, fatherFromId);
+			deleteFatherFromFile(fileId, fatherFromId);
 
-		try {
-			addFather(fileId, fToId);
-		} catch (FileException fe) {
+			try {
+				addFather(fileId, fToId);
+			} catch (FileException fe) {
 
-			throw new GeneralException("Internal error in addFather method: "
-					+ fe.getMessage());
+				throw new GeneralException(
+						"Internal error in addFather method: "
+								+ fe.getMessage());
+			}
+
 		}
 
 		// savePlainFile(file);
-
 	}
 
 	public void moveFolder(Long fatherFromId, Long fFromId, Long fToId)
