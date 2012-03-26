@@ -147,8 +147,8 @@ public class EditorActivity extends PopupPanel {
 			}
 
 			private boolean checkcatalog() {
-				return ((SelectedCatalogOld != null) && (SelectedCatalog != null) && (SelectedCatalog.getId().equals(SelectedCatalogOld.getId()))
-						|| (SelectedCatalogOldPublic != null) && (SelectedCatalogPublic != null) && (SelectedCatalogPublic.getId().equals(SelectedCatalogOldPublic.getId())));
+				return ((SelectedCatalogOld != null) && (SelectedCatalog != null) && !(SelectedCatalog.getId().equals(SelectedCatalogOld.getId()))
+						|| (SelectedCatalogOldPublic != null) && (SelectedCatalogPublic != null) && !(SelectedCatalogPublic.getId().equals(SelectedCatalogOldPublic.getId())));
 				
 			}
 

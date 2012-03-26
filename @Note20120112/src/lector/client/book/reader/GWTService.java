@@ -232,4 +232,6 @@ public interface GWTService extends RemoteService {
 	public String getJSONServiceTODrawGraph(String url);
 	
 	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId);
+	
+	public void updateRenameOfUser(Long userId);
 }

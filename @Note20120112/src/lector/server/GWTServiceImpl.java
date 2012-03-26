@@ -1554,7 +1554,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	public void deleteFolder(Long folderId, Long fatherId)
 			throws GeneralException {
 		ids = new ArrayList<Long>();
-		// sonsFatherMap = new HashMap<Long, ArrayList<Long>>();
 		FolderDB folder = loadFolderById(folderId);
 		folder.getFathers().remove(fatherId);
 		deleteFolderFromParent(folder, fatherId);
@@ -1716,10 +1715,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public boolean saveUser(UserApp user) {
-		EntityManager entityManager;
-		EntityTransaction entityTransaction;
-		entityManager = EMF.get().createEntityManager();
-		entityTransaction = entityManager.getTransaction();
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		boolean out = false;
 		if (user.getId() == null) {
@@ -1785,13 +1782,16 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		UserApp userAppDeleted = entityManager.find(UserApp.class, userId);
 		total = userAppDeleted.getGroupIds().size();
-		if (userAppDeleted.getGroupIds() != null) {
+		if (total > 0) {
 			for (int i = 0; i < userAppDeleted.getGroupIds().size(); i++) {
 				removeUserFromGroup(userId, userAppDeleted.getGroupIds().get(i));
 			}
 		}
 		deletePrivateAnnotationsOfUser(userId);
-		deleteAnnotationThreads(getAnnotationThreadsByUserId(userId));
+		if (getAnnotationThreadsByUserId(userId) != null) {
+			deleteAnnotationThreads(getAnnotationThreadsByUserId(userId));
+		}
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(userAppDeleted);
@@ -3585,14 +3585,13 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				builder.append(line);
 			}
 
-
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
 					null, ex);
 		} catch (IOException ex) {
 			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
 					null, ex);
-		} 
+		}
 		return builder.toString();
 	}
 
@@ -3601,7 +3600,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		sonIds = new ArrayList<Long>();
 		Catalogo catalogo = loadCatalogById(catalogId);
 		AnnotationSchema annotationSchema = new AnnotationSchema(catalogId,
-				catalogo.getCatalogName(), catalogo.getEntryIds(),true);
+				catalogo.getCatalogName(), catalogo.getEntryIds(), true);
 		schema.add(annotationSchema);
 		for (int j = 0; j < catalogo.getEntryIds().size(); j++) {
 			deepingRoot(catalogo.getEntryIds().get(j));
@@ -3636,26 +3635,49 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		for (Long id : ids) {
 			FolderDB folder = loadFolderById(id);
 			if (folder != null) {
-				ArrayList<Long> Al=new ArrayList<Long>();
+				ArrayList<Long> Al = new ArrayList<Long>();
 				for (Long long1 : folder.getEntryIds()) {
 					Al.add(long1);
 				}
 				AnnotationSchema son = new AnnotationSchema(id,
-						folder.getName(), Al,true);
+						folder.getName(), Al, true);
 				schema.add(son);
 			}
 		}
-		
+
 		for (Long id : ids) {
 			FileDB folder = loadFileById(id);
 			if (folder != null) {
 				AnnotationSchema son = new AnnotationSchema(id,
-						folder.getName(), new ArrayList<Long>(),false);
+						folder.getName(), new ArrayList<Long>(), false);
 				schema.add(son);
 			}
 		}
 
 		return schema;
+	}
+
+	public void updateRenameOfUser(Long userId) {
+		UserApp user = loadUserById(userId);
+		String userName = user.getName();
+		ArrayList<Annotation> userAnnotations = getAnnotationsByAuthorId(userId);
+		for (Annotation annotation : userAnnotations) {
+			updateAnnotation(annotation.getId(), userName);
+		}
+	}
+
+	private void updateAnnotation(Long annotationId, String userName) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		Annotation a = entityManager.find(Annotation.class, annotationId);
+		a.setUserName(userName);
+		entityTransaction.begin();
+		entityManager.merge(a);
+		entityManager.flush();
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
 	}
 
 }

@@ -229,4 +229,6 @@ public interface GWTServiceAsync {
 	void getSchemaByCatalogId(Long catalogId,
 			AsyncCallback<ArrayList<AnnotationSchema>> callback);
 
+	void updateRenameOfUser(Long userId, AsyncCallback<Void> callback);
+
 }
