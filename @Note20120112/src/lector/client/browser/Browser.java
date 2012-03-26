@@ -58,6 +58,10 @@ public class Browser implements EntryPoint {
 			.create(GWTService.class);
 	private static ArrayList<Long> filtroResidual;
 
+	public Browser() {
+		SelectedB = new VerticalPanel();
+	}
+	
 	public void onModuleLoad() {
 		
 		ActualLang=ActualUser.getLanguage();
@@ -81,7 +85,6 @@ public class Browser implements EntryPoint {
 		Selected = new VerticalPanel();
 		BrowserSelectPanel.addSouth(Selected, 200.0);
 		Selected.setWidth("100%");
-		SelectedB = new VerticalPanel();
 		Selected.add(SelectedB);
 		SelectedB.setWidth("100%");
 		
@@ -150,7 +153,7 @@ public class Browser implements EntryPoint {
 				((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 			}
 		});
-		btnNewButton.setVisible(false);
+		if (SelectedB.getWidgetCount()==0) btnNewButton.setVisible(false);
 		btnNewButton.setSize("100%", "100%");
 		
 		

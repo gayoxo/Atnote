@@ -23,6 +23,7 @@
 	<!-- -->
 	
 	 <inherits name='com.google.gwt.widgetideas.GWTCanvas'/>
+	 <entry-point class="lector.client.login.UserEdition"/>
 
   <!-- Other module inherits                                      -->
 

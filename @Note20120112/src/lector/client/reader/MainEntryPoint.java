@@ -11,6 +11,10 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.uibinder.client.UiChild;
@@ -44,6 +48,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 /***
  * Main entry point.
@@ -98,8 +104,76 @@ public class MainEntryPoint implements EntryPoint {
 	private final MenuItemSeparator separator_4 = new MenuItemSeparator();
 	private final MenuItemSeparator separator_5 = new MenuItemSeparator();
 	private static MenuItem FilterInfo;
+	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
 
 	public MainEntryPoint() {
+		
+
+		
+		pageForward.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+	pageForward.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
+
+		pageForward.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		pageForward.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		pageForward.setStyleName("gwt-ButtonCenter");
+		
+		
+		pageBack.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+pageBack.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
+
+		pageBack.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		pageBack.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		pageBack.setStyleName("gwt-ButtonCenter");
 
 		pageBack.addClickHandler(new ClickHandler() {
 
@@ -206,9 +280,13 @@ public class MainEntryPoint implements EntryPoint {
 
 		originalBook.setVisible(false);
 		decoratorPanel.setVisible(false);
-		RootTXOriginalB.add(pageBack);
-		RootTXOriginalB.add(selectorPageBox);
-		RootTXOriginalB.add(pageForward);
+		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		
+		RootTXOriginalB.add(horizontalPanel);
+		horizontalPanel.add(pageBack);
+		pageBack.setVisible(false);
+		horizontalPanel.add(selectorPageBox);
+		horizontalPanel.add(pageForward);
 		menuBar.clearItems();
 		menuBar.setAnimationEnabled(true);
 		RootMenu.add(menuBar);
@@ -394,16 +472,18 @@ public class MainEntryPoint implements EntryPoint {
 				A.center();
 			}
 		});
-		FilterInfo.setEnabled(false);
-		FilterInfo.setVisible(false);
+		
+		if (filtroTypes.size()==1 && filtroTypes.get(0)==Long.MIN_VALUE && filtroUsers.isEmpty())
+			setfilterinfo(false);
+		else setfilterinfo(true);
 		FilterInfo.setStyleName("gwt-MenuItemFiltering");
 		menuBar.addItem(FilterInfo);
 		if (!(ActualUser.getUser().getProfile().equals(Constants.STUDENT))) {
 			mntmManage2.setEnabled(false);
 			mntmManage2.setVisible(false);
 		}
-
-		selectorPageBox.setSize("44px", "16px");
+		
+		selectorPageBox.setSize("44px", "100%");
 		
 		SimplePanel SP=new SimplePanel();
 		SP.setHeight("875px");
@@ -420,7 +500,6 @@ public class MainEntryPoint implements EntryPoint {
 		//ScrollAnnotationsPanel.setAlwaysShowScrollBars(true);
 		selectorPageBox.setVisible(false);
 		pageForward.setVisible(false);
-		pageBack.setVisible(false);
 
 		if (filtroTypes == null ) {
 			filtroTypes = new ArrayList<Long>();
@@ -797,6 +876,9 @@ public class MainEntryPoint implements EntryPoint {
 	
 	
 	public static void setFiltroTypesAndUser(ArrayList<Long> filtroTypes, ArrayList<Long> User) {
+		if (filtroTypes.size()==1 && filtroTypes.get(0)==Long.MIN_VALUE && User.isEmpty())
+			setfilterinfo(false);
+		else setfilterinfo(true);
 		MainEntryPoint.filtroTypes = filtroTypes;
 		MainEntryPoint.filtroUsers=User;
 		filtroAnotPar=new ArrayList<Long>();
@@ -980,7 +1062,10 @@ public class MainEntryPoint implements EntryPoint {
 	
 	public static void setfilterinfo(boolean estado)
 	{
-		FilterInfo.setEnabled(estado);
-		FilterInfo.setVisible(estado);
+		if (FilterInfo!=null){
+			FilterInfo.setEnabled(estado);
+			FilterInfo.setVisible(estado);
+		}
+		
 	}
 }
