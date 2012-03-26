@@ -88,7 +88,7 @@ public class Finder extends Composite {
 					}
 					else
 					{
-						Selecciona();
+						if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID) Selecciona();
 					}
 				}
 				else if (ActualRamaNew.getEntidad() instanceof File)
@@ -97,7 +97,7 @@ public class Finder extends Composite {
 					}
 					else
 					{
-						Selecciona();
+						if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID) Selecciona();
 					}
 				
 			}

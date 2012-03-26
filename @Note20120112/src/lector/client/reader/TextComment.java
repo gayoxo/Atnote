@@ -53,7 +53,9 @@ public class TextComment extends DialogBox {
 		setAnimationEnabled(true);
 		CommentPanel.setEstado(true);
 		Date now = new Date();
-		setHTML(ActualUser.getUser().getEmail() + "  -  " + now.toGMTString());
+		if (!ActualUser.getUser().getName().isEmpty())
+			 setHTML(ActualUser.getUser().getName() + "  -  " + now.toGMTString());
+			else  setHTML(ActualUser.getUser().getEmail() + "  -  " + now.toGMTString());
 		setSize("100%", "100%");
 		final Book bookRef = book;
 		this.textSelector = textSelectorin;
