@@ -53,7 +53,7 @@ public class TextComment extends DialogBox {
 		setAnimationEnabled(true);
 		CommentPanel.setEstado(true);
 		Date now = new Date();
-		if (!ActualUser.getUser().getName().isEmpty())
+		if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
 			 setHTML(ActualUser.getUser().getName() + "  -  " + now.toGMTString());
 			else  setHTML(ActualUser.getUser().getEmail() + "  -  " + now.toGMTString());
 		setSize("100%", "100%");
