@@ -47,6 +47,7 @@ public class EditorActivity extends PopupPanel {
 	private Catalog SelectedCatalogOld = null;
 	private Catalog SelectedCatalogPublic = null;
 	private Catalog SelectedCatalogOldPublic = null;
+	private String SelectedBookOld = null;
 	private Language SelectedLanguage = null;
 	private GroupApp SelectedGroup = null;
 	private String SelectedBook = null;
@@ -73,6 +74,7 @@ public class EditorActivity extends PopupPanel {
 		 SelectedBook = null;
 		 SelectedCatalogPublic = null;
 		SelectedCatalogOldPublic = null;
+		SelectedBookOld = null;
 		setGlassEnabled(true);
 		ActualActivity = RA;
 		Yo = this;
@@ -111,7 +113,7 @@ public class EditorActivity extends PopupPanel {
 			private void saveActivity() {
 				if (checkcatalog()){
 						if (Window
-							.confirm("Are you sure you want to swap the catalog in the activity?. The anotation asociated to the activity will be deleted")) {
+							.confirm("Are you sure you want to swap the catalogue in the activity?. The annotation associated to the activity will be deleted")) {
 						LoadingPanel.getInstance().center();
 						LoadingPanel.getInstance().setLabelTexto("Deleting...");
 						bookReaderServiceHolder
@@ -137,7 +139,36 @@ public class EditorActivity extends PopupPanel {
 
 					}
 					}
-				else{
+				else if (checkbook()){
+						if (Window
+							.confirm("Are you sure you want to swap the book in the activity?. The annotation associated to the activity will be deleted")) {
+						LoadingPanel.getInstance().center();
+						LoadingPanel.getInstance().setLabelTexto("Deleting...");
+						bookReaderServiceHolder
+								.removeReadingActivityFromAnnotations(
+										ActualActivity.getId(),
+										new AsyncCallback<Integer>() {
+
+											public void onFailure(
+													Throwable caught) {
+												Window.alert("The annotations could not be deleted");
+												LoadingPanel.getInstance()
+														.hide();
+
+											}
+
+											public void onSuccess(Integer result) {
+												SaveacActivitytoServer();
+												LoadingPanel.getInstance()
+														.hide();
+
+											}
+										});
+
+					}
+					}
+				else		
+				{
 //					if (SelectedCatalog.getId()==SelectedCatalogPublic.getId()) Window.alert("The open catalog and the teachers catalog can't be the same");
 //					else 
 						SaveacActivitytoServer();
@@ -146,9 +177,13 @@ public class EditorActivity extends PopupPanel {
 
 			}
 
+			private boolean checkbook() {
+			 return ((SelectedBook != null) && (SelectedBookOld != null) && !(SelectedBook.equals(SelectedBookOld)));
+			}
+
 			private boolean checkcatalog() {
-				return ((SelectedCatalogOld != null) && (SelectedCatalog != null) && !(SelectedCatalog.getId().equals(SelectedCatalogOld.getId()))
-						|| (SelectedCatalogOldPublic != null) && (SelectedCatalogPublic != null) && !(SelectedCatalogPublic.getId().equals(SelectedCatalogOldPublic.getId())));
+				return (((SelectedCatalogOld != null) && (SelectedCatalog != null) && !(SelectedCatalog.getId().equals(SelectedCatalogOld.getId())))
+						|| ((SelectedCatalogOldPublic != null) && (SelectedCatalogPublic != null) && !(SelectedCatalogPublic.getId().equals(SelectedCatalogOldPublic.getId()))));
 				
 			}
 
@@ -320,6 +355,7 @@ public class EditorActivity extends PopupPanel {
 	private void generabookOld() {
 		if (ActualActivity.getBookId() != null) {
 			SelectedBook = ActualActivity.getBookId();
+			SelectedBookOld=SelectedBook;
 			BooksLabel.setText("Book : " + SelectedBook);
 			generagroupOld();
 		} else

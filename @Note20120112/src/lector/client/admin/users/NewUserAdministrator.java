@@ -278,11 +278,11 @@ public class NewUserAdministrator implements EntryPoint {
 		stackPanel_1.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-				String Nombre = ((BotonesStackPanelUsersMio) event.getSource())
-						.getText();
+				Long Nombre = ((BotonesStackPanelUsersMio) event.getSource())
+						.getEntidad().getID();
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");
-				bookReaderServiceHolder.loadUserByEmail(Nombre,
+				bookReaderServiceHolder.loadUserById(Nombre,
 						new AsyncCallback<UserApp>() {
 
 							public void onFailure(Throwable caught) {
@@ -347,19 +347,25 @@ public class NewUserAdministrator implements EntryPoint {
 			public void onSuccess(ArrayList<UserApp> result) {
 				LoadingPanel.getInstance().hide();
 				if (result.size() < 10) {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadUser E = new EntidadUser(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadUser E = new EntidadUser(Bienvenida, User1.getId());
 						stackPanel_1.addBotonLessTen(E);
-						IDi++;
 					}
 
 				} else {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadUser E = new EntidadUser(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadUser E = new EntidadUser(Bienvenida, User1.getId());
 						stackPanel_1.addBoton(E);
-						IDi++;
 					}
 				}
 				stackPanel_1.setSize("100%", "100%");
@@ -385,19 +391,25 @@ public class NewUserAdministrator implements EntryPoint {
 			public void onSuccess(ArrayList<UserApp> result) {
 				LoadingPanel.getInstance().hide();
 				if (result.size() < 10) {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadUser E = new EntidadUser(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadUser E = new EntidadUser(Bienvenida, User1.getId());
 						stackPanel_1.addBotonLessTen(E);
-						IDi++;
 					}
 
 				} else {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadUser E = new EntidadUser(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadUser E = new EntidadUser(Bienvenida, User1.getId());
 						stackPanel_1.addBoton(E);
-						IDi++;
 					}
 				}
 				stackPanel_1.setSize("100%", "100%");

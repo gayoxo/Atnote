@@ -9,6 +9,8 @@ import lector.client.catalogo.BotonesStackPanelMioGrafo;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
+import lector.client.login.ActualUser;
+import lector.client.reader.LoadingPanel;
 import lector.client.service.AnnotationSchema;
 
 import com.google.gwt.core.client.GWT;
@@ -52,17 +54,20 @@ public class PanelGrafo extends Composite {
 		sPanel = new SimplePanel();
 		absolutePanel.add(sPanel, 0, 0);
 		sPanel.setSize("100%", "100%");
-		
+		LoadingPanel.getInstance().center();
+		LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
 		bookReaderServiceHolder.getSchemaByCatalogId(Catalogo, new AsyncCallback<ArrayList<AnnotationSchema>>() {
 			
 			public void onSuccess(ArrayList<AnnotationSchema> result) {
 				compare=result;
 				LlamadaServicio();
+				LoadingPanel.getInstance().hide();
 				
 			}
 			
 			public void onFailure(Throwable caught) {
 				Window.alert("Error Retriving Catalog");
+				LoadingPanel.getInstance().hide();
 				
 			}
 		});
@@ -73,16 +78,20 @@ public class PanelGrafo extends Composite {
 	public void refresca(Long Catalog){
 		absolutePanel.clear();
 		absolutePanel.add(sPanel);
+		LoadingPanel.getInstance().center();
+		LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
 bookReaderServiceHolder.getSchemaByCatalogId(Catalog, new AsyncCallback<ArrayList<AnnotationSchema>>() {
 			
 			public void onSuccess(ArrayList<AnnotationSchema> result) {
 				compare=result;
 				LlamadaServicio();
+				LoadingPanel.getInstance().hide();
 				
 			}
 			
 			public void onFailure(Throwable caught) {
 				Window.alert("Error Retriving Catalog");
+				LoadingPanel.getInstance().hide();
 				
 			}
 		});
@@ -93,16 +102,20 @@ bookReaderServiceHolder.getSchemaByCatalogId(Catalog, new AsyncCallback<ArrayLis
 	protected void LlamadaServicio() {
 		String URLReq=generaString();
 		URLReq="https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"+URLReq+"}&chof=json";
+		LoadingPanel.getInstance().center();
+		LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
 		bookReaderServiceHolder.getJSONServiceTODrawGraph(URL.encode(URLReq), new AsyncCallback<String>() {
 			
 			public void onSuccess(String result) {
 				Play(result);
+				LoadingPanel.getInstance().hide();
 				
 			}
 			
 			public void onFailure(Throwable caught) {
 				Window.alert("Errro, Try again");
 				LlamadaServicio();
+				LoadingPanel.getInstance().hide();
 				
 			}
 		});

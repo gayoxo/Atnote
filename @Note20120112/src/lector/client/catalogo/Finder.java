@@ -56,6 +56,7 @@ public class Finder extends Composite {
 	protected ScrollPanel scrollPanel;
 	protected ClickHandler clickHandler;
 	protected BotonesStackPanelMio buttonMio;
+	private Tree ArbolDeNavegacion;
 	
 	public Finder() {
 		
@@ -77,7 +78,7 @@ public class Finder extends Composite {
 		
 		
 		
-		Tree ArbolDeNavegacion = new Tree();
+		ArbolDeNavegacion = new Tree();
 		ArbolDeNavegacion.addSelectionHandler(new SelectionHandler<TreeItem>() {
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				Node ActualRamaNew=(Node)event.getSelectedItem();
@@ -152,8 +153,8 @@ public class Finder extends Composite {
 		scrollPanel.setWidget(ArbolDeNavegacion);
 		ArbolDeNavegacion.setSize("100%", "100%");
 		
-		trtmNewItem = new Node(new Folder("Catalogo", Constants.CATALOGID, Constants.CATALOGID));
-		trtmNewItem.setText("\\");
+		trtmNewItem = new Node(new Folder("Cataolo", Constants.CATALOGID, Constants.CATALOGID));
+		trtmNewItem.setText("//");
 		ArbolDeNavegacion.addItem(trtmNewItem);
 		ActualRama=trtmNewItem;
 		
@@ -218,6 +219,7 @@ public class Finder extends Composite {
 	public void setCatalogo(Catalog c) {
 		C = c;
 		ActualRama=trtmNewItem;
+		trtmNewItem.setText(C.getCatalogName());
 		cargaLaRama();
 	}
 	
@@ -236,6 +238,7 @@ public class Finder extends Composite {
 	
 	public void RefrescaLosDatos()
 	{
+		ActualRama=trtmNewItem;
 		cargaLaRama();
 		//simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
 		//horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");

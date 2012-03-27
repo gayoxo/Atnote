@@ -280,29 +280,14 @@ btnNewButton.addClickHandler(new ClickHandler() {
 		stackPanel_1.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-				String Nombre=((BotonesStackPanelAdminsMio) event.getSource()).getText();
+				Long Ident=((BotonesStackPanelAdminsMio) event.getSource()).getEntidad().getID();
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");
-				bookReaderServiceHolder.loadUserByEmail(Nombre,
-						new AsyncCallback<UserApp>() {
-
-							public void onFailure(Throwable caught) {
-								LoadingPanel.getInstance().hide();
-							}
-
-							public void onSuccess(UserApp result) {
-								LoadingPanel.getInstance().hide();
-								if (Window.confirm("Are you sure you want to delete this user?"))							
-									remove(result.getId());
-									
-
-							}
-
-							private void remove(Long id) {
+				
 								LoadingPanel.getInstance().center();
 								LoadingPanel.getInstance().setLabelTexto("Deleting...");
 								
-								bookReaderServiceHolder.deleteProfessor(id, new AsyncCallback<Integer>() {
+								bookReaderServiceHolder.deleteProfessor(Ident, new AsyncCallback<Integer>() {
 
 									public void onFailure(Throwable caught) {
 										Window.alert("Sorry but the user could not be removed, try again later");
@@ -314,7 +299,7 @@ btnNewButton.addClickHandler(new ClickHandler() {
 								});
 								
 								//Salir si me borro a mi mismo
-								if (ActualUser.getUser().getId()==id)
+								if (ActualUser.getUser().getId()==Ident)
 								{
 									Window.open(ActualUser.getUser().getLogoutUrl(), "_self", "");
 								ActualUser.setUser(null);
@@ -327,10 +312,6 @@ btnNewButton.addClickHandler(new ClickHandler() {
 				
 
 						
-			}
-
-			
-		});
 				
 		// Profesores
 		LoadingPanel.getInstance().center();
@@ -344,19 +325,25 @@ btnNewButton.addClickHandler(new ClickHandler() {
 			public void onSuccess(ArrayList<UserApp> result) {
 				LoadingPanel.getInstance().hide();
 				if (result.size() < 10) {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadAdmin E = new EntidadAdmin(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadAdmin E = new EntidadAdmin(Bienvenida, User1.getId());
 						stackPanel_1.addBotonLessTen(E);
-						IDi++;
 					}
 
 				} else {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadAdmin E = new EntidadAdmin(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadAdmin E = new EntidadAdmin(Bienvenida, User1.getId());
 						stackPanel_1.addBoton(E);
-						IDi++;
 					}
 				}
 				stackPanel_1.setSize("100%", "100%");
@@ -382,19 +369,25 @@ btnNewButton.addClickHandler(new ClickHandler() {
 			public void onSuccess(ArrayList<UserApp> result) {
 				LoadingPanel.getInstance().hide();
 				if (result.size() < 10) {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadAdmin E = new EntidadAdmin(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadAdmin E = new EntidadAdmin(Bienvenida, User1.getId());
 						stackPanel_1.addBotonLessTen(E);
-						IDi++;
 					}
 
 				} else {
-					Long IDi = 0l;
 					for (UserApp User1 : result) {
-						EntidadAdmin E = new EntidadAdmin(User1.getEmail(), IDi);
+						String Bienvenida;
+						if ((User1.getName()!=null)&&(!User1.getName().isEmpty()))
+							Bienvenida= User1.getName();
+							else 
+							Bienvenida=User1.getEmail();
+						EntidadAdmin E = new EntidadAdmin(Bienvenida, User1.getId());
 						stackPanel_1.addBoton(E);
-						IDi++;
 					}
 				}
 				stackPanel_1.setSize("100%", "100%");

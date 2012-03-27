@@ -57,7 +57,7 @@ public class NewAdminCatalogs implements EntryPoint {
 		menuBar.setWidth("99%");
 		
 		MenuItem menuItem = new MenuItem("Catalogue", false, (Command) null);
-		menuItem.setHTML("Catalog Administration");
+		menuItem.setHTML("Catalogue Administration");
 		menuItem.setEnabled(false);
 		menuBar.addItem(menuItem);
 		

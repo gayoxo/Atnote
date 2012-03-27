@@ -84,7 +84,10 @@ public class TextComment extends DialogBox {
 							MainEntryPoint.getCurrentPageNumber(),
 							textSelector, comment);
 					annotation.setUserId(ActualUser.getUser().getId());
-					annotation.setUserName(ActualUser.getUser().getEmail());
+					
+					if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+						annotation.setUserName(ActualUser.getUser().getName());
+						else annotation.setUserName(ActualUser.getUser().getEmail());
 					annotation.setReadingActivity(ActualUser.getReadingactivity().getId());
 					
 					

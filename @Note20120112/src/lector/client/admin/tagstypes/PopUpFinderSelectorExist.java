@@ -51,10 +51,10 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		SimplePanel S= new SimplePanel();
 		S.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
 		S.setWidget(finder);
-		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelAdministracionMio(
 				"prototipo", new VerticalPanel(), new VerticalPanel(),finder));
 		
-		finder.setBotonClick(new ClickHandlerMioSeleccion(this)
+		FinderGrafo.setBotonClickGrafo(new ClickHandlerMioSeleccion(this)
 				
 //				new ClickHandler() {
 //

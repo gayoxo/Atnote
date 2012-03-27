@@ -42,67 +42,81 @@ public class MyBooks implements EntryPoint {
 
 	private ArrayList<String> BooksIDs = new ArrayList<String>();
 	private VerticalPanel verticalPanel = new VerticalPanel();
+	private VerticalPanel PanelBotones;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 
 	public void onModuleLoad() {
 		BooksIDs = new ArrayList<String>();
-		verticalPanel = new VerticalPanel();
 		RootPanel RootMenu = RootPanel.get("Menu");
 		RootPanel RootTXOriginal = RootPanel.get("Original");
-		generaBookIds();
+		
 
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
 
-		MenuItem menuItem = new MenuItem(
-				"Welcome " + ActualUser.getUser().getEmail(), false,
+		String Bienvenida;
+		if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+		Bienvenida= ActualUser.getUser().getName();
+		else 
+		Bienvenida=ActualUser.getUser().getEmail();
+		
+		MenuItem TextoBienvenida = new MenuItem(
+				Bienvenida + "'s Personal Library ", false,
 				(Command) null);
-		menuItem.setEnabled(false);
-		menuBar.addItem(menuItem);
+		TextoBienvenida.setEnabled(false);
+		menuBar.addItem(TextoBienvenida);
 
 		MenuItemSeparator separator = new MenuItemSeparator();
 		menuBar.addSeparator(separator);
 
-		MenuItem menuItem_1 = new MenuItem("Back", false, new Command() {
+		MenuItem BotonAtras = new MenuItem("Back", false, new Command() {
 			public void execute() {
 				Controlador.change2Administrator();
 			}
 		});
 		
 		
-		menuBar.addItem(menuItem_1);
+		menuBar.addItem(BotonAtras);
 
 
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		RootTXOriginal.add(horizontalPanel);
-		horizontalPanel.setSize("100%", "100%");
+		HorizontalPanel PanelGeneral = new HorizontalPanel();
+		
+		RootTXOriginal.add(PanelGeneral);
+		PanelGeneral.setSize("100%", "100%");
+		
+		VerticalPanel PanelLibrosGeneral = new VerticalPanel();
+		PanelGeneral.add(PanelLibrosGeneral);
+		
+		VerticalPanel Glue40px = new VerticalPanel();
+		PanelLibrosGeneral.add(Glue40px);
+		Glue40px.setHeight("40px");
+		PanelBotones = new VerticalPanel();
+		PanelLibrosGeneral.add(PanelBotones);
+		PanelBotones.setSize("500px", "");
 
 		
-		verticalPanel.setSpacing(10);
-		horizontalPanel.add(verticalPanel);
-		verticalPanel.setSize("218px", "");
 
+		SimplePanel PanelIconoGeneral = new SimplePanel();
+		PanelGeneral.add(PanelIconoGeneral);
+		PanelIconoGeneral.setSize("655px", "655px");
 		
-
-		SimplePanel simplePanel = new SimplePanel();
-		horizontalPanel.add(simplePanel);
-		simplePanel.setSize("655px", "655px");
-		
-		VerticalPanel verticalPanel_1 = new VerticalPanel();
-		verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		simplePanel.setWidget(verticalPanel_1);
-		verticalPanel_1.setSize("100%", "100%");
+		VerticalPanel CentaradorVertical = new VerticalPanel();
+		CentaradorVertical.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		CentaradorVertical.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		PanelIconoGeneral.setWidget(CentaradorVertical);
+		CentaradorVertical.setSize("100%", "100%");
 				
-				HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
-				horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-				horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-				verticalPanel_1.add(horizontalPanel_1);
+				HorizontalPanel CentradorHorizontal = new HorizontalPanel();
+				CentradorHorizontal.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+				CentradorHorizontal.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				CentaradorVertical.add(CentradorHorizontal);
 		
-				Image image = new Image("Logo.jpg");
-				horizontalPanel_1.add(image);
+				Image Logo = new Image("Logo.jpg");
+				CentradorHorizontal.add(Logo);
 		BooksIDs = new ArrayList<String>();
+		
+		generaBookIds();
 
 	}
 
@@ -120,9 +134,9 @@ public class MyBooks implements EntryPoint {
 		for (int i = 0; i < BooksIDs.size(); i++) {
 
 			Button button = new Button(BooksIDs.get(i));
+			button.setSize("100%", "100%");
 			if (!buttonexist(button)){
-				verticalPanel.add(button);
-			button.setWidth("100%");
+				PanelBotones.add(button);
 			button.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 
@@ -151,8 +165,7 @@ public class MyBooks implements EntryPoint {
 					bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
 							callback);
 				}
-			});
-			button.setSize("100%", "100%");
+			});			
 			button.setStyleName("gwt-ButtonTOP");
 			button.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
@@ -172,9 +185,9 @@ public class MyBooks implements EntryPoint {
 		}
 		
 	}
-		if (verticalPanel.getWidgetCount()>0)
+		if (PanelBotones.getWidgetCount()>0)
 		{
-		Widget W=verticalPanel.getWidget(verticalPanel.getWidgetCount()-1);
+		Widget W=PanelBotones.getWidget(PanelBotones.getWidgetCount()-1);
 		Button B=(Button)W;
 		B.setSize("100%", "100%");
 		B.setStyleName("gwt-ButtonBotton");
@@ -199,8 +212,8 @@ public class MyBooks implements EntryPoint {
 
 
 	private boolean buttonexist(Button button) {
-		for (int i = 0; i < verticalPanel.getWidgetCount(); i++) {
-			Button B=((Button)verticalPanel.getWidget(i));
+		for (int i = 0; i < PanelBotones.getWidgetCount(); i++) {
+			Button B=((Button)PanelBotones.getWidget(i));
 			if (B.getText().equals(button.getText())) return true;
 		}
 		return false;

@@ -21,6 +21,7 @@ import lector.client.reader.MainEntryPoint;
 import lector.client.reader.filter.advance.FilterAdvance;
 import lector.client.search.Searcher;
 import lector.client.welcome.Welcome;
+import lector.client.login.UserEdition;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -28,6 +29,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class Controlador implements EntryPoint {
 
 
+	
 	private static Welcome WelcomePage = new Welcome();
     private static MainEntryPoint MEP = new MainEntryPoint();
     private static EntryPoint Actual = null;
@@ -49,6 +51,7 @@ public class Controlador implements EntryPoint {
     private static VisorEntry Visor=new VisorEntry();
     private static Browser Browser=new Browser();
     private static FilterAdvance FilterAdvance=new FilterAdvance();
+    private static UserEdition UserEdition = new UserEdition();
 
     /**
      * @wbp.parser.entryPoint
@@ -205,5 +208,11 @@ public class Controlador implements EntryPoint {
 		Actual = FilterAdvance;
 		Actual.onModuleLoad();
 		
+	}
+
+	public static void change2UserEdition() {
+		clear();
+		Actual = UserEdition;
+		Actual.onModuleLoad();
 	}
 }

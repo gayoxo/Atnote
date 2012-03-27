@@ -2,7 +2,9 @@ package lector.client.login;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
+import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -25,6 +27,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 
 public class UserEdition implements EntryPoint {
 
@@ -38,11 +46,14 @@ public class UserEdition implements EntryPoint {
 		RootPanel RootMenu = RootPanel.get("Menu");
 		
 		MenuBar menuBar = new MenuBar(false);
-		rootPanel.add(menuBar);
+		RootMenu.add(menuBar);
 		
 		MenuItem CloseBoton = new MenuItem("Close", false, new Command() {
 			public void execute() {
-				Controlador.change2MyActivities();
+				if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))
+					Controlador.change2Administrator();
+				else if (ActualUser.getUser().getProfile().equals(Constants.STUDENT))
+					 Controlador.change2MyActivities();
 			}
 		});
 		menuBar.addItem(CloseBoton);
@@ -86,6 +97,10 @@ public class UserEdition implements EntryPoint {
 		NameText.setVisibleLength(25);
 		horizontalPanel_2.add(NameText);
 		NameText.setWidth("90%");
+		String Nombre="";
+		if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+			Nombre=ActualUser.getUser().getName();
+		NameText.setText(Nombre);
 		
 		HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
 		horizontalPanel_3.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -100,6 +115,10 @@ public class UserEdition implements EntryPoint {
 		ApellidosText.setMaxLength(120);
 		horizontalPanel_3.add(ApellidosText);
 		ApellidosText.setWidth("90%");
+		String Apellido="";
+		if ((ActualUser.getUser().getLastName()!=null)&&(!ActualUser.getUser().getLastName().isEmpty()))
+			Apellido=ActualUser.getUser().getLastName();
+		ApellidosText.setText(Apellido);
 		
 		HorizontalPanel horizontalPanel_4 = new HorizontalPanel();
 		horizontalPanel_4.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -107,38 +126,90 @@ public class UserEdition implements EntryPoint {
 		PanelCampos.add(horizontalPanel_4);
 		horizontalPanel_4.setWidth("100%");
 		
+		SimplePanel simplePanel_1 = new SimplePanel();
+		horizontalPanel_4.add(simplePanel_1);
+		
 		Button btnNewButton = new Button("Save");
+		simplePanel_1.setWidget(btnNewButton);
+		btnNewButton.setSize("100%", "100%");
 		btnNewButton.addClickHandler(new ClickHandler() {
+			
 			public void onClick(ClickEvent event) {
-				UserApp AU=ActualUser.getUser();
-				AU.setName(NameText.getText());
-				AU.setLastName(ApellidosText.getText());
-				bookReaderServiceHolder.saveUser(AU, new AsyncCallback<Boolean>() {
-					
-					public void onSuccess(Boolean result) {
-						bookReaderServiceHolder.loadUserById(ActualUser.getUser().getId(), new AsyncCallback<UserApp>() {
-							
-							public void onSuccess(UserApp result) {
-								ActualUser.setUser(result);
-								
-							}
-							
-							public void onFailure(Throwable caught) {
-								Window.alert("I can reload the update User, if you want to show the new userInformation please reload the page");
-								
-							}
-						});
-						
-					}
-					
-					public void onFailure(Throwable caught) {
-						Window.alert("Error updating User.");
-						
-					}
-				});
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
 			}
 		});
-		horizontalPanel_4.add(btnNewButton);
+		
+			btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+				}
+			});
+			
+
+			btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+			}
+	});
+			
+
+			btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+				
+			}
+	});
+			
+					btnNewButton.setStyleName("gwt-ButtonCenter");
+					btnNewButton.addClickHandler(new ClickHandler() {
+						public void onClick(ClickEvent event) {
+							UserApp AU=ActualUser.getUser();
+							AU.setName(NameText.getText());
+							AU.setLastName(ApellidosText.getText());
+							LoadingPanel.getInstance().center();
+							LoadingPanel.getInstance().setLabelTexto("Updating...");
+							bookReaderServiceHolder.saveUser(AU, new AsyncCallback<Boolean>() {
+								
+								public void onSuccess(Boolean result) {
+									bookReaderServiceHolder.loadUserById(ActualUser.getUser().getId(), new AsyncCallback<UserApp>() {
+										
+										public void onSuccess(UserApp result) {
+											ActualUser.setUser(result);
+											bookReaderServiceHolder.updateRenameOfUser(result.getId(), new AsyncCallback<Void>() {
+												
+												public void onSuccess(Void result) {
+													LoadingPanel.getInstance().hide();
+													
+												}
+												
+												public void onFailure(Throwable caught) {
+													LoadingPanel.getInstance().hide();
+													Window.alert("I can refresh the old anotations, please re-save your name to fix it");
+													
+												}
+											});
+											
+											
+										}
+										
+										public void onFailure(Throwable caught) {
+											Window.alert("I can reload the update User, if you want to show the new userInformation please reload the page");
+											LoadingPanel.getInstance().hide();
+										}
+									});
+									
+								}
+								
+								public void onFailure(Throwable caught) {
+									Window.alert("Error updating User.");
+									LoadingPanel.getInstance().hide();
+									
+								}
+							});
+						}
+					});
 		
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
 		verticalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);

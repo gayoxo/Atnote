@@ -32,7 +32,7 @@ public class Language implements Serializable, IsSerializable {
     private String FilterMainButton = "Filter";
     private String BrowserMainButton = "Browser";
     private String AnnotationsFiltering="Active Filter";
-    private String DOYOUFilterOUT="Doy you want to desactivate the filter?";
+    private String DOYOUFilterOUT="Do you want to desactivate the filter?";
     private String AcceptFilter="Accept";
     private String CancelFilter="Cancel";
     
@@ -63,7 +63,7 @@ public class Language implements Serializable, IsSerializable {
     private String Cancel = "Cancel";
     private String DeleteAnnotation = "Delete Annotation";
     private String SetTypes = "Teacher Catalog";
-	private String SetTypesPublic = "Student Publico";
+	private String SetTypesPublic = "Student Catalog";
     private String Visibility = "Visibility";
     private String Upgradeable = "Public Editable?";
     private String New="New";
@@ -80,8 +80,8 @@ public class Language implements Serializable, IsSerializable {
     private String E_Coments_dont_be_refresh="Error: Comments could not be refreshed";
     private String E_Need_to_select_a_type="Error: Select a Type from ";
     private String W_Newer_version_of_anotation="Warning : There's a newer version for this Annotacion, Are you sure you want to save it anyway?";
-    private String E_Tags_Refresh="Error : Tags could not be refreshed";
-    private String E_Types_refresh="Error : Types could not refreshed";
+    private String E_Tags_Refresh="Error : Tags cannot be refreshed";
+    private String E_Types_refresh="Error : Types cannot be refreshed";
     private String E_Empty_Or_2Less_Tag="Error : Tags must be more than 2 letters long";
     private String E_Tag_Dont_Exist="Error : Tag does not exist";
     private String E_loading="Error Loading";

@@ -45,7 +45,7 @@ public class newCatalog extends PopupPanel {
 		setWidget(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
 
-		Label lblInsertTheName = new Label("Insert the name for the new Catalog and Visibility\r\n");
+		Label lblInsertTheName = new Label("Insert the name for the new Catalogue and Visibility\r\n");
 		verticalPanel.add(lblInsertTheName);
 		lblInsertTheName.setSize("100%", "100%");
 
@@ -106,7 +106,7 @@ public class newCatalog extends PopupPanel {
 
 								public void onFailure(Throwable caught) {
 									LoadingPanel.getInstance().hide();
-									Window.alert("I could not save the Catalog");
+									Window.alert("I could not save the Catalogue");
 
 								}
 							});

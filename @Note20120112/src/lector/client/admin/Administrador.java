@@ -36,6 +36,7 @@ public class Administrador implements EntryPoint {
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private Button btnNewButton_4;
+	private Button MyProfile;
 	
 	
 	public void onModuleLoad() {
@@ -48,7 +49,13 @@ public class Administrador implements EntryPoint {
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
 		
-		MenuItem menuItem = new MenuItem("Welcome to de administrator page : " + ActualUser.getUser().getEmail() , false, (Command) null);
+		String Bienvenida;
+		if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+		Bienvenida= ActualUser.getUser().getName();
+		else 
+		Bienvenida=ActualUser.getUser().getEmail();
+		
+		MenuItem menuItem = new MenuItem("Welcome to de administrator page : " + Bienvenida , false, (Command) null);
 		menuItem.setEnabled(false);
 		menuBar.addItem(menuItem);
 		
@@ -314,6 +321,33 @@ public class Administrador implements EntryPoint {
 			}
 		});
 		
+		MyProfile = new Button("Edit Profile");
+		MyProfile.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Controlador.change2UserEdition();
+			}
+		});
+		MyProfile.setText("My Profile");
+		MyProfile.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+			}
+		});
+		MyProfile.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+			}
+		});
+		MyProfile.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+			}
+		});
+		MyProfile.setStyleName("gwt-ButtonTOP");
+		verticalPanel.add(MyProfile);
+		MyProfile.setSize("100%", "100%");
+		
+		
 		btnNewButton_4 = new Button("Return to the Activity");
 		btnNewButton_4.setStyleName("gwt-ButtonBotton");
 		btnNewButton_4.addMouseOutHandler(new MouseOutHandler() {
@@ -331,6 +365,8 @@ public class Administrador implements EntryPoint {
 				((Button)event.getSource()).setStyleName("gwt-ButtonPushBotton");
 			}
 		});
+		
+		
 		verticalPanel.add(btnNewButton_4);
 		btnNewButton_4.setSize("100%", "100%");
 		if (ActualUser.getReadingactivity()==null) {

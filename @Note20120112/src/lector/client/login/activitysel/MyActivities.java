@@ -53,6 +53,7 @@ public class MyActivities implements EntryPoint {
 	private static String RAtemp=null;
 
 	public void onModuleLoad() {
+		
 		BooksIDs = new ArrayList<ReadingActivity>();
 		RootPanel RootMenu = RootPanel.get("Menu");
 		
@@ -63,10 +64,22 @@ public class MyActivities implements EntryPoint {
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
 
-		MenuItem menuItem = new MenuItem("Welcome "
-				+ ActualUser.getUser().getEmail(), false, (Command) null);
+		String Bienvenida;
+		if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+		Bienvenida="Welcome " + ActualUser.getUser().getName();
+		else 
+		Bienvenida="Welcome " + ActualUser.getUser().getEmail();
+		MenuItem menuItem = new MenuItem(Bienvenida, false, (Command) null);
 		menuItem.setEnabled(false);
 		menuBar.addItem(menuItem);
+		
+		MenuItem mntmNewItem = new MenuItem("Edit Profile", false, new Command() {
+			public void execute() {
+				Controlador.change2UserEdition();
+			}
+		});
+		mntmNewItem.setHTML("Edit User");
+		
 
 		MenuItemSeparator separator = new MenuItemSeparator();
 		menuBar.addSeparator(separator);
@@ -90,7 +103,10 @@ public class MyActivities implements EntryPoint {
 		if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))
 			menuBar.addItem(menuItem_1);
 		else if (ActualUser.getUser().getProfile().equals(Constants.STUDENT))
+			{
+			menuBar.addItem(mntmNewItem);
 			menuBar.addItem(menuItem_2);
+			}
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -489,5 +505,4 @@ public class MyActivities implements EntryPoint {
 		}
 		return false;
 	}
-
 }
