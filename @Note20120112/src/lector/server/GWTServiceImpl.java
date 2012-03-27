@@ -713,10 +713,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	// return annotations;
 	// }
 
-	// METODOS NECESARIOS PARA LA RESOLUCIÃ“N DE LOS TIPOS POR RBOL
 	public void moveFile(Long fatherFromId, Long fileId, Long fToId)
 			throws GeneralException {
-		if (!fatherFromId.equals(fToId)) {
+		if (!fatherFromId.equals(fToId) && !(fileId.equals(fToId))) {
 			FileDB file = loadFileById2(fileId);
 			deleteFileFromParent(file, fatherFromId);
 			deleteFatherFromFile(fileId, fatherFromId);
@@ -737,25 +736,27 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	public void moveFolder(Long fatherFromId, Long fFromId, Long fToId)
 			throws GeneralException, DecendanceException {
-		FolderDB folderTo = loadFolderById(fToId);
-		if (!isFolderDestinationDecendant(fFromId, folderTo)) {
-			FolderDB fFrom = loadFolderById(fFromId);
-			deleteFolderFromParent(fFrom, fatherFromId);
-			deleteFatherFromFolder(fFromId, fatherFromId);
-			try {
-				addFather(fFromId, fToId);
+		if (!fFromId.equals(fToId)) {
+			FolderDB folderTo = loadFolderById(fToId);
+			if (!isFolderDestinationDecendant(fFromId, folderTo)) {
+				FolderDB fFrom = loadFolderById(fFromId);
+				deleteFolderFromParent(fFrom, fatherFromId);
+				deleteFatherFromFolder(fFromId, fatherFromId);
+				try {
+					addFather(fFromId, fToId);
 
-			} catch (FileException fe) {
-				throw new GeneralException(
-						"Internal error in addFather method: "
-								+ fe.getMessage());
+				} catch (FileException fe) {
+					throw new GeneralException(
+							"Internal error in addFather method: "
+									+ fe.getMessage());
+				}
+			} else {
+				throw new DecendanceException(
+						"The file you are trying to move is decentant in its herarchy, the action will be not take place ");
+
 			}
-		} else {
-			throw new DecendanceException(
-					"The file you are trying to move is decentant in its herarchy, the action will be not take place ");
-
+			// updateFolder(fFrom);
 		}
-		// updateFolder(fFrom);
 
 	}
 
@@ -1607,10 +1608,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (folder != null) {
 			ArrayList<FolderDB> foldersChildren = getFolderChildren(folder);
 			for (int i = 0; i < foldersChildren.size(); i++) {
-				ids.add(foldersChildren.get(i).getId()); // TODO revisar esta
-															// función no esta
-															// recorriendo
-															// profundidad
+				deepFolderDeletion(foldersChildren.get(i).getId());
+
 			}
 			ArrayList<FileDB> filesChildren = getFileChildren(folder);
 			for (int i = 0; i < filesChildren.size(); i++) {
@@ -2581,7 +2580,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		ArrayList<ReadingActivity> readingActivities = getReadingActivitiesByCatalogId(catalogId);
 		if (!readingActivities.isEmpty()) {
 			for (ReadingActivity readingActivity : readingActivities) {
-				if (readingActivity.getCatalogId().equals(catalogId)) {
+
+				if (readingActivity.getCatalogId() != null
+						&& readingActivity.getCatalogId().equals(catalogId)) {
 					readingActivity.setCatalogId(null);
 				} else {
 					readingActivity.setOpenCatalogId(null);
@@ -3139,60 +3140,59 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return fileSons;
 	}
 
-	/* añade la relación padre - hijo */
-	public void addFather(Long sonId, Long fatherId) throws FileException {
-		FileDB sonFile = loadFileById(sonId);
+	private void addFatherToFile(Long fileId, Long fatherId)
+			throws FileException {
+		FileDB sonFile = loadFileById2(fileId);
 		FolderDB folder = null;
 
-		if (fatherId != Constants.CATALOGID)
+		if (!fatherId.equals(Constants.CATALOGID)) {
 			folder = loadFolderById(fatherId);
-
-		if (!isFolderDestinationDecendant(sonId, folder)) {
-
-			if (fatherId != Constants.CATALOGID) {
-				folder = loadFolderById(fatherId);
-				if (!(folder.getEntryIds().contains(sonId))) {
-					folder.getEntryIds().add(sonId);
-					updateFolder(folder);
-				}
-			} else {
-				Long catalogId;
-				if (sonFile != null) {
-					catalogId = sonFile.getCatalogId();
-				} else {
-					catalogId = loadFolderById(sonId).getCatalogId();
-				}
-				Catalogo catalog = loadCatalogById2(catalogId);
-				if (!(catalog.getEntryIds().contains(sonId))) {
-					catalog.getEntryIds().add(sonId);
-					saveCatalog(catalog);
-				}
+			if (!(folder.getEntryIds().contains(fileId))) {
+				folder.getEntryIds().add(fileId);
+				updateFolder(folder);
 			}
-			if (sonFile != null) {
-				if (!(sonFile.getFathers().contains(fatherId))) {
-					sonFile.getFathers().add(fatherId);
-					savePlainFile(sonFile);
-				}
-			} else {
-				FolderDB sonFolder = loadFolderById(sonId);
-
-				if (sonFolder != null) {
-					if (!(sonFolder.getFathers().contains(fatherId))) {
-						sonFolder.getFathers().add(fatherId);
-						updateFolder(sonFolder);
-					}
-				} else {
-					throw new FileException(
-							"Error while loading the folder, found: NULL ");
-				}
+		} else {
+			Long catalogId = sonFile.getCatalogId();
+			Catalogo catalog = loadCatalogById2(catalogId);
+			if (!(catalog.getEntryIds().contains(fileId))) {
+				catalog.getEntryIds().add(fileId);
+				saveCatalog(catalog);
 			}
 		}
 	}
 
-	/*
-	 * modified for graph - eliminar cuando se haya desarrollado el catalogo
-	 * grafo
-	 */
+	/* añade la relación padre - hijo */
+	private void addFatherToFolder(Long folderId, Long fatherId)
+			throws FileException {
+
+		FolderDB folderFather = null;
+		boolean isFatherCatalog = true;
+
+		if (!fatherId.equals(Constants.CATALOGID)) {
+			folderFather = loadFolderById(fatherId);
+			isFatherCatalog = false;
+		}
+		if (!isFolderDestinationDecendant(folderId, folderFather)) {
+			FolderDB sonFolder = loadFolderById(folderId);
+			if (!isFatherCatalog) {
+				if (!(folderFather.getEntryIds().contains(folderId))) {
+					folderFather.getEntryIds().add(folderId);
+					updateFolder(folderFather);
+				}
+			} else {
+				Long catalogId = sonFolder.getCatalogId();
+				Catalogo catalog = loadCatalogById2(catalogId);
+				if (!(catalog.getEntryIds().contains(folderId))) {
+					catalog.getEntryIds().add(folderId);
+					saveCatalog(catalog);
+				}
+			}
+			if (!(sonFolder.getFathers().contains(fatherId))) {
+				sonFolder.getFathers().add(fatherId);
+				updateFolder(sonFolder);
+			}
+		}
+	}
 
 	private int addAnnotationsFromFileToAnother(FileDB fFrom, FileDB fTo) {
 		ArrayList<Long> annotationFromIds = fFrom.getAnnotationsIds();
@@ -3244,12 +3244,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			total = addAnnotationsFromFileToAnother(fileFrom, fileTo);
 			for (int i = 0; i < fileFrom.getFathers().size(); i++) {
 				deleteFileFromParent(fileFrom, fileFrom.getFathers().get(i));
-				addFather(fToId, fileFrom.getFathers().get(i)); // que pasa
-																// cuando uno de
-																// sus padres es
-																// el catalogo,
-																// no se ha
-																// considerado.
+				addFather(fToId, fileFrom.getFathers().get(i));
 			}
 
 			deletePlainFile(fileFrom);
@@ -3267,12 +3262,12 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	public void fusionFolder(Long fFromId, Long fToId)
 			throws IlegalFolderFusionException, GeneralException {
+		FolderDB fto = loadFolderById(fToId);
+		if (isFolderDestinationDecendant(fFromId, fto)) {
+			throw new IlegalFolderFusionException(
+					"Sorry, no merge is possible from a parent to a child category");
+		}
 		FolderDB fFrom = loadFolderById(fFromId);
-		// FolderDB fTo = loadFolderById(fToId);
-		// if (isFolderDestinationDecendant(fFromId, fTo)) {
-		// throw new IlegalFolderFusionException(
-		// "Sorry, no merge is possible from a parent to a child category");
-		// }
 		try {
 			ArrayList<FolderDB> foldersChildren = getFolderChildren(fFrom);
 			if (!foldersChildren.isEmpty()) {
@@ -3286,7 +3281,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 			for (int i = 0; i < fFrom.getFathers().size(); i++) {
 				deleteFolderFromParent(fFrom, fFrom.getFathers().get(i));
-				addFather(fToId, fFrom.getFathers().get(i));
+				// addFather(fToId, fFrom.getFathers().get(i));
 			}
 			deletePlainFolder(fFrom);
 		} catch (Exception e) {
@@ -3306,18 +3301,21 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		ArrayList<FolderDB> parentsList = new ArrayList<FolderDB>();
 		ArrayList<Long> parentsListIDs = folderTo.getFathers();
 		for (Long long1 : parentsListIDs) {
-			parentsList.add(loadFolderById(long1));
+			if (!long1.equals(Constants.CATALOGID)) {
+				parentsList.add(loadFolderById(long1));
+			}
+
 		}
 		int i = 0;
 		while (!isDecendant && i < parentsList.size()) {
-			if (parentsList.get(i) != null)
-				if (parentsList.get(i).getId().equals(folderFromId)) {
-					isDecendant = true;
-				} else {
+			if (parentsList.get(i).getId().equals(folderFromId)) {
+				isDecendant = true;
+			} else {
 
-					isDecendant = isFolderDestinationDecendant(folderFromId,
-							parentsList.get(i));
-				}
+				isDecendant = isFolderDestinationDecendant(folderFromId,
+						parentsList.get(i));
+			}
+
 			i++;
 		}
 		return isDecendant;
@@ -3683,4 +3681,14 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 	}
 
+	// TODO comprobar si el cliente esta usando esta función.
+	public void addFather(Long sonId, Long fatherId) throws FileException {
+		FileDB file = loadFileById2(sonId);
+		if (file != null) {
+			addFatherToFile(sonId, fatherId);
+		} else {
+			addFatherToFolder(sonId, fatherId);
+		}
+
+	}
 }
