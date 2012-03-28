@@ -13,6 +13,7 @@ import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
+import lector.client.catalogo.client.FolderException;
 import lector.client.catalogo.server.Catalogo;
 import lector.client.catalogo.server.FileDB;
 import lector.client.language.Language;
@@ -111,7 +112,7 @@ public interface GWTService extends RemoteService {
 	public Long saveFile(File filesys, Long fatherId) throws FileException;
 
 	public Long saveFolder(Folder folderSys, Long fatherId)
-			throws FileException;
+			throws FolderException;
 
 	public ArrayList<Entity> getSons(Long fatherId, Long catalogId);
 
@@ -220,7 +221,7 @@ public interface GWTService extends RemoteService {
 	
 	public void renameFile(Long fileId, String newName) throws FileException;
 	
-	public void renameFolder(Long folderId, String newName) throws FileException;
+	public void renameFolder(Long folderId, String newName) throws FolderException;
 	
 	public Long saveAnnotationThread(AnnotationThread annotationThread);
 	

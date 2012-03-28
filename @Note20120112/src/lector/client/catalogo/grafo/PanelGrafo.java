@@ -109,6 +109,7 @@ public class PanelGrafo extends Composite {
 
 	protected void LlamadaServicio() {
 		String URLReq = generaString();
+		if (!URLReq.isEmpty()){
 		URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
 				+ URLReq + "}&chof=json";
 		LoadingPanel.getInstance().center();
@@ -133,7 +134,7 @@ public class PanelGrafo extends Composite {
 
 					}
 				});
-
+		}
 	}
 
 	private String generaString() {

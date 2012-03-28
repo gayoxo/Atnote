@@ -25,7 +25,9 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
+import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
+import lector.client.catalogo.client.FolderException;
 import lector.client.controler.Constants;
 import lector.client.reader.LoadingPanel;
 
@@ -80,17 +82,19 @@ public class NewTyperAdmin extends PopupPanel {
 		btnNewButton.setSize("100%", "100%");
 		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterPush");
 			}
 		});
 		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				((Button) event.getSource()).setStyleName("gwt-ButtonCenter");
 			}
 		});
 		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterOver");
 			}
 		});
 		btnNewButton.setStyleName("gwt-ButtonCenter");
@@ -103,7 +107,16 @@ public class NewTyperAdmin extends PopupPanel {
 					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 
 						public void onFailure(Throwable caught) {
-							Window.alert("The file could not be saved");
+							if (caught instanceof FileException) {
+								Window.alert(((FileException) caught)   // Se ataja cuando se guarda un file con un nombre que ya existe.
+										.getMessage());
+							} else if (caught instanceof FolderException) {
+								Window.alert(((FolderException) caught)   // Se ataja cuando se guarda un folder con un nombre que ya existe en su mismo nivel.
+										.getMessage());
+							} else {
+								Window.alert("The file could not be saved");
+							}
+
 							LoadingPanel.getInstance().hide();
 							Yo.hide();
 
@@ -120,22 +133,25 @@ public class NewTyperAdmin extends PopupPanel {
 					if (WNCopy == whatsthenew.Type) {
 						File F = new File(textBox.getText(), null, catalog
 								.getId());
-						/*if (Father == null) {
-							bookReaderServiceHolder.saveFile(F, Constants.CATALOGID, callback);
-						} else {*/
-							bookReaderServiceHolder.saveFile(F, Father.getID(),
-									callback);
-						//}
+						/*
+						 * if (Father == null) {
+						 * bookReaderServiceHolder.saveFile(F,
+						 * Constants.CATALOGID, callback); } else {
+						 */
+						bookReaderServiceHolder.saveFile(F, Father.getID(),
+								callback);
+						// }
 
 					} else {
 						Folder F = new Folder(textBox.getText(), null, catalog
 								.getId());
-						/*if (Father == null)
-							bookReaderServiceHolder.saveFolder(F, Constants.CATALOGID,
-									callback);
-						else*/
-							bookReaderServiceHolder.saveFolder(F,
-									Father.getID(), callback);
+						/*
+						 * if (Father == null)
+						 * bookReaderServiceHolder.saveFolder(F,
+						 * Constants.CATALOGID, callback); else
+						 */
+						bookReaderServiceHolder.saveFolder(F, Father.getID(),
+								callback);
 
 					}
 					Yo.hide();
@@ -167,17 +183,19 @@ public class NewTyperAdmin extends PopupPanel {
 		CancelButton.setSize("100%", "100%");
 		CancelButton.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterPush");
 			}
 		});
 		CancelButton.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				((Button) event.getSource()).setStyleName("gwt-ButtonCenter");
 			}
 		});
 		CancelButton.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterOver");
 			}
 		});
 		CancelButton.setStyleName("gwt-ButtonCenter");

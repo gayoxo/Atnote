@@ -51,6 +51,7 @@ public class SeleccionMenuCatalog extends PopupPanel {
 		Button btnNewButton_1 = new Button("Delete");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				hide();
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Deleting...");
 				bookReaderServiceHolder.deleteCatalog(BLan.getCatalog().getId(), new AsyncCallback<Void>() {
@@ -58,12 +59,12 @@ public class SeleccionMenuCatalog extends PopupPanel {
 					public void onSuccess(Void result) {
 						LoadingPanel.getInstance().hide();
 						Father.refresh();
-						hide();
 					}
 					
 					public void onFailure(Throwable caught) {
 						LoadingPanel.getInstance().hide();
 					Window.alert("The Catalog could not be deleted");
+					
 						
 					}
 				});
@@ -93,9 +94,10 @@ public class SeleccionMenuCatalog extends PopupPanel {
 		Button btnNewButton_2 = new Button("Edit");
 		btnNewButton_2.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				hide();
 				EditorTagsAndTypes.setCatalogo(BLan.getCatalog());
 				Controlador.change2EditorTagsAndTypes();
-				hide();
+				
 			}
 		});
 		btnNewButton_2.addMouseDownHandler(new MouseDownHandler() {
@@ -120,6 +122,7 @@ public class SeleccionMenuCatalog extends PopupPanel {
 		Button btnNewButton_3 = new Button("Change Visibility");
 		btnNewButton_3.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				hide();
 				Change_Visivility Nuevo=new Change_Visivility(BLan.getCatalog(), Father);
 				Nuevo.center();
 			}

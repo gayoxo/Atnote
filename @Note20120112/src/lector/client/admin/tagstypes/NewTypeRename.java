@@ -25,7 +25,9 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
+import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
+import lector.client.catalogo.client.FolderException;
 import lector.client.reader.IlegalFolderFusionException;
 import lector.client.reader.LoadingPanel;
 
@@ -62,7 +64,7 @@ public class NewTypeRename extends PopupPanel {
         verticalPanel.add(grid);
         grid.setSize("159px", "56px");
 
-        Label lblType = new Label("Type");
+        Label lblType = new Label(Tipo);
         grid.setWidget(0, 0, lblType);
         
         VerticalPanel verticalPanel_1 = new VerticalPanel();
@@ -174,7 +176,15 @@ public class NewTypeRename extends PopupPanel {
                         		AsyncCallback<Void> callback=new AsyncCallback<Void>(){
 
 									public void onFailure(Throwable caught) {
-										Window.alert("Error in Merge");
+										if (caught instanceof FileException) {
+											Window.alert(((FileException) caught)   // Se ataja cuando se guarda un file con un nombre que ya existe.
+													.getMessage());
+										} else if (caught instanceof FolderException) {
+											Window.alert(((FolderException) caught)   // Se ataja cuando se guarda un folder con un nombre que ya existe en su mismo nivel.
+													.getMessage());
+										} else {
+											Window.alert("Error in Merge");
+											}
 										LoadingPanel.getInstance().hide();
                                         Yo.hide();
 										

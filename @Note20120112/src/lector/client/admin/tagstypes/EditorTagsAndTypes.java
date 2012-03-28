@@ -163,6 +163,8 @@ public class EditorTagsAndTypes implements EntryPoint {
 
 		MenuItem mntmMove = new MenuItem("Move", false, new Command() {
 			public void execute() {
+				if (!(finder.getTopPath() instanceof File))
+				{
 				int mover = Selected.getWidgetCount();
 				for (int i = 1; i < mover; i++) {
 
@@ -170,8 +172,9 @@ public class EditorTagsAndTypes implements EntryPoint {
 							.getWidget(i));
 
 					moverTypos(Delete.getEntidad());
-
 				}
+				}
+				else Window.alert("Destiny cannot be a Type. It always has to be a Category");
 			}
 
 			private void moverTypos(Entity entidad) {

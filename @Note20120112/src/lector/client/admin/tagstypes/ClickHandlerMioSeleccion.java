@@ -40,9 +40,7 @@ public class ClickHandlerMioSeleccion extends ClickHandlerMio implements
 				
 			}
 		};
-		if (PFSE.getFather()==null)
-		bookReaderServiceHolder.addFather(E.getID(), Constants.CATALOGID, LLamada);
-		else 
+		
 			bookReaderServiceHolder.addFather(E.getID(), PFSE.getFather().getID(), LLamada);
 
 	}

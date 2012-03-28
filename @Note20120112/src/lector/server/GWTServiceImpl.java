@@ -31,6 +31,7 @@ import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
+import lector.client.catalogo.client.FolderException;
 import lector.client.catalogo.server.Catalogo;
 import lector.client.catalogo.server.Entry;
 import lector.client.catalogo.server.FileDB;
@@ -752,7 +753,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				}
 			} else {
 				throw new DecendanceException(
-						"The file you are trying to move is decentant in its herarchy, the action will be not take place ");
+						"The file you are trying to move is decentant in its herarchy, the action will not take place ");
 
 			}
 			// updateFolder(fFrom);
@@ -1012,7 +1013,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (isFileNameInDB(filesys.getName(), catalogId)
 				&& filesys.getID() == null) {
 			throw new FileException(
-					"El Tipo de Anotaci贸n que intenta guardar ya lo ha utilizado, por favor c谩mbielo");
+					"The type you are trying to save already exist in the Database, please check the name or reuse it otherwise");
 		}
 		FileDB file = cloneFile(filesys);
 		if (!(file.getFathers().contains(fatherId))) {
@@ -1158,19 +1159,19 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public Long saveFolder(Folder folderSys, Long fatherId)
-			throws FileException {
+			throws FolderException {
 		Long folderId = 0l;
 
 		if (!fatherId.equals(Constants.CATALOGID)) {
 			if (hasTwinBrother(folderSys.getName(), fatherId, false)) {
-				throw new FileException(
-						"El Tipo de Anotaci贸n que intenta guardar ya lo ha utilizado, por favor c谩mbielo");
+				throw new FolderException(
+						"They Category you are trying to save has a 'twin brother'. Please rename the Category");
 			}
 		} else {
 			if (hasTwinBrother(folderSys.getName(), folderSys.getCatalogId(),
 					true)) {
-				throw new FileException(
-						"El Tipo de Anotaci贸n que intenta guardar ya lo ha utilizado, por favor c谩mbielo");
+				throw new FolderException(
+						"They Category you are trying to save has a 'twin brother'. Please rename the Category");
 			}
 		}
 		try {
@@ -1494,7 +1495,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		ArrayList<Entry> listEntries;
 		entityManager = EMF.get().createEntityManager();
 		String sql;
-		if (fatherId == Constants.CATALOGID) {
+		if (fatherId.equals(Constants.CATALOGID)) {
 			sql = "SELECT f FROM FolderDB f WHERE f.catalogId=" + catalogId
 					+ " AND f.fathers=" + Constants.CATALOGID;
 		} else {
@@ -1504,7 +1505,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		listEntries = new ArrayList<Entry>(list);
 		entityManager = EMF.get().createEntityManager();
 
-		if (fatherId == Constants.CATALOGID) {
+		if (fatherId.equals(Constants.CATALOGID)) {
 			sql = "SELECT f FROM FileDB f WHERE f.catalogId=" + catalogId
 					+ " AND f.fathers=" + Constants.CATALOGID;
 		} else {
@@ -3159,6 +3160,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				saveCatalog(catalog);
 			}
 		}
+		if (!(sonFile.getFathers().contains(fatherId))) {
+			sonFile.getFathers().add(fatherId);
+			savePlainFile(sonFile);
+		}
 	}
 
 	/* a馻de la relaci髇 padre - hijo */
@@ -3325,7 +3330,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		FileDB fileDB = loadFileById(fileId);
 		if (isFileNameInDB(newName, fileDB.getCatalogId())) {
 			throw new FileException(
-					"El Tipo de Anotaci贸n que intenta guardar ya lo ha utilizado, por favor c谩mbielo");
+					"The type you are trying to save already exist in the Database, please check the name or reuse it otherwise");
 		}
 		fileDB.setName(newName);
 		savePlainFile(fileDB);
@@ -3333,13 +3338,13 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public void renameFolder(Long folderId, String newName)
-			throws FileException {
+			throws FolderException{
 		FolderDB folderDB = loadFolderById(folderId);
 		for (int i = 0; i < folderDB.getFathers().size(); i++) {
 			if (isFolderBrotherNameInDB(newName, folderDB.getFathers().get(i),
 					folderDB.getCatalogId())) {
-				throw new FileException(
-						"El Tipo de Anotaci贸n que intenta guardar ya lo ha utilizado, por favor c谩mbielo");
+				throw new FolderException(
+						"They Category you are trying to save has a 'twin brother'. Please rename the Category");
 			}
 		}
 		folderDB.setName(newName);

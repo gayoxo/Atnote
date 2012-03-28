@@ -4,7 +4,9 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.client.File;
+import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
+import lector.client.catalogo.client.FolderException;
 import lector.client.login.ActualUser;
 
 import com.google.gwt.user.client.Window;
@@ -108,6 +110,16 @@ btnNewButton.addClickHandler(new ClickHandler() {
 
 					public void onFailure(Throwable caught) {
 						LoadingPanel.getInstance().hide();
+						//TODO Modificar lenguaje etiquetas para los errores.
+						if (caught instanceof FileException) {
+							Window.alert(((FileException) caught)   // Se ataja cuando se guarda un file con un nombre que ya existe.
+									.getMessage());
+						} else if (caught instanceof FolderException) {
+							Window.alert(((FolderException) caught)   // Se ataja cuando se guarda un folder con un nombre que ya existe en su mismo nivel.
+									.getMessage());
+						} else {
+							Window.alert("The file could not be saved");
+						}
 						Window.alert(ActualUser.getLanguage().getE_Saving());
 						hide();
 						
