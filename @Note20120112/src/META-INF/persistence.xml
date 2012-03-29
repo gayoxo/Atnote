@@ -17,7 +17,7 @@
 		<class>lector.client.language.Language</class>
 		<class>lector.client.admin.activity.ReadingActivity</class>
 		<class>lector.client.reader.annotthread.AnnotationThread</class>
-
+		<class>lector.client.reader.BookBlob</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="datanucleus.ConnectionURL" value="appengine" />

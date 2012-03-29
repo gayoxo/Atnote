@@ -10,9 +10,33 @@
 		<servlet-name>ServletAdaptor</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>ImageService</servlet-name>
+		<servlet-class>lector.server.ImageServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Upload</servlet-name>
+		<servlet-class>lector.server.Upload</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Serve</servlet-name>
+		<servlet-class>lector.server.Serve</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Upload</servlet-name>
+		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Serve</servlet-name>
+		<url-pattern>/serve</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>GWTService</servlet-name>
 		<url-pattern>/BookReader/book.reader/gwtservice</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImageService</servlet-name>
+		<url-pattern>/simplegwtproject/book.reader/imageservice</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ServletAdaptor</servlet-name>

@@ -21,4 +21,9 @@ public class Constants {
 	public static String ANNOTATION_UPDATE_RESTRICTED = "Restricted";
 	public static String BREAKER = "-";
 	
+	// BOOK_BLOBS PARAMETERS
+	public static String BLOB_UPLOADER = "uploader";
+	public static String BLOB_AUTHOR = "author";
+	public static String BLOB_PUBLISHED_YEAR = "publishedyear";
+	public static String BLOB_TITLE = "title";
 }
