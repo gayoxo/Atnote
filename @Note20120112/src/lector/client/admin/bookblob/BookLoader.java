@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -59,8 +60,11 @@ public class BookLoader implements EntryPoint {
 	private int actualFiles;
 	private VerticalPanel PanelUploaders;
 	private FormPanel form;
-	private FileUpload fileUpload;
+	private FileUpload FU;
 	private Button submitButton;
+	private FileUpload FU1;
+	private FileUpload FU2;
+	private FileUpload FU3;
 
 	public void onModuleLoad() {
 
@@ -159,14 +163,14 @@ public class BookLoader implements EntryPoint {
 		horizontalPanel_7.add(title);
 		title.setWidth("393px");
 		title.setName(Constants.BLOB_TITLE);
-
-		userApp = new TextBox();
-		horizontalPanel_7.add(userApp);
-		userApp.setWidth("393px");
-		userApp.setText(ActualUser.getUser().getId().toString());
-		userApp.setReadOnly(true);
-		userApp.setVisible(false);
-		userApp.setName(Constants.BLOB_UPLOADER);
+		
+				userApp = new TextBox();
+				verticalPanel_2.add(userApp);
+				userApp.setWidth("393px");
+				userApp.setText(ActualUser.getUser().getId().toString());
+				userApp.setReadOnly(true);
+				userApp.setVisible(false);
+				userApp.setName(Constants.BLOB_UPLOADER);
 
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
 		verticalPanel_2.add(verticalPanel_3);
@@ -178,25 +182,25 @@ public class BookLoader implements EntryPoint {
 
 
 
-		fileUpload = new FileUpload();
-		fileUpload.setName("1");
-		PanelUploaders.add(fileUpload);
-		fileUpload.setWidth("100%");
+		FU = new FileUpload();
+		FU.setName("1");
+		PanelUploaders.add(FU);
+		FU.setWidth("100%");
 
-		FileUpload fileUpload_2 = new FileUpload();
-		fileUpload_2.setName("2");
-		PanelUploaders.add(fileUpload_2);
-		fileUpload_2.setWidth("100%");
+		FU1 = new FileUpload();
+		FU1.setName("2");
+		PanelUploaders.add(FU1);
+		FU1.setWidth("100%");
 
-		FileUpload fileUpload_1 = new FileUpload();
-		fileUpload_1.setName("3");
-		PanelUploaders.add(fileUpload_1);
-		fileUpload_1.setWidth("100%");
+		FU2 = new FileUpload();
+		FU2.setName("3");
+		PanelUploaders.add(FU2);
+		FU2.setWidth("100%");
 
-		FileUpload fileUpload_3 = new FileUpload();
-		fileUpload_3.setName("4");
-		PanelUploaders.add(fileUpload_3);
-		fileUpload_3.setSize("100%", "100%");
+		FU3 = new FileUpload();
+		FU3.setName("4");
+		PanelUploaders.add(FU3);
+		FU3.setSize("100%", "100%");
 
 		SimplePanel simplePanel = new SimplePanel();
 		verticalPanel_3.add(simplePanel);
@@ -250,7 +254,28 @@ public class BookLoader implements EntryPoint {
 		submitButton = new Button("loading...");
 		submitButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				form.submit();
+				ArrayList<Widget> Listanueva=new ArrayList<Widget>();
+				ArrayList<Widget> ListaIncompatibles=new ArrayList<Widget>();
+				for (Widget widget : PanelUploaders) {
+					FileUpload T=(FileUpload)widget;
+					if (!T.getFilename().isEmpty())
+						{
+						//Compativilidad
+						Listanueva.add(T);
+						}
+				}
+				PanelUploaders.clear();
+				int i=0;
+				for (Widget widget : Listanueva) {
+					FileUpload T=(FileUpload)widget;
+					T.setName(Integer.toString(i));	
+					PanelUploaders.add(widget);
+				//	Window.alert(T.getFilename() + " : " + i);
+					i++;
+				}
+				if ((!Listanueva.isEmpty())&& !title.getText().isEmpty())
+					form.submit();
+				else Window.alert(ErrorConstants.TEXT_NULL_OR_NO_IMAGEN);
 			}
 		});
 		verticalPanel_2.add(submitButton);
@@ -323,7 +348,7 @@ public class BookLoader implements EntryPoint {
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				
 				startNewBlobstoreSession();
-				form.reset();
+				
 				/*userImageService.getBookBlobsByUserId(ActualUser.getUser().getId(),
 						new AsyncCallback<ArrayList<BookBlob>>() {
 
@@ -352,6 +377,7 @@ public class BookLoader implements EntryPoint {
 					public void onSuccess(UserApp result) {
 						ActualUser.setUser(result);
 						Controlador.change2Administrator();
+						//form.reset();
 						
 					}
 					

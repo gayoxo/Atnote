@@ -55,7 +55,7 @@ public class Administrador implements EntryPoint {
 		else 
 		Bienvenida=ActualUser.getUser().getEmail();
 		
-		MenuItem menuItem = new MenuItem("Welcome to de administrator page : " + Bienvenida , false, (Command) null);
+		MenuItem menuItem = new MenuItem("Welcome to the administrator page : " + Bienvenida , false, (Command) null);
 		menuItem.setEnabled(false);
 		menuBar.addItem(menuItem);
 		
