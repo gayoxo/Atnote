@@ -34,16 +34,22 @@ public class Upload extends HttpServlet {
 			throws ServletException, IOException {
 
 		Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(req);
-
 		ArrayList<String> webLinks = new ArrayList<String>();
-		Iterator itr = blobs.entrySet().iterator();
-		while (itr.hasNext()) {
-			Map.Entry e = (Map.Entry) itr.next();
-			// blobKeys.add((BlobKey) e.getValue());
+		for(int i = 0; i < blobs.size(); i++){
 			String webLink = "/serve?blob-key="
-					+ (((BlobKey) e.getValue()).getKeyString());
+				+ (blobs.get(String.valueOf(i)).getKeyString());
 			webLinks.add(webLink);
 		}
+		
+
+		// Iterator itr = blobs.entrySet().iterator();
+		// while (itr.hasNext()) {
+		// Map.Entry e = (Map.Entry) itr.next();
+		// // blobKeys.add((BlobKey) e.getValue());
+		// String webLink = "/serve?blob-key="
+		// + (((BlobKey) e.getValue()).getKeyString());
+		// webLinks.add(webLink);
+		//	}
 
 		String pagesCount = String.valueOf(blobs.size());
 		String publishedYear = req.getParameter(Constants.BLOB_PUBLISHED_YEAR);
