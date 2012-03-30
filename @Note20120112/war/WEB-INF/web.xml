@@ -36,7 +36,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ImageService</servlet-name>
-		<url-pattern>/simplegwtproject/book.reader/imageservice</url-pattern>
+		<url-pattern>/BookReader/book.reader/imageservice</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ServletAdaptor</servlet-name>
