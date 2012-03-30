@@ -180,7 +180,12 @@ public class UserEdition implements EntryPoint {
 											bookReaderServiceHolder.updateRenameOfUser(result.getId(), new AsyncCallback<Void>() {
 												
 												public void onSuccess(Void result) {
+													
 													LoadingPanel.getInstance().hide();
+													if (ActualUser.getUser().getProfile().equals(Constants.PROFESSOR))
+														Controlador.change2Administrator();
+													else if (ActualUser.getUser().getProfile().equals(Constants.STUDENT))
+														 Controlador.change2MyActivities();
 													
 												}
 												
