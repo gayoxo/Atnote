@@ -270,6 +270,32 @@ public class Administrador implements EntryPoint {
 		});
 		verticalPanel.add(btnNewButton_2);
 		btnNewButton_2.setSize("100%", "100%");
+		//
+		Button LoadABook = new Button("Load a Book");
+		LoadABook.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+			}
+		});
+		LoadABook.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+			}
+		});
+		LoadABook.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+			}
+		});
+		LoadABook.setStyleName("gwt-ButtonTOP");
+		LoadABook.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Controlador.change2LoadABook();
+			}
+		});
+		verticalPanel.add(LoadABook);
+		LoadABook.setSize("100%", "100%");
+		//
 		
 		Button btnNewButton_3 = new Button("My Books");
 		btnNewButton_3.addMouseOutHandler(new MouseOutHandler() {

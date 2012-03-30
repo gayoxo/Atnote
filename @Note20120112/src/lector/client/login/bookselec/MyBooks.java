@@ -6,6 +6,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
+import lector.client.controler.InformationConstants;
 import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
 import lector.client.login.activitysel.Visor;
@@ -161,9 +162,14 @@ public class MyBooks implements EntryPoint {
 					};
 					Button B = (Button) event.getSource();
 					String[] SS=B.getHTML().split(Constants.BREAKER);
-
-					bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
+					
+					if (!SS[1].startsWith(" ##"))
+						bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
 							callback);
+					else {
+						Window.alert(InformationConstants.THIS_IS_A_LOCAL_BOOK);
+						LoadingPanel.getInstance().hide();
+					}
 				}
 			});			
 			button.setStyleName("gwt-ButtonTOP");

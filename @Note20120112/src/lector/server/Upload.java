@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lector.client.controler.Constants;
+import lector.client.login.UserApp;
 import lector.client.reader.BookBlob;
 
 import com.google.appengine.api.blobstore.BlobInfo;
@@ -23,6 +24,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 @SuppressWarnings("serial")
 public class Upload extends HttpServlet {
 	private ImageServiceImpl imageService = new ImageServiceImpl();
+	private GWTServiceImpl gwtServiceImpl = new GWTServiceImpl();
 	private final static Logger _logger = Logger.getLogger(Upload.class
 			.getName());
 	private BlobstoreService blobstoreService = BlobstoreServiceFactory
@@ -38,7 +40,8 @@ public class Upload extends HttpServlet {
 		while (itr.hasNext()) {
 			Map.Entry e = (Map.Entry) itr.next();
 			// blobKeys.add((BlobKey) e.getValue());
-			String webLink = "/serve?blob-key=" + (((BlobKey) e.getValue()).getKeyString());
+			String webLink = "/serve?blob-key="
+					+ (((BlobKey) e.getValue()).getKeyString());
 			webLinks.add(webLink);
 		}
 
@@ -46,10 +49,10 @@ public class Upload extends HttpServlet {
 		String publishedYear = req.getParameter(Constants.BLOB_PUBLISHED_YEAR);
 		String title = req.getParameter(Constants.BLOB_TITLE);
 		String author = req.getParameter(Constants.BLOB_AUTHOR);
-		Long userApp = Long
-				.parseLong(req.getParameter(Constants.BLOB_UPLOADER));
+		Long userAppId = Long.parseLong(req
+				.getParameter(Constants.BLOB_UPLOADER));
 		BookBlob bookBlob = new BookBlob(pagesCount, publishedYear, title,
-				author, webLinks, userApp);
+				author, webLinks, userAppId);
 		// BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
 		// BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKeys.get(0));
 
@@ -58,22 +61,24 @@ public class Upload extends HttpServlet {
 		// + "/t" + blobInfo.getMd5Hash();
 		// System.out.println(s);
 
-//		if (blobKey1 == null) {
-//			res.sendRedirect("/");
-//		} else {
-//			BookBlob bookBlob = new BookBlob(blobKey1.getKeyString(), "prueba");
-//			imageService.saveBookBlob(bookBlob);
-//			res.sendRedirect("/upload?blob-key=" + blobKey1.getKeyString());
-//
-//	
-//
-//		}
-		
-			imageService.saveBookBlob(bookBlob);
-		// res.sendRedirect("/upload?blob-key="
-		//			+ blobKeys.get(0).getKeyString());
+		// if (blobKey1 == null) {
+		// res.sendRedirect("/");
+		// } else {
+		// BookBlob bookBlob = new BookBlob(blobKey1.getKeyString(), "prueba");
+		// imageService.saveBookBlob(bookBlob);
+		// res.sendRedirect("/upload?blob-key=" + blobKey1.getKeyString());
+		//
+		//
+		//
+		// }
 
-		
+		imageService.saveBookBlob(bookBlob);
+
+		UserApp upLoader = gwtServiceImpl.loadUserById(userAppId);
+		String book = title + " - " + "##" + bookBlob.getId();
+		upLoader.getBookIds().add(book);
+		gwtServiceImpl.saveUser(upLoader);
+
 	}
 
 	@Override

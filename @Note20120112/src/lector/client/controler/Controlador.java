@@ -4,6 +4,7 @@ import lector.client.admin.Administrador;
 import lector.client.admin.activity.NewAdminActivities;
 import lector.client.admin.admins.NewAdminAdministrator;
 import lector.client.admin.book.BookAdministration;
+import lector.client.admin.bookblob.BookLoader;
 import lector.client.admin.catalog.NewAdminCatalogs;
 import lector.client.admin.group.Groupadministration;
 import lector.client.admin.langedit.EditordeLenguajes;
@@ -52,6 +53,7 @@ public class Controlador implements EntryPoint {
     private static Browser Browser=new Browser();
     private static FilterAdvance FilterAdvance=new FilterAdvance();
     private static UserEdition UserEdition = new UserEdition();
+	private static BookLoader BooKLoader=new BookLoader();
 
     /**
      * @wbp.parser.entryPoint
@@ -214,5 +216,12 @@ public class Controlador implements EntryPoint {
 		clear();
 		Actual = UserEdition;
 		Actual.onModuleLoad();
+	}
+
+	public static void change2LoadABook() {
+		clear();
+		Actual = BooKLoader;
+		Actual.onModuleLoad();
+		
 	}
 }

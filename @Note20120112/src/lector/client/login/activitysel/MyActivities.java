@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import lector.client.admin.activity.ReadingActivity;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.book.reader.ImageService;
+import lector.client.book.reader.ImageServiceAsync;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.server.Catalogo;
 import lector.client.controler.Constants;
@@ -14,6 +16,7 @@ import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
 import lector.client.login.bookselec.ButtonActivityReader;
 import lector.client.reader.Book;
+import lector.client.reader.BookBlob;
 import lector.client.reader.LoadingPanel;
 import lector.client.reader.MainEntryPoint;
 
@@ -48,6 +51,7 @@ public class MyActivities implements EntryPoint {
 	private VerticalPanel verticalPanel = new VerticalPanel();
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
+	static ImageServiceAsync userImageService = GWT.create(ImageService.class);
 	private ReadingActivity RA;
 	private static int retryCounter=0;
 	private static String RAtemp=null;
@@ -258,6 +262,7 @@ public class MyActivities implements EntryPoint {
 				
 				button.addClickHandler(new ClickHandler() {
 					private AsyncCallback<Book> callback;
+					private AsyncCallback<BookBlob> callback2;
 
 					public void onClick(ClickEvent event) {
 
@@ -300,13 +305,57 @@ public class MyActivities implements EntryPoint {
 
 
 						};
+						
+						
+						callback2=new AsyncCallback<BookBlob>() {
+							
+							public void onSuccess(BookBlob result) {
+								ActualUser.setReadingactivity(RA);
+								Book B=new Book(result.getAuthor(), String.valueOf(result.getId()), result.getPagesCount(), result.getPublishedYear(), result.getTitle(), "LocalBooks.jpg", (String)null);
+								ActualUser.setBook(B);
+								B.setWebLinks(result.getWebLinks());
+								B.setImagesPath(B.getWebLinks().get(0));
+								ArrayList<Long> L=new ArrayList<Long>();
+								L.add(new Long(Long.MIN_VALUE));
+								MainEntryPoint.setFiltroTypes(L);
+								loadCatalog();
+								LoadingPanel.getInstance().hide();
+								
+							}
+							
+							public void onFailure(Throwable caught) {
+								if (retryCounter<3)
+								{
+								retryCounter++;
+								//TODO Error a lenguaje
+								Window.alert("Try Again " + retryCounter);
+								userImageService.loadBookBlobById(Long.parseLong(RAtemp), callback2);
+								
+								}else
+								{
+								Window.alert("Failed to load the book, this may be unavailable or the connection is too slow.");
+								LoadingPanel.getInstance().hide();
+//								throw new UnsupportedOperationException(
+//										"Not supported yet.");
+								}
+								
+							}
+						};
 						ButtonActivityReader B = (ButtonActivityReader) event.getSource();
 						String[] SS = B.getRA().getBookId().split(Constants.BREAKER);
 						RA=B.getRA();
 						retryCounter=0;
 						RAtemp=SS[1];
-						bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
-								callback);
+						 if (!RAtemp.startsWith(" ##"))
+							 bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
+									 callback);
+						 else 
+						 {
+							String[] RAtemp2=RAtemp.split("##");
+							RAtemp=RAtemp2[1];
+							userImageService.loadBookBlobById(Long.parseLong(RAtemp), callback2);
+							
+						 }
 					}
 				});
 			}
@@ -367,6 +416,7 @@ public class MyActivities implements EntryPoint {
 				
 				button.addClickHandler(new ClickHandler() {
 					private AsyncCallback<Book> callback;
+					private AsyncCallback<BookBlob> callback2;
 
 					public void onClick(ClickEvent event) {
 
@@ -409,13 +459,55 @@ public class MyActivities implements EntryPoint {
 
 
 						};
+						callback2=new AsyncCallback<BookBlob>() {
+							
+							public void onSuccess(BookBlob result) {
+								ActualUser.setReadingactivity(RA);
+								Book B=new Book(result.getAuthor(), String.valueOf(result.getId()), result.getPagesCount(), result.getPublishedYear(), result.getTitle(), "LocalBooks.jpg", (String)null);
+								ActualUser.setBook(B);
+								B.setWebLinks(result.getWebLinks());
+								B.setImagesPath(B.getWebLinks().get(0));
+								ArrayList<Long> L=new ArrayList<Long>();
+								L.add(new Long(Long.MIN_VALUE));
+								MainEntryPoint.setFiltroTypes(L);
+								loadCatalog();
+								LoadingPanel.getInstance().hide();
+								
+							}
+							
+							public void onFailure(Throwable caught) {
+								if (retryCounter<3)
+								{
+								retryCounter++;
+								//TODO Error a lenguaje
+								Window.alert("Try Again " + retryCounter);
+								userImageService.loadBookBlobById(Long.parseLong(RAtemp), callback2);
+								
+								}else
+								{
+								Window.alert("Failed to load the book, this may be unavailable or the connection is too slow.");
+								LoadingPanel.getInstance().hide();
+//								throw new UnsupportedOperationException(
+//										"Not supported yet.");
+								}
+								
+							}
+						};
 						ButtonActivityReader B = (ButtonActivityReader) event.getSource();
 						String[] SS = B.getRA().getBookId().split(Constants.BREAKER);
 						RA=B.getRA();
 						retryCounter=0;
 						RAtemp=SS[1];
-						bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
-								callback);
+						 if (!RAtemp.startsWith(" ##"))
+							 bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
+									 callback);
+						 else 
+						 {
+							String[] RAtemp2=RAtemp.split("##");
+							RAtemp=RAtemp2[1];
+							userImageService.loadBookBlobById(Long.parseLong(RAtemp), callback2);
+							
+						 }
 					}
 				});
 			}

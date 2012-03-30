@@ -3,6 +3,10 @@ package lector.client.admin.bookblob;
 import java.util.ArrayList;
 
 import lector.client.controler.Constants;
+import lector.client.controler.Controlador;
+import lector.client.controler.ErrorConstants;
+import lector.client.login.ActualUser;
+import lector.client.login.UserApp;
 import lector.client.reader.BookBlob;
 
 
@@ -29,14 +33,25 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import lector.client.book.reader.GWTService;
+import lector.client.book.reader.GWTServiceAsync;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.book.reader.ImageService;
 
 public class BookLoader implements EntryPoint {
 
 	static ImageServiceAsync userImageService = GWT.create(ImageService.class);
+	static GWTServiceAsync bookReaderServiceHolder = GWT
+	.create(GWTService.class);
 	private TextBox author;
 	private TextBox publishedYear;
 	private TextBox title;
@@ -57,7 +72,13 @@ public class BookLoader implements EntryPoint {
 		RPMenu.add(menuBar);
 		menuBar.setWidth("100%");
 
-		MenuItem mntmNewItem = new MenuItem("New item", false, (Command) null);
+		MenuItem mntmNewItem = new MenuItem("Close", false, new Command() {
+			
+			public void execute() {
+				Controlador.change2Administrator();
+				
+			}
+		});
 		menuBar.addItem(mntmNewItem);
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
@@ -83,7 +104,7 @@ public class BookLoader implements EntryPoint {
 
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		verticalPanel.add(verticalPanel_2);
-		verticalPanel_2.setWidth("450px");
+		verticalPanel_2.setWidth("200px");
 
 		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
 		verticalPanel_2.add(horizontalPanel_2);
@@ -142,6 +163,9 @@ public class BookLoader implements EntryPoint {
 		userApp = new TextBox();
 		horizontalPanel_7.add(userApp);
 		userApp.setWidth("393px");
+		userApp.setText(ActualUser.getUser().getId().toString());
+		userApp.setReadOnly(true);
+		userApp.setVisible(false);
 		userApp.setName(Constants.BLOB_UPLOADER);
 
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
@@ -191,7 +215,37 @@ public class BookLoader implements EntryPoint {
 			}
 		});
 		btnNewButton.setSize("100%", "100%");
+		btnNewButton.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+		btnNewButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
 
+		btnNewButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		btnNewButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		btnNewButton.setStyleName("gwt-ButtonCenter");
 		
 		submitButton = new Button("loading...");
 		submitButton.addClickHandler(new ClickHandler() {
@@ -202,7 +256,38 @@ public class BookLoader implements EntryPoint {
 		verticalPanel_2.add(submitButton);
 		submitButton.setWidth("100%");
 		submitButton.setEnabled(false);
+		submitButton.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				
+			}
+		});
+	
+		submitButton.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+			}
+		});
+		
 
+		submitButton.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+		}
+	});
+		
+
+		submitButton.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+			
+		}
+	});
+
+		submitButton.setStyleName("gwt-ButtonCenter");
+		
 		startNewBlobstoreSession();
 		
 		actualFiles = 4;
@@ -238,7 +323,8 @@ public class BookLoader implements EntryPoint {
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				
 				startNewBlobstoreSession();
-				userImageService.getBookBlobsByUserId(Long.parseLong(userApp.getText()),
+				form.reset();
+				/*userImageService.getBookBlobsByUserId(ActualUser.getUser().getId(),
 						new AsyncCallback<ArrayList<BookBlob>>() {
 
 							public void onFailure(Throwable caught) {
@@ -248,8 +334,8 @@ public class BookLoader implements EntryPoint {
 
 							public void onSuccess(ArrayList<BookBlob> result) {
 								Image image = new Image();
-								String imgURL = result.get(1).getWebLinks()
-										.get(1);
+								String imgURL = result.get(0).getWebLinks()
+										.get(0);
 								image.setUrl(imgURL);
 
 								final PopupPanel imagePopup = new PopupPanel(
@@ -257,9 +343,23 @@ public class BookLoader implements EntryPoint {
 								imagePopup.setWidget(image);
 								imagePopup.center();
 								form.reset();
+								
 
 							}
-						});
+						});*/
+				bookReaderServiceHolder.loadUserById(ActualUser.getUser().getId(), new AsyncCallback<UserApp>() {
+					
+					public void onSuccess(UserApp result) {
+						ActualUser.setUser(result);
+						Controlador.change2Administrator();
+						
+					}
+					
+					public void onFailure(Throwable caught) {
+						Window.alert(ErrorConstants.ERROR_LOAD_FORCE_LOGIN);
+						
+					}
+				});
 
 			}
 		});
