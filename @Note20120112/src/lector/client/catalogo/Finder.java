@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 public class Finder extends Composite {
 
 	protected Node ActualRama;
+	protected Long NanotimeOld;
 	protected Catalog C;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
@@ -60,6 +61,7 @@ public class Finder extends Composite {
 	
 	public Finder() {
 		
+		NanotimeOld=0l;
 		simplePanel = new SimplePanel();
 		initWidget(simplePanel);
 		
@@ -82,23 +84,36 @@ public class Finder extends Composite {
 		ArbolDeNavegacion.addSelectionHandler(new SelectionHandler<TreeItem>() {
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				Node ActualRamaNew=(Node)event.getSelectedItem();
+				Long acLong=System.currentTimeMillis();
+				Long Dist=acLong-NanotimeOld;
+				Boolean Seleccionador=(Dist<1000);
 				if (((Node)event.getSelectedItem()).getEntidad() instanceof Folder){
 					if (ActualRama!=ActualRamaNew){
 						ActualRama=ActualRamaNew;
+						NanotimeOld=System.currentTimeMillis();
 						cargaLaRama();
 					}
 					else
 					{
-						if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID) Selecciona();
+						if (Seleccionador)
+							if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID)
+								Selecciona();
+							else {}
+						else NanotimeOld=System.currentTimeMillis();
 					}
 				}
 				else if (ActualRamaNew.getEntidad() instanceof File)
 					if (ActualRama!=ActualRamaNew){
+						NanotimeOld=System.currentTimeMillis();
 						ActualRama=ActualRamaNew;
 					}
 					else
 					{
-						if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID) Selecciona();
+						if (Seleccionador)
+							if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID)
+								Selecciona();
+							else {}
+						else NanotimeOld=System.currentTimeMillis();
 					}
 				
 			}
