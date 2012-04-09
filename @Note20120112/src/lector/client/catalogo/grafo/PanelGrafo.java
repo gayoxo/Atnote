@@ -31,6 +31,10 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.widgetideas.graphics.client.Color;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class PanelGrafo extends Composite {
 
@@ -43,17 +47,96 @@ public class PanelGrafo extends Composite {
 	private static ClickHandler AccionAsociada;
 	private static Button ButonTipo;
 	private Long Catalogo;
+	private VerticalPanel zoomPanel;
+	private Button btnNewButton;
+	private Button btnNewButton_1;
+	private int OldSizehight;
+	private int OldSizewigth;
+	private Button btnNewButton_2;
+	private HorizontalPanel horizontalPanel;
 
 	public PanelGrafo(Long Catalog) {
 
 		Catalogo = Catalog;
+		OldSizehight = 0;
+		OldSizewigth = 0;
+
+		horizontalPanel = new HorizontalPanel();
+		initWidget(horizontalPanel);
+
+		zoomPanel = new VerticalPanel();
+		horizontalPanel.add(zoomPanel);
+
+		btnNewButton = new Button("Mas");
+		btnNewButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio((int) Math.round(OldSizehight * 1.3),
+						(int) Math.round(OldSizewigth * 1.3), true);
+
+			}
+
+		});
+		btnNewButton.setText("+");
+		btnNewButton.setHTML("<img src=\"Plus.gif\">");
+		zoomPanel.add(btnNewButton);
+		zoomPanel.setCellVerticalAlignment(btnNewButton,
+				HasVerticalAlignment.ALIGN_MIDDLE);
+		zoomPanel.setCellHorizontalAlignment(btnNewButton,
+				HasHorizontalAlignment.ALIGN_CENTER);
+
+		btnNewButton_1 = new Button("Menos");
+		btnNewButton_1.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio((int) Math.round(OldSizehight / 1.3),
+						(int) Math.round(OldSizewigth / 1.3), true);
+			}
+		});
+		btnNewButton_1.setText("-");
+		btnNewButton_1.setHTML("<img src=\"Less.gif\">");
+		zoomPanel.add(btnNewButton_1);
+
+		zoomPanel.setCellVerticalAlignment(btnNewButton_1,
+				HasVerticalAlignment.ALIGN_MIDDLE);
+		zoomPanel.setCellHorizontalAlignment(btnNewButton_1,
+				HasHorizontalAlignment.ALIGN_CENTER);
+
+		btnNewButton_2 = new Button("Reset");
+		btnNewButton_2.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				LlamadaServicio(0, 0, false);
+			}
+		});
+		btnNewButton_2.setText("Reset");
+		btnNewButton_2.setHTML("<img src=\"NAvar.gif\">");
+
+		btnNewButton.setEnabled(false);
+		btnNewButton_1.setEnabled(false);
+		btnNewButton_2.setEnabled(false);
+
+		zoomPanel.add(btnNewButton_2);
+		zoomPanel.setCellVerticalAlignment(btnNewButton_2,
+				HasVerticalAlignment.ALIGN_MIDDLE);
+		zoomPanel.setCellHorizontalAlignment(btnNewButton_2,
+				HasHorizontalAlignment.ALIGN_CENTER);
+
 		absolutePanel = new AbsolutePanel();
-		initWidget(absolutePanel);
+		horizontalPanel.add(absolutePanel);
 		absolutePanel.setSize("400px", "400px");
 
 		sPanel = new SimplePanel();
 		absolutePanel.add(sPanel, 0, 0);
 		sPanel.setSize("100%", "100%");
+
 		LoadingPanel.getInstance().center();
 		if (ActualUser.getLanguage() != null) {
 			LoadingPanel.getInstance().setLabelTexto(
@@ -65,7 +148,7 @@ public class PanelGrafo extends Composite {
 
 					public void onSuccess(ArrayList<AnnotationSchema> result) {
 						compare = result;
-						LlamadaServicio();
+						LlamadaServicio(0, 0, false);
 						LoadingPanel.getInstance().hide();
 
 					}
@@ -81,7 +164,7 @@ public class PanelGrafo extends Composite {
 
 	public void refresca(Long Catalog) {
 		absolutePanel.clear();
-		absolutePanel.add(sPanel);
+		absolutePanel.add(sPanel, 0, 0);
 		LoadingPanel.getInstance().center();
 		if (ActualUser.getLanguage() != null) {
 			LoadingPanel.getInstance().setLabelTexto(
@@ -93,7 +176,7 @@ public class PanelGrafo extends Composite {
 
 					public void onSuccess(ArrayList<AnnotationSchema> result) {
 						compare = result;
-						LlamadaServicio();
+						LlamadaServicio(0, 0, false);
 						LoadingPanel.getInstance().hide();
 
 					}
@@ -107,33 +190,56 @@ public class PanelGrafo extends Composite {
 
 	}
 
-	protected void LlamadaServicio() {
+	protected void LlamadaServicio(int newSizehight2, int newSizewigth2,
+			boolean sizeset) {
 		String URLReq = generaString();
-		if (!URLReq.isEmpty()){
-		URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
-				+ URLReq + "}&chof=json";
-		LoadingPanel.getInstance().center();
-		if (ActualUser.getLanguage() != null) {
-			LoadingPanel.getInstance().setLabelTexto(
-					ActualUser.getLanguage().getLoading());
+
+		if ((newSizehight2 * newSizewigth2) > 300000) {
+			float prop = newSizehight2 / newSizewigth2;
+			newSizehight2 = (int) Math.round(546 * prop);
+			newSizewigth2 = (int) Math.round(546 / prop);
 		}
+		if (newSizehight2 > 1000) {
+			newSizewigth2 = (1000 * newSizewigth2) / newSizehight2;
+			newSizehight2 = 1000;
+		}
+		if (newSizewigth2 > 1000) {
+			newSizehight2 = (1000 * newSizehight2) / newSizewigth2;
+			newSizewigth2 = 1000;
+		}
+		if (!URLReq.isEmpty()) {
+			if (!sizeset)
+				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
+						+ URLReq + "}&chof=json";
+			else
+				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
+						+ URLReq
+						+ "}&chof=json&chs="
+						+ newSizewigth2
+						+ "x"
+						+ newSizehight2;
+			LoadingPanel.getInstance().center();
+			if (ActualUser.getLanguage() != null) {
+				LoadingPanel.getInstance().setLabelTexto(
+						ActualUser.getLanguage().getLoading());
+			}
 
-		bookReaderServiceHolder.getJSONServiceTODrawGraph(URL.encode(URLReq),
-				new AsyncCallback<String>() {
+			bookReaderServiceHolder.getJSONServiceTODrawGraph(
+					URL.encode(URLReq), new AsyncCallback<String>() {
 
-					public void onSuccess(String result) {
-						Play(result);
-						LoadingPanel.getInstance().hide();
+						public void onSuccess(String result) {
+							Play(result);
+							LoadingPanel.getInstance().hide();
 
-					}
+						}
 
-					public void onFailure(Throwable caught) {
-						Window.alert("Errro, Try again");
-						LlamadaServicio();
-						LoadingPanel.getInstance().hide();
+						public void onFailure(Throwable caught) {
+							Window.alert("Errro, Try again");
+							LlamadaServicio(0, 0, false);
+							LoadingPanel.getInstance().hide();
 
-					}
-				});
+						}
+					});
 		}
 	}
 
@@ -211,6 +317,13 @@ public class PanelGrafo extends Composite {
 
 			int W = 10 + Lienzo.getwhight();
 			int H = 10 + Lienzo.getheight();
+			OldSizehight = H;
+			OldSizewigth = W;
+
+			btnNewButton.setEnabled(true);
+			btnNewButton_1.setEnabled(true);
+			btnNewButton_2.setEnabled(true);
+
 			absolutePanel.setSize(W + "px", H + "px");
 
 			canvas = new GWTCanvas(W, H);
@@ -247,7 +360,7 @@ public class PanelGrafo extends Composite {
 
 						public void onClick(ClickEvent event) {
 							((Button) event.getSource())
-									.setStyleName("gwt-ButtonCenter");
+									.setStyleName("gwt-ButtonCenterGraph");
 
 						}
 					});
@@ -255,14 +368,14 @@ public class PanelGrafo extends Composite {
 					sal.addMouseDownHandler(new MouseDownHandler() {
 						public void onMouseDown(MouseDownEvent event) {
 							((Button) event.getSource())
-									.setStyleName("gwt-ButtonCenterPush");
+									.setStyleName("gwt-ButtonCenterGraphPush");
 						}
 					});
 
 					sal.addMouseOutHandler(new MouseOutHandler() {
 						public void onMouseOut(MouseOutEvent event) {
 							((Button) event.getSource())
-									.setStyleName("gwt-ButtonCenter");
+									.setStyleName("gwt-ButtonCenterGraph");
 						}
 					});
 
@@ -270,12 +383,12 @@ public class PanelGrafo extends Composite {
 						public void onMouseOver(MouseOverEvent event) {
 
 							((Button) event.getSource())
-									.setStyleName("gwt-ButtonCenterOver");
+									.setStyleName("gwt-ButtonCenterGraphOver");
 
 						}
 					});
 
-					sal.setStyleName("gwt-ButtonCenter");
+					sal.setStyleName("gwt-ButtonCenterGraph");
 
 					sal.setWidth(But.getwhight() + "px");
 					sal.setHeight(But.getheight() + "px");
@@ -295,6 +408,7 @@ public class PanelGrafo extends Composite {
 			}
 		} catch (Exception e) {
 			Window.alert("Error Mostrando el Grafo");
+			LlamadaServicio(0, 0, false);
 		}
 
 	}

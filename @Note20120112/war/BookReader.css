@@ -585,3 +585,53 @@ max-height:400px;
 	font-style: italic;
 	font-weight: normal;
 }
+
+.gwt-ButtonCenterGraph {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+     background-size:  100% 100%;
+	color: White;
+	border: 0px solid;
+	font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
+.gwt-ButtonCenterGraphOver {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+	font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
+
+.gwt-ButtonCenterGraphSelect {
+background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+	font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
+
+.gwt-ButtonCenterGraphPush {
+ display: block;
+    float: left;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	text-decoration: none;
+	background-color: White;
+			font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
