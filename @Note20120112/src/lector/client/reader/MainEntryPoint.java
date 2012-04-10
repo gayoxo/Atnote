@@ -37,6 +37,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
+import lector.client.controler.HelpMessage;
 import lector.client.language.Language;
 import lector.client.login.ActualUser;
 import lector.client.reader.filter.FilterBasicPopUp;
@@ -328,6 +329,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				mntmShowAllComments.setEnabled(true);
 				mntmBlockedComments.setEnabled(false);
 				mntmBlockedComments.setHTML("<img src=\"NAvar.gif\">");
+				mntmBlockedComments.setTitle(HelpMessage.NOANNOTATIONHELP);
 				state = State.NoAnnotations;
 				ScrollAnnotationsPanel.setVisible(false);
 				mntmFilter.setEnabled(false);
@@ -338,6 +340,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		});
 		menuBar_1.addItem(mntmNoAnnotacion);
 		mntmNoAnnotacion.setEnabled(false);
+		mntmNoAnnotacion.setTitle(HelpMessage.NOANNOTATIONHELP);
 
 		mntmShowAllComments = new MenuItem(ActualLang.getAll_Annotation(), false,
 				new Command() {
@@ -348,6 +351,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmShowAllComments.setEnabled(false);
 						mntmBlockedComments.setEnabled(false);
 						mntmBlockedComments.setHTML("<img src=\"All.gif\">");
+						mntmBlockedComments.setTitle(HelpMessage.ALLANNOTATIONHELP);
 						state = State.AllAnnotations;
 						ScrollAnnotationsPanel.setVisible(true);
 						mntmFilter.setEnabled(true);
@@ -359,6 +363,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				});
 		menuBar_1.addItem(mntmShowAllComments);
 		mntmShowAllComments.setEnabled(false);
+		mntmShowAllComments.setTitle(HelpMessage.ALLANNOTATIONHELP);
 
 		mntmShowSelectedComments = new MenuItem(ActualLang.getOnly_Selected(), false,
 				new Command() {
@@ -370,6 +375,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						state = State.SelectedFree;
 						mntmBlockedComments.setEnabled(false);
 						mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
+						mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
 						refreshP();
 						ScrollAnnotationsPanel.setVisible(true);
 						verticalAnnotationsPanel.clear();
@@ -381,6 +387,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				});
 		menuBar_1.addItem(mntmShowSelectedComments);
 		mntmShowSelectedComments.setEnabled(false);
+		mntmShowSelectedComments.setTitle(HelpMessage.SELECTEDANNOTATIONHELP);
 		menuBar.addItem(Annotacion);
 
 		menuBar.addSeparator(separator_1);
@@ -391,12 +398,14 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 					public void execute() {
 						state = State.SelectedFree;
 						mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
+						mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
 						mntmBlockedComments.setEnabled(false);
 					}
 				});
 
 		mntmBlockedComments.setEnabled(false);
 		mntmBlockedComments.setHTML("<img src=\"NAvar.gif\">");
+		mntmBlockedComments.setTitle(HelpMessage.NOANNOTATIONHELP);
 
 		menuBar.addItem(mntmBlockedComments);
 
@@ -517,6 +526,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmShowAllComments.setEnabled(false);
 			mntmBlockedComments.setEnabled(false);
 			mntmBlockedComments.setHTML("<img src=\"All.gif\">");
+			mntmBlockedComments.setTitle(HelpMessage.ALLANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(true);
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
@@ -529,6 +539,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmShowAllComments.setEnabled(true);
 			mntmBlockedComments.setEnabled(false);
 			mntmBlockedComments.setHTML("<img src=\"NAvar.gif\">");
+			mntmBlockedComments.setTitle(HelpMessage.NOANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(false);
 			mntmFilter.setVisible(false);
 			separator_2.setVisible(false);
@@ -539,15 +550,14 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmNoAnnotacion.setEnabled(true);
 			mntmShowSelectedComments.setEnabled(false);
 			mntmShowAllComments.setEnabled(true);
-			mntmBlockedComments.setEnabled(false);
-			mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
+			mntmBlockedComments.setEnabled(true);
+			mntmBlockedComments.setHTML("<img src=\"Bloked.gif\">");
+			mntmBlockedComments.setTitle(HelpMessage.BLOKEDANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(true);
 			verticalAnnotationsPanel.clear();
 			mntmFilter.setVisible(true);
-			mntmBlockedComments.setEnabled(false);
 			separator_2.setVisible(true);
 			mntmBrowser.setVisible(true);
-			mntmBlockedComments.setHTML("<img src=\"NAvar.gif\">");
 			break;
 		case SelectedFree:
 			mntmNoAnnotacion.setEnabled(true);
@@ -555,6 +565,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmShowAllComments.setEnabled(true);
 			mntmBlockedComments.setEnabled(false);
 			mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
+			mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(true);
 			verticalAnnotationsPanel.clear();
 			mntmFilter.setVisible(true);
@@ -979,12 +990,14 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						state = State.SelectedBloked;
 						mntmBlockedComments.setHTML("<img src=\"Bloked.gif\">");
 						mntmBlockedComments.setEnabled(true);
+						mntmBlockedComments.setTitle(HelpMessage.BLOKEDANNOTATIONHELP);
 					}
 
 					if (event.isAltKeyDown() && (state == State.SelectedBloked)) {
 						state = State.SelectedFree;
 						mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
 						mntmBlockedComments.setEnabled(false);
+						mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
 					}
 
 				}
