@@ -8,5 +8,8 @@ public class HelpMessage {
 	public static String FREEANNOTATIONHELP= "Annotations will be displayed when passing the mouse over the area annotated  for block them must press control";
 	public static String BLOKEDANNOTATIONHELP= "Annotations are blocked,  press \"Alt\" or cross button on the screen to free up";
 	public static String REFRESHANNOTATIONHELP= "Press to refresh the annotations from the server";
+	public static String ABOUTANNOTATIONHELP= "Information about the aplication";
+	public static String SPECIFICATIONSHELP= "Specifications of the book";
+	public static String ANNOTATIONSMODEHELP="Selection mode";
 
 }

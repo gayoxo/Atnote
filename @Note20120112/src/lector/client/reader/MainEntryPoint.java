@@ -298,16 +298,16 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				About.showRelativeTo(AboutMenuButton);
 			}
 		});
-		AboutMenuButton.setEnabled(true);
-
+		AboutMenuButton.setEnabled(true);	
 		AboutMenuButton.setHTML(ActualLang.getNamePage());
+		AboutMenuButton.setTitle(HelpMessage.ABOUTANNOTATIONHELP);
 		
 		menuBar.addItem(AboutMenuButton);
 		
 		menuBar.addSeparator(separator_3);
 
 		Ficha = new MenuItem("New item", false, new Command() {
-
+		
 			public void execute() {
 				PopUpFicha PF = new PopUpFicha(technicalSpecs);
 				PF.showRelativeTo(Ficha);
@@ -315,11 +315,13 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		});
 		Ficha.setEnabled(false);
 		Ficha.setHTML(ActualLang.getSpecifications());
+		Ficha.setTitle(HelpMessage.SPECIFICATIONSHELP);
 		menuBar.addItem(Ficha);
 		MenuBar menuBar_1 = new MenuBar(true);
 		menuBar_1.setAnimationEnabled(true);
 
 		Annotacion = new MenuItem(ActualLang.getAnnotation(), false, menuBar_1);
+		Annotacion.setTitle(HelpMessage.ANNOTATIONSMODEHELP);
 
 		mntmNoAnnotacion = new MenuItem(ActualLang.getNo_Annotation(), false, new Command() {
 
