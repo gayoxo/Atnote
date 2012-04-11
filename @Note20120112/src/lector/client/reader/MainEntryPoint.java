@@ -417,6 +417,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			}
 		});
 		mntmRefresh.setHTML("<img src=\"RefreshIco.gif\">");
+		mntmRefresh.setTitle(HelpMessage.REFRESHANNOTATIONHELP);
 		menuBar.addItem(mntmRefresh);
 		menuBar.addSeparator(separator);
 
@@ -983,22 +984,24 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						popUpSelector.setTamagno(event.getX(), event.getY());
 					} else {
 						refreshC(event.getX(), event.getY());
+						
+						if (event.isControlKeyDown()
+								&& (state == State.SelectedFree)) {
+							state = State.SelectedBloked;
+							mntmBlockedComments.setHTML("<img src=\"Bloked.gif\">");
+							mntmBlockedComments.setEnabled(true);
+							mntmBlockedComments.setTitle(HelpMessage.BLOKEDANNOTATIONHELP);
+						}
+
+						if (event.isAltKeyDown() && (state == State.SelectedBloked)) {
+							state = State.SelectedFree;
+							mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
+							mntmBlockedComments.setEnabled(false);
+							mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
+						}
 					}
 
-					if (event.isControlKeyDown()
-							&& (state == State.SelectedFree)) {
-						state = State.SelectedBloked;
-						mntmBlockedComments.setHTML("<img src=\"Bloked.gif\">");
-						mntmBlockedComments.setEnabled(true);
-						mntmBlockedComments.setTitle(HelpMessage.BLOKEDANNOTATIONHELP);
-					}
-
-					if (event.isAltKeyDown() && (state == State.SelectedBloked)) {
-						state = State.SelectedFree;
-						mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
-						mntmBlockedComments.setEnabled(false);
-						mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
-					}
+					
 
 				}
 
