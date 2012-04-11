@@ -635,3 +635,53 @@ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center
 	font-family: arial, sans-serif;
 	text-decoration: none;
 }
+
+.gwt-ButtonCenterMoreLess {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+     background-size:  100% 100%;
+	color: White;
+	border: 0px solid;
+	font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
+.gwt-ButtonCenterMoreLessOver {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+	font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
+
+.gwt-ButtonCenterMoreLessSelect {
+background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+	font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}
+
+.gwt-ButtonCenterMoreLessPush {
+ display: block;
+    float: left;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	text-decoration: none;
+	background-color: White;
+			font-style: normal;
+	font-family: arial, sans-serif;
+	text-decoration: none;
+}

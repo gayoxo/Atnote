@@ -114,21 +114,21 @@ public class MainEntryPoint implements EntryPoint {
 		pageForward.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLess");
 				
 			}
 		});
 	
 	pageForward.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLessPush");
 			}
 		});
 		
 
 		pageForward.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLess");
 		}
 	});
 		
@@ -136,32 +136,32 @@ public class MainEntryPoint implements EntryPoint {
 		pageForward.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
 				
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLessOver");
 			
 		}
 	});
 
-		pageForward.setStyleName("gwt-ButtonCenter");
+		pageForward.setStyleName("gwt-ButtonCenterMoreLess");
 		
 		
 		pageBack.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLess");
 				
 			}
 		});
 	
 pageBack.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLessPush");
 			}
 		});
 		
 
 		pageBack.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLess");
 		}
 	});
 		
@@ -169,12 +169,12 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		pageBack.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
 				
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterMoreLessOver");
 			
 		}
 	});
 
-		pageBack.setStyleName("gwt-ButtonCenter");
+		pageBack.setStyleName("gwt-ButtonCenterMoreLess");
 
 		pageBack.addClickHandler(new ClickHandler() {
 
@@ -435,6 +435,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 
 		mntmFilter.setHTML(ActualLang.getFilterMainButton());
 		mntmFilter.setVisible(false);
+		mntmFilter.setTitle(HelpMessage.FILTERHELP);
 		menuBar.addItem(mntmFilter);
 		
 		mntmBrowser = new MenuItem("New item", false, new Command() {
@@ -445,6 +446,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		});
 		mntmBrowser.setHTML(ActualLang.getBrowserMainButton());
 		mntmBrowser.setVisible(false);
+		mntmBrowser.setTitle(HelpMessage.BROWSERHELP);
 		menuBar.addItem(mntmBrowser);
 
 		menuBar.addSeparator(separator_2);
@@ -463,6 +465,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmManage.setEnabled(false);
 			mntmManage.setVisible(false);
 		}
+		mntmManage.setTitle(HelpMessage.ADMINISTRADORHELP);
 
 		MenuItem mntmManage2 = new MenuItem(ActualLang.getBackUserButton(), false, new Command() {
 
@@ -472,6 +475,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			}
 		});
 		mntmManage2.setHTML(ActualLang.getBackUserButton());
+		mntmManage2.setTitle(HelpMessage.BACKUSERHELP);
 		menuBar.addItem(mntmManage2);
 		
 		menuBar.addSeparator(separator_4);

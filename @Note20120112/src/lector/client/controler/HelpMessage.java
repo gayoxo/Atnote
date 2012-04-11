@@ -11,5 +11,9 @@ public class HelpMessage {
 	public static String ABOUTANNOTATIONHELP= "Information about the aplication";
 	public static String SPECIFICATIONSHELP= "Specifications of the book";
 	public static String ANNOTATIONSMODEHELP="Selection mode";
+	public static String FILTERHELP="Press to enter in filter annotation menu";
+	public static String BROWSERHELP="Press to enter in filter annotation browser";
+	public static String ADMINISTRADORHELP="Press to back to administrator menu";
+	public static String BACKUSERHELP="Press to back to user activity menu";
 
 }
