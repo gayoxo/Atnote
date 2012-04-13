@@ -44,12 +44,12 @@ public class TextComentNoEdit extends DialogBox {
 	private MenuItemSeparator separator;
 	private Language ActualLang;
 	private ArrayList<Long> Antiguos;
-	private SelectorPanel SE;
+	private ArrayList<SelectorPanel> SE;
 	private TextArea AnotArea;
 	private HorizontalPanel horizontalPanel;
 	private HorizontalPanel horizontalPanel_1;
 
-	public TextComentNoEdit(Annotation E, SelectorPanel sE) {
+	public TextComentNoEdit(Annotation E, ArrayList<SelectorPanel> sE) {
 		
 		super(false);
 		setAnimationEnabled(true);
@@ -71,7 +71,9 @@ public class TextComentNoEdit extends DialogBox {
 					public void execute() {
 						CommentPanel.setEstado(false);
 						hide();
-						SE.hide();
+						for (SelectorPanel SP : SE) {
+							SP.hide();
+						}
 					}
 				});
 

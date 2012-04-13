@@ -3,6 +3,7 @@ package lector.client.reader;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import lector.client.controler.Constants;
 import lector.client.reader.hilocomentarios.ReplyDialog;
@@ -38,7 +39,7 @@ public class CommentPanel extends Composite {
     private VerticalPanel verticalPanel = new VerticalPanel();
     private Button button_1 = new Button("+");
  //   private RichTextArea richTextAreaBoton = new RichTextArea();
-    private SelectorPanel SE;
+    private ArrayList<SelectorPanel> SE;
     private final MenuBar menuBar = new MenuBar(false);
     private MenuItem mntmNewItem;
   //  private MenuItem mntmNewItem_1;
@@ -78,22 +79,31 @@ public class CommentPanel extends Composite {
 
             public void onMouseOut(MouseOutEvent event) {
                 if (SE != null) {
-                    SE.hide();
+                	for (SelectorPanel SP : SE) {
+                		SP.hide();
+					}
                 }
             }
         });
         button.addMouseOverHandler(new MouseOverHandler() {
 
             public void onMouseOver(MouseOverEvent event) {
-                if (SE != null) {
-                    SE.hide();
-                }
-                SE = new SelectorPanel(annotation.getTextSelector().getX().intValue(),
-                        annotation.getTextSelector().getY().intValue(),
-                        Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
-                        annotation.getTextSelector().getWidth().intValue(),
-                        annotation.getTextSelector().getHeight().intValue());
-                if (!Estado) SE.show();
+            	 if (SE != null) {
+                 	for (SelectorPanel SP : SE) {
+                 		SP.hide();
+ 					}
+                 }
+            	 SE=new ArrayList<SelectorPanel>();
+            	 for (TextSelector TS : annotation.getTextSelectors()) {
+            		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+            				 TS.getY().intValue(),
+                             Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
+                             TS.getWidth().intValue(),
+                             TS.getHeight().intValue());
+                     if (!Estado) SEE.show();
+                     SE.add(SEE);
+				}
+               
             }
         });
         button.setStyleName("gwt-ButtonIzquierda");
@@ -134,9 +144,11 @@ public class CommentPanel extends Composite {
 
             public void onMouseOut(MouseOutEvent event) {
             	if (!Estado){
-            	if (SE != null) {
-                    SE.hide();
-                }
+            		 if (SE != null) {
+                      	for (SelectorPanel SP : SE) {
+                      		SP.hide();
+      					}
+                      }
             	}
             }
         });
@@ -145,15 +157,21 @@ public class CommentPanel extends Composite {
 
             public void onMouseOver(MouseOverEvent event) {
             	if (!Estado){
-            	if (SE != null) {
-            					SE.hide();
-            					}
-                SE = new SelectorPanel(annotation.getTextSelector().getX().intValue(),
-                        annotation.getTextSelector().getY().intValue(),
-                        Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
-                        annotation.getTextSelector().getWidth().intValue(),
-                        annotation.getTextSelector().getHeight().intValue());
-                 SE.show();
+            		 if (SE != null) {
+                      	for (SelectorPanel SP : SE) {
+                      		SP.hide();
+      					}
+                      }
+            		 SE=new ArrayList<SelectorPanel>();
+                	 for (TextSelector TS : annotation.getTextSelectors()) {
+                		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+                				 TS.getY().intValue(),
+                                 Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
+                                 TS.getWidth().intValue(),
+                                 TS.getHeight().intValue());
+                         if (!Estado) SEE.show();
+                         SE.add(SEE);
+    				}
                 }
             }
         });
@@ -264,6 +282,9 @@ public class CommentPanel extends Composite {
 	}
     
     public void hideSelectorPanel() {
-		SE.hide();
+		for (SelectorPanel SP : SE) {
+			SP.hide();
+		}
+    	
 	}
 }

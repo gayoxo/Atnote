@@ -34,7 +34,7 @@ public class AnnotationSimp implements Serializable, IsSerializable {
 	private Integer pageNumber;
 	@Basic
 	@OneToOne(cascade = CascadeType.ALL)
-	private TextSelector textSelector;
+	private ArrayList<TextSelector> textSelector;
 	@Basic
 	private String comment;
 	@Basic
@@ -46,7 +46,7 @@ public class AnnotationSimp implements Serializable, IsSerializable {
 	}
 
 	public AnnotationSimp(Long id, Boolean visibility, Integer pageNumber,
-			TextSelector textSelector, String comment,
+			ArrayList<TextSelector> textSelector, String comment,
 			List<FileToExport> files, Date createdDate) {
 		super();
 		this.id = id;
@@ -74,11 +74,11 @@ public class AnnotationSimp implements Serializable, IsSerializable {
 		this.pageNumber = pageNumber;
 	}
 
-	public TextSelector getTextSelector() {
+	public ArrayList<TextSelector> getTextSelector() {
 		return textSelector;
 	}
 
-	public void setTextSelector(TextSelector textSelector) {
+	public void setTextSelector(ArrayList<TextSelector> textSelector) {
 		this.textSelector = textSelector;
 	}
 

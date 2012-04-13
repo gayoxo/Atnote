@@ -25,7 +25,7 @@ public class TextComment extends DialogBox {
 
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
-	private TextSelector textSelector;
+	private ArrayList<TextSelector> textSelector;
 	private MenuItem mntmGuardar;
 	private MenuItem mntmClear;
 	private MenuItem mntmCancelar;
@@ -47,7 +47,7 @@ public class TextComment extends DialogBox {
 	private PanelTextComent PanelTexto;
 	
 	
-	public TextComment(TextSelector textSelectorin, Book book) {
+	public TextComment(ArrayList<TextSelector> textSelectorin, Book book) {
 
 		super(false);
 		setAnimationEnabled(true);

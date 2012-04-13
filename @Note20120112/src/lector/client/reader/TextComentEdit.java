@@ -47,9 +47,9 @@ public class TextComentEdit extends DialogBox {
 	private ArrayList<Long> PilaABorrar;
 	private ArrayList<Long> ListaASalvar;
 	private ArrayList<Long> Resultado;
-	private SelectorPanel SE;
+	private ArrayList<SelectorPanel> SE;
 
-	public TextComentEdit(Annotation E, SelectorPanel sE) {
+	public TextComentEdit(Annotation E, ArrayList<SelectorPanel> sE) {
 		
 		super(false);
 		setAnimationEnabled(true);
@@ -141,7 +141,9 @@ public class TextComentEdit extends DialogBox {
 						public void onFailure(Throwable caught) {
 							Window.alert(ActualUser.getLanguage().getE_deleting());
 							hide();
-							SE.hide();
+							for (SelectorPanel SP : SE) {
+								SP.hide();
+							}
 							CommentPanel.setEstado(false);
 							LoadingPanel.getInstance().hide();
 						}
@@ -169,7 +171,9 @@ public class TextComentEdit extends DialogBox {
 
 								saveAnnotacion();
 								hide();
-								SE.hide();
+								for (SelectorPanel SP : SE) {
+									SP.hide();
+								}
 								CommentPanel.setEstado(false);
 								LoadingPanel.getInstance().hide();
 
@@ -260,7 +264,9 @@ public class TextComentEdit extends DialogBox {
 					public void execute() {
 						CommentPanel.setEstado(false);
 						hide();
-						SE.hide();
+						for (SelectorPanel SP : SE) {
+							SP.hide();
+						}
 					}
 				});
 
@@ -293,7 +299,9 @@ public class TextComentEdit extends DialogBox {
 								callback);
 						CommentPanel.setEstado(false);
 						hide();
-						SE.hide();
+						for (SelectorPanel SP : SE) {
+							SP.hide();
+						}
 					}
 				});
 		menuBar.addItem(mntmDeleteAnnootation);

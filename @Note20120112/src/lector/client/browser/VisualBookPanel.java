@@ -7,6 +7,7 @@ import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;
 import lector.client.reader.MainEntryPoint;
 import lector.client.reader.SelectorPanel;
+import lector.client.reader.TextSelector;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
@@ -24,7 +25,7 @@ public class VisualBookPanel extends DialogBox {
 
 	private Image image;
 	 private Annotation annotation;
-	private SelectorPanel SE;
+	private ArrayList<SelectorPanel> SE;
 	private VisualBookPanel Yo;
 
 
@@ -73,12 +74,17 @@ setWidget(SP);
 
 		MenuItem mntmShowSelection = new MenuItem(ActualUser.getLanguage().getComment_Area(), false, new Command() {
 			public void execute() {
-				SE=new SelectorPanel(annotation.getTextSelector().getX().intValue(),
-		                annotation.getTextSelector().getY().intValue(),
-		                image.getAbsoluteLeft(), image.getAbsoluteTop(),
-		                annotation.getTextSelector().getWidth().intValue(),
-		                annotation.getTextSelector().getHeight().intValue());
-		        SE.show();
+				SE=new ArrayList<SelectorPanel>();
+				for (TextSelector TS : annotation.getTextSelectors()) {
+					
+					SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+							TS.getY().intValue(),
+			                image.getAbsoluteLeft(), image.getAbsoluteTop(),
+			                TS.getWidth().intValue(),
+			                TS.getHeight().intValue());
+			        SEE.show();
+			        SE.add(SEE);
+				}
 			}
 		});
 		menuBar.addItem(mntmShowSelection);
@@ -106,17 +112,24 @@ setWidget(SP);
 	@Override
 	public void center() {
 		super.center();
-		SE = new SelectorPanel(annotation.getTextSelector().getX().intValue(),
-                 annotation.getTextSelector().getY().intValue(),
-                 image.getAbsoluteLeft(), image.getAbsoluteTop(),
-                 annotation.getTextSelector().getWidth().intValue(),
-                 annotation.getTextSelector().getHeight().intValue());
-         SE.show();
+		SE=new ArrayList<SelectorPanel>();
+		for (TextSelector TS : annotation.getTextSelectors()) {
+			
+			SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+					TS.getY().intValue(),
+	                image.getAbsoluteLeft(), image.getAbsoluteTop(),
+	                TS.getWidth().intValue(),
+	                TS.getHeight().intValue());
+	        SEE.show();
+	        SE.add(SEE);
+		}
 	}
 	
 	@Override
 	public void hide() {
-		SE.hide();
+		for (SelectorPanel SEE : SE) {
+			SEE.hide();
+		}
 		super.hide();
 
 	}
@@ -124,12 +137,17 @@ setWidget(SP);
 	@Override
 	public void show() {
 		super.show();
-		SE = new SelectorPanel(annotation.getTextSelector().getX().intValue(),
-                annotation.getTextSelector().getY().intValue(),
-                image.getAbsoluteLeft(), image.getAbsoluteTop(),
-                annotation.getTextSelector().getWidth().intValue(),
-                annotation.getTextSelector().getHeight().intValue());
-        SE.show();
+		SE=new ArrayList<SelectorPanel>();
+		for (TextSelector TS : annotation.getTextSelectors()) {
+			
+			SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+					TS.getY().intValue(),
+	                image.getAbsoluteLeft(), image.getAbsoluteTop(),
+	                TS.getWidth().intValue(),
+	                TS.getHeight().intValue());
+	        SEE.show();
+	        SE.add(SEE);
+		}
 	}
 	
 	
@@ -140,15 +158,23 @@ setWidget(SP);
 	
 	@Override
 	protected void continueDragging(MouseMoveEvent event) {
-		// TODO Auto-generated method stub
+
 		super.continueDragging(event);
-		if (SE!=null) SE.hide();
-		SE=new SelectorPanel(annotation.getTextSelector().getX().intValue(),
-                annotation.getTextSelector().getY().intValue(),
-                image.getAbsoluteLeft(), image.getAbsoluteTop(),
-                annotation.getTextSelector().getWidth().intValue(),
-                annotation.getTextSelector().getHeight().intValue());
-        SE.show();
+		if (SE!=null) 
+			for (SelectorPanel SEE : SE) {
+				SEE.hide();
+			}
+		SE=new ArrayList<SelectorPanel>();
+		for (TextSelector TS : annotation.getTextSelectors()) {
+			
+			SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+					TS.getY().intValue(),
+	                image.getAbsoluteLeft(), image.getAbsoluteTop(),
+	                TS.getWidth().intValue(),
+	                TS.getHeight().intValue());
+	        SEE.show();
+	        SE.add(SEE);
+		}
 		
 	}
 }

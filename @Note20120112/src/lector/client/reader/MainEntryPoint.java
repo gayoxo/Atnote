@@ -78,7 +78,8 @@ public class MainEntryPoint implements EntryPoint {
 	private static TextBox selectorPageBox = new TextBox();
 	private static DecoratorPanel decoratorPanel = new DecoratorPanel();
 	private static boolean isSelectionMode;
-	private static SelectorPanel popUpSelector;
+	private static ArrayList<SelectorPanel> popUpSelector;
+	private static SelectorPanel popUpSelectoract;
 	private static State state = State.NoAnnotations;
 	private static MenuItem mntmShowAllComments;
 	private static MenuItem mntmShowSelectedComments;
@@ -621,13 +622,20 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 
 	private static boolean isIn(Annotation annotationTest, int horizontal,
 			int vertical) {
-		TextSelector TS = annotationTest.getTextSelector();
-		boolean resultado = (horizontal >= TS.getX())
+		boolean resultado=false;
+		int i=0;
+		while(!resultado&&i<annotationTest.getTextSelectors().size())
+		{
+		TextSelector TS = annotationTest.getTextSelectors().get(i);
+		resultado = (horizontal >= TS.getX())
 				&& (horizontal <= TS.getX() + TS.getWidth());
 		resultado = resultado && (vertical >= TS.getY())
 				&& (vertical <= TS.getY() + TS.getHeight());
+		i++;
+		}
 		return resultado;
-	}
+	
+		}
 
 	protected static void refreshC(int X, int Y) {
 		switch (state) {
@@ -697,7 +705,9 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	
 	public static void refreshP() {
 		if (popUpSelector != null) {
-			popUpSelector.hide();
+			for (SelectorPanel SP : popUpSelector) {
+				SP.hide();
+			}
 		}
 		RefresCoDeTypesYTags();
 		verticalAnnotationsPanel.clear();
@@ -889,7 +899,9 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	}
 
 	public static void hidePopUpSelector() {
-		popUpSelector.hide();
+		for (SelectorPanel SP : popUpSelector) {
+			SP.hide();
+		}
 	}
 	
 	
@@ -987,7 +999,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseMove(MouseMoveEvent event) {
 				if (state != State.NoAnnotations) {
 					if (isSelectionMode == true) {
-						popUpSelector.setTamagno(event.getX(), event.getY());
+						popUpSelectoract.setTamagno(event.getX(), event.getY());
 					} else {
 						refreshC(event.getX(), event.getY());
 						
@@ -1031,11 +1043,11 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				if (state != State.NoAnnotations) {
 					if (!isSelectionMode
 							&& (event.getNativeButton() == NativeEvent.BUTTON_LEFT)) {
-
-						popUpSelector = new SelectorPanel(event.getX(), event
+						popUpSelector=new ArrayList<SelectorPanel>();
+						popUpSelectoract = new SelectorPanel(event.getX(), event
 								.getY(), originalBook.getAbsoluteLeft(),
 								originalBook.getAbsoluteTop(), 0, 0);
-						popUpSelector.show();
+						popUpSelectoract.show();
 						isSelectionMode = true;
 					}
 
@@ -1051,8 +1063,12 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				event.stopPropagation();
 				if (state != State.NoAnnotations) {
 					if (isSelectionMode) {
-						TextComment TC = new TextComment(popUpSelector
-								.getSelector(), book);
+						popUpSelector.add(popUpSelectoract);
+						ArrayList<TextSelector> ARRAT=new ArrayList<TextSelector>();
+						for (SelectorPanel PPSelect : popUpSelector) {
+							ARRAT.add(PPSelect.getSelector());
+						}
+						TextComment TC = new TextComment(ARRAT, book);
 						TC.center();
 						isSelectionMode = false;
 					}

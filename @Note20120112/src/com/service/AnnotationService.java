@@ -545,7 +545,7 @@ public class AnnotationService {
 
 		AnnotationSimp annotationSimp = new AnnotationSimp(annotation.getId(),
 				annotation.getVisibility(), annotation.getPageNumber(),
-				annotation.getTextSelector(), annotation.getComment()
+				annotation.getTextSelectors(), annotation.getComment()
 						.getValue(), files, annotation.getCreatedDate());
 
 		AnnotationToExport ate = new AnnotationToExport(userSimp, bookSimp,

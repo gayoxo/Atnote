@@ -74,8 +74,12 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         MenuItem mntmNewItem_1 = new MenuItem("New item", false, new Command() {
         	public void execute() {
         		while(HP.getWidgetCount()!=0)
-        			panelBotonesTipo.add(HP.getWidget(0));
-//        		for (Widget widget : HP) {
+        		{
+        			ButtonTipo Yo=(ButtonTipo)HP.getWidget(0);
+					Yo.setPertenezco(panelBotonesTipo);
+        			panelBotonesTipo.add(Yo);
+       		}
+//        			for (Widget widget : HP) {
 //					panelBotonesTipo.add(widget);				
 //        		}
         		hide();
