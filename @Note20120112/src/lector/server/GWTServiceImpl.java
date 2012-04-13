@@ -206,7 +206,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		annotationAux.setUserId(annotation.getUserId());
 		annotationAux.setVisibility(annotation.getVisibility());
 		annotationAux.setUpdatability(annotation.getUpdatability());
-		annotationAux.setTextSelector(annotation.getTextSelector());
+		annotationAux.setTextSelectors(annotation.getTextSelectors());
 		annotationAux.setIsPersisted(annotation.isPersisted());
 		annotationAux.setPageNumber(annotation.getPageNumber());
 		annotationAux.setFileIds(annotation.getFileIds());
@@ -260,6 +260,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				listAnnotations2.add(annotationAux);
 				annotationAux.setFileIds(new ArrayList<Long>(annotationAux
 						.getFileIds()));
+				
 			}
 		} catch (Exception e) {
 			throw new GeneralException(

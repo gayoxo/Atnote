@@ -11,7 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+
 
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,8 +32,8 @@ public class Annotation implements Serializable, IsSerializable {
 	private Boolean updatability = false;
 	private Integer pageNumber;
 	@Basic
-	@OneToOne(cascade = CascadeType.ALL)
-	private TextSelector textSelector;
+	@OneToMany(cascade = CascadeType.ALL)
+	private ArrayList<TextSelector> textSelectors;
 	@Basic
 	private Text comment;
 	@Basic
@@ -53,22 +54,24 @@ public class Annotation implements Serializable, IsSerializable {
 		isPersisted = false;
 		this.visibilityGroupIds = new ArrayList<Long>();
 		this.updatableGroupIds = new ArrayList<Long>();
+		this.textSelectors = new ArrayList<TextSelector>();
 	}
 
 	public Annotation(String bookId, Integer pageNumber,
-			TextSelector textSelector, Text comment) {
+			ArrayList<TextSelector> textSelectors, Text comment) {
 		this();
 		this.bookId = bookId;
 		this.pageNumber = pageNumber;
-		this.textSelector = textSelector;
+		this.textSelectors = textSelectors;
 		this.comment = comment;
 	}
 
 	public Annotation(String bookId, Integer pageNumber,
-			TextSelector textSelector, Text comment, ArrayList<Long> fileId) {
+			ArrayList<TextSelector> textSelectors, Text comment,
+			ArrayList<Long> fileId) {
 		this.bookId = bookId;
 		this.pageNumber = pageNumber;
-		this.textSelector = textSelector;
+		this.textSelectors = textSelectors;
 		this.comment = comment;
 		this.fileIds = fileId;
 	}
@@ -97,18 +100,18 @@ public class Annotation implements Serializable, IsSerializable {
 		this.pageNumber = pageNumber;
 	}
 
-	public TextSelector getTextSelector() {
-		return textSelector;
+	public ArrayList<TextSelector> getTextSelectors() {
+		return textSelectors;
 	}
 
-	public void setTextSelector(TextSelector textSelector) {
-		this.textSelector = textSelector;
+	public void setTextSelectors(ArrayList<TextSelector> textSelectors) {
+		this.textSelectors = textSelectors;
 	}
 
 	public ArrayList<Long> getFileIds() {
 		return fileIds;
 	}
-	
+
 	public void setFileIds(ArrayList<Long> fileIds) {
 		this.fileIds = fileIds;
 	}
