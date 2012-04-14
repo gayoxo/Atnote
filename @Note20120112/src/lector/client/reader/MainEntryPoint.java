@@ -78,6 +78,7 @@ public class MainEntryPoint implements EntryPoint {
 	private static TextBox selectorPageBox = new TextBox();
 	private static DecoratorPanel decoratorPanel = new DecoratorPanel();
 	private static boolean isSelectionMode;
+	private static boolean isShiftSelectionMode;
 	private static ArrayList<SelectorPanel> popUpSelector;
 	private static SelectorPanel popUpSelectoract;
 	private static State state = State.NoAnnotations;
@@ -107,10 +108,12 @@ public class MainEntryPoint implements EntryPoint {
 	private final MenuItemSeparator separator_5 = new MenuItemSeparator();
 	private static MenuItem FilterInfo;
 	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
+	private MenuItem DensidadAnot;
 
 	public MainEntryPoint() {
 		
-
+		isShiftSelectionMode=false;
+		popUpSelector=new ArrayList<SelectorPanel>();
 		
 		pageForward.addClickHandler(new ClickHandler() {
 			
@@ -392,6 +395,14 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		mntmShowSelectedComments.setEnabled(false);
 		mntmShowSelectedComments.setTitle(HelpMessage.SELECTEDANNOTATIONHELP);
 		menuBar.addItem(Annotacion);
+		
+		DensidadAnot = new MenuItem(ActualLang.getShowDensity(), false, new Command() {
+			public void execute() {
+				
+			}
+		});
+		DensidadAnot.setTitle(HelpMessage.DENSITYANNOTATIONHELP);
+		menuBar.addItem(DensidadAnot);
 
 		menuBar.addSeparator(separator_1);
 
@@ -902,6 +913,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		for (SelectorPanel SP : popUpSelector) {
 			SP.hide();
 		}
+		popUpSelectoract.hide();
 	}
 	
 	
@@ -999,9 +1011,32 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseMove(MouseMoveEvent event) {
 				if (state != State.NoAnnotations) {
 					if (isSelectionMode == true) {
-						popUpSelectoract.setTamagno(event.getX(), event.getY());
+
+							popUpSelectoract.setTamagno(event.getX(), event.getY());
+						
 					} else {
+						
+						if (isShiftSelectionMode && !event.isShiftKeyDown())
+							{
+							
+							ArrayList<TextSelector> ARRAT=new ArrayList<TextSelector>();
+								{
+								for (SelectorPanel PPSelect : popUpSelector) {
+								
+								ARRAT.add(PPSelect.getSelector());
+								}
+							TextComment TC = new TextComment(ARRAT, book);
+							TC.center();
+							popUpSelector=new ArrayList<SelectorPanel>();
+							isShiftSelectionMode=false;
+							
+								}
+							
+							
+							}
+						
 						refreshC(event.getX(), event.getY());
+						
 						
 						if (event.isControlKeyDown()
 								&& (state == State.SelectedFree)) {
@@ -1043,12 +1078,19 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				if (state != State.NoAnnotations) {
 					if (!isSelectionMode
 							&& (event.getNativeButton() == NativeEvent.BUTTON_LEFT)) {
-						popUpSelector=new ArrayList<SelectorPanel>();
+						if (!event.isShiftKeyDown()) 
+							{
+							for (SelectorPanel SP : popUpSelector) {
+								SP.hide();
+							}
+							popUpSelector=new ArrayList<SelectorPanel>();
+							}
 						popUpSelectoract = new SelectorPanel(event.getX(), event
 								.getY(), originalBook.getAbsoluteLeft(),
 								originalBook.getAbsoluteTop(), 0, 0);
 						popUpSelectoract.show();
 						isSelectionMode = true;
+							
 					}
 
 				}
@@ -1064,12 +1106,24 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				if (state != State.NoAnnotations) {
 					if (isSelectionMode) {
 						popUpSelector.add(popUpSelectoract);
+						
+						if (!event.isShiftKeyDown())
+						{
+						
 						ArrayList<TextSelector> ARRAT=new ArrayList<TextSelector>();
-						for (SelectorPanel PPSelect : popUpSelector) {
+		
+							for (SelectorPanel PPSelect : popUpSelector) {
+							
 							ARRAT.add(PPSelect.getSelector());
-						}
+							}
 						TextComment TC = new TextComment(ARRAT, book);
 						TC.center();
+						popUpSelector=new ArrayList<SelectorPanel>();
+						isShiftSelectionMode=false;
+						
+						}else 
+						isShiftSelectionMode=true;
+
 						isSelectionMode = false;
 					}
 

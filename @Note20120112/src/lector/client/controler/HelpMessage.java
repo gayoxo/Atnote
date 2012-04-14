@@ -15,5 +15,6 @@ public class HelpMessage {
 	public static String BROWSERHELP="Press to enter in filter annotation browser";
 	public static String ADMINISTRADORHELP="Press to back to administrator menu";
 	public static String BACKUSERHELP="Press to back to user activity menu";
+	public static String DENSITYANNOTATIONHELP="Show Annotation's Density";
 
 }

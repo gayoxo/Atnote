@@ -13,6 +13,14 @@ public class Language implements Serializable, IsSerializable {
 
 
 
+
+
+
+
+	
+
+
+
 	
 
 
@@ -35,6 +43,7 @@ public class Language implements Serializable, IsSerializable {
     private String DOYOUFilterOUT="Do you want to desactivate the filter?";
     private String AcceptFilter="Accept";
     private String CancelFilter="Cancel";
+    private String ShowDensity = "Show Density";
     
     //Specifications
     private String ID = "ID";
@@ -232,6 +241,14 @@ public class Language implements Serializable, IsSerializable {
     public String getCancelFilter() {
 		return CancelFilter;
 	}
+    
+    public String getShowDensity() {
+    	return ShowDensity;
+    }
+
+   public void setShowDensity(String showDensity) {
+	ShowDensity = showDensity;
+}
     
     //TODO Specifications
     public String getID() {
@@ -726,6 +743,7 @@ public String getOpenTypes() {
 public void setOpenTypes(String openTypes) {
 	OpenTypes = openTypes;
 }
+
 
 
 

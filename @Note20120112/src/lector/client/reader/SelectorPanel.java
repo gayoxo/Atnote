@@ -11,7 +11,7 @@ public class SelectorPanel extends PopupPanel {
     private TextSelector selector;
 
     public SelectorPanel(int x, int y, int i, int j, int width, int height) {
-        super(true);
+        super(false);
         setStyleName("gwt-PopUpTr-new");
         setSize("0", "0");
         transparentPanel = new SimplePanel();

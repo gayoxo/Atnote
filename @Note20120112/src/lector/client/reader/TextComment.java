@@ -151,11 +151,13 @@ public class TextComment extends DialogBox {
 
 					public void onFailure(Throwable caught) {
 						Window.alert(ActualLang.getE_saving()+ " Annotation");
+						MainEntryPoint.hidePopUpSelector();
 						LoadingPanel.getInstance().hide();
 					}
 
 					public void onSuccess(Long result) {
 						LoadingPanel.getInstance().hide();
+						MainEntryPoint.hidePopUpSelector();
 						MainEntryPoint.refreshP();
 					}
 				};
