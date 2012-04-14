@@ -50,6 +50,7 @@ import lector.client.reader.BookNotFoundException;
 import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
 import lector.client.reader.NullParameterException;
+import lector.client.reader.TextSelector;
 import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.appengine.api.users.User;
@@ -260,6 +261,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				listAnnotations2.add(annotationAux);
 				annotationAux.setFileIds(new ArrayList<Long>(annotationAux
 						.getFileIds()));
+				annotationAux.setTextSelectors(new ArrayList<TextSelector>(annotationAux.getTextSelectors()));
 				
 			}
 		} catch (Exception e) {
@@ -2191,6 +2193,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 							.getUpdatableGroupIds()));
 			annotationsSorted.get(i).setFileIds(
 					new ArrayList<Long>(annotationsSorted.get(i).getFileIds()));
+			annotationsSorted.get(i).setTextSelectors(
+					new ArrayList<TextSelector>(annotationsSorted.get(i).getTextSelectors()));
 		}
 
 		return annotationsSorted;
@@ -2936,6 +2940,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 						annotationReturn.getVisibilityGroupIds()));
 				annotationReturn.setUpdatableGroupIds(new ArrayList<Long>(
 						annotationReturn.getUpdatableGroupIds()));
+				annotationReturn.setTextSelectors(new ArrayList<TextSelector>(
+						annotationReturn.getTextSelectors()));
 			}
 			annotationReturnArra.add(annotationReturn);
 		}
@@ -3024,6 +3030,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 							.getUpdatableGroupIds()));
 			annotations.get(i).setFileIds(
 					new ArrayList<Long>(annotations.get(i).getFileIds()));
+			annotations.get(i).setTextSelectors(new ArrayList<TextSelector>(
+					annotations.get(i).getTextSelectors()));
 		}
 		return annotations;
 	}
