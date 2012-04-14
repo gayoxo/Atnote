@@ -26,6 +26,7 @@ public class MainWindowEditor extends PanelDecorador {
     private Texto DOYOUFilterOUT;
     private Texto AcceptFilter;
     private Texto CancelFilter;
+    private Texto ShowDensity;
 	private static Language LenguajeActual;
 	
 	public MainWindowEditor(Language LenguajeActualin) {
@@ -84,6 +85,9 @@ public class MainWindowEditor extends PanelDecorador {
 		CancelFilter = new Texto(LenguajeActual.getCancelFilter());	
 		CancelFilter.getTextBox().addChangeHandler(CH);
 		add(CancelFilter);
+		ShowDensity = new Texto(LenguajeActual.getShowDensity());	
+		ShowDensity.getTextBox().addChangeHandler(CH);
+		add(ShowDensity);
 		
 
 	}
@@ -147,6 +151,10 @@ public class MainWindowEditor extends PanelDecorador {
 		if (!CancelFilter.getText().isEmpty())
 			if (CancelFilter.getText().length()<2 ) Window.alert(CancelFilter.getLabel() + " lengh need to be more lenght tham two");
 				else LenguajeActual.setCancelFilter(CancelFilter.getText());
+		
+		if (!ShowDensity.getText().isEmpty())
+			if (ShowDensity.getText().length()<2 ) Window.alert(ShowDensity.getLabel() + " lengh need to be more lenght tham two");
+				else LenguajeActual.setShowDensity(ShowDensity.getText());
 		
 		saveLanguage(LenguajeActual);
 		saved=true;

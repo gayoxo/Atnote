@@ -88,6 +88,8 @@ public class CommentPanel extends Composite {
         button.addMouseOverHandler(new MouseOverHandler() {
 
             public void onMouseOver(MouseOverEvent event) {
+            	MainEntryPoint.hidePopUpSelector();
+				MainEntryPoint.hideDENSelector();
             	 if (SE != null) {
                  	for (SelectorPanel SP : SE) {
                  		SP.hide();
@@ -126,6 +128,8 @@ public class CommentPanel extends Composite {
         richTextArea.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
+            	MainEntryPoint.hidePopUpSelector();
+				MainEntryPoint.hideDENSelector();
                 if (annotation.isEditable())
                 	{
                 	TextComentEdit TCE = new TextComentEdit(annotation,SE);

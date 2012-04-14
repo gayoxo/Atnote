@@ -79,6 +79,7 @@ public class MainEntryPoint implements EntryPoint {
 	private static DecoratorPanel decoratorPanel = new DecoratorPanel();
 	private static boolean isSelectionMode;
 	private static boolean isShiftSelectionMode;
+	private static boolean isShowDensity;
 	private static ArrayList<SelectorPanel> popUpSelector;
 	private static SelectorPanel popUpSelectoract;
 	private static State state = State.NoAnnotations;
@@ -109,6 +110,7 @@ public class MainEntryPoint implements EntryPoint {
 	private static MenuItem FilterInfo;
 	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
 	private MenuItem DensidadAnot;
+	private static ArrayList<SelectorPanel> SE;
 
 	public MainEntryPoint() {
 		
@@ -183,6 +185,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		pageBack.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
+				hidePopUpSelector();
+				hideDENSelector();
 				if (currentPageNumber == book.getWebLinks().size() - 1) {
 					if (!pageForward.isVisible()) {
 						pageForward.setVisible(true);
@@ -200,6 +204,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		pageForward.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
+				hidePopUpSelector();
+				hideDENSelector();
 				if (currentPageNumber == 0) {
 					if (!pageBack.isVisible()) {
 						pageBack.setVisible(true);
@@ -218,6 +224,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 
 			public void onChange(ChangeEvent event) {
 
+				hidePopUpSelector();
+				hideDENSelector();
 				TextBox aux = (TextBox) event.getSource();
 				String ele = aux.getText();
 				try {
@@ -298,6 +306,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 
 		AboutMenuButton = new MenuItem(ActualLang.getNamePage(), false, new Command() {
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				PopupPanel About = new About();
 				About.showRelativeTo(AboutMenuButton);
 			}
@@ -313,6 +323,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		Ficha = new MenuItem("New item", false, new Command() {
 		
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				PopUpFicha PF = new PopUpFicha(technicalSpecs);
 				PF.showRelativeTo(Ficha);
 			}
@@ -330,6 +342,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		mntmNoAnnotacion = new MenuItem(ActualLang.getNo_Annotation(), false, new Command() {
 
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				mntmNoAnnotacion.setEnabled(false);
 				mntmShowSelectedComments.setEnabled(true);
 				mntmShowAllComments.setEnabled(true);
@@ -342,6 +356,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				mntmFilter.setVisible(false);
 				separator_2.setVisible(false);
 				mntmBrowser.setVisible(false);
+				DensidadAnot.setEnabled(false);
+				DensidadAnot.setVisible(false);
 			}
 		});
 		menuBar_1.addItem(mntmNoAnnotacion);
@@ -352,6 +368,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				new Command() {
 
 					public void execute() {
+						hidePopUpSelector();
+						hideDENSelector();
 						mntmNoAnnotacion.setEnabled(true);
 						mntmShowSelectedComments.setEnabled(true);
 						mntmShowAllComments.setEnabled(false);
@@ -364,6 +382,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmFilter.setVisible(true);
 						separator_2.setVisible(true);
 						mntmBrowser.setVisible(true);
+						DensidadAnot.setEnabled(true);
+						DensidadAnot.setVisible(true);
 						refreshP();
 					}
 				});
@@ -375,6 +395,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				new Command() {
 
 					public void execute() {
+						hidePopUpSelector();
+						hideDENSelector();
 						mntmNoAnnotacion.setEnabled(true);
 						mntmShowSelectedComments.setEnabled(false);
 						mntmShowAllComments.setEnabled(true);
@@ -389,6 +411,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmFilter.setVisible(true);
 						separator_2.setVisible(true);
 						mntmBrowser.setVisible(true);
+						DensidadAnot.setEnabled(true);
+						DensidadAnot.setVisible(true);
 					}
 				});
 		menuBar_1.addItem(mntmShowSelectedComments);
@@ -397,10 +421,31 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		menuBar.addItem(Annotacion);
 		
 		DensidadAnot = new MenuItem(ActualLang.getShowDensity(), false, new Command() {
+			
+
 			public void execute() {
-				
+				hidePopUpSelector();
+				hideDENSelector();
+				SE=new ArrayList<SelectorPanel>();
+				for (Annotation A:book.getAnnotations())
+				{
+
+						
+	                	 for (TextSelector TS : A.getTextSelectors()) {
+	                		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+	                				 TS.getY().intValue(),
+	                                 originalBook.getAbsoluteLeft(), originalBook.getAbsoluteTop(),
+	                                 TS.getWidth().intValue(),
+	                                 TS.getHeight().intValue());
+	                         SEE.show();
+	                         SE.add(SEE);
+	    				}
+	            isShowDensity=true;
+				}
 			}
 		});
+		DensidadAnot.setEnabled(false);
+		DensidadAnot.setVisible(false);
 		DensidadAnot.setTitle(HelpMessage.DENSITYANNOTATIONHELP);
 		menuBar.addItem(DensidadAnot);
 
@@ -410,6 +455,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				new Command() {
 
 					public void execute() {
+						hidePopUpSelector();
+						hideDENSelector();
 						state = State.SelectedFree;
 						mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
 						mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
@@ -426,6 +473,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		mntmRefresh = new MenuItem("Refresh", false, new Command() {
 
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				refreshP();
 				Refresh();
 			}
@@ -440,6 +489,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		mntmFilter = new MenuItem("New item", false, new Command() {
 
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				TyposFilter.showRelativeTo(mntmFilter);
 
 			}
@@ -452,6 +503,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		
 		mntmBrowser = new MenuItem("New item", false, new Command() {
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				ActualUser.setBook(book);
 				Controlador.change2Browser();
 			}
@@ -467,6 +520,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				new Command() {
 
 					public void execute() {
+						hidePopUpSelector();
+						hideDENSelector();
 						ActualUser.setBook(book);
 						Controlador.change2Administrator();
 					}
@@ -482,6 +537,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		MenuItem mntmManage2 = new MenuItem(ActualLang.getBackUserButton(), false, new Command() {
 
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				ActualUser.setBook(book);
 				Controlador.change2MyActivities();
 			}
@@ -496,6 +553,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		
 		FilterInfo = new MenuItem(ActualLang.getAnnotationsFiltering(), false, new Command() {
 			public void execute() {
+				hidePopUpSelector();
+				hideDENSelector();
 				AceptWindow A=new AceptWindow();
 				A.center();
 			}
@@ -550,6 +609,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
 			mntmBrowser.setVisible(true);
+			DensidadAnot.setEnabled(true);
+			DensidadAnot.setVisible(true);
 			break;
 
 		case NoAnnotations:
@@ -563,6 +624,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmFilter.setVisible(false);
 			separator_2.setVisible(false);
 			mntmBrowser.setVisible(false);
+			DensidadAnot.setEnabled(false);
+			DensidadAnot.setVisible(false);
 			break;
 
 		case SelectedBloked:
@@ -577,6 +640,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
 			mntmBrowser.setVisible(true);
+			DensidadAnot.setEnabled(true);
+			DensidadAnot.setVisible(true);
 			break;
 		case SelectedFree:
 			mntmNoAnnotacion.setEnabled(true);
@@ -590,6 +655,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
 			mntmBrowser.setVisible(true);
+			DensidadAnot.setEnabled(true);
+			DensidadAnot.setVisible(true);
 			break;
 		default:
 			break;
@@ -910,12 +977,20 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	}
 
 	public static void hidePopUpSelector() {
-		for (SelectorPanel SP : popUpSelector) {
+		if (popUpSelector!=null)
+			for (SelectorPanel SP : popUpSelector) {
 			SP.hide();
 		}
-		popUpSelectoract.hide();
+		if (popUpSelectoract!=null) popUpSelectoract.hide();
 	}
 	
+	public static void hideDENSelector() {
+		if (SE!=null) 
+			for (SelectorPanel SP : SE) {
+			SP.hide();
+		}
+		
+	}
 	
 	public static void setFiltroTypesAndUser(ArrayList<Long> filtroTypes, ArrayList<Long> User) {
 		if (filtroTypes.size()==1 && filtroTypes.get(0)==Long.MIN_VALUE && User.isEmpty())
@@ -1009,6 +1084,14 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		originalBook.addMouseMoveHandler(new MouseMoveHandler() {
 
 			public void onMouseMove(MouseMoveEvent event) {
+				if (isShowDensity)
+				{
+					isShowDensity=false;
+					if (SE!=null) 
+						for (SelectorPanel SP : SE) {
+						SP.hide();
+					}
+				}
 				if (state != State.NoAnnotations) {
 					if (isSelectionMode == true) {
 
