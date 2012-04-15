@@ -691,7 +691,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				CommentPanel commentPanel = new CommentPanel(List.get(i),
 						originalBook);
 				JeraquiaSimulada JS=new JeraquiaSimulada();
-				Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), List.get(i).getId(),Constants.THREADFATHERNULLID));
+				Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), List.get(i).getId(),Constants.THREADFATHERNULLID,List.get(i).getTextSelectors()));
 				verticalAnnotationsPanel.add(commentPanel);
 				verticalAnnotationsPanel.add(JS);
 			}
@@ -1242,5 +1242,9 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			FilterInfo.setVisible(estado);
 		}
 		
+	}
+	
+	public static Image getOriginalBook() {
+		return originalBook;
 	}
 }

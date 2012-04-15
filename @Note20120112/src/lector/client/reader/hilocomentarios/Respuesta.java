@@ -1,11 +1,14 @@
 package lector.client.reader.hilocomentarios;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.login.ActualUser;
 import lector.client.reader.MainEntryPoint;
+import lector.client.reader.SelectorPanel;
+import lector.client.reader.TextSelector;
 import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.gwt.core.client.GWT;
@@ -49,12 +52,15 @@ public class Respuesta extends Composite {
     private MenuItem mntmNewItem_1;
     private final MenuItemSeparator separator = new MenuItemSeparator();
     private MenuItem mntmNewItem_2;
+    private ArrayList<TextSelector> TextSelectores;
+    private ArrayList<SelectorPanel> SE;
     static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
     
     
-	public Respuesta(AnnotationThread annotationin) {
+	public Respuesta(AnnotationThread annotationin, ArrayList<TextSelector> Selectoresin) {
 		 annotation = annotationin;
+		 TextSelectores=Selectoresin;
 	        SimplePanel decoratorPanel = new SimplePanel();
 	        decoratorPanel.setHeight("");
 	        initWidget(decoratorPanel);
@@ -80,11 +86,29 @@ public class Respuesta extends Composite {
 	        button.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
 					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+					
+					for(SelectorPanel SEE: SE)
+					{
+ 
+		            		 SEE.hide();
+					}
 				}
 			});
 	        button.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
 					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+					SE=new ArrayList<SelectorPanel>();
+					for(TextSelector Select: TextSelectores)
+					{
+
+		            		 SelectorPanel SEE = new SelectorPanel(Select.getX().intValue(),
+		            				 Select.getY().intValue(),
+		                             MainEntryPoint.getOriginalBook().getAbsoluteLeft(), MainEntryPoint.getOriginalBook().getAbsoluteTop(),
+		                             Select.getWidth().intValue(),
+		                             Select.getHeight().intValue());
+		            		 SEE.show();
+		            		 SE.add(SEE);
+					}
 				}
 			});
 
@@ -208,7 +232,7 @@ public class Respuesta extends Composite {
 						}
 						
 						public void onFailure(Throwable caught) {
-							Window.alert("Error en borrado");
+							Window.alert(ActualUser.getLanguage().getE_DeleteReply());
 							//TODO Error
 							
 						}

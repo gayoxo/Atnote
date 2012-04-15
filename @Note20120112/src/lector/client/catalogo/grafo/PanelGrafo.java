@@ -82,7 +82,7 @@ public class PanelGrafo extends Composite {
 
 		});
 		btnNewButton.setText("+");
-		btnNewButton.setHTML("<img src=\"Plus.gif\">");
+		btnNewButton.setHTML("<img src=\"ZPlus.gif\">");
 		zoomPanel.add(btnNewButton);
 		zoomPanel.setCellVerticalAlignment(btnNewButton,
 				HasVerticalAlignment.ALIGN_MIDDLE);
@@ -102,7 +102,7 @@ public class PanelGrafo extends Composite {
 			}
 		});
 		btnNewButton_1.setText("-");
-		btnNewButton_1.setHTML("<img src=\"Less.gif\">");
+		btnNewButton_1.setHTML("<img src=\"ZLess.gif\">");
 		zoomPanel.add(btnNewButton_1);
 
 		zoomPanel.setCellVerticalAlignment(btnNewButton_1,
@@ -117,7 +117,7 @@ public class PanelGrafo extends Composite {
 			}
 		});
 		btnNewButton_2.setText("Reset");
-		btnNewButton_2.setHTML("<img src=\"NAvar.gif\">");
+		btnNewButton_2.setHTML("<img src=\"Z.gif\">");
 
 		btnNewButton.setEnabled(false);
 		btnNewButton_1.setEnabled(false);

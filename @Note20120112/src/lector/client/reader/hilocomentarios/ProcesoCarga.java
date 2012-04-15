@@ -25,11 +25,11 @@ public class ProcesoCarga {
 			public void onSuccess(ArrayList<AnnotationThread> result) {
 				if (result==null) result = new ArrayList<AnnotationThread>();
 				for (AnnotationThread annotationThread : result) {
-					Respuesta R=new Respuesta(annotationThread);
+					Respuesta R=new Respuesta(annotationThread,P.getSelectores());
 					P.getVP().add(R);
 					
 					JeraquiaSimulada JS=new JeraquiaSimulada();
-					Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), P.getIDPadre(),annotationThread.getId()));
+					Arbitro.getInstance().addLlamada(new ParesLlamada(JS.getVerticalPanel(), P.getIDPadre(),annotationThread.getId(),P.getSelectores()));
 					P.getVP().add(JS);
 //					MainEntryPoint.setPorcentScrollAnnotationsPanel();
 				}

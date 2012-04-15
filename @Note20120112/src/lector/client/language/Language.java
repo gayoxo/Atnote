@@ -11,20 +11,6 @@ public class Language implements Serializable, IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 
-
-
-
-
-
-
-	
-
-
-
-	
-
-
-
 	//Generales
     @Id
     private String nameId;
@@ -102,6 +88,7 @@ public class Language implements Serializable, IsSerializable {
     private String E_filteringmesagetypes="Error filtering Message: Load Types";
     private String E_filteringmesageAnnotations="Error filtering Message: Load Annotations";
     private String E_Saving="Error: Error Saving";
+	private String E_DeleteReply = "Error: Error Deleting Reply, Please Try Again";
    //Browser
     private String Close="Close";
     private String FilterButtonBrowser="Filter";
@@ -677,6 +664,14 @@ public void setE_filteringmesagetypes(String e_filteringmesagetypes) {
 	E_filteringmesagetypes = e_filteringmesagetypes;
 }
 
+public String getE_DeleteReply() {
+	return E_DeleteReply;
+}
+
+public void setE_DeleteReply(String e_DeleteReply) {
+	E_DeleteReply = e_DeleteReply;
+}
+
 //TODO Browser
 
 public String getE_Saving() {
@@ -743,6 +738,7 @@ public String getOpenTypes() {
 public void setOpenTypes(String openTypes) {
 	OpenTypes = openTypes;
 }
+
 
 
 
