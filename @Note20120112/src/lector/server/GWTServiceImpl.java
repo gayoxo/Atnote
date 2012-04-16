@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.Basic;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
@@ -230,12 +231,19 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	private Annotation loadAnnotationById(Long id) {
 		EntityManager entityManager;
 		entityManager = EMF.get().createEntityManager();
-		Annotation annotation = entityManager.find(Annotation.class, id);
-		if (entityManager.isOpen()) {
+		List<Annotation> annotations = new ArrayList<Annotation>();
+		ArrayList<Annotation> annotationList;
+		entityManager = EMF.get().createEntityManager();
+		String sql = "SELECT a FROM Annotation a WHERE a.id=" + id;
+		annotations = entityManager.createQuery(sql).getResultList();
+		annotationList = new ArrayList<Annotation>(annotations);
+		if (entityManager.isOpen())
 			entityManager.close();
+		if(annotations.isEmpty()){
+			annotationList.add(null);
 		}
+		return annotationList.get(0);
 
-		return annotation;
 	}
 
 	public ArrayList<Annotation> getAnnotationsByPageNumber(Integer pageNumber,
@@ -261,8 +269,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				listAnnotations2.add(annotationAux);
 				annotationAux.setFileIds(new ArrayList<Long>(annotationAux
 						.getFileIds()));
-				annotationAux.setTextSelectors(new ArrayList<TextSelector>(annotationAux.getTextSelectors()));
-				
+				annotationAux.setTextSelectors(new ArrayList<TextSelector>(
+						annotationAux.getTextSelectors()));
+
 			}
 		} catch (Exception e) {
 			throw new GeneralException(
@@ -2194,7 +2203,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			annotationsSorted.get(i).setFileIds(
 					new ArrayList<Long>(annotationsSorted.get(i).getFileIds()));
 			annotationsSorted.get(i).setTextSelectors(
-					new ArrayList<TextSelector>(annotationsSorted.get(i).getTextSelectors()));
+					new ArrayList<TextSelector>(annotationsSorted.get(i)
+							.getTextSelectors()));
 		}
 
 		return annotationsSorted;
@@ -2899,6 +2909,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 							.getUpdatableGroupIds()));
 			annotations.get(i).setFileIds(
 					new ArrayList<Long>(annotations.get(i).getFileIds()));
+			annotations.get(i).setTextSelectors(
+					new ArrayList<TextSelector>(annotations.get(i)
+							.getTextSelectors()));
 		}
 		return annotations;
 	}
@@ -3030,8 +3043,9 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 							.getUpdatableGroupIds()));
 			annotations.get(i).setFileIds(
 					new ArrayList<Long>(annotations.get(i).getFileIds()));
-			annotations.get(i).setTextSelectors(new ArrayList<TextSelector>(
-					annotations.get(i).getTextSelectors()));
+			annotations.get(i).setTextSelectors(
+					new ArrayList<TextSelector>(annotations.get(i)
+							.getTextSelectors()));
 		}
 		return annotations;
 	}
@@ -3347,7 +3361,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public void renameFolder(Long folderId, String newName)
-			throws FolderException{
+			throws FolderException {
 		FolderDB folderDB = loadFolderById(folderId);
 		for (int i = 0; i < folderDB.getFathers().size(); i++) {
 			if (isFolderBrotherNameInDB(newName, folderDB.getFathers().get(i),

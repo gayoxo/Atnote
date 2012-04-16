@@ -31,8 +31,9 @@ public class Annotation implements Serializable, IsSerializable {
 	private Boolean visibility = false;
 	private Boolean updatability = false;
 	private Integer pageNumber;
-	@Basic
+	
 	@OneToMany(cascade = CascadeType.ALL)
+	@Basic
 	private ArrayList<TextSelector> textSelectors;
 	@Basic
 	private Text comment;
