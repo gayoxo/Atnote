@@ -252,7 +252,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		List<Annotation> annotations = new ArrayList<Annotation>();
 		ArrayList<Annotation> annotationList;
 		entityManager = EMF.get().createEntityManager();
-		String sql = "SELECT a FROM Annotation a WHERE a.id=" + id + "AND a.readingActivity=" + readingActivityId;
+		String sql = "SELECT a FROM Annotation a WHERE a.id=" + id + " AND a.readingActivity=" + readingActivityId;
 		annotations = entityManager.createQuery(sql).getResultList();
 		annotationList = new ArrayList<Annotation>(annotations);
 		if (entityManager.isOpen())
@@ -2908,7 +2908,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			ArrayList<Long> ids, Long Student, Long readingActivityId) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
-			Annotation annotation = loadAnnotationById(ids.get(i));
+			Annotation annotation = loadAnnotationByIdAndReadingActivity(ids.get(i), readingActivityId);
 			if (annotation != null) {
 				annotations.add(annotation);
 			}
@@ -2980,8 +2980,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(
-			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity) {
-		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids);
+			ArrayList<Long> ids, ArrayList<Long> authorIds, Long activity) {
+		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids,activity);
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		if (!annotationsAux.isEmpty() && annotationsAux != null) {
 			annotations.addAll(annotationsAux);
@@ -3010,10 +3010,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(
-			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity,
+			ArrayList<Long> ids, ArrayList<Long> authorIds, Long activity,
 			Long Student) {
 		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsStudent(ids,
-				Student);
+				Student, activity);
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		if (!annotationsAux.isEmpty() && annotationsAux != null) {
 			annotations.addAll(annotationsAux);
