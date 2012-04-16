@@ -302,8 +302,8 @@ public class Browser implements EntryPoint {
 			}
 		};
 		if (ActualUser.getRol().equals(Constants.PROFESSOR)){
-		bookReaderServiceHolder.getAnnotationsByIdsTeacher(ArrayAnotaciones,callback );
-		}else bookReaderServiceHolder.getAnnotationsByIdsStudent(ArrayAnotaciones,ActualUser.getUser().getId(),callback );
+		bookReaderServiceHolder.getAnnotationsByIdsTeacher(ArrayAnotaciones,ActualUser.getReadingactivity().getId(),callback );
+		}else bookReaderServiceHolder.getAnnotationsByIdsStudent(ArrayAnotaciones,ActualUser.getUser().getId(),ActualUser.getReadingactivity().getId(),callback );
 	}
 	
 	public static ArrayList<Long> getFiltroResidual() {
