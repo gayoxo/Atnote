@@ -981,6 +981,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			for (SelectorPanel SP : popUpSelector) {
 			SP.hide();
 		}
+		popUpSelector=new ArrayList<SelectorPanel>();
 		if (popUpSelectoract!=null) popUpSelectoract.hide();
 	}
 	
@@ -1110,7 +1111,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 								}
 							TextComment TC = new TextComment(ARRAT, book);
 							TC.center();
-							popUpSelector=new ArrayList<SelectorPanel>();
+							
 							isShiftSelectionMode=false;
 							
 								}
@@ -1201,7 +1202,6 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 							}
 						TextComment TC = new TextComment(ARRAT, book);
 						TC.center();
-						popUpSelector=new ArrayList<SelectorPanel>();
 						isShiftSelectionMode=false;
 						
 						}else 

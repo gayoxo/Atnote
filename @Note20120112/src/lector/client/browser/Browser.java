@@ -16,7 +16,6 @@ import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;
 import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.LoadingPanel;
-import lector.client.reader.TextSelector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -38,6 +37,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -163,12 +163,13 @@ public class Browser implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
-			//TODO REvisar Despierto.
-				if ((FinderButton.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
-					{
-					BS.Swap();
-					}
-				else if (EqualsFinderButton(BS))
+//			//TODO REvisar Despierto.
+//				if ((FinderButton.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
+//					{
+//					BS.Swap();
+//					}
+//				else
+				if (!EqualsFinderButton(BS))
 					{
 					BS.Swap();
 					}
@@ -178,8 +179,9 @@ public class Browser implements EntryPoint {
 			}
 
 			private boolean EqualsFinderButton(BotonesStackPanelBrowser bS) {
-				for (Entity entity : bS.getEntidad().getFathers()) {
-					if (FinderButton.getTopPath().getID().equals(entity.getID())) return true;
+				for (int i=0; i<SelectedB.getWidgetCount();i++) {
+					BotonesStackPanelBrowser Boton=(BotonesStackPanelBrowser)SelectedB.getWidget(i);
+					if (Boton.getEntidad().getID().equals(bS.getEntidad().getID())) return true;
 				}		
 				return false;
 			}
@@ -284,7 +286,6 @@ public class Browser implements EntryPoint {
 			
 			public void onSuccess(ArrayList<Annotation> result) {
 				VerticalPanel AnnotationPanel=new VerticalPanel();
-
 				AnnotationPanel.clear();
 				for (Annotation AIndiv : result) {
 					AnnotationPanel.add(new CommentPanelBrowser(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));
@@ -307,5 +308,11 @@ public class Browser implements EntryPoint {
 	
 	public static ArrayList<Long> getFiltroResidual() {
 		return filtroResidual;
+	}
+	
+	public static void refreshButton()
+	{
+		if (SelectedB.getWidgetCount()==0)btnNewButton.setVisible(false);
+		else btnNewButton.setVisible(true);
 	}
 }

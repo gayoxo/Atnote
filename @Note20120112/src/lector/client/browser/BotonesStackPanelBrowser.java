@@ -36,8 +36,8 @@ public class BotonesStackPanelBrowser extends
 	public void Swap() {
 //		Actual.remove(this);
 
-		if (Actual==Normal)
-		{
+//		if (Actual==Normal)
+//		{
 		Actual=Selected;
 		if (!EstainSelectedmio()){
 		BotonesStackPanelBrowser BS=(BotonesStackPanelBrowser)this.Clone();	
@@ -58,17 +58,24 @@ public class BotonesStackPanelBrowser extends
 			}
 		});
 		BS.setStyleName("gwt-ButtonTOP");
-		
 		BS.setHTML(this.getHTML());
 		BS.setEntidad(getEntidad());
 		Selected.add(BS);
+		BS.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				BotonesStackPanelBrowser BS=(BotonesStackPanelBrowser)event.getSource();	
+				Selected.remove(BS);
+				Browser.refreshButton();
+			}
+		});
 		}
-		}
-	else 
-		{
-		Actual.remove(this);
-		Actual=Normal;
-		}
+//		}
+//	else 
+//		{
+//		Actual.remove(this);
+//		Actual=Normal;
+//		}
 
 	}
 
