@@ -88,10 +88,10 @@ public interface GWTService extends RemoteService {
 
 	public ArrayList<FileDB> getEntriesIdsByIdsRec(ArrayList<Long> Ids);
 
-	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids);
+	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids, Long readingActivityId);
 
 	public ArrayList<Annotation> getAnnotationsByIdsStudent(
-			ArrayList<Long> ids, Long Student);
+			ArrayList<Long> ids, Long Student, Long readingActivityId);
 
 	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsStudent(
 			ArrayList<Long> ids, ArrayList<Long> authorIds, Long Activity,

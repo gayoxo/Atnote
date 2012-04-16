@@ -3027,7 +3027,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
-			Annotation annotation = loadAnnotationById(ids.get(i));
+			Annotation annotation = loadAnnotationById(ids.get(i)); 
 			if (annotation != null) {
 				annotations.add(annotation);
 			}

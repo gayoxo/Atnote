@@ -16,6 +16,7 @@ import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;
 import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.LoadingPanel;
+import lector.client.reader.TextSelector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -283,6 +284,7 @@ public class Browser implements EntryPoint {
 			
 			public void onSuccess(ArrayList<Annotation> result) {
 				VerticalPanel AnnotationPanel=new VerticalPanel();
+
 				AnnotationPanel.clear();
 				for (Annotation AIndiv : result) {
 					AnnotationPanel.add(new CommentPanelBrowser(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));

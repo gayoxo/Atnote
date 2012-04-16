@@ -198,10 +198,13 @@ public interface GWTServiceAsync {
 	void getEntriesIdsByIdsRec(ArrayList<Long> Ids,
 			AsyncCallback<ArrayList<FileDB>> callback);
 
+
 	void getAnnotationsByIdsTeacher(ArrayList<Long> ids,
+			Long readingActivityId,
 			AsyncCallback<ArrayList<Annotation>> callback);
 
 	void getAnnotationsByIdsStudent(ArrayList<Long> ids, Long Student,
+			Long readingActivityId,
 			AsyncCallback<ArrayList<Annotation>> callback);
 
 	void getAnnotationsByIdsAndAuthorsStudent(ArrayList<Long> ids,
@@ -230,5 +233,7 @@ public interface GWTServiceAsync {
 			AsyncCallback<ArrayList<AnnotationSchema>> callback);
 
 	void updateRenameOfUser(Long userId, AsyncCallback<Void> callback);
+
+
 
 }
