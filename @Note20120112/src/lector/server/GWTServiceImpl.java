@@ -246,6 +246,23 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	}
 
+	private Annotation loadAnnotationByIdAndReadingActivity(Long id, Long readingActivityId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<Annotation> annotations = new ArrayList<Annotation>();
+		ArrayList<Annotation> annotationList;
+		entityManager = EMF.get().createEntityManager();
+		String sql = "SELECT a FROM Annotation a WHERE a.id=" + id + "AND a.readingActivity=" + readingActivityId;
+		annotations = entityManager.createQuery(sql).getResultList();
+		annotationList = new ArrayList<Annotation>(annotations);
+		if (entityManager.isOpen())
+			entityManager.close();
+		if(annotations.isEmpty()){
+			annotationList.add(null);
+		}
+		return annotationList.get(0);
+
+	}
 	public ArrayList<Annotation> getAnnotationsByPageNumber(Integer pageNumber,
 			String bookId, Long readingActivityId) throws GeneralException,
 			AnnotationNotFoundException, NullParameterException,
@@ -2888,7 +2905,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public ArrayList<Annotation> getAnnotationsByIdsStudent(
-			ArrayList<Long> ids, Long Student) {
+			ArrayList<Long> ids, Long Student, Long readingActivityId) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
 			Annotation annotation = loadAnnotationById(ids.get(i));
@@ -3024,10 +3041,10 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return annotations;
 	}
 
-	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids) {
+	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids, Long readingActivityId) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
-			Annotation annotation = loadAnnotationById(ids.get(i)); 
+			Annotation annotation = loadAnnotationByIdAndReadingActivity(ids.get(i), readingActivityId); 
 			if (annotation != null) {
 				annotations.add(annotation);
 			}
