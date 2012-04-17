@@ -1,5 +1,7 @@
 package lector.client.catalogo.grafo;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
@@ -113,6 +115,11 @@ public class PanelGrafo extends Composite {
 		btnNewButton_2 = new Button("Reset");
 		btnNewButton_2.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
 				LlamadaServicio(0, 0, false);
 			}
 		});
@@ -195,9 +202,16 @@ public class PanelGrafo extends Composite {
 		String URLReq = generaString();
 
 		if ((newSizehight2 * newSizewigth2) > 300000) {
-			float prop = newSizehight2 / newSizewigth2;
-			newSizehight2 = (int) Math.round(546 * prop);
-			newSizewigth2 = (int) Math.round(546 / prop);
+			float prop = ((float)300000)/((float)newSizehight2 * (float)newSizewigth2);
+			prop=(float) Math.sqrt(prop);
+//			BigDecimal bd = new BigDecimal((float)newSizehight2*prop);
+//			BigDecimal positiveRedondeado = bd.setScale(0, RoundingMode.DOWN);	
+//			newSizehight2 = positiveRedondeado.intValue();
+//			bd = new BigDecimal((float)newSizewigth2*prop);
+//			positiveRedondeado = bd.setScale(0, RoundingMode.DOWN);	
+//			newSizewigth2 = positiveRedondeado.intValue();
+			newSizehight2 = (int) Math.round(((float)newSizehight2) * prop);
+			newSizewigth2 = (int) Math.round(((float)newSizewigth2) * prop);
 		}
 		if (newSizehight2 > 1000) {
 			newSizewigth2 = (1000 * newSizewigth2) / newSizehight2;
