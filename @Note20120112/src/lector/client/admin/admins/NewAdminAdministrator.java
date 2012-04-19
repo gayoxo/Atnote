@@ -280,7 +280,15 @@ btnNewButton.addClickHandler(new ClickHandler() {
 		stackPanel_1.setBotonClick(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
+				
 				Long Ident=((BotonesStackPanelAdminsMio) event.getSource()).getEntidad().getID();
+				String Name=((BotonesStackPanelAdminsMio) event.getSource()).getEntidad().getName();
+//				if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+//					Name=((BotonesStackPanelAdminsMio) event.getSource()).getEntidad().get;
+//					else  Name=((BotonesStackPanelAdminsMio) event.getSource()).getEntidad().getName();
+				if (Window
+						.confirm("Are you sure you want to delete this "+Name+"?, His/her activities, anbnotations and book will be deleted"))
+				{
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");
 				
@@ -308,10 +316,11 @@ btnNewButton.addClickHandler(new ClickHandler() {
 								}
 								
 							}
+			}	
 						});
 				
 
-						
+		
 				
 		// Profesores
 		LoadingPanel.getInstance().center();
