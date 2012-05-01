@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
@@ -31,7 +30,7 @@ public class Annotation implements Serializable, IsSerializable {
 	private Boolean visibility = false;
 	private Boolean updatability = false;
 	private Integer pageNumber;
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@Basic
 	private ArrayList<TextSelector> textSelectors;
@@ -44,17 +43,13 @@ public class Annotation implements Serializable, IsSerializable {
 	private Long readingActivity;
 	@Temporal(javax.persistence.TemporalType.DATE)
 	private Date createdDate;
-	@Basic
-	private ArrayList<Long> visibilityGroupIds;
-	@Basic
-	private ArrayList<Long> updatableGroupIds;
+
 	@Transient
 	private boolean isEditable = false;
 
 	public Annotation() {
 		isPersisted = false;
-		this.visibilityGroupIds = new ArrayList<Long>();
-		this.updatableGroupIds = new ArrayList<Long>();
+
 		this.textSelectors = new ArrayList<TextSelector>();
 	}
 
@@ -159,22 +154,6 @@ public class Annotation implements Serializable, IsSerializable {
 
 	public void setPersisted(boolean isPersisted) {
 		this.isPersisted = isPersisted;
-	}
-
-	public ArrayList<Long> getVisibilityGroupIds() {
-		return visibilityGroupIds;
-	}
-
-	public void setVisibilityGroupIds(ArrayList<Long> visibilityGroupIds) {
-		this.visibilityGroupIds = visibilityGroupIds;
-	}
-
-	public ArrayList<Long> getUpdatableGroupIds() {
-		return updatableGroupIds;
-	}
-
-	public void setUpdatableGroupIds(ArrayList<Long> updatableGroupIds) {
-		this.updatableGroupIds = updatableGroupIds;
 	}
 
 	public boolean isEditable() {

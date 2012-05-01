@@ -16,7 +16,6 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lector.client.controler.Constants;
-import lector.client.reader.AnnotationConfig;
 import lector.client.reader.filter.FilterConfig;
 
 @Entity
@@ -45,9 +44,7 @@ public class UserApp implements Serializable, IsSerializable {
 	private String logoutUrl;
 	@Transient
 	private boolean isAuthenticated = true;
-	@Basic
-	@OneToOne(cascade = CascadeType.ALL)
-	private AnnotationConfig annotationConfig;
+
 	@Basic
 	@OneToOne(cascade = CascadeType.ALL)
 	private FilterConfig filterConfig;
@@ -159,14 +156,6 @@ public class UserApp implements Serializable, IsSerializable {
 
 	public void setIsAuthenticated(boolean isAuthenticated) {
 		this.isAuthenticated = isAuthenticated;
-	}
-
-	public AnnotationConfig getAnnotationConfig() {
-		return annotationConfig;
-	}
-
-	public void setAnnotationConfig(AnnotationConfig annotationConfig) {
-		this.annotationConfig = annotationConfig;
 	}
 
 	public FilterConfig getFilterConfig() {

@@ -218,13 +218,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			annotationAux.setUserName("Unknown");
 		else
 			annotationAux.setUserName(annotation.getUserName());
-
-		for (Long visibilityGroupId : annotation.getVisibilityGroupIds()) {
-			annotationAux.getVisibilityGroupIds().add(visibilityGroupId);
-		}
-		for (Long updateableGroupId : annotation.getUpdatableGroupIds()) {
-			annotationAux.getUpdatableGroupIds().add(updateableGroupId);
-		}
 		return annotationAux;
 	}
 
@@ -239,30 +232,33 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		annotationList = new ArrayList<Annotation>(annotations);
 		if (entityManager.isOpen())
 			entityManager.close();
-		if(annotations.isEmpty()){
+		if (annotations.isEmpty()) {
 			annotationList.add(null);
 		}
 		return annotationList.get(0);
 
 	}
 
-	private Annotation loadAnnotationByIdAndReadingActivity(Long id, Long readingActivityId) {
+	private Annotation loadAnnotationByIdAndReadingActivity(Long id,
+			Long readingActivityId) {
 		EntityManager entityManager;
 		entityManager = EMF.get().createEntityManager();
 		List<Annotation> annotations = new ArrayList<Annotation>();
 		ArrayList<Annotation> annotationList;
 		entityManager = EMF.get().createEntityManager();
-		String sql = "SELECT a FROM Annotation a WHERE a.id=" + id + " AND a.readingActivity=" + readingActivityId;
+		String sql = "SELECT a FROM Annotation a WHERE a.id=" + id
+				+ " AND a.readingActivity=" + readingActivityId;
 		annotations = entityManager.createQuery(sql).getResultList();
 		annotationList = new ArrayList<Annotation>(annotations);
 		if (entityManager.isOpen())
 			entityManager.close();
-		if(annotations.isEmpty()){
+		if (annotations.isEmpty()) {
 			annotationList.add(null);
 		}
 		return annotationList.get(0);
 
 	}
+
 	public ArrayList<Annotation> getAnnotationsByPageNumber(Integer pageNumber,
 			String bookId, Long readingActivityId) throws GeneralException,
 			AnnotationNotFoundException, NullParameterException,
@@ -2211,12 +2207,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 		for (int i = 0; i < annotationsSorted.size(); i++) {
 
-			annotationsSorted.get(i).setVisibilityGroupIds(
-					new ArrayList<Long>(annotationsSorted.get(i)
-							.getVisibilityGroupIds()));
-			annotationsSorted.get(i).setUpdatableGroupIds(
-					new ArrayList<Long>(annotationsSorted.get(i)
-							.getUpdatableGroupIds()));
 			annotationsSorted.get(i).setFileIds(
 					new ArrayList<Long>(annotationsSorted.get(i).getFileIds()));
 			annotationsSorted.get(i).setTextSelectors(
@@ -2904,11 +2894,15 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return annotations;
 	}
 
-	public ArrayList<Annotation> getAnnotationsByIdsStudent(  //anotaciones restringidas por usuario y actividad
+	public ArrayList<Annotation> getAnnotationsByIdsStudent( // anotaciones
+																// restringidas
+																// por usuario y
+																// actividad
 			ArrayList<Long> ids, Long Student, Long readingActivityId) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
-			Annotation annotation = loadAnnotationByIdAndReadingActivity(ids.get(i), readingActivityId);
+			Annotation annotation = loadAnnotationByIdAndReadingActivity(
+					ids.get(i), readingActivityId);
 			if (annotation != null) {
 				annotations.add(annotation);
 			}
@@ -2918,12 +2912,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				annotations, Student);
 		for (int i = 0; i < annotations.size(); i++) {
 
-			annotations.get(i).setVisibilityGroupIds(
-					new ArrayList<Long>(annotations.get(i)
-							.getVisibilityGroupIds()));
-			annotations.get(i).setUpdatableGroupIds(
-					new ArrayList<Long>(annotations.get(i)
-							.getUpdatableGroupIds()));
 			annotations.get(i).setFileIds(
 					new ArrayList<Long>(annotations.get(i).getFileIds()));
 			annotations.get(i).setTextSelectors(
@@ -2966,10 +2954,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			if (annotationReturn != null) {
 				annotationReturn.setFileIds(new ArrayList<Long>(
 						annotationReturn.getFileIds()));
-				annotationReturn.setVisibilityGroupIds(new ArrayList<Long>(
-						annotationReturn.getVisibilityGroupIds()));
-				annotationReturn.setUpdatableGroupIds(new ArrayList<Long>(
-						annotationReturn.getUpdatableGroupIds()));
 				annotationReturn.setTextSelectors(new ArrayList<TextSelector>(
 						annotationReturn.getTextSelectors()));
 			}
@@ -2981,7 +2965,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	public ArrayList<Annotation> getAnnotationsByIdsAndAuthorsTeacher(
 			ArrayList<Long> ids, ArrayList<Long> authorIds, Long activity) {
-		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids,activity);
+		ArrayList<Annotation> annotationsAux = getAnnotationsByIdsTeacher(ids,
+				activity);
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		if (!annotationsAux.isEmpty() && annotationsAux != null) {
 			annotations.addAll(annotationsAux);
@@ -3041,10 +3026,12 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return annotations;
 	}
 
-	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids, Long readingActivityId) {
+	public ArrayList<Annotation> getAnnotationsByIdsTeacher(
+			ArrayList<Long> ids, Long readingActivityId) {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 		for (int i = 0; i < ids.size(); i++) {
-			Annotation annotation = loadAnnotationByIdAndReadingActivity(ids.get(i), readingActivityId); 
+			Annotation annotation = loadAnnotationByIdAndReadingActivity(
+					ids.get(i), readingActivityId);
 			if (annotation != null) {
 				annotations.add(annotation);
 			}
@@ -3052,12 +3039,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 		for (int i = 0; i < annotations.size(); i++) {
 
-			annotations.get(i).setVisibilityGroupIds(
-					new ArrayList<Long>(annotations.get(i)
-							.getVisibilityGroupIds()));
-			annotations.get(i).setUpdatableGroupIds(
-					new ArrayList<Long>(annotations.get(i)
-							.getUpdatableGroupIds()));
 			annotations.get(i).setFileIds(
 					new ArrayList<Long>(annotations.get(i).getFileIds()));
 			annotations.get(i).setTextSelectors(
