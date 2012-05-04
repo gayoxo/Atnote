@@ -163,7 +163,7 @@ public class MyBooks implements EntryPoint {
 					Button B = (Button) event.getSource();
 					String[] SS=B.getHTML().split(Constants.BREAKER);
 					
-					if (!SS[1].startsWith(" ##"))
+					if (!SS[SS.length-1].startsWith(" ##"))
 						bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
 							callback);
 					else {

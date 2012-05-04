@@ -497,7 +497,7 @@ public class MyActivities implements EntryPoint {
 						String[] SS = B.getRA().getBookId().split(Constants.BREAKER);
 						RA=B.getRA();
 						retryCounter=0;
-						RAtemp=SS[1];
+						RAtemp=SS[SS.length-1];
 						 if (!RAtemp.startsWith(" ##"))
 							 bookReaderServiceHolder.loadFullBookInGoogle(SS[1],
 									 callback);
