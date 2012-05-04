@@ -586,7 +586,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		ScrollAnnotationsPanel.setVisible(false);
 		//ScrollAnnotationsPanel.setAlwaysShowScrollBars(true);
 		selectorPageBox.setVisible(false);
-		pageForward.setVisible(false);
+//		pageForward.setVisible(false);
 
 		if (filtroTypes == null ) {
 			filtroTypes = new ArrayList<Long>();
@@ -596,7 +596,9 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			filtroUsers = new ArrayList<Long>();
 		}
 		
-
+		setCurrentPageNumber(currentPageNumber);
+		
+		
 		switch (state) {
 		case AllAnnotations:
 			mntmNoAnnotacion.setEnabled(true);
@@ -661,6 +663,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		default:
 			break;
 		}
+		
+		
 	}
 
 	protected static void Refresh() {
@@ -925,11 +929,11 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 
 	public static void setCurrentPageNumber(int currentPageNumber) {
 		MainEntryPoint.currentPageNumber = currentPageNumber;
-		if (currentPageNumber <= book.getWebLinks().size() - 1) {
+		if (currentPageNumber < book.getWebLinks().size() - 1) {
 				pageForward.setVisible(true);
 		}
 		else pageForward.setVisible(false);
-		if (currentPageNumber >= 0) {
+		if (currentPageNumber > 0) {
 			pageBack.setVisible(true);
 		}
 		else pageBack.setVisible(false);
@@ -940,8 +944,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	public static void SetBook(Book result) {
 		originalBook.setVisible(true);
 		decoratorPanel.setVisible(true);
-		pageForward.setVisible(true);
-		pageBack.setVisible(false);
+		setCurrentPageNumber(currentPageNumber);
 		selectorPageBox.setVisible(true);
 		Ficha.setEnabled(true);
 		book = result;
