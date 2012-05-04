@@ -43,7 +43,9 @@ public class ReplyDialog extends DialogBox {
 		AnotPadre = AnotPadrein;
 		setAnimationEnabled(true);
 		Date now = new Date();
-		setHTML(ActualUser.getUser().getEmail() + "  -  " + now.toGMTString());
+		if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+			 setHTML(ActualUser.getUser().getName() + "  -  " + now.toGMTString());
+			else  setHTML(ActualUser.getUser().getEmail() + "  -  " + now.toGMTString());
 		richTextArea = new RichTextArea();
 		toolbar = new RichTextToolbar(richTextArea);
 		verticalPanel = new VerticalPanel();
@@ -55,10 +57,14 @@ public class ReplyDialog extends DialogBox {
 
 		Guardar = new MenuItem(ActualLang.getSave(), false, new Command() {
 			public void execute() {
+				String Nombre;
+				if ((ActualUser.getUser().getName()!=null)&&(!ActualUser.getUser().getName().isEmpty()))
+					Nombre=ActualUser.getUser().getName();
+					else Nombre=ActualUser.getUser().getEmail();
 				AnnotationThread AT = new AnnotationThread(Padre, AnotPadre,
 						new ArrayList<Long>(),
 						new Text(richTextArea.getText()), ActualUser.getUser()
-								.getId(), ActualUser.getUser().getEmail());
+								.getId(), Nombre);
 				bookReaderServiceHolder.saveAnnotationThread(AT,
 						new AsyncCallback<Long>() {
 

@@ -210,7 +210,7 @@ public class PanelTextComent extends Composite {
 		
 		PenelBotonesTipo = new HorizontalPanel();
 		scrollPanel.setWidget(PenelBotonesTipo);
-		chckbxNewCheckBox.setVisible(false);
+		chckbxNewCheckBox.setVisible(true);
 
 		// Previous = annotation.getTagsIds();
 		// for (int i = 0; i < Previous.size(); i++) {

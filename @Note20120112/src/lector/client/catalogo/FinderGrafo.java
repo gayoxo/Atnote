@@ -96,7 +96,10 @@ public class FinderGrafo extends Finder {
 				return ActualRama.getEntidad();
 	}
 	
-
+@Override
+public void RefrescaLosDatos() {
+	SeleccionaLaRama();
+}
 
 
 
