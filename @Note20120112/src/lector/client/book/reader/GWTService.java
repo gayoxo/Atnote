@@ -234,5 +234,7 @@ public interface GWTService extends RemoteService {
 	
 	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId);
 	
-	public void updateRenameOfUser(Long userId);
+	public void updateRenameOfUser(Long userId); 
+	
+	public void deleteBook(String bookId, Long userId);
 }

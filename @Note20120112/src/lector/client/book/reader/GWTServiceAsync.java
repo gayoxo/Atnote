@@ -198,7 +198,6 @@ public interface GWTServiceAsync {
 	void getEntriesIdsByIdsRec(ArrayList<Long> Ids,
 			AsyncCallback<ArrayList<FileDB>> callback);
 
-
 	void getAnnotationsByIdsTeacher(ArrayList<Long> ids,
 			Long readingActivityId,
 			AsyncCallback<ArrayList<Annotation>> callback);
@@ -224,7 +223,8 @@ public interface GWTServiceAsync {
 	void deleteAnnotationThread(Long annotationThread,
 			AsyncCallback<Void> callback);
 
-	void getAnnotationThreadsByItsFather(Long annotationId,Long threadFatherId,
+	void getAnnotationThreadsByItsFather(Long annotationId,
+			Long threadFatherId,
 			AsyncCallback<ArrayList<AnnotationThread>> callback);
 
 	void getJSONServiceTODrawGraph(String url, AsyncCallback<String> callback);
@@ -234,6 +234,6 @@ public interface GWTServiceAsync {
 
 	void updateRenameOfUser(Long userId, AsyncCallback<Void> callback);
 
-
+	void deleteBook(String bookId, Long userId, AsyncCallback<Void> callback);
 
 }

@@ -47,6 +47,7 @@ import lector.client.login.UserNotFoundException;
 import lector.client.reader.Annotation;
 import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.Book;
+import lector.client.reader.BookBlob;
 import lector.client.reader.BookNotFoundException;
 import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
@@ -3717,4 +3718,81 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 
 	}
+
+//	private UserApp loadUserBybookId(String bookId) {
+//		EntityManager entityManager;
+//		List<UserApp> users;
+//		ArrayList<UserApp> userList;
+//		entityManager = EMF.get().createEntityManager();
+//		String sql = "SELECT a FROM UserApp a WHERE a.bookIds='" + bookId + "'";
+//		users = entityManager.createQuery(sql).getResultList();
+//		if (users == null) {
+//			return null;
+//		}
+//		userList = new ArrayList<UserApp>(users);
+//		if (entityManager.isOpen())
+//			entityManager.close();
+//		return userList.get(0);
+//	}
+
+	private void deletePlainBookBlob(Long bookId) {
+		EntityManager entityManager;
+		EntityTransaction entityTransaction;
+		List<BookBlob> books;
+		entityManager = EMF.get().createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		String sql = "SELECT a FROM BookBlob a WHERE a.id=" + bookId;
+		books = entityManager.createQuery(sql).getResultList();
+		entityManager.remove(books.get(0));
+		entityTransaction.commit();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+	}
+
+	private ReadingActivity loadReadingActivityByBookId(String bookId) {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.id'=" + bookId
+				+ "'";
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		if (list.isEmpty()) {
+			readingActivitys.add(null);
+		}
+		return readingActivitys.get(0);
+	}
+
+	private void removeBookFromReadingActivity(String bookId) {
+		ReadingActivity readingActivity = loadReadingActivityByBookId(bookId);
+
+		if (readingActivity != null) {
+			readingActivity.setBookId(null);
+			saveReadingActivity(readingActivity);
+		}
+
+	}
+
+	public void deleteBook(String id, Long userId) {
+		String[] splitId = id.split("##");
+		Long bookId = null;
+		if (splitId.length > 1) {
+			bookId = Long.parseLong(splitId[1]);
+			deletePlainBookBlob(bookId);
+		}
+		UserApp user = loadUserById(userId);
+		if (user.getBookIds().contains(id)) {
+			user.getBookIds().remove(id);
+			saveUser(user);
+		}
+		removeBookFromReadingActivity(id);
+
+	}
+
 }
