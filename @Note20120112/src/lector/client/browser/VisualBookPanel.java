@@ -87,7 +87,7 @@ setWidget(SP);
 				}
 			}
 		});
-		menuBar.addItem(mntmShowSelection);
+	//	menuBar.addItem(mntmShowSelection);
 		
 		SP.add(image, DockPanel.SOUTH);
 		

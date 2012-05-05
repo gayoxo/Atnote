@@ -110,6 +110,7 @@ public class MainEntryPoint implements EntryPoint {
 	private static MenuItem FilterInfo;
 	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
 	private MenuItem DensidadAnot;
+	private static SimplePanel Glue;
 	private static ArrayList<SelectorPanel> SE;
 
 	public MainEntryPoint() {
@@ -352,6 +353,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				mntmBlockedComments.setTitle(HelpMessage.NOANNOTATIONHELP);
 				state = State.NoAnnotations;
 				ScrollAnnotationsPanel.setVisible(false);
+				Glue.setVisible(false);
 				mntmFilter.setEnabled(false);
 				mntmFilter.setVisible(false);
 				separator_2.setVisible(false);
@@ -378,6 +380,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmBlockedComments.setTitle(HelpMessage.ALLANNOTATIONHELP);
 						state = State.AllAnnotations;
 						ScrollAnnotationsPanel.setVisible(true);
+						Glue.setVisible(true);
 						mntmFilter.setEnabled(true);
 						mntmFilter.setVisible(true);
 						separator_2.setVisible(true);
@@ -406,6 +409,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
 						refreshP();
 						ScrollAnnotationsPanel.setVisible(true);
+						Glue.setVisible(true);
 						verticalAnnotationsPanel.clear();
 						mntmFilter.setEnabled(true);
 						mntmFilter.setVisible(true);
@@ -572,9 +576,14 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		
 		selectorPageBox.setSize("44px", "100%");
 		
-		SimplePanel SP=new SimplePanel();
+		
+		//TODO GENERAR PANEL DEL MISMO TAMAÑO QUE UNA ANOTACION STANDAR
+		VerticalPanel SP=new VerticalPanel();
 		SP.setHeight("875px");
 		//SP.setSize("1000px", "875px");
+		Glue=new SimplePanel();
+		Glue.setWidth("310px");
+		SP.add(Glue);
 		SP.add(ScrollAnnotationsPanel);
 		RootAnnotation.add(SP);
 		
@@ -608,6 +617,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBlockedComments.setHTML("<img src=\"All.gif\">");
 			mntmBlockedComments.setTitle(HelpMessage.ALLANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(true);
+			Glue.setVisible(true);
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
 			mntmBrowser.setVisible(true);
@@ -623,6 +633,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBlockedComments.setHTML("<img src=\"NAvar.gif\">");
 			mntmBlockedComments.setTitle(HelpMessage.NOANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(false);
+			Glue.setVisible(false);
 			mntmFilter.setVisible(false);
 			separator_2.setVisible(false);
 			mntmBrowser.setVisible(false);
@@ -638,6 +649,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBlockedComments.setHTML("<img src=\"Bloked.gif\">");
 			mntmBlockedComments.setTitle(HelpMessage.BLOKEDANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(true);
+			Glue.setVisible(true);
 			verticalAnnotationsPanel.clear();
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
@@ -653,6 +665,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBlockedComments.setHTML("<img src=\"Free.gif\">");
 			mntmBlockedComments.setTitle(HelpMessage.FREEANNOTATIONHELP);
 			ScrollAnnotationsPanel.setVisible(true);
+			Glue.setVisible(true);
 			verticalAnnotationsPanel.clear();
 			mntmFilter.setVisible(true);
 			separator_2.setVisible(true);
@@ -944,11 +957,11 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	public static void SetBook(Book result) {
 		originalBook.setVisible(true);
 		decoratorPanel.setVisible(true);
-		setCurrentPageNumber(currentPageNumber);
 		selectorPageBox.setVisible(true);
 		Ficha.setEnabled(true);
 		book = result;
 		verticalAnnotationsPanel.clear();
+		setCurrentPageNumber(currentPageNumber);
 		MainEntryPoint.refreshP();
 		Refresh();
 	}
