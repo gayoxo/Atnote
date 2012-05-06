@@ -3756,7 +3756,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		entityManager = EMF.get().createEntityManager();
 		List<ReadingActivity> list;
 		ArrayList<ReadingActivity> readingActivitys;
-		String sql = "SELECT r FROM ReadingActivity r WHERE r.id'=" + bookId
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.id='" + bookId
 				+ "'";
 		list = entityManager.createQuery(sql).getResultList();
 		readingActivitys = new ArrayList<ReadingActivity>(list);
@@ -3780,10 +3780,14 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public void deleteBook(String id, Long userId) {
-		String[] splitId = id.split("##");
+		
+		String[] splitIDyCut=id.split("-");
+		String id2=splitIDyCut[splitIDyCut.length-1];
+		String[] splitId = id2.split("##");
 		Long bookId = null;
 		if (splitId.length > 1) {
-			bookId = Long.parseLong(splitId[1]);
+			id2=splitId[splitId.length-1];
+			bookId = Long.parseLong(id2);
 			deletePlainBookBlob(bookId);
 		}
 		UserApp user = loadUserById(userId);
@@ -3791,7 +3795,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			user.getBookIds().remove(id);
 			saveUser(user);
 		}
-		removeBookFromReadingActivity(id);
+		removeBookFromReadingActivity(id2);
 
 	}
 
