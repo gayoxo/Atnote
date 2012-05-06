@@ -39,7 +39,7 @@ public class BookAdministration implements EntryPoint {
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private static Stack<String> Aborrar;
-
+	private static String bookToBeRemoved = "";
 	public void onModuleLoad() {
 		RootPanel RootTXOriginal = RootPanel.get();
 		RootPanel RootMenu = RootPanel.get("Menu");
@@ -87,8 +87,11 @@ public class BookAdministration implements EntryPoint {
 				callback=new AsyncCallback<Void>() {
 					
 					public void onSuccess(Void result) {
-						if (!Aborrar.isEmpty()) 
-							bookReaderServiceHolder.deleteBook(Aborrar.pop(), ActualUser.getUser().getId(), callback);
+						if (!Aborrar.isEmpty()){
+						    bookToBeRemoved = Aborrar.pop();
+							bookReaderServiceHolder.deleteBook(bookToBeRemoved, ActualUser.getUser().getId(), callback);
+						} 
+							
 						else Selected.clear();
 					}
 					
@@ -98,8 +101,12 @@ public class BookAdministration implements EntryPoint {
 					}
 				};
 				
-				if (!Aborrar.isEmpty()) 
-					bookReaderServiceHolder.deleteBook(Aborrar.pop(), ActualUser.getUser().getId(), callback);
+				if (!Aborrar.isEmpty()){
+					bookToBeRemoved = Aborrar.pop();
+					ActualUser.getUser().getBookIds().remove(bookToBeRemoved);
+					bookReaderServiceHolder.deleteBook(bookToBeRemoved, ActualUser.getUser().getId(), callback);
+				} 
+					
 //				bookReaderServiceHolder.saveUser(ActualUser.getUser(),
 //						new AsyncCallback<Boolean>() {
 //
