@@ -1,6 +1,7 @@
 package lector.client.admin.book;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import lector.client.admin.BotonesStackPanelAdministracionMio;
 import lector.client.book.reader.GWTService;
@@ -37,6 +38,8 @@ public class BookAdministration implements EntryPoint {
 	private VerticalPanel Selected;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
+	private static Stack<String> Aborrar;
+	private AsyncCallback<Void> callback;
 
 	public void onModuleLoad() {
 		RootPanel RootTXOriginal = RootPanel.get();
@@ -64,28 +67,49 @@ public class BookAdministration implements EntryPoint {
 		});
 		menuBar.addItem(mntmAddbook);
 
+		callback=new AsyncCallback<Void>() {
+			
+			public void onSuccess(Void result) {
+				if (!Aborrar.isEmpty()) 
+					bookReaderServiceHolder.deleteBook(Aborrar.pop(), ActualUser.getUser().getId(), callback);
+				else Selected.clear();
+			}
+			
+			public void onFailure(Throwable caught) {
+				Window.alert("There has been an erron when trying to remove the books of the user");
+				
+			}
+		};
+		
 		MenuItem mntmNewItem_1 = new MenuItem("New item", false, new Command() {
+			private AsyncCallback<Void> callback;
+
 			public void execute() {
 				int SelectedWidgetCount = Selected.getWidgetCount();
+				Aborrar=new Stack<String>();
 				for (int i = 0; i < SelectedWidgetCount; i++) {
 					BotonesStackPanelAdministracionMio BDPM = (BotonesStackPanelAdministracionMio) Selected
 							.getWidget(i);
-					ActualUser.getUser().getBookIds().remove(BDPM.getText());
+					Aborrar.add(BDPM.getText());
+//					ActualUser.getUser().getBookIds().remove(BDPM.getText());
 				}
 
 				Selected.clear();
-				bookReaderServiceHolder.saveUser(ActualUser.getUser(),
-						new AsyncCallback<Boolean>() {
-
-							public void onSuccess(Boolean result) {
-								Selected.clear();
-
-							}
-
-							public void onFailure(Throwable caught) {
-								Window.alert("There has been an erron when trying to remove the books of the user");
-							}
-						});
+				
+				if (!Aborrar.isEmpty()) 
+					bookReaderServiceHolder.deleteBook(Aborrar.pop(), ActualUser.getUser().getId(), callback);
+//				bookReaderServiceHolder.saveUser(ActualUser.getUser(),
+//						new AsyncCallback<Boolean>() {
+//
+//							public void onSuccess(Boolean result) {
+//								Selected.clear();
+//
+//							}
+//
+//							public void onFailure(Throwable caught) {
+//								Window.alert("There has been an erron when trying to remove the books of the user");
+//							}
+//						});
 			}
 		});
 		mntmNewItem_1.setHTML("Remove");

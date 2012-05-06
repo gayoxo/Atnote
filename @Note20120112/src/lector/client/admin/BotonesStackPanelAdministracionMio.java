@@ -47,7 +47,7 @@ public class BotonesStackPanelAdministracionMio extends BotonesStackPanelMio{
 	
 
 	private boolean checkFamilia() {
-		
+		if (F==null) return true;
 		return F.getTopPath().equals(super.getEntidad().getActualFather());
 	}
 
