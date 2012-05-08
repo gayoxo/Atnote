@@ -685,3 +685,54 @@ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center
 	font-family: arial, sans-serif;
 	text-decoration: none;
 }
+
+.gwt-MenuItemPanel {
+font-size: 11px;
+}
+
+.gwt-ButtonCenterPequ {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+	font-size: 11px;
+}
+.gwt-ButtonCenterPequOver {
+ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	font-size: 21px;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonCenterPequSelect {
+background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	font-size: 11px;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonCenterPequPush {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	font-size: 11px;
+	text-decoration: none;
+	background-color: White;
+}

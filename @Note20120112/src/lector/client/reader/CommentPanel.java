@@ -5,10 +5,16 @@ package lector.client.reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import lector.client.book.reader.GWTService;
+import lector.client.book.reader.GWTServiceAsync;
+import lector.client.catalogo.client.File;
+import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
+import lector.client.login.ActualUser;
 import lector.client.reader.hilocomentarios.ReplyDialog;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -19,6 +25,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -31,6 +38,8 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 public class CommentPanel extends Composite {
 
@@ -48,8 +57,30 @@ public class CommentPanel extends Composite {
     private Image Imagen;
     private Button button;
     private static boolean Estado;
+    private ScrollPanel scrollPanel;
+    private GWTServiceAsync bookReaderServiceHolder = GWT
+			.create(GWTService.class);
+    private HorizontalPanel PanelTexto;
+    private SimplePanel simplePanel;
     
 
+public enum CatalogTipo {
+		
+		Catalog1("<img src=\"FilePe.gif\">"), Catalog2("<img src=\"File2Pe.gif\">");
+		
+		private String Texto;
+		
+		private CatalogTipo(String A) {
+			Texto=A;
+		}
+		
+		public String getTexto() {
+			return Texto;
+		}
+		
+	};
+	
+    
     public CommentPanel(Annotation annotationin, Image originalBook) {
 
         annotation = annotationin;
@@ -194,6 +225,7 @@ public class CommentPanel extends Composite {
                     //verticalPanel.add(richTextArea);
                     richTextArea.setVisible(true);
                     menuBar.setVisible(true);
+                    simplePanel.setVisible(true);
                   //  button.setVisible(true);
 //                    richTextAreaBoton.setVisible(false);
                     button_1.setText("-");
@@ -205,6 +237,7 @@ public class CommentPanel extends Composite {
 //                    richTextAreaBoton.setSize("254px", "38px");
                     button_1.setText("+");
                     menuBar.setVisible(false);
+                    simplePanel.setVisible(false);
 //                    horizontalPanel.clear();
 //                    horizontalPanel.add(button);
 ////                    horizontalPanel.add(richTextAreaBoton);
@@ -238,9 +271,22 @@ public class CommentPanel extends Composite {
         button_1.setSize("52px", "30px");
 
         richTextArea.setHTML(annotation.getComment().toString());
-        richTextArea.setHeight("174px");
+        richTextArea.setHeight("177px");
         verticalPanel.add(richTextArea);
         richTextArea.setEnabled(false);
+        
+        simplePanel = new SimplePanel();
+        verticalPanel.add(simplePanel);
+        simplePanel.setSize("306px", "45px");
+        
+        scrollPanel = new ScrollPanel();
+        simplePanel.setWidget(scrollPanel);
+        scrollPanel.setAlwaysShowScrollBars(true);
+        simplePanel.setVisible(false);
+        scrollPanel.setSize("", "45px");
+        PanelTexto= new HorizontalPanel();
+        scrollPanel.setWidget(PanelTexto);
+        PanelTexto.setSize("447px", "27px");
         
         verticalPanel.add(menuBar);
         
@@ -276,7 +322,129 @@ public class CommentPanel extends Composite {
         richTextArea.setVisible(false);
 
 
+        bookReaderServiceHolder.getFilesByIds(annotation.getFileIds(),
+				new AsyncCallback<ArrayList<FileDB>>() {
 
+        		private int whithPanel;
+        		
+					public void onFailure(Throwable caught) {
+
+					}
+
+					public void onSuccess(ArrayList<FileDB> result) {
+						System.out.println(annotation.getComment());
+						whithPanel=0;
+						for (int i = 0; i < result.size(); i++) {
+						FileDB resulttmp=result.get(i);
+						File F=new File(resulttmp.getName(), resulttmp.getId(), resulttmp.getCatalogId());
+						F.setFathers(null);
+						if (F.getCatalogId().equals(ActualUser.getReadingactivity().getCatalogId()))
+						{
+							ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog1.getTexto(),PanelTexto);
+							B.addClickHandler(new ClickHandler() {
+								
+								public void onClick(ClickEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenterPequ");
+									
+								}
+							});
+						
+				        	B.addMouseDownHandler(new MouseDownHandler() {
+								public void onMouseDown(MouseDownEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenterPequPush");
+								}
+							});
+							
+
+				        	B.addMouseUpHandler(new MouseUpHandler() {
+								public void onMouseUp(MouseUpEvent event) {
+									((Button)event.getSource()).setStyleName("gwt-ButtonCenterPequ");
+							}
+						});
+							
+
+//				        	B.addMouseOverHandler(new MouseOverHandler() {
+//								public void onMouseOver(MouseOverEvent event) {
+//									
+//									((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+//								
+//							}
+//						});
+
+				        	B.setStyleName("gwt-ButtonCenterPequ");
+//							if (annotation.isEditable()) {
+//								B.addClickHandler(new ClickHandler() {
+//								
+//								public void onClick(ClickEvent event) {
+//									ButtonTipo Yo=(ButtonTipo)event.getSource();
+//									Yo.getPertenezco().remove(Yo);
+//									
+//								}
+//								});
+//							}
+				        	int TamAdd=B.getText().length()*10+19;
+//				        	System.out.println(TamAdd);
+				        	B.setWidth(TamAdd+"px");
+				        	whithPanel=whithPanel+(TamAdd);
+//				        	System.out.println(whithPanel+"px");
+				        	PanelTexto.setWidth(whithPanel+"px");
+							PanelTexto.add(B);
+						}
+							else{
+								ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog2.getTexto(),PanelTexto);
+//								if (annotation.isEditable()) {
+								B.addClickHandler(new ClickHandler() {
+									
+									public void onClick(ClickEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPequ");
+										
+									}
+								});
+							
+					        	B.addMouseDownHandler(new MouseDownHandler() {
+									public void onMouseDown(MouseDownEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPequPush");
+									}
+								});
+								
+
+					        	B.addMouseUpHandler(new MouseUpHandler() {
+									public void onMouseUp(MouseUpEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPequ");
+								}
+							});
+								
+
+//					        	B.addMouseOverHandler(new MouseOverHandler() {
+//									public void onMouseOver(MouseOverEvent event) {
+//										
+//										((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+//									
+//								}
+//							});
+
+					        	B.setStyleName("gwt-ButtonCenterPequ");
+//									B.addClickHandler(new ClickHandler() {
+//
+//										public void onClick(ClickEvent event) {
+//											ButtonTipo Yo = (ButtonTipo) event
+//													.getSource();
+//											Yo.getPertenezco().remove(Yo);
+//
+//										}
+//									});
+//								}
+					        	int TamAdd=B.getText().length()*10+19;
+//					        	System.out.println(TamAdd);
+					        	B.setWidth(TamAdd+"px");
+					        	whithPanel=whithPanel+(TamAdd);
+//					        	System.out.println(whithPanel+"px");
+					        	PanelTexto.setWidth(whithPanel+"px");
+								PanelTexto.add(B);
+							}
+						}
+					}
+				});
 
 
     }

@@ -377,6 +377,38 @@ public class TextComentEdit extends DialogBox {
 							else{
 								ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog2.getTexto(),PanelTexto.getPenelBotonesTipo());
 //								if (annotation.isEditable()) {
+								
+								B.addClickHandler(new ClickHandler() {
+									
+									public void onClick(ClickEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+										
+									}
+								});
+							
+					        	B.addMouseDownHandler(new MouseDownHandler() {
+									public void onMouseDown(MouseDownEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+									}
+								});
+								
+
+					        	B.addMouseOutHandler(new MouseOutHandler() {
+									public void onMouseOut(MouseOutEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								}
+							});
+								
+
+					        	B.addMouseOverHandler(new MouseOverHandler() {
+									public void onMouseOver(MouseOverEvent event) {
+										
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+									
+								}
+							});
+
+					        	B.setStyleName("gwt-ButtonCenter");
 									B.addClickHandler(new ClickHandler() {
 
 										public void onClick(ClickEvent event) {
