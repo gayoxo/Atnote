@@ -332,7 +332,7 @@ public enum CatalogTipo {
 					}
 
 					public void onSuccess(ArrayList<FileDB> result) {
-						System.out.println(annotation.getComment());
+					//	System.out.println(annotation.getComment());
 						whithPanel=0;
 						for (int i = 0; i < result.size(); i++) {
 						FileDB resulttmp=result.get(i);

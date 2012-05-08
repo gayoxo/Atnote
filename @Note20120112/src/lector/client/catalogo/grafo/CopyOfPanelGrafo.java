@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class PanelGrafo extends Composite {
+public class CopyOfPanelGrafo extends Composite {
 
 	private GWTCanvas canvas;
 	private AbsolutePanel absolutePanel;
@@ -52,16 +52,16 @@ public class PanelGrafo extends Composite {
 	private VerticalPanel zoomPanel;
 	private Button btnNewButton;
 	private Button btnNewButton_1;
-	private float multiplicador;
-	private String Result;
+	private int OldSizehight;
+	private int OldSizewigth;
 	private Button btnNewButton_2;
 	private HorizontalPanel horizontalPanel;
 
-	public PanelGrafo(Long Catalog) {
+	public CopyOfPanelGrafo(Long Catalog) {
 
 		Catalogo = Catalog;
-		multiplicador=1.0f;
-		Result=null;
+		OldSizehight = 0;
+		OldSizewigth = 0;
 
 		horizontalPanel = new HorizontalPanel();
 		initWidget(horizontalPanel);
@@ -77,12 +77,8 @@ public class PanelGrafo extends Composite {
 				btnNewButton_2.setEnabled(false);
 				absolutePanel.clear();
 				absolutePanel.add(sPanel, 0, 0);
-				multiplicador=multiplicador+0.1f;
-				Play() ;
-//				LlamadaServicio(
-////						(int) Math.round(OldSizehight * 1.3),
-////						(int) Math.round(OldSizewigth * 1.3), true
-//						);
+				LlamadaServicio((int) Math.round(OldSizehight * 1.3),
+						(int) Math.round(OldSizewigth * 1.3), true);
 
 			}
 
@@ -103,12 +99,8 @@ public class PanelGrafo extends Composite {
 				btnNewButton_2.setEnabled(false);
 				absolutePanel.clear();
 				absolutePanel.add(sPanel, 0, 0);
-				if (multiplicador-0.1f>0.3f) multiplicador=multiplicador-0.1f;
-				Play() ;
-//				LlamadaServicio(
-////						(int) Math.round(OldSizehight / 1.3),
-////						(int) Math.round(OldSizewigth / 1.3), true
-//						);
+				LlamadaServicio((int) Math.round(OldSizehight / 1.3),
+						(int) Math.round(OldSizewigth / 1.3), true);
 			}
 		});
 		btnNewButton_1.setText("-");
@@ -128,11 +120,7 @@ public class PanelGrafo extends Composite {
 				btnNewButton_2.setEnabled(false);
 				absolutePanel.clear();
 				absolutePanel.add(sPanel, 0, 0);
-				multiplicador=1.0f;
-				Play();
-//				LlamadaServicio(
-////						0, 0, false
-//						);
+				LlamadaServicio(0, 0, false);
 			}
 		});
 		btnNewButton_2.setText("Reset");
@@ -167,9 +155,7 @@ public class PanelGrafo extends Composite {
 
 					public void onSuccess(ArrayList<AnnotationSchema> result) {
 						compare = result;
-						LlamadaServicio(
-//								0, 0, false
-								);
+						LlamadaServicio(0, 0, false);
 						LoadingPanel.getInstance().hide();
 
 					}
@@ -197,9 +183,7 @@ public class PanelGrafo extends Composite {
 
 					public void onSuccess(ArrayList<AnnotationSchema> result) {
 						compare = result;
-						LlamadaServicio(
-//								0, 0, false
-								);
+						LlamadaServicio(0, 0, false);
 						LoadingPanel.getInstance().hide();
 
 					}
@@ -213,42 +197,41 @@ public class PanelGrafo extends Composite {
 
 	}
 
-	protected void LlamadaServicio(
-//			int newSizehight2, int newSizewigth2,boolean sizeset
-			) {
+	protected void LlamadaServicio(int newSizehight2, int newSizewigth2,
+			boolean sizeset) {
 		String URLReq = generaString();
 
-//		if ((newSizehight2 * newSizewigth2) > 300000) {
-//			float prop = ((float)300000)/((float)newSizehight2 * (float)newSizewigth2);
-//			prop=(float) Math.sqrt(prop);
-////			BigDecimal bd = new BigDecimal((float)newSizehight2*prop);
-////			BigDecimal positiveRedondeado = bd.setScale(0, RoundingMode.DOWN);	
-////			newSizehight2 = positiveRedondeado.intValue();
-////			bd = new BigDecimal((float)newSizewigth2*prop);
-////			positiveRedondeado = bd.setScale(0, RoundingMode.DOWN);	
-////			newSizewigth2 = positiveRedondeado.intValue();
-//			newSizehight2 = (int) Math.round(((float)newSizehight2) * prop);
-//			newSizewigth2 = (int) Math.round(((float)newSizewigth2) * prop);
-//		}
-//		if (newSizehight2 > 1000) {
-//			newSizewigth2 = (1000 * newSizewigth2) / newSizehight2;
-//			newSizehight2 = 1000;
-//		}
-//		if (newSizewigth2 > 1000) {
-//			newSizehight2 = (1000 * newSizehight2) / newSizewigth2;
-//			newSizewigth2 = 1000;
-//		}
+		if ((newSizehight2 * newSizewigth2) > 300000) {
+			float prop = ((float)300000)/((float)newSizehight2 * (float)newSizewigth2);
+			prop=(float) Math.sqrt(prop);
+//			BigDecimal bd = new BigDecimal((float)newSizehight2*prop);
+//			BigDecimal positiveRedondeado = bd.setScale(0, RoundingMode.DOWN);	
+//			newSizehight2 = positiveRedondeado.intValue();
+//			bd = new BigDecimal((float)newSizewigth2*prop);
+//			positiveRedondeado = bd.setScale(0, RoundingMode.DOWN);	
+//			newSizewigth2 = positiveRedondeado.intValue();
+			newSizehight2 = (int) Math.round(((float)newSizehight2) * prop);
+			newSizewigth2 = (int) Math.round(((float)newSizewigth2) * prop);
+		}
+		if (newSizehight2 > 1000) {
+			newSizewigth2 = (1000 * newSizewigth2) / newSizehight2;
+			newSizehight2 = 1000;
+		}
+		if (newSizewigth2 > 1000) {
+			newSizehight2 = (1000 * newSizehight2) / newSizewigth2;
+			newSizewigth2 = 1000;
+		}
 		if (!URLReq.isEmpty()) {
-//			if (!sizeset)
+			if (!sizeset)
 				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
 						+ URLReq + "}&chof=json";
-//			else
-//				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
-//						+ URLReq
-//						+ "}&chof=json&chs="
-//						+ newSizewigth2
-//						+ "x"
-//						+ newSizehight2;
+			else
+				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
+						+ URLReq
+						+ "}&chof=json&chs="
+						+ newSizewigth2
+						+ "x"
+						+ newSizehight2;
 			LoadingPanel.getInstance().center();
 			if (ActualUser.getLanguage() != null) {
 				LoadingPanel.getInstance().setLabelTexto(
@@ -259,17 +242,14 @@ public class PanelGrafo extends Composite {
 					URL.encode(URLReq), new AsyncCallback<String>() {
 
 						public void onSuccess(String result) {
-							Result=result;
-							Play();
+							Play(result);
 							LoadingPanel.getInstance().hide();
 
 						}
 
 						public void onFailure(Throwable caught) {
 							Window.alert("Errro, Try again");
-							LlamadaServicio(
-//									0, 0, false
-									);
+							LlamadaServicio(0, 0, false);
 							LoadingPanel.getInstance().hide();
 
 						}
@@ -315,10 +295,10 @@ public class PanelGrafo extends Composite {
 		return null;
 	}
 
-	private void Play() {
+	private void Play(String A) {
 		try {
 
-			String[] Datosplus = Result.split("\\{\"chartshape\":\\[");
+			String[] Datosplus = A.split("\\{\"chartshape\":\\[");
 
 			Datosplus = Datosplus[1].split("\\{");
 
@@ -349,11 +329,10 @@ public class PanelGrafo extends Composite {
 			// canvas.setSize(Integer.toString(Lienzo.getwhight())+"px",
 			// Integer.toString(Lienzo.getheight())+"px");
 
-			float FW=(float)Lienzo.getwhight()*multiplicador;
-			float FH=(float)Lienzo.getheight()*multiplicador;
-			
-			int W = 10 + Math.round(FW);
-			int H = 10 + Math.round(FH);
+			int W = 10 + Lienzo.getwhight();
+			int H = 10 + Lienzo.getheight();
+			OldSizehight = H;
+			OldSizewigth = W;
 
 			btnNewButton.setEnabled(true);
 			btnNewButton_1.setEnabled(true);
@@ -383,12 +362,11 @@ public class PanelGrafo extends Composite {
 					sal.setHTML(E.getE().getName());
 
 					Entity S = E.getE();
-					if (multiplicador>0.6f){
 					if (S instanceof File)
 						sal.setIcon("File.gif", S.getName());
 					else if (S instanceof Folder)
 						sal.setIcon("Folder.gif", S.getName());
-					}
+
 					if (AccionAsociada != null)
 						sal.addClickHandler(AccionAsociada);
 
@@ -426,13 +404,9 @@ public class PanelGrafo extends Composite {
 
 					sal.setStyleName("gwt-ButtonCenterGraph");
 
-					float WF=(float)But.getwhight()*multiplicador;
-					float HF=(float)But.getheight()*multiplicador;
-					sal.setWidth(Math.round(WF) + "px");
-					sal.setHeight(Math.round(HF) + "px");
-					float XF=(float)But.getXori()*multiplicador;
-					float YF=(float)But.getYori()*multiplicador;
-					absolutePanel.add(sal, Math.round(XF), Math.round(YF));
+					sal.setWidth(But.getwhight() + "px");
+					sal.setHeight(But.getheight() + "px");
+					absolutePanel.add(sal, But.getXori(), But.getYori());
 				} else {
 
 					Flecha[lineas] = E;
@@ -448,9 +422,7 @@ public class PanelGrafo extends Composite {
 			}
 		} catch (Exception e) {
 			Window.alert("Error Mostrando el Grafo");
-			LlamadaServicio(
-//					0, 0, false
-					);
+			LlamadaServicio(0, 0, false);
 		}
 
 	}
@@ -472,14 +444,7 @@ public class PanelGrafo extends Composite {
 
 		i = Integer.parseInt(coordenadasPalo[0]);
 		j = Integer.parseInt(coordenadasPalo[1]);
-		
 
-		float iF=(float)i*multiplicador;
-		float jF=(float)j*multiplicador;
-		
-		i=Math.round(iF);
-		j=Math.round(jF);
-		
 		canvas.beginPath();
 
 		canvas.moveTo(i, j);
@@ -488,13 +453,6 @@ public class PanelGrafo extends Composite {
 			i = Integer.parseInt(coordenadasPalo[j2]);
 			j2++;
 			j = Integer.parseInt(coordenadasPalo[j2]);
-			
-			iF=(float)i*multiplicador;
-			jF=(float)j*multiplicador;
-			
-			i=Math.round(iF);
-			j=Math.round(jF);
-			
 			canvas.lineTo(i, j);
 		}
 
@@ -505,14 +463,8 @@ public class PanelGrafo extends Composite {
 
 		Rectangulo But = CalculaDistancias(coordenadasDestino);
 
-		float WF=(float)But.getwhight()*multiplicador;
-		float HF=(float)But.getheight()*multiplicador;
-		float XF=(float)But.getXori()*multiplicador;
-		float YF=(float)But.getYori()*multiplicador;
-		
-		
-		i = Math.round(XF) + (Math.round(WF) / 2);
-		j = Math.round(YF) + (Math.round(HF) / 2);
+		i = But.getXori() + (But.getwhight() / 2);
+		j = But.getYori() + (But.getheight() / 2);
 
 		if (j > tempj) {
 			canvas.lineTo(tempi + 3, tempj);
@@ -531,13 +483,6 @@ public class PanelGrafo extends Composite {
 		i = Integer.parseInt(coordenadasPalo[coordenadasPalo.length / 2]);
 		j = Integer.parseInt(coordenadasPalo[(coordenadasPalo.length / 2) + 1]);
 
-		iF=(float)i*multiplicador;
-		jF=(float)j*multiplicador;
-		
-		i=Math.round(iF);
-		j=Math.round(jF);
-		
-		
 		if (j > tempj) {
 			canvas.lineTo(i + 3, j);
 			// Window.alert(tempi+3 + " " + j);
@@ -554,13 +499,6 @@ public class PanelGrafo extends Composite {
 			i = Integer.parseInt(coordenadasPalo[j2]);
 			j2++;
 			j = Integer.parseInt(coordenadasPalo[j2]);
-			
-			iF=(float)i*multiplicador;
-			jF=(float)j*multiplicador;
-			
-			i=Math.round(iF);
-			j=Math.round(jF);
-			
 			canvas.lineTo(i, j);
 		}
 
@@ -583,48 +521,22 @@ public class PanelGrafo extends Composite {
 		i = Integer.parseInt(coordenadasDestino[0]);
 		j = Integer.parseInt(coordenadasDestino[1]);
 
-		float iF = (float)i*multiplicador;
-		float jF = (float)j*multiplicador;
-		
-		i=Math.round(iF);
-		j=Math.round(jF);
-		
 		canvas.beginPath();
 
 		canvas.moveTo(i, j);
 
 		i = Integer.parseInt(coordenadasDestino[2]);
 		j = Integer.parseInt(coordenadasDestino[3]);
-		
-		iF=(float)i*multiplicador;
-		jF=(float)j*multiplicador;
-		
-		i=Math.round(iF);
-		j=Math.round(jF);
-		
 
 		canvas.lineTo(i, j);
 
 		i = Integer.parseInt(coordenadasDestino[4]);
 		j = Integer.parseInt(coordenadasDestino[5]);
-		
-		iF=(float)i*multiplicador;
-		jF=(float)j*multiplicador;
-		
-		i=Math.round(iF);
-		j=Math.round(jF);
-		
 
 		canvas.lineTo(i, j);
 
 		i = Integer.parseInt(coordenadasDestino[6]);
 		j = Integer.parseInt(coordenadasDestino[7]);
-		
-		iF=(float)i*multiplicador;
-		jF=(float)j*multiplicador;
-		
-		i=Math.round(iF);
-		j=Math.round(jF);
 
 		canvas.lineTo(i, j);
 		canvas.closePath();

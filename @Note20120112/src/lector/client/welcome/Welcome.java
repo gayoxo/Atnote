@@ -30,6 +30,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import java.util.logging.Logger;
+
 
 public class Welcome implements EntryPoint {
 	static GWTServiceAsync bookReaderServiceHolder = GWT
@@ -37,6 +39,7 @@ public class Welcome implements EntryPoint {
 	private Button btnNewButton;
 	private HorizontalPanel horizontalPanel;
 	private RootPanel Footer;
+	private static final Logger log = Logger.getLogger(Welcome.class.getName());
 
 	
 	//DESCOMENTAR EN DESARROLLO, CREA UN USUARIO ROOT.
@@ -299,6 +302,7 @@ public class Welcome implements EntryPoint {
 								btnNewButton.setStyleName("gwt-ButtonCenter");
 
 							}
+							else {log.info(result.getEmail());}
 
 						}
 					}
