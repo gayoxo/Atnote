@@ -30,6 +30,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -39,8 +41,8 @@ public class Welcome implements EntryPoint {
 	private Button btnNewButton;
 	private HorizontalPanel horizontalPanel;
 	private RootPanel Footer;
-	private static final Logger log = Logger.getLogger(Welcome.class.getName());
-
+	private final static Logger LOGGER = Logger.getLogger(Welcome.class
+			.getName());
 	
 	//DESCOMENTAR EN DESARROLLO, CREA UN USUARIO ROOT.
 //	private void callUserRoot() {
@@ -58,9 +60,15 @@ public class Welcome implements EntryPoint {
 //				});
 //	}
 
+
+	
 	public void onModuleLoad() {
 	//	callUserRoot();
-
+		LOGGER.setLevel(Level.INFO);
+		LOGGER.severe("Info Log");
+		LOGGER.warning("Info Log");
+		LOGGER.info("Info Log");
+		LOGGER.finest("Really not important");
 		RootPanel rootPanel = RootPanel.get();
 		Footer=RootPanel.get("footer");
 		rootPanel.setSize("100%", "100%");
@@ -175,6 +183,7 @@ public class Welcome implements EntryPoint {
 					}
 
 					public void onSuccess(UserApp result) {
+						System.err.println("Correo Electronico: "+ result.getEmail());
 						ActualUser.setUser(result);
 						btnNewButton = new Button("Log In");
 						horizontalPanel.add(btnNewButton);
@@ -302,7 +311,7 @@ public class Welcome implements EntryPoint {
 								btnNewButton.setStyleName("gwt-ButtonCenter");
 
 							}
-							else {log.info(result.getEmail());}
+							
 
 						}
 					}
