@@ -1678,6 +1678,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				userApp.setLoginUrl(userService.createLoginURL(requestUri));
 				userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
 				userApp.setIsAuthenticated(false);
+				LoggerServelet.getInstance().info("Correo Electronico: "+ userApp.getEmail());
 				return userApp;
 			}
 
@@ -1692,6 +1693,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			userApp.setLoginUrl(userService.createLoginURL(requestUri));
 			userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
 		}
+		LoggerServelet.getInstance().info("Correo Electronico: "+ userApp.getEmail());
 		return userApp;
 	}
 
