@@ -190,6 +190,8 @@ public class Finder extends Composite {
 
 			public void onSuccess(ArrayList<Entity> result) {
 				
+				sortStringExchange(result);
+				
 				ActualRama.removeItems();
 				for (Entity entity : result) {
 					entity.setActualFather(ActualRama.getEntidad());
@@ -203,6 +205,26 @@ public class Finder extends Composite {
 					}
 				LoadingPanel.getInstance().hide();
 			}
+			
+			  public void sortStringExchange( ArrayList<Entity>  x )
+		      {
+		            int i, j;
+		            Entity temp;
+
+		            for ( i = 0;  i < x.size() - 1;  i++ )
+		            {
+		                for ( j = i + 1;  j < x.size();  j++ )
+		                {  
+		                         if ( x.get(i).getName().compareToIgnoreCase( x.get(j).getName()) > 0 )
+		                          {                                             // ascending sort
+		                                      temp = x.get(i);
+		                                      x.set(i, x.get(j));    // swapping
+		                                      x.set(j, temp); 
+		                                      
+		                           } 
+		                   } 
+		             } 
+		      } 
 		};
 		LoadingPanel.getInstance().center();
 		if (InReadingActivity)  LoadingPanel.getInstance().setLabelTexto(ActualUser.getLanguage().getLoading());
