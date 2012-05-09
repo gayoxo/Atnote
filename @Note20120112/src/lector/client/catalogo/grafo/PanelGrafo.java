@@ -239,8 +239,8 @@ public class PanelGrafo extends Composite {
 //			newSizewigth2 = 1000;
 //		}
 		if (!URLReq.isEmpty()) {
-//			if (!sizeset)
-				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
+//			if (!sizeset)	
+			URLReq = "cht=gv:dot&chl=digraph{"
 						+ URLReq + "}&chof=json";
 //			else
 //				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
@@ -255,7 +255,7 @@ public class PanelGrafo extends Composite {
 						ActualUser.getLanguage().getLoading());
 			}
 
-			bookReaderServiceHolder.getJSONServiceTODrawGraph(
+			bookReaderServiceHolder.getJSONServiceTODrawGraph(URL.encode("https://chart.googleapis.com/chart?"),
 					URL.encode(URLReq), new AsyncCallback<String>() {
 
 						public void onSuccess(String result) {

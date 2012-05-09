@@ -3624,7 +3624,6 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			}
 			wr.close();
 			reader.close();
-			return reader.toString();
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
 					null, ex);
