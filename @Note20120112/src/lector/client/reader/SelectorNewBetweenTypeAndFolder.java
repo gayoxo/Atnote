@@ -35,13 +35,13 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 	.create(GWTService.class);
 	private ListBox comboBox;
-	private Finder finder;
+	private Finder finderrefresh;
 	private TextBox textBox;
 
 	public SelectorNewBetweenTypeAndFolder(Finder finderin) {
 		super(true);
 		setGlassEnabled(true);
-		this.finder=finderin;
+		this.finderrefresh=finderin;
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -131,7 +131,7 @@ btnNewButton.addClickHandler(new ClickHandler() {
 					
 
 					public void onSuccess(Long result) {
-						finder.RefrescaLosDatos();
+						finderrefresh.RefrescaLosDatos();
 						LoadingPanel.getInstance().hide();
 						hide();
 					}
@@ -141,13 +141,13 @@ btnNewButton.addClickHandler(new ClickHandler() {
 				LoadingPanel.getInstance().center();
 				
 				if (Seleccion.equals("Type")){
-				File F=new File(textBox.getText(),null, finder.getCatalogo().getId());
+				File F=new File(textBox.getText(),null, finderrefresh.getCatalogo().getId());
 		
-				bookReaderServiceHolder.saveFile(F,finder.getTopPath().getID(), callback);
+				bookReaderServiceHolder.saveFile(F,finderrefresh.getTopPath().getID(), callback);
 				}
 				else {
-					Folder F=new Folder(textBox.getText(),null,finder.getCatalogo().getId());
-					bookReaderServiceHolder.saveFolder(F,finder.getTopPath().getID(), callback);
+					Folder F=new Folder(textBox.getText(),null,finderrefresh.getCatalogo().getId());
+					bookReaderServiceHolder.saveFolder(F,finderrefresh.getTopPath().getID(), callback);
 				}
 				hide();
 				
