@@ -227,7 +227,7 @@ public interface GWTServiceAsync {
 			Long threadFatherId,
 			AsyncCallback<ArrayList<AnnotationThread>> callback);
 
-	void getJSONServiceTODrawGraph(String url, AsyncCallback<String> callback);
+	void getJSONServiceTODrawGraph(String url,String body, AsyncCallback<String> callback);
 
 	void getSchemaByCatalogId(Long catalogId,
 			AsyncCallback<ArrayList<AnnotationSchema>> callback);

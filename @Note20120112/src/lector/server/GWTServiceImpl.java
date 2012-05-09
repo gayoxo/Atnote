@@ -3,6 +3,7 @@ package lector.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -1678,7 +1679,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				userApp.setLoginUrl(userService.createLoginURL(requestUri));
 				userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
 				userApp.setIsAuthenticated(false);
-				LoggerServelet.getInstance().info("Correo Electronico: "+ userApp.getEmail());
+				LoggerServelet.getInstance().info(
+						"Correo Electronico: " + userApp.getEmail());
 				return userApp;
 			}
 
@@ -1693,7 +1695,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			userApp.setLoginUrl(userService.createLoginURL(requestUri));
 			userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
 		}
-		LoggerServelet.getInstance().info("Correo Electronico: "+ userApp.getEmail());
+		LoggerServelet.getInstance().info(
+				"Correo Electronico: " + userApp.getEmail());
 		return userApp;
 	}
 
@@ -3598,7 +3601,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 	}
 
-	public String getJSONServiceTODrawGraph(String query) {
+	public String getJSONServiceTODrawGraph(String query, String data) {
 		URL url;
 		URLConnection connection;
 		String line;
@@ -3609,12 +3612,19 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			connection = url.openConnection();
 			connection.addRequestProperty("Referer",
 					"http://a-note.appspot.com/");
+			connection.setDoOutput(true);
+			OutputStreamWriter wr = new OutputStreamWriter(
+					connection.getOutputStream());
+			wr.write(data);
+			wr.flush();
 			reader = new BufferedReader(new InputStreamReader(
 					connection.getInputStream()));
 			while ((line = reader.readLine()) != null) {
 				builder.append(line);
 			}
-
+			wr.close();
+			reader.close();
+			return reader.toString();
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
 					null, ex);
@@ -3721,21 +3731,21 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
 	}
 
-//	private UserApp loadUserBybookId(String bookId) {
-//		EntityManager entityManager;
-//		List<UserApp> users;
-//		ArrayList<UserApp> userList;
-//		entityManager = EMF.get().createEntityManager();
-//		String sql = "SELECT a FROM UserApp a WHERE a.bookIds='" + bookId + "'";
-//		users = entityManager.createQuery(sql).getResultList();
-//		if (users == null) {
-//			return null;
-//		}
-//		userList = new ArrayList<UserApp>(users);
-//		if (entityManager.isOpen())
-//			entityManager.close();
-//		return userList.get(0);
-//	}
+	// private UserApp loadUserBybookId(String bookId) {
+	// EntityManager entityManager;
+	// List<UserApp> users;
+	// ArrayList<UserApp> userList;
+	// entityManager = EMF.get().createEntityManager();
+	// String sql = "SELECT a FROM UserApp a WHERE a.bookIds='" + bookId + "'";
+	// users = entityManager.createQuery(sql).getResultList();
+	// if (users == null) {
+	// return null;
+	// }
+	// userList = new ArrayList<UserApp>(users);
+	// if (entityManager.isOpen())
+	// entityManager.close();
+	// return userList.get(0);
+	// }
 
 	private void deletePlainBookBlob(Long bookId) {
 		EntityManager entityManager;
@@ -3758,8 +3768,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		entityManager = EMF.get().createEntityManager();
 		List<ReadingActivity> list;
 		ArrayList<ReadingActivity> readingActivitys;
-		String sql = "SELECT r FROM ReadingActivity r WHERE r.bookId='" + bookId
-				+ "'";
+		String sql = "SELECT r FROM ReadingActivity r WHERE r.bookId='"
+				+ bookId + "'";
 		list = entityManager.createQuery(sql).getResultList();
 		readingActivitys = new ArrayList<ReadingActivity>(list);
 		if (entityManager.isOpen()) {
@@ -3782,13 +3792,13 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	}
 
 	public void deleteBook(String id, Long userId) {
-		
-//		String[] splitIDyCut=id.split("-");
-//		String id2=splitIDyCut[splitIDyCut.length-1];
+
+		// String[] splitIDyCut=id.split("-");
+		// String id2=splitIDyCut[splitIDyCut.length-1];
 		String[] splitId = id.split("##");
 		Long bookId = null;
 		if (splitId.length > 1) {
-			String id2=splitId[splitId.length-1];
+			String id2 = splitId[splitId.length - 1];
 			bookId = Long.parseLong(id2);
 			deletePlainBookBlob(bookId);
 		}

@@ -230,7 +230,7 @@ public interface GWTService extends RemoteService {
 	public ArrayList<AnnotationThread> getAnnotationThreadsByItsFather(
 			Long annotationId, Long threadFatherId) throws GeneralException;
 
-	public String getJSONServiceTODrawGraph(String url);
+	public String getJSONServiceTODrawGraph(String url, String body);
 	
 	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId);
 	
