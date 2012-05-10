@@ -81,6 +81,7 @@ public class Respuesta extends Composite {
 	        	Showbutton=Showbutton.substring(0,20);
 	        	Showbutton=Showbutton+" ...";
 	        }
+	        Showbutton.replaceAll("\\<[^>]*>","");
 	        button = new Button(Showbutton);
 	        button.setHTML(Showbutton);
 	        horizontalPanel.add(button);

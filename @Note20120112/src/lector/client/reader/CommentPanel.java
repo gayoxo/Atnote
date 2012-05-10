@@ -106,8 +106,9 @@ public enum CatalogTipo {
         	Showbutton=Showbutton.substring(0,20);
         	Showbutton=Showbutton+" ...";
         }
+        Showbutton=Showbutton.replaceAll("\\<[^>]*>","");
         button = new Button(Showbutton);
-        button.setHTML(Showbutton);
+        button.setText(Showbutton);
         horizontalPanel.add(button);
         button.setEnabled(true);
         button.setVisible(true);
@@ -239,7 +240,7 @@ public enum CatalogTipo {
         richTextArea2.setWidget(ScrollPanel);
         ScrollPanel.setSize("100%", "100%");
         
-        panel = new HTMLPanel("New HTML");
+        panel = new HTMLPanel(annotation.getComment().toString());
         ScrollPanel.setWidget(panel);
         panel.setSize("100%", "100%");
         decoratorPanel_1.setVisible(false);

@@ -34,7 +34,6 @@ public class CommentPanelBrowser extends Composite {
     private Button button_1 = new Button("+");
     private Image Imagen;
     private Button button;
-    private final VerticalPanel verticalPanel_1 = new VerticalPanel();
     private final MenuBar menuBar = new MenuBar(false);
 	private MenuItem mntmNewItem_2;
     
@@ -54,81 +53,82 @@ public class CommentPanelBrowser extends Composite {
          horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
          verticalPanel.add(horizontalPanel);
          horizontalPanel.setWidth("100%");
-         horizontalPanel.add(verticalPanel_1);
-         verticalPanel_1.setSize("100%", "100%");
 
          String Showbutton= annotation.getComment().toString();
          if (Showbutton.length()>20){
          	Showbutton=Showbutton.substring(0,20);
          	Showbutton=Showbutton+" ...";
+         }else{
+        	 while (Showbutton.length()<20) Showbutton=Showbutton+" ";
          }
+         Showbutton=Showbutton.replaceAll("\\<[^>]*>","");
         button = new Button(Showbutton);
-        button.setHTML(Showbutton);
-        verticalPanel_1.add(button);
+        horizontalPanel.add(button);
+        button.setText(Showbutton);
         button.setEnabled(true);
         button.setSize("100%", "42px");
         button.setStyleName("gwt-ButtonIzquierda");
-//        button.addMouseOutHandler(new MouseOutHandler() {
-//			public void onMouseOut(MouseOutEvent event) {
-//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
-//			}
-//		});
-//        button.addMouseOverHandler(new MouseOverHandler() {
-//			public void onMouseOver(MouseOverEvent event) {
-//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
-//			}
-//		});
-//        button.addMouseDownHandler(new MouseDownHandler() {
-//			public void onMouseDown(MouseDownEvent event) {
-//				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
-//			}
-//		});
-
-
-        button_1.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-            	 if (button_1.getText().contentEquals("+")) {
-                     //verticalPanel.add(richTextArea);
-                     richTextArea.setVisible(true);
-                     menuBar.setVisible(true);
-                   //  button.setVisible(true);
-//                     richTextAreaBoton.setVisible(false);
-                     button_1.setText("-");
-                 } else {
-                     // verticalPanel.remove(richTextArea);
-                     richTextArea.setVisible(false);
-                    // button.setVisible(false);
-//                     richTextAreaBoton.setVisible(true);
-//                     richTextAreaBoton.setSize("254px", "38px");
-                     button_1.setText("+");
-                     menuBar.setVisible(false);
-//                     horizontalPanel.clear();
-//                     horizontalPanel.add(button);
-////                     horizontalPanel.add(richTextAreaBoton);
-//                     horizontalPanel.add(button_1);
-
-                 }
-            }
-        });
-        horizontalPanel.add(button_1);
-        button_1.setStyleName("gwt-ButtonDerecha");
-        button_1.addMouseOutHandler(new MouseOutHandler() {
+                horizontalPanel.add(button_1);
+        //        button.addMouseOutHandler(new MouseOutHandler() {
+        //			public void onMouseOut(MouseOutEvent event) {
+        //				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+        //			}
+        //		});
+        //        button.addMouseOverHandler(new MouseOverHandler() {
+        //			public void onMouseOver(MouseOverEvent event) {
+        //				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+        //			}
+        //		});
+        //        button.addMouseDownHandler(new MouseDownHandler() {
+        //			public void onMouseDown(MouseDownEvent event) {
+        //				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+        //			}
+        //		});
+        
+        
+                button_1.addClickHandler(new ClickHandler() {
+        
+                    public void onClick(ClickEvent event) {
+                    	 if (button_1.getText().contentEquals("+")) {
+                             //verticalPanel.add(richTextArea);
+                             richTextArea.setVisible(true);
+                             menuBar.setVisible(true);
+                           //  button.setVisible(true);
+        //                     richTextAreaBoton.setVisible(false);
+                             button_1.setText("-");
+                         } else {
+                             // verticalPanel.remove(richTextArea);
+                             richTextArea.setVisible(false);
+                            // button.setVisible(false);
+        //                     richTextAreaBoton.setVisible(true);
+        //                     richTextAreaBoton.setSize("254px", "38px");
+                             button_1.setText("+");
+                             menuBar.setVisible(false);
+        //                     horizontalPanel.clear();
+        //                     horizontalPanel.add(button);
+        ////                     horizontalPanel.add(richTextAreaBoton);
+        //                     horizontalPanel.add(button_1);
+        
+                         }
+                    }
+                });
+                button_1.setStyleName("gwt-ButtonDerecha");
+                button_1.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
 			}
 		});
-        button_1.addMouseOverHandler(new MouseOverHandler() {
+                button_1.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
 			}
 		});
-        button_1.addMouseDownHandler(new MouseDownHandler() {
+                button_1.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
 			}
 		});
-        button_1.setSize("100%", "42px");
+                button_1.setSize("100%", "42px");
 
         richTextArea.addClickHandler(new ClickHandler() {
 

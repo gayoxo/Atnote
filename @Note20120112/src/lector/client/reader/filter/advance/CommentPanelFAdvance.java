@@ -63,7 +63,10 @@ public class CommentPanelFAdvance extends Composite {
         if (Showbutton.length()>20){
         	Showbutton=Showbutton.substring(0,20);
         	Showbutton=Showbutton+" ...";
+        }else{
+       	 while (Showbutton.length()<20) Showbutton=Showbutton+" ";
         }
+        Showbutton=Showbutton.replaceAll("\\<[^>]*>","");
         button = new Button(Showbutton);
         verticalPanel_1.add(button);
         button.setText(Showbutton);
