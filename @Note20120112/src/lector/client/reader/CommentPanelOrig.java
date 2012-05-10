@@ -40,12 +40,10 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.FocusPanel;
 
-public class CommentPanel extends Composite {
+public class CommentPanelOrig extends Composite {
 
-   // private RichTextArea richTextArea = new RichTextArea();
+    private RichTextArea richTextArea = new RichTextArea();
     private Annotation annotation;
     private VerticalPanel verticalPanel = new VerticalPanel();
     private Button button_1 = new Button("+");
@@ -64,10 +62,6 @@ public class CommentPanel extends Composite {
 			.create(GWTService.class);
     private HorizontalPanel PanelTexto;
     private SimplePanel simplePanel;
-    private ScrollPanel ScrollPanel;
-    private HTMLPanel panel;
-    private FocusPanel richTextArea2;
-    private DecoratorPanel decoratorPanel_1;
     
 
 public enum CatalogTipo {
@@ -87,7 +81,7 @@ public enum CatalogTipo {
 	};
 	
     
-    public CommentPanel(Annotation annotationin, Image originalBook) {
+    public CommentPanelOrig(Annotation annotationin, Image originalBook) {
 
         annotation = annotationin;
         Imagen = originalBook;
@@ -162,7 +156,60 @@ public enum CatalogTipo {
 //        button.setVisible(false);
 //        button.setSize("254px", "42px");
 
+        richTextArea.addClickHandler(new ClickHandler() {
 
+            public void onClick(ClickEvent event) {
+            	MainEntryPoint.hidePopUpSelector();
+				MainEntryPoint.hideDENSelector();
+                if (annotation.isEditable())
+                	{
+                	TextComentEdit TCE = new TextComentEdit(annotation,SE);
+                	TCE.center();
+                	}
+                else {
+                	TextComentNoEdit TCE= new TextComentNoEdit(annotation, SE);
+                	TCE.center();
+                }
+                
+
+            }
+        });
+
+        richTextArea.addMouseOutHandler(new MouseOutHandler() {
+
+            public void onMouseOut(MouseOutEvent event) {
+            	if (!Estado){
+            		 if (SE != null) {
+                      	for (SelectorPanel SP : SE) {
+                      		SP.hide();
+      					}
+                      }
+            	}
+            }
+        });
+
+        richTextArea.addMouseOverHandler(new MouseOverHandler() {
+
+            public void onMouseOver(MouseOverEvent event) {
+            	if (!Estado){
+            		 if (SE != null) {
+                      	for (SelectorPanel SP : SE) {
+                      		SP.hide();
+      					}
+                      }
+            		 SE=new ArrayList<SelectorPanel>();
+                	 for (TextSelector TS : annotation.getTextSelectors()) {
+                		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+                				 TS.getY().intValue(),
+                                 Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
+                                 TS.getWidth().intValue(),
+                                 TS.getHeight().intValue());
+                         if (!Estado) SEE.show();
+                         SE.add(SEE);
+    				}
+                }
+            }
+        });
 //
 //        richTextAreaBoton.setHTML(annotation.getComment().toString());
 //        richTextAreaBoton.setSize("254px", "38px");
@@ -176,7 +223,7 @@ public enum CatalogTipo {
             public void onClick(ClickEvent event) {
                 if (button_1.getText().contentEquals("+")) {
                     //verticalPanel.add(richTextArea);
-                	decoratorPanel_1.setVisible(true);
+                    richTextArea.setVisible(true);
                     menuBar.setVisible(true);
                     simplePanel.setVisible(true);
                   //  button.setVisible(true);
@@ -184,7 +231,7 @@ public enum CatalogTipo {
                     button_1.setText("-");
                 } else {
                     // verticalPanel.remove(richTextArea);
-                	decoratorPanel_1.setVisible(false);
+                    richTextArea.setVisible(false);
                    // button.setVisible(false);
 //                    richTextAreaBoton.setVisible(true);
 //                    richTextAreaBoton.setSize("254px", "38px");
@@ -222,82 +269,11 @@ public enum CatalogTipo {
 		});
         horizontalPanel.add(button_1);
         button_1.setSize("52px", "30px");
-        
-        decoratorPanel_1 = new DecoratorPanel();
-        verticalPanel.add(decoratorPanel_1);
-        decoratorPanel_1.setWidth("");
 
-//        richTextArea.setHTML(annotation.getComment().toString());
-//        richTextArea.setHeight("177px");
-//        verticalPanel.add(richTextArea);
-//        richTextArea.setEnabled(false);
-        
-        richTextArea2 = new FocusPanel();
-        decoratorPanel_1.setWidget(richTextArea2);
-        richTextArea2.setSize("297px", "190px");
-        ScrollPanel = new ScrollPanel();
-        richTextArea2.setWidget(ScrollPanel);
-        ScrollPanel.setSize("100%", "100%");
-        
-        panel = new HTMLPanel("New HTML");
-        ScrollPanel.setWidget(panel);
-        panel.setSize("100%", "100%");
-        decoratorPanel_1.setVisible(false);
-        richTextArea2.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-            	MainEntryPoint.hidePopUpSelector();
-				MainEntryPoint.hideDENSelector();
-                if (annotation.isEditable()||(annotation.getUserId().equals(ActualUser.getUser().getId())))
-                	{
-                	TextComentEdit TCE = new TextComentEdit(annotation,SE);
-                	TCE.center();
-                	}
-                else {
-                	TextComentNoEdit TCE= new TextComentNoEdit(annotation, SE);
-                	TCE.center();
-                }
-                
-
-            }
-        });
-
-        richTextArea2.addMouseOutHandler(new MouseOutHandler() {
-
-            public void onMouseOut(MouseOutEvent event) {
-            	if (!Estado){
-            		 if (SE != null) {
-                      	for (SelectorPanel SP : SE) {
-                      		SP.hide();
-      					}
-                      }
-            	}
-            }
-        });
-
-        richTextArea2.addMouseOverHandler(new MouseOverHandler() {
-
-            public void onMouseOver(MouseOverEvent event) {
-            	if (!Estado){
-            		 if (SE != null) {
-                      	for (SelectorPanel SP : SE) {
-                      		SP.hide();
-      					}
-                      }
-            		 SE=new ArrayList<SelectorPanel>();
-                	 for (TextSelector TS : annotation.getTextSelectors()) {
-                		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
-                				 TS.getY().intValue(),
-                                 Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
-                                 TS.getWidth().intValue(),
-                                 TS.getHeight().intValue());
-                         if (!Estado) SEE.show();
-                         SE.add(SEE);
-    				}
-                }
-            }
-        });
-//        richTextArea2.setVisible(false);
+        richTextArea.setHTML(annotation.getComment().toString());
+        richTextArea.setHeight("177px");
+        verticalPanel.add(richTextArea);
+        richTextArea.setEnabled(false);
         
         simplePanel = new SimplePanel();
         verticalPanel.add(simplePanel);
@@ -343,6 +319,7 @@ public enum CatalogTipo {
 
 //tocado        
        mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
+        richTextArea.setVisible(false);
 
 
         bookReaderServiceHolder.getFilesByIds(annotation.getFileIds(),

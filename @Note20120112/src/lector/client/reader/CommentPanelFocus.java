@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 
-public class CommentPanel extends Composite {
+public class CommentPanelFocus extends Composite {
 
    // private RichTextArea richTextArea = new RichTextArea();
     private Annotation annotation;
@@ -67,7 +67,6 @@ public class CommentPanel extends Composite {
     private ScrollPanel ScrollPanel;
     private HTMLPanel panel;
     private FocusPanel richTextArea2;
-    private DecoratorPanel decoratorPanel_1;
     
 
 public enum CatalogTipo {
@@ -87,7 +86,7 @@ public enum CatalogTipo {
 	};
 	
     
-    public CommentPanel(Annotation annotationin, Image originalBook) {
+    public CommentPanelFocus(Annotation annotationin, Image originalBook) {
 
         annotation = annotationin;
         Imagen = originalBook;
@@ -162,87 +161,6 @@ public enum CatalogTipo {
 //        button.setVisible(false);
 //        button.setSize("254px", "42px");
 
-
-//
-//        richTextAreaBoton.setHTML(annotation.getComment().toString());
-//        richTextAreaBoton.setSize("254px", "38px");
-//        horizontalPanel.add(richTextAreaBoton);
-//        richTextAreaBoton.setEnabled(false);
-//        richTextAreaBoton.setVisible(true);
-
-
-        button_1.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                if (button_1.getText().contentEquals("+")) {
-                    //verticalPanel.add(richTextArea);
-                	decoratorPanel_1.setVisible(true);
-                    menuBar.setVisible(true);
-                    simplePanel.setVisible(true);
-                  //  button.setVisible(true);
-//                    richTextAreaBoton.setVisible(false);
-                    button_1.setText("-");
-                } else {
-                    // verticalPanel.remove(richTextArea);
-                	decoratorPanel_1.setVisible(false);
-                   // button.setVisible(false);
-//                    richTextAreaBoton.setVisible(true);
-//                    richTextAreaBoton.setSize("254px", "38px");
-                    button_1.setText("+");
-                    menuBar.setVisible(false);
-                    simplePanel.setVisible(false);
-//                    horizontalPanel.clear();
-//                    horizontalPanel.add(button);
-////                    horizontalPanel.add(richTextAreaBoton);
-//                    horizontalPanel.add(button_1);
-
-                }
-            }
-        });
-        button_1.setStyleName("gwt-ButtonDerecha");
-        button_1.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
-			}
-		});
-        button_1.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
-			}
-		});
-        button_1.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
-			}
-		});
-        button_1.addMouseUpHandler(new MouseUpHandler() {
-			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
-			}
-		});
-        horizontalPanel.add(button_1);
-        button_1.setSize("52px", "30px");
-        
-        decoratorPanel_1 = new DecoratorPanel();
-        verticalPanel.add(decoratorPanel_1);
-        decoratorPanel_1.setWidth("");
-
-//        richTextArea.setHTML(annotation.getComment().toString());
-//        richTextArea.setHeight("177px");
-//        verticalPanel.add(richTextArea);
-//        richTextArea.setEnabled(false);
-        
-        richTextArea2 = new FocusPanel();
-        decoratorPanel_1.setWidget(richTextArea2);
-        richTextArea2.setSize("297px", "190px");
-        ScrollPanel = new ScrollPanel();
-        richTextArea2.setWidget(ScrollPanel);
-        ScrollPanel.setSize("100%", "100%");
-        
-        panel = new HTMLPanel("New HTML");
-        ScrollPanel.setWidget(panel);
-        panel.setSize("100%", "100%");
-        decoratorPanel_1.setVisible(false);
         richTextArea2.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
@@ -297,7 +215,83 @@ public enum CatalogTipo {
                 }
             }
         });
-//        richTextArea2.setVisible(false);
+//
+//        richTextAreaBoton.setHTML(annotation.getComment().toString());
+//        richTextAreaBoton.setSize("254px", "38px");
+//        horizontalPanel.add(richTextAreaBoton);
+//        richTextAreaBoton.setEnabled(false);
+//        richTextAreaBoton.setVisible(true);
+
+
+        button_1.addClickHandler(new ClickHandler() {
+
+            public void onClick(ClickEvent event) {
+                if (button_1.getText().contentEquals("+")) {
+                    //verticalPanel.add(richTextArea);
+                	richTextArea2.setVisible(true);
+                    menuBar.setVisible(true);
+                    simplePanel.setVisible(true);
+                  //  button.setVisible(true);
+//                    richTextAreaBoton.setVisible(false);
+                    button_1.setText("-");
+                } else {
+                    // verticalPanel.remove(richTextArea);
+                	richTextArea2.setVisible(false);
+                   // button.setVisible(false);
+//                    richTextAreaBoton.setVisible(true);
+//                    richTextAreaBoton.setSize("254px", "38px");
+                    button_1.setText("+");
+                    menuBar.setVisible(false);
+                    simplePanel.setVisible(false);
+//                    horizontalPanel.clear();
+//                    horizontalPanel.add(button);
+////                    horizontalPanel.add(richTextAreaBoton);
+//                    horizontalPanel.add(button_1);
+
+                }
+            }
+        });
+        button_1.setStyleName("gwt-ButtonDerecha");
+        button_1.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
+        button_1.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+			}
+		});
+        button_1.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+			}
+		});
+        button_1.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
+        horizontalPanel.add(button_1);
+        button_1.setSize("52px", "30px");
+
+//        richTextArea.setHTML(annotation.getComment().toString());
+//        richTextArea.setHeight("177px");
+//        verticalPanel.add(richTextArea);
+//        richTextArea.setEnabled(false);
+        
+        richTextArea2 = new FocusPanel();
+        richTextArea2.setHeight("177px");
+        verticalPanel.add(richTextArea2);
+        richTextArea2.setVisible(false);
+        
+        ScrollPanel = new ScrollPanel();
+        richTextArea2.setWidget(ScrollPanel);
+        ScrollPanel.setSize("100%", "100%");
+        
+        panel = new HTMLPanel("New HTML");
+        ScrollPanel.setWidget(panel);
+        panel.setSize("100%", "100%");
         
         simplePanel = new SimplePanel();
         verticalPanel.add(simplePanel);
@@ -343,6 +337,7 @@ public enum CatalogTipo {
 
 //tocado        
        mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
+       richTextArea2.setVisible(false);
 
 
         bookReaderServiceHolder.getFilesByIds(annotation.getFileIds(),

@@ -60,6 +60,7 @@ public class Respuesta extends Composite {
 			.create(GWTService.class);
     private ScrollPanel richTextArea2 = new ScrollPanel();
     private HTMLPanel panel = new HTMLPanel("New HTML");
+    private DecoratorPanel decoratorPanel_1;
     
     
 	public Respuesta(AnnotationThread annotationin, ArrayList<TextSelector> Selectoresin) {
@@ -165,14 +166,14 @@ public class Respuesta extends Composite {
 	            public void onClick(ClickEvent event) {
 	                if (button_1.getText().contentEquals("+")) {
 	                    //verticalPanel.add(richTextArea);
-	                	richTextArea2.setVisible(true);
+	                	decoratorPanel_1.setVisible(true);
 	                    menuBar.setVisible(true);
 	                  //  button.setVisible(true);
 //	                    richTextAreaBoton.setVisible(false);
 	                    button_1.setText("-");
 	                } else {
 	                    // verticalPanel.remove(richTextArea);
-	                	richTextArea2.setVisible(false);
+	                	decoratorPanel_1.setVisible(false);
 	                   // button.setVisible(false);
 //	                    richTextAreaBoton.setVisible(true);
 //	                    richTextAreaBoton.setSize("254px", "38px");
@@ -209,7 +210,11 @@ public class Respuesta extends Composite {
 				}
 			});
 	        button_1.setSize("52px", "30px");
-
+	        
+	        decoratorPanel_1 = new DecoratorPanel();
+	        verticalPanel.add(decoratorPanel_1);
+	        decoratorPanel_1.setWidth("");
+	        decoratorPanel_1.setVisible(false);
 //	        richTextArea.setHTML(annotation.getComment().toString());
 //	        richTextArea.setHeight("174px");
 //	        verticalPanel.add(richTextArea);
@@ -217,13 +222,14 @@ public class Respuesta extends Composite {
 	        
 	        
 	        richTextArea2 = new ScrollPanel();
+	        decoratorPanel_1.setWidget(richTextArea2);
 	        panel = new HTMLPanel(annotation.getComment().toString());
-	        richTextArea2.setHeight("174px");
-	        verticalPanel.add(richTextArea2);
-	        richTextArea2.setVisible(false);
+	        richTextArea2.setSize("296px", "174px");
+	        
 	        
 	        richTextArea2.setWidget(panel);
 	        panel.setSize("100%", "100%");
+	        decoratorPanel_1.setVisible(false);
 	        
 	        verticalPanel.add(menuBar);
 	        
@@ -267,7 +273,6 @@ public class Respuesta extends Composite {
 	        
 	      
 	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
-	       richTextArea2.setVisible(false);
 
 
 
