@@ -11,6 +11,7 @@ import lector.client.catalogo.BotonesStackPanelMioGrafo;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.Folder;
+import lector.client.controler.ErrorConstants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
 import lector.client.service.AnnotationSchema;
@@ -56,6 +57,7 @@ public class PanelGrafo extends Composite {
 	private String Result;
 	private Button btnNewButton_2;
 	private HorizontalPanel horizontalPanel;
+	private static int ContadorErrores;
 
 	public PanelGrafo(Long Catalog) {
 
@@ -167,6 +169,7 @@ public class PanelGrafo extends Composite {
 
 					public void onSuccess(ArrayList<AnnotationSchema> result) {
 						compare = result;
+						ContadorErrores=0;
 						LlamadaServicio(
 //								0, 0, false
 								);
@@ -197,6 +200,7 @@ public class PanelGrafo extends Composite {
 
 					public void onSuccess(ArrayList<AnnotationSchema> result) {
 						compare = result;
+						ContadorErrores=0;
 						LlamadaServicio(
 //								0, 0, false
 								);
@@ -267,9 +271,12 @@ public class PanelGrafo extends Composite {
 
 						public void onFailure(Throwable caught) {
 							Window.alert("Errro, Try again");
-							LlamadaServicio(
+							ContadorErrores++;
+							if (ContadorErrores!=4) 
+								LlamadaServicio(
 //									0, 0, false
 									);
+							else Window.alert(ErrorConstants.ERROR_LOAD_IMAGE);
 							LoadingPanel.getInstance().hide();
 
 						}

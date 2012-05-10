@@ -25,10 +25,13 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class CommentPanelBrowser extends Composite {
 
-    private RichTextArea richTextArea = new RichTextArea();
+  //  private RichTextArea richTextArea = new RichTextArea();
     private Annotation annotation;
     private VerticalPanel verticalPanel = new VerticalPanel();
     private Button button_1 = new Button("+");
@@ -36,6 +39,10 @@ public class CommentPanelBrowser extends Composite {
     private Button button;
     private final MenuBar menuBar = new MenuBar(false);
 	private MenuItem mntmNewItem_2;
+	private  FocusPanel richTextArea2;
+	private  ScrollPanel scrollPanel;
+	private  HTMLPanel panel;
+	private HorizontalPanel Ocultador;
     
 
     public CommentPanelBrowser(Annotation annotationin, Image originalBook) {
@@ -91,14 +98,14 @@ public class CommentPanelBrowser extends Composite {
                     public void onClick(ClickEvent event) {
                     	 if (button_1.getText().contentEquals("+")) {
                              //verticalPanel.add(richTextArea);
-                             richTextArea.setVisible(true);
+                    		 Ocultador.setVisible(true);
                              menuBar.setVisible(true);
                            //  button.setVisible(true);
         //                     richTextAreaBoton.setVisible(false);
                              button_1.setText("-");
                          } else {
                              // verticalPanel.remove(richTextArea);
-                             richTextArea.setVisible(false);
+                        	 Ocultador.setVisible(false);
                             // button.setVisible(false);
         //                     richTextAreaBoton.setVisible(true);
         //                     richTextAreaBoton.setSize("254px", "38px");
@@ -129,20 +136,29 @@ public class CommentPanelBrowser extends Composite {
 			}
 		});
                 button_1.setSize("100%", "42px");
+Ocultador = new HorizontalPanel();
+Ocultador.setBorderWidth(1);
+verticalPanel.add(Ocultador);
+Ocultador.setSize("100%", "100%");
 
-        richTextArea.addClickHandler(new ClickHandler() {
+richTextArea2 = new FocusPanel();
+Ocultador.add(richTextArea2);
+Ocultador.setVisible(false);
 
-            public void onClick(ClickEvent event) {
-            	VisualBookPanel TCE = new VisualBookPanel(annotation,Imagen);
-                  TCE.show();
-            }
-        });
-        
-        richTextArea.setHTML(annotation.getComment().toString());
-        richTextArea.setSize("99%", "174px");
-        verticalPanel.add(richTextArea);
-        richTextArea.setEnabled(false);
-        richTextArea.setVisible(false);
+richTextArea2.addClickHandler(new ClickHandler() {
+
+    public void onClick(ClickEvent event) {
+    	VisualBookPanel TCE = new VisualBookPanel(annotation,Imagen);
+          TCE.show();
+    }
+});
+richTextArea2.setSize("100%", "174px");
+scrollPanel = new ScrollPanel();
+richTextArea2.setWidget(scrollPanel);
+scrollPanel.setSize("100%", "100%");
+panel = new HTMLPanel(annotation.getComment().toString());
+scrollPanel.setWidget(panel);
+panel.setSize("100%", "100%");
 
 verticalPanel.add(menuBar);
         
