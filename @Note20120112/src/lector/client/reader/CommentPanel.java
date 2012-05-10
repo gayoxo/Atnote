@@ -40,10 +40,12 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 
 public class CommentPanel extends Composite {
 
-    private RichTextArea richTextArea = new RichTextArea();
+   // private RichTextArea richTextArea = new RichTextArea();
     private Annotation annotation;
     private VerticalPanel verticalPanel = new VerticalPanel();
     private Button button_1 = new Button("+");
@@ -62,6 +64,9 @@ public class CommentPanel extends Composite {
 			.create(GWTService.class);
     private HorizontalPanel PanelTexto;
     private SimplePanel simplePanel;
+    private ScrollPanel ScrollPanel;
+    private HTMLPanel panel;
+    private FocusPanel richTextArea2;
     
 
 public enum CatalogTipo {
@@ -156,12 +161,12 @@ public enum CatalogTipo {
 //        button.setVisible(false);
 //        button.setSize("254px", "42px");
 
-        richTextArea.addClickHandler(new ClickHandler() {
+        richTextArea2.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
             	MainEntryPoint.hidePopUpSelector();
 				MainEntryPoint.hideDENSelector();
-                if (annotation.isEditable())
+                if (annotation.isEditable()||(annotation.getUserId().equals(ActualUser.getUser().getId())))
                 	{
                 	TextComentEdit TCE = new TextComentEdit(annotation,SE);
                 	TCE.center();
@@ -175,7 +180,7 @@ public enum CatalogTipo {
             }
         });
 
-        richTextArea.addMouseOutHandler(new MouseOutHandler() {
+        richTextArea2.addMouseOutHandler(new MouseOutHandler() {
 
             public void onMouseOut(MouseOutEvent event) {
             	if (!Estado){
@@ -188,7 +193,7 @@ public enum CatalogTipo {
             }
         });
 
-        richTextArea.addMouseOverHandler(new MouseOverHandler() {
+        richTextArea2.addMouseOverHandler(new MouseOverHandler() {
 
             public void onMouseOver(MouseOverEvent event) {
             	if (!Estado){
@@ -223,7 +228,7 @@ public enum CatalogTipo {
             public void onClick(ClickEvent event) {
                 if (button_1.getText().contentEquals("+")) {
                     //verticalPanel.add(richTextArea);
-                    richTextArea.setVisible(true);
+                	richTextArea2.setVisible(true);
                     menuBar.setVisible(true);
                     simplePanel.setVisible(true);
                   //  button.setVisible(true);
@@ -231,7 +236,7 @@ public enum CatalogTipo {
                     button_1.setText("-");
                 } else {
                     // verticalPanel.remove(richTextArea);
-                    richTextArea.setVisible(false);
+                	richTextArea2.setVisible(false);
                    // button.setVisible(false);
 //                    richTextAreaBoton.setVisible(true);
 //                    richTextAreaBoton.setSize("254px", "38px");
@@ -270,10 +275,23 @@ public enum CatalogTipo {
         horizontalPanel.add(button_1);
         button_1.setSize("52px", "30px");
 
-        richTextArea.setHTML(annotation.getComment().toString());
-        richTextArea.setHeight("177px");
-        verticalPanel.add(richTextArea);
-        richTextArea.setEnabled(false);
+//        richTextArea.setHTML(annotation.getComment().toString());
+//        richTextArea.setHeight("177px");
+//        verticalPanel.add(richTextArea);
+//        richTextArea.setEnabled(false);
+        
+        richTextArea2 = new FocusPanel();
+        richTextArea2.setHeight("177px");
+        verticalPanel.add(richTextArea2);
+        richTextArea2.setVisible(false);
+        
+        ScrollPanel = new ScrollPanel();
+        richTextArea2.setWidget(ScrollPanel);
+        ScrollPanel.setSize("100%", "100%");
+        
+        panel = new HTMLPanel("New HTML");
+        ScrollPanel.setWidget(panel);
+        panel.setSize("100%", "100%");
         
         simplePanel = new SimplePanel();
         verticalPanel.add(simplePanel);
@@ -319,7 +337,7 @@ public enum CatalogTipo {
 
 //tocado        
        mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
-        richTextArea.setVisible(false);
+       richTextArea2.setVisible(false);
 
 
         bookReaderServiceHolder.getFilesByIds(annotation.getFileIds(),

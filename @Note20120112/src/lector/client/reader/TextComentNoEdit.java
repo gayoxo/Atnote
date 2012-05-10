@@ -34,6 +34,8 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 public class TextComentNoEdit extends DialogBox {
 
@@ -45,9 +47,11 @@ public class TextComentNoEdit extends DialogBox {
 	private Language ActualLang;
 	private ArrayList<Long> Antiguos;
 	private ArrayList<SelectorPanel> SE;
-	private TextArea AnotArea;
+	//private TextArea AnotArea;
 	private HorizontalPanel horizontalPanel;
 	private HorizontalPanel horizontalPanel_1;
+	private HTMLPanel AnotAreaHTML;
+	private ScrollPanel scrollPanel;
 
 	public TextComentNoEdit(Annotation E, ArrayList<SelectorPanel> sE) {
 		
@@ -82,10 +86,20 @@ public class TextComentNoEdit extends DialogBox {
 		separator = new MenuItemSeparator();
 		menuBar.addSeparator(separator);
 		
-		AnotArea = new TextArea();
-		AnotArea.setReadOnly(true);
-		verticalPanel.add(AnotArea);
-		AnotArea.setSize("99%", "263px");
+		scrollPanel = new ScrollPanel();
+		verticalPanel.add(scrollPanel);
+		scrollPanel.setSize("99%", "263px");
+		
+//		AnotArea = new TextArea();
+//		AnotArea.setReadOnly(true);
+//		verticalPanel.add(AnotArea);
+//		AnotArea.setSize("99%", "263px");
+//		AnotArea.setText(annotation.getComment().toString());
+		
+		AnotAreaHTML = new HTMLPanel(annotation.getComment().toString());
+		scrollPanel.setWidget(AnotAreaHTML);
+		AnotAreaHTML.setSize("100%", "100%");
+
 		
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -153,6 +167,38 @@ public class TextComentNoEdit extends DialogBox {
 						}
 							else{
 								ButtonTipo B=new ButtonTipo(F,CatalogTipo.Catalog2.getTexto(),horizontalPanel_1);
+								
+								B.addClickHandler(new ClickHandler() {
+									
+									public void onClick(ClickEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+										
+									}
+								});
+							
+					        	B.addMouseDownHandler(new MouseDownHandler() {
+									public void onMouseDown(MouseDownEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+									}
+								});
+								
+
+					        	B.addMouseOutHandler(new MouseOutHandler() {
+									public void onMouseOut(MouseOutEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								}
+							});
+								
+
+					        	B.addMouseOverHandler(new MouseOverHandler() {
+									public void onMouseOver(MouseOverEvent event) {
+										
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+									
+								}
+							});
+
+					        	B.setStyleName("gwt-ButtonCenter");
 								
 								horizontalPanel_1.add(B);
 							}

@@ -221,7 +221,7 @@ public class FilterAdvance implements EntryPoint{
 			public void onSuccess(ArrayList<UserApp> result) {
 				for (UserApp User : result) {
 					ButtonUser B;
-					if (!User.getName().isEmpty())
+					if (User.getName()!=null&&!User.getName().isEmpty())
 					 B=new ButtonUser(User.getName(),User.getId());
 					else  B=new ButtonUser(User.getEmail(),User.getId());
 					B.addClickHandler(new ClickHandler() {
@@ -259,7 +259,10 @@ public class FilterAdvance implements EntryPoint{
 				bookReaderServiceHolder.loadUserById(ActualUser.getReadingactivity().getProfessorId(), new AsyncCallback<UserApp>() {
 					
 					public void onSuccess(UserApp result) {
-						ButtonUser B=new ButtonUser(result.getEmail(),result.getId());
+						ButtonUser B;
+						if (result.getName()!=null&&!result.getName().isEmpty())
+							 B=new ButtonUser(result.getName(),result.getId());
+							else  B=new ButtonUser(result.getEmail(),result.getId());
 						B.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
 								Rule R=FilterAdvance.getActualRule();

@@ -36,11 +36,13 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class Respuesta extends Composite {
 
 	
-	private RichTextArea richTextArea = new RichTextArea();
+//	private RichTextArea richTextArea = new RichTextArea();
     private AnnotationThread annotation;
     private VerticalPanel verticalPanel = new VerticalPanel();
     private Button button_1 = new Button("+");
@@ -56,6 +58,8 @@ public class Respuesta extends Composite {
     private ArrayList<SelectorPanel> SE;
     static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
+    private ScrollPanel richTextArea2 = new ScrollPanel();
+    private HTMLPanel panel = new HTMLPanel("New HTML");
     
     
 	public Respuesta(AnnotationThread annotationin, ArrayList<TextSelector> Selectoresin) {
@@ -161,14 +165,14 @@ public class Respuesta extends Composite {
 	            public void onClick(ClickEvent event) {
 	                if (button_1.getText().contentEquals("+")) {
 	                    //verticalPanel.add(richTextArea);
-	                    richTextArea.setVisible(true);
+	                	richTextArea2.setVisible(true);
 	                    menuBar.setVisible(true);
 	                  //  button.setVisible(true);
 //	                    richTextAreaBoton.setVisible(false);
 	                    button_1.setText("-");
 	                } else {
 	                    // verticalPanel.remove(richTextArea);
-	                    richTextArea.setVisible(false);
+	                	richTextArea2.setVisible(false);
 	                   // button.setVisible(false);
 //	                    richTextAreaBoton.setVisible(true);
 //	                    richTextAreaBoton.setSize("254px", "38px");
@@ -206,10 +210,20 @@ public class Respuesta extends Composite {
 			});
 	        button_1.setSize("52px", "30px");
 
-	        richTextArea.setHTML(annotation.getComment().toString());
-	        richTextArea.setHeight("174px");
-	        verticalPanel.add(richTextArea);
-	        richTextArea.setEnabled(false);
+//	        richTextArea.setHTML(annotation.getComment().toString());
+//	        richTextArea.setHeight("174px");
+//	        verticalPanel.add(richTextArea);
+//	        richTextArea.setEnabled(false);
+	        
+	        
+	        richTextArea2 = new ScrollPanel();
+	        panel = new HTMLPanel(annotation.getComment().toString());
+	        richTextArea2.setHeight("174px");
+	        verticalPanel.add(richTextArea2);
+	        richTextArea2.setVisible(false);
+	        
+	        richTextArea2.setWidget(panel);
+	        panel.setSize("100%", "100%");
 	        
 	        verticalPanel.add(menuBar);
 	        
@@ -253,7 +267,7 @@ public class Respuesta extends Composite {
 	        
 	      
 	       mntmNewItem_2.setText(annotation.getUserName() + " --- " +DateTimeFormat.getShortDateFormat().format(annotation.getCreatedDate()));
-	        richTextArea.setVisible(false);
+	       richTextArea2.setVisible(false);
 
 
 
