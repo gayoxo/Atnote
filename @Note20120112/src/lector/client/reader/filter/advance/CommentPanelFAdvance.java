@@ -67,16 +67,18 @@ public class CommentPanelFAdvance extends Composite {
         verticalPanel_1.setSize("100%", "100%");
 
         String Showbutton= annotation.getComment().toString();
+        Showbutton=Showbutton.replaceAll("\\<.*?\\>","");
+        
         if (Showbutton.length()>20){
         	Showbutton=Showbutton.substring(0,20);
         	Showbutton=Showbutton+" ...";
         }else{
        	 while (Showbutton.length()<20) Showbutton=Showbutton+" ";
         }
-        Showbutton=Showbutton.replaceAll("\\<[^>]*>","");
+        
         button = new Button(Showbutton);
         verticalPanel_1.add(button);
-        button.setText(Showbutton);
+        button.setHTML(Showbutton);
         button.setEnabled(true);
         button.setSize("100%", "42px");
         button.setStyleName("gwt-ButtonIzquierda");

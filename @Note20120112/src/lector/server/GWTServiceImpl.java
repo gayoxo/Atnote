@@ -1373,9 +1373,13 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			entityManager.close();
 		}
 		if (list.isEmpty()) {
-			files.add(null);
+			return null;
 		}
 		FileDB fileDB = files.get(0);
+		java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
+				(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
+		fileDB.getAnnotationsIds().clear();
+		fileDB.setAnnotationsIds(annotationsIds);
 		return fileDB;
 	}
 
@@ -1670,13 +1674,15 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		User user = userService.getCurrentUser();
 		UserApp userApp = new UserApp();
 		if (user != null) {
-			
+
 			userApp = loadUserByEmail(user.getEmail());
 			if (userApp == null) { // PROBAR AQUI LANZANDO UNA EXCEPCION CON EL
 				// URL COMO MENSAJE, PERO NO FUNCIONA, VER
 				// QUE PASA
-				/*Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.INFO,
-						null, user.getEmail());*/
+				/*
+				 * Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.INFO
+				 * , null, user.getEmail());
+				 */
 				userApp = new UserApp();
 				userApp.setLoggedIn(false);
 				userApp.setLoginUrl(userService.createLoginURL(requestUri));
@@ -1697,7 +1703,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			userApp.setLoginUrl(userService.createLoginURL(requestUri));
 			userApp.setLogoutUrl(userService.createLogoutURL(requestUri));
 		}
-		
+
 		return userApp;
 	}
 

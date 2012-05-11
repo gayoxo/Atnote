@@ -59,7 +59,7 @@ public class Respuesta extends Composite {
     static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
     private ScrollPanel richTextArea2 = new ScrollPanel();
-    private HTMLPanel panel = new HTMLPanel("New HTML");
+    private HTMLPanel panel;
     private DecoratorPanel decoratorPanel_1;
     
     
@@ -77,11 +77,12 @@ public class Respuesta extends Composite {
 	        horizontalPanel.setHeight("28px");
 
 	        String Showbutton= annotation.getComment().toString();
+	        Showbutton=Showbutton.replaceAll("\\<.*?\\>","");
 	        if (Showbutton.length()>20){
 	        	Showbutton=Showbutton.substring(0,20);
 	        	Showbutton=Showbutton+" ...";
 	        }
-	        Showbutton.replaceAll("\\<[^>]*>","");
+	        
 	        button = new Button(Showbutton);
 	        button.setHTML(Showbutton);
 	        horizontalPanel.add(button);

@@ -14,6 +14,7 @@ import lector.client.login.ActualUser;
 import lector.client.reader.hilocomentarios.ReplyDialog;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -102,13 +103,14 @@ public enum CatalogTipo {
         horizontalPanel.setHeight("28px");
 
         String Showbutton= annotation.getComment().toString();
+       
+        Showbutton=Showbutton.replaceAll("\\<.*?\\>","");
         if (Showbutton.length()>20){
         	Showbutton=Showbutton.substring(0,20);
         	Showbutton=Showbutton+" ...";
-        }
-        Showbutton=Showbutton.replaceAll("\\<[^>]*>","");
+        }  
         button = new Button(Showbutton);
-        button.setText(Showbutton);
+        button.setHTML(Showbutton);
         horizontalPanel.add(button);
         button.setEnabled(true);
         button.setVisible(true);

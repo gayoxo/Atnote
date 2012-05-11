@@ -61,17 +61,19 @@ public class CommentPanelBrowser extends Composite {
          verticalPanel.add(horizontalPanel);
          horizontalPanel.setWidth("100%");
 
+        
          String Showbutton= annotation.getComment().toString();
+         Showbutton=Showbutton.replaceAll("\\<.*?\\>","");
          if (Showbutton.length()>20){
          	Showbutton=Showbutton.substring(0,20);
          	Showbutton=Showbutton+" ...";
          }else{
         	 while (Showbutton.length()<20) Showbutton=Showbutton+" ";
          }
-         Showbutton=Showbutton.replaceAll("\\<[^>]*>","");
+        
         button = new Button(Showbutton);
         horizontalPanel.add(button);
-        button.setText(Showbutton);
+        button.setHTML(Showbutton);
         button.setEnabled(true);
         button.setSize("100%", "42px");
         button.setStyleName("gwt-ButtonIzquierda");
