@@ -2,12 +2,16 @@ package lector.client.welcome;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.book.reader.LoggerService;
+import lector.client.book.reader.LoggerServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
+import lector.client.controler.LogMessageConstants;
+import lector.client.logger.Logger;
 import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
 import lector.client.reader.About;
-import lector.server.LoggerServelet;
+
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -177,6 +181,7 @@ public class Welcome implements EntryPoint {
 					}
 
 					public void onSuccess(UserApp result) {
+
 						ActualUser.setUser(result);
 						btnNewButton = new Button("Log In");
 						horizontalPanel.add(btnNewButton);
@@ -234,6 +239,7 @@ public class Welcome implements EntryPoint {
 						 * horizontalPanel.add(signOutLink);
 						 */
 						if (result.isLoggedIn()) {
+							Logger.GetLogger().info(Welcome.class.getName(), LogMessageConstants.USER_SUCCESS_LOGGED_IN + result.getEmail());
 							if (result.getProfile().equals(Constants.STUDENT)){
 								Controlador.change2MyActivities();
 								Footer.clear();
@@ -247,6 +253,7 @@ public class Welcome implements EntryPoint {
 								
 						} else {
 							if (!result.isIsAuthenticated()) {
+								Logger.GetLogger().warning(Welcome.class.getName(),LogMessageConstants.USER_FAILURE_LOGGED_IN  + result.getEmail());
 								Window.alert("You are not authorized to view this application");
 								horizontalPanel.remove(btnNewButton);
 								btnNewButton = new Button("Log Out");
