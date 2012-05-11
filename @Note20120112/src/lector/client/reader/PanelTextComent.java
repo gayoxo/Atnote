@@ -197,9 +197,10 @@ public class PanelTextComent extends Composite {
 				}
 			}
 		});
-
-		comboBox.addItem(Constants.ANNOTATION_PRIVATE);
+		
 		comboBox.addItem(Constants.ANNOTATION_PUBLIC);
+		comboBox.addItem(Constants.ANNOTATION_PRIVATE);
+	
 
 		chckbxNewCheckBox = new CheckBox(ActualLang.getUpgradeable());
 		horizontalPanel_3.add(chckbxNewCheckBox);

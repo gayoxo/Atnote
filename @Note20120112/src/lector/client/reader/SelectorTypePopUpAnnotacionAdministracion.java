@@ -56,7 +56,7 @@ public class SelectorTypePopUpAnnotacionAdministracion extends PopupPanel {
         
         mntmNewItem = new MenuItem(ActualUser.getLanguage().getNew(), false, new Command() {
         	public void execute() {
-        		SelectorNewBetweenTypeAndFolder SBFF=new SelectorNewBetweenTypeAndFolder(finderrefresh);
+        		SelectorNewBetweenTypeAndFolder SBFF=new SelectorNewBetweenTypeAndFolder(finder,finderrefresh);
 				SBFF.center();
 				SBFF.setModal(true);
 				hide();

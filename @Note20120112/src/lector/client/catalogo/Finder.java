@@ -97,7 +97,7 @@ public class Finder extends Composite {
 					{
 						if (Seleccionador)
 							if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID)
-								Selecciona();
+								if (buttonMio!=null)Selecciona();
 							else {}
 						else NanotimeOld=System.currentTimeMillis();
 					}
