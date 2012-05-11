@@ -3100,19 +3100,28 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			java.util.ArrayList<Long> annotationsIds = new java.util.ArrayList<Long>(
 					(java.util.ArrayList<Long>) fileDB.getAnnotationsIds());
 			fileDB.getAnnotationsIds().clear();
+			java.util.ArrayList<Long> fatherIds = new java.util.ArrayList<Long>(
+					(java.util.ArrayList<Long>) fileDB.getFathers());
+			fileDB.getFathers().clear();
+			FileDB A;
 			if (annotationsIds.isEmpty()) {
-				annotationsIds = new java.util.ArrayList<Long>();
-				FileDB A = new FileDB();
-				A.setAnnotationsIds(annotationsIds);
+				A = new FileDB();
+				A.setAnnotationsIds(new java.util.ArrayList<Long>());
 				A.setCatalogId(fileDB.getCatalogId());
-				A.setFathers(fileDB.getFathers());
+
 				A.setId(fileDB.getId());
 				A.setName(fileDB.getName());
-				Salida.add(A);
+
 			} else {
 				fileDB.setAnnotationsIds(annotationsIds);
-				Salida.add(fileDB);
+				A = fileDB;
 			}
+			if (fatherIds.isEmpty())
+				A.setFathers(new java.util.ArrayList<Long>());
+			else
+				A.setFathers(fatherIds);
+
+			Salida.add(A);
 		}
 		return Salida;
 
