@@ -2,8 +2,6 @@ package lector.client.welcome;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.book.reader.LoggerService;
-import lector.client.book.reader.LoggerServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.controler.LogMessageConstants;

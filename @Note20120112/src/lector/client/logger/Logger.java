@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Logger {
 
-	private static final AsyncCallback<Void> callback= new AsyncCallback<Void>() {
+	private static AsyncCallback<Void> callback= new AsyncCallback<Void>() {
 
 		public void onFailure(Throwable caught) {
 

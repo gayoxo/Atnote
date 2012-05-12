@@ -70,6 +70,15 @@ public class TextComentEdit extends DialogBox {
 
 			public void execute() {
 				annotation.setComment(new Text(PanelTexto.getRichTextArea().getHTML()));
+				annotation.setVisibility(false);
+				if (PanelTexto.getComboBox().getItemText(
+						PanelTexto.getComboBox().getSelectedIndex()).equals(
+						Constants.ANNOTATION_PUBLIC)) {
+					annotation.setVisibility(true);
+					annotation
+							.setUpdatability(PanelTexto.getChckbxNewCheckBox()
+									.getValue());
+				}
 				LoadingPanel.getInstance().setLabelTexto(ActualLang.getSaving());
 				LoadingPanel.getInstance().center();
 
