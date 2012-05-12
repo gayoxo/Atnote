@@ -149,7 +149,7 @@ public class FilterAdvance implements EntryPoint{
 		splitLayoutPanel.addSouth(splitLayoutPanel_1, 185.0);
 		
 		SimplePanel decoratorPanel = new SimplePanel();
-		splitLayoutPanel_1.addWest(decoratorPanel, 298.0);
+		splitLayoutPanel_1.addWest(decoratorPanel, 400.0);
 		decoratorPanel.setSize("100%", "100%");
 		
 		ScrollPanel scrollPanel_3 = new ScrollPanel();

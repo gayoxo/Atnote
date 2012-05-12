@@ -51,6 +51,7 @@ public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 //						//	scrollPanel.setWidget(finder);
 //						finderrefresh.setSize("100%","100%");
 						finderrefresh.RefrescaLosDatos();
+						SelectorTypePopUpAnnotacion.RestoreFinderButtonActio();
 						//	scrollPanel.setWidget(finder);
 						//finderrefresh.setSize("100%","100%");
 						hide();

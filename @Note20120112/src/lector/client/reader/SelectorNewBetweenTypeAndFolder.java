@@ -134,6 +134,7 @@ btnNewButton.addClickHandler(new ClickHandler() {
 
 					public void onSuccess(Long result) {
 						finderrefresh.RefrescaLosDatos();
+						SelectorTypePopUpAnnotacion.RestoreFinderButtonActio();;
 						LoadingPanel.getInstance().hide();
 						hide();
 					}

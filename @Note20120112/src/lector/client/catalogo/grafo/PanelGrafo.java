@@ -290,14 +290,15 @@ public class PanelGrafo extends Composite {
 			String Pa = AS.getId().toString();
 			String Name = AS.getName();
 			for (Long LL : AS.getSons()) {
-
+				
+				AnnotationSchema AST = getannotationSchema(LL);
 				for (int i = 0; i < Name.length() - Pa.length(); i++) {
 					SB.append(0);
 				}
 				SB.append("000"); // icono
 				SB.append(Pa);
 				SB.append("->");
-				AnnotationSchema AST = getannotationSchema(LL);
+				
 				String Pat = AST.getId().toString();
 				String Namet = AST.getName();
 				for (int i = 0; i < Namet.length() - Pat.length(); i++) {

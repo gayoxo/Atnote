@@ -38,10 +38,10 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	private static FinderGrafo finder;
 	protected MenuItem mntmNewItem;
 	protected MenuBar menuBar;
-	private CatalogTipo CT;
+	private static CatalogTipo CT;
 	private HorizontalPanel panelBotonesTipo;
 	private Catalog Cata;
-	private HorizontalPanel HP;
+	private static HorizontalPanel HP;
 
 	public SelectorTypePopUpAnnotacion(HorizontalPanel penelBotonesTipo,Catalog Catain, CatalogTipo catalog2) {
 		super(true);
@@ -77,13 +77,25 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         		{
         			ButtonTipo Yo=(ButtonTipo)HP.getWidget(0);
 					Yo.setPertenezco(panelBotonesTipo);
-        			panelBotonesTipo.add(Yo);
+					if (!exist(Yo))
+						panelBotonesTipo.add(Yo);
+					else HP.remove(Yo);
        		}
 //        			for (Widget widget : HP) {
 //					panelBotonesTipo.add(widget);				
 //        		}
         		hide();
         	}
+
+			private boolean exist(ButtonTipo yo) {
+				for (Widget BB:panelBotonesTipo)
+					{
+					ButtonTipo Yo=(ButtonTipo)BB;
+					if (yo.getEntidad().getID().equals(Yo.getEntidad().getID())) 
+						return true;
+					}
+				return false;
+			}
         });
         mntmNewItem_1.setHTML(ActualUser.getLanguage().getClose());
         menuBar.addItem(mntmNewItem_1);
@@ -179,5 +191,73 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 	protected void setAllowCreate(boolean state)
 	{
 		if (state) menuBar.addItem(mntmNewItem);
+	}
+	
+	public static void RestoreFinderButtonActio(){
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),HP));
+		 FinderGrafo.setBotonClickGrafo(new ClickHandler() {
+
+		        public void onClick(ClickEvent event) {
+		        	BotonesStackPanelReaderSelectMio BS=((BotonesStackPanelReaderSelectMio) event.getSource());
+		        Entity Act=BS.getEntidad();
+		        
+		        if (Act instanceof File)
+		        {
+		        	ButtonTipo nuevo=new ButtonTipo(Act,CT.getTexto(),BS.getLabeltypo());
+		        	nuevo.addClickHandler(new ClickHandler() {
+						
+						public void onClick(ClickEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+							
+						}
+					});
+				
+		        	nuevo.addMouseDownHandler(new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+						}
+					});
+					
+
+		        	nuevo.addMouseOutHandler(new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+					}
+				});
+					
+
+		        	nuevo.addMouseOverHandler(new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+						
+					}
+				});
+
+		        	nuevo.setStyleName("gwt-ButtonCenter");
+		        	nuevo.addClickHandler(new ClickHandler() {
+						
+						public void onClick(ClickEvent event) {
+							ButtonTipo Yo=(ButtonTipo)event.getSource();
+							Yo.getPertenezco().remove(Yo);
+							
+							
+						}
+					});
+		        	if (!ExistPreview(BS.getLabeltypo(),Act))
+		        			BS.getLabeltypo().add(nuevo);
+		        	else Window.alert(ActualUser.getLanguage().getE_ExistBefore());
+		        }
+		        }
+
+				private boolean ExistPreview(HorizontalPanel labeltypo, Entity act) {
+					for (int i = 0; i < labeltypo.getWidgetCount(); i++) {
+						Entity temp = ((ButtonTipo)labeltypo.getWidget(i)).getEntidad();
+						if (temp.getID()==act.getID()) return true;
+						
+					}
+					return false;
+				}
+		        });
 	}
 }
