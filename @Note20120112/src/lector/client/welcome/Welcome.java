@@ -237,7 +237,8 @@ public class Welcome implements EntryPoint {
 						 * horizontalPanel.add(signOutLink);
 						 */
 						if (result.isLoggedIn()) {
-							Logger.GetLogger().info(Welcome.class.getName(), LogMessageConstants.USER_SUCCESS_LOGGED_IN + result.getEmail());
+							Logger L=Logger.GetLogger();
+									
 							if (result.getProfile().equals(Constants.STUDENT)){
 								Controlador.change2MyActivities();
 								Footer.clear();
@@ -248,10 +249,12 @@ public class Welcome implements EntryPoint {
 								Controlador.change2Administrator();
 								Footer.clear();
 							}
+							L.info(Welcome.class.getName(), LogMessageConstants.USER_SUCCESS_LOGGED_IN + result.getEmail());
 								
 						} else {
 							if (!result.isIsAuthenticated()) {
-								Logger.GetLogger().warning(Welcome.class.getName(),LogMessageConstants.USER_FAILURE_LOGGED_IN  + result.getEmail());
+								Logger L=Logger.GetLogger();
+								
 								Window.alert("You are not authorized to view this application");
 								horizontalPanel.remove(btnNewButton);
 								btnNewButton = new Button("Log Out");
@@ -261,6 +264,7 @@ public class Welcome implements EntryPoint {
 
 								btnNewButton.setSize("164px", "50px");
 								btnNewButton.setEnabled(true);
+								L.warning(Welcome.class.getName(),LogMessageConstants.USER_FAILURE_LOGGED_IN  + result.getEmail());
 								btnNewButton
 										.addClickHandler(new ClickHandler() {
 											public void onClick(ClickEvent event) {

@@ -1,11 +1,10 @@
 package lector.client.logger;
 
-import java.util.logging.Level;
 import lector.client.book.reader.LoggerService;
 import lector.client.book.reader.LoggerServiceAsync;
-import lector.client.welcome.Welcome;
-
+import lector.client.controler.ErrorConstants;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Logger {
@@ -13,7 +12,7 @@ public class Logger {
 	private static AsyncCallback<Void> callback= new AsyncCallback<Void>() {
 
 		public void onFailure(Throwable caught) {
-
+			Window.alert(ErrorConstants.LOGS_ERROR);
 			
 		}
 
@@ -40,6 +39,7 @@ public class Logger {
 	}
 
 	public void info(String className, String text) {
+		//Window.alert("info");
 		loggerServiceHolder.info(className, text, callback);
 
 	}
@@ -51,6 +51,7 @@ public class Logger {
 	
 	
 	public static Logger GetLogger(){
+		//Window.alert("GetLogger");
 		if (Log==null) Log=new Logger();
 		return Log;
 	}

@@ -442,10 +442,10 @@ public class TextComentEdit extends DialogBox {
 			PanelTexto.getChckbxNewCheckBox().setValue(false);
 
 		if (!annotation.getVisibility()) {
-			PanelTexto.getComboBox().setSelectedIndex(0);
+			PanelTexto.getComboBox().setSelectedIndex(1);
 			PanelTexto.getChckbxNewCheckBox().setVisible(false);
 		} else if (annotation.getVisibility()) {
-			PanelTexto.getComboBox().setSelectedIndex(1);
+			PanelTexto.getComboBox().setSelectedIndex(0);
 			PanelTexto.getChckbxNewCheckBox().setVisible(true);
 		} 
 
