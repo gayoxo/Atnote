@@ -45,7 +45,7 @@ public class CommentPanelBrowser extends Composite {
 	private HorizontalPanel Ocultador;
     
 
-    public CommentPanelBrowser(Annotation annotationin, Image originalBook) {
+    public CommentPanelBrowser(Annotation annotationin, Image originalBook,String width) {
 
     	 annotation = annotationin;
          Imagen = originalBook;
@@ -59,7 +59,7 @@ public class CommentPanelBrowser extends Composite {
          final HorizontalPanel horizontalPanel = new HorizontalPanel();
          horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
          verticalPanel.add(horizontalPanel);
-         horizontalPanel.setWidth("100%");
+         horizontalPanel.setWidth("");
 
         
          String Showbutton= annotation.getComment().toString();
@@ -68,14 +68,14 @@ public class CommentPanelBrowser extends Composite {
          	Showbutton=Showbutton.substring(0,20);
          	Showbutton=Showbutton+" ...";
          }else{
-        	 while (Showbutton.length()<20) Showbutton=Showbutton+" ";
+        	 while (Showbutton.length()<24) Showbutton=Showbutton+" ";
          }
         
         button = new Button(Showbutton);
         horizontalPanel.add(button);
         button.setHTML(Showbutton);
         button.setEnabled(true);
-        button.setSize("100%", "42px");
+        button.setSize("400px", "42px");
         button.setStyleName("gwt-ButtonIzquierda");
                 horizontalPanel.add(button_1);
         //        button.addMouseOutHandler(new MouseOutHandler() {
@@ -102,6 +102,11 @@ public class CommentPanelBrowser extends Composite {
                              //verticalPanel.add(richTextArea);
                     		 Ocultador.setVisible(true);
                              menuBar.setVisible(true);
+                             if (panel.getOffsetHeight()>174)
+     	                    {
+                            	 scrollPanel.setHeight("174px");
+     	                    //	Window.alert("Tamaño reducido");
+     	                    }
                            //  button.setVisible(true);
         //                     richTextAreaBoton.setVisible(false);
                              button_1.setText("-");
@@ -137,7 +142,7 @@ public class CommentPanelBrowser extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
 			}
 		});
-                button_1.setSize("100%", "42px");
+                button_1.setSize("47px", "42px");
 Ocultador = new HorizontalPanel();
 Ocultador.setBorderWidth(1);
 verticalPanel.add(Ocultador);
@@ -154,10 +159,10 @@ richTextArea2.addClickHandler(new ClickHandler() {
           TCE.show();
     }
 });
-richTextArea2.setSize("100%", "174px");
+richTextArea2.setSize("100%", "100%");
 scrollPanel = new ScrollPanel();
 richTextArea2.setWidget(scrollPanel);
-scrollPanel.setSize("100%", "100%");
+scrollPanel.setSize(width, "100%");
 panel = new HTMLPanel(annotation.getComment().toString());
 scrollPanel.setWidget(panel);
 panel.setSize("100%", "100%");

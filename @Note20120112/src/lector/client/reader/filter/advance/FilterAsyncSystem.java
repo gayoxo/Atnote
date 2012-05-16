@@ -42,10 +42,10 @@ public class FilterAsyncSystem {
 	private static void flitrado() {
 		generafiltroResidual();
 		VerticalPanel resultado=new VerticalPanel();
-		for (Annotation AIndiv : Anotaciones) {
-			resultado.add(new CommentPanelFAdvance(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));
-		}
 		AnotationFilterResultPanel Panel=new AnotationFilterResultPanel(resultado);
+		for (Annotation AIndiv : Anotaciones) {
+			resultado.add(new CommentPanelFAdvance(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber())),Panel.getHeight()));
+		}	
 		Panel.center();
 		LoadingPanel.getInstance().hide();
 		

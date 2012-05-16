@@ -51,6 +51,7 @@ import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 /***
  * Main entry point.
@@ -112,6 +113,9 @@ public class MainEntryPoint implements EntryPoint {
 	private MenuItem DensidadAnot;
 	private static SimplePanel Glue;
 	private static ArrayList<SelectorPanel> SE;
+	private HorizontalPanel panelbase ;
+	private VerticalPanel PanelBotoneseImagen;
+	private HorizontalPanel PanelBaseCentrado;
 
 	public MainEntryPoint() {
 		
@@ -266,41 +270,22 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	public void onModuleLoad() {
 
 		// Paneles
-		final RootPanel RootAnnotation = RootPanel.get("Etiquetas");
+		//final RootPanel RootAnnotation = RootPanel.get("Etiquetas");
 		RootPanel RootMenu = RootPanel.get("Menu");
-		RootPanel RootTXOriginal = RootPanel.get("Original");
-		RootPanel RootTXOriginalB = RootPanel.get("OriginalB");
+//		RootPanel RootTXOriginal = RootPanel.get("Original");
+//		RootPanel RootTXOriginalB = RootPanel.get("OriginalB");
+		RootPanel RootTXOriginal=  RootPanel.get();
 
 		// Stilos
 		RootMenu.setStyleName("Root");
 		RootTXOriginal.setStyleName("Root");
+		RootTXOriginal.setSize("100%", "100%");
 
 		isSelectionMode = false;
 		if (state == null)
 			state = State.NoAnnotations; // ya esta inicializado, no es
-											// necesario
-
-		// Botones Y Panel de isSelectionMode de Pagina
-
-		selectorPageBox.setReadOnly(false);
-
-		RootTXOriginal.add(decoratorPanel);
 		
 		ActualLang=ActualUser.getLanguage();
-			
-		decoratorPanel.setWidget(originalBook);
-
-		// Propiedades de los Elementos
-
-		originalBook.setVisible(false);
-		decoratorPanel.setVisible(false);
-		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		
-		RootTXOriginalB.add(horizontalPanel);
-		horizontalPanel.add(pageBack);
-		pageBack.setVisible(false);
-		horizontalPanel.add(selectorPageBox);
-		horizontalPanel.add(pageForward);
 		menuBar.clearItems();
 		menuBar.setAnimationEnabled(true);
 		RootMenu.add(menuBar);
@@ -569,23 +554,47 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		else setfilterinfo(true);
 		FilterInfo.setStyleName("gwt-MenuItemFiltering");
 		menuBar.addItem(FilterInfo);
-		if (!(ActualUser.getUser().getProfile().equals(Constants.STUDENT))) {
-			mntmManage2.setEnabled(false);
-			mntmManage2.setVisible(false);
-		}
+		
+		
+		PanelBaseCentrado = new HorizontalPanel();
+		PanelBaseCentrado.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		RootTXOriginal.add(PanelBaseCentrado,0,36);
+		PanelBaseCentrado.setSize("100%", "100%");
+		
+		panelbase = new HorizontalPanel();
+		PanelBaseCentrado.add(panelbase);
+		panelbase.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		PanelBotoneseImagen = new VerticalPanel();
+		
+		panelbase.add(PanelBotoneseImagen);
+		PanelBotoneseImagen.setSize("100%", "100%");
+		// necesario
+
+		// Botones Y Panel de isSelectionMode de Pagina
+
+		selectorPageBox.setReadOnly(false);
+		PanelBotoneseImagen.add(horizontalPanel);
+		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel.add(pageBack);
+		pageBack.setVisible(false);
+		horizontalPanel.add(selectorPageBox);
+		horizontalPanel.add(pageForward);
 		
 		selectorPageBox.setSize("44px", "100%");
+		PanelBotoneseImagen.add(decoratorPanel);
+		
+		decoratorPanel.setWidget(originalBook);
 		
 		
-		//TODO GENERAR PANEL DEL MISMO TAMAÑO QUE UNA ANOTACION STANDAR
 		VerticalPanel SP=new VerticalPanel();
+		panelbase.add(SP);
 		SP.setHeight("875px");
 		//SP.setSize("1000px", "875px");
 		Glue=new SimplePanel();
-		Glue.setWidth("310px");
+		Glue.setWidth("700px");
 		SP.add(Glue);
 		SP.add(ScrollAnnotationsPanel);
-		RootAnnotation.add(SP);
 		
 		ScrollAnnotationsPanel.setWidget(verticalAnnotationsPanel);
 		ScrollAnnotationsPanel.setHeight("875px");
@@ -593,8 +602,17 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		//verticalAnnotationsPanel.setSize("100%", "100%");
 		//ScrollAnnotationsPanel.setSize("340px", "875px");
 		ScrollAnnotationsPanel.setVisible(false);
-		//ScrollAnnotationsPanel.setAlwaysShowScrollBars(true);
-		selectorPageBox.setVisible(false);
+		
+				// Propiedades de los Elementos
+		
+				originalBook.setVisible(false);
+				decoratorPanel.setVisible(false);
+				//ScrollAnnotationsPanel.setAlwaysShowScrollBars(true);
+				selectorPageBox.setVisible(false);
+		if (!(ActualUser.getUser().getProfile().equals(Constants.STUDENT))) {
+			mntmManage2.setEnabled(false);
+			mntmManage2.setVisible(false);
+		}
 //		pageForward.setVisible(false);
 
 		if (filtroTypes == null ) {

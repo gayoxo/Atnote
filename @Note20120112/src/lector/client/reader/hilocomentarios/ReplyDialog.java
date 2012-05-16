@@ -63,7 +63,7 @@ public class ReplyDialog extends DialogBox {
 					else Nombre=ActualUser.getUser().getEmail();
 				AnnotationThread AT = new AnnotationThread(Padre, AnotPadre,
 						new ArrayList<Long>(),
-						new Text(richTextArea.getText()), ActualUser.getUser()
+						new Text(richTextArea.getHTML()), ActualUser.getUser()
 								.getId(), Nombre);
 				bookReaderServiceHolder.saveAnnotationThread(AT,
 						new AsyncCallback<Long>() {

@@ -15,6 +15,7 @@ import lector.client.reader.hilocomentarios.ReplyDialog;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -43,6 +44,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 public class CommentPanel extends Composite {
 
@@ -182,7 +184,12 @@ public enum CatalogTipo {
                 	decoratorPanel_1.setVisible(true);
                     menuBar.setVisible(true);
                     simplePanel.setVisible(true);
-                  //  button.setVisible(true);
+                    if (panel.getOffsetHeight()>174)
+                    {
+                    	ScrollPanel.setHeight("174px");
+                    //	Window.alert("Tamaño reducido");
+                    }
+                    	//  button.setVisible(true);
 //                    richTextAreaBoton.setVisible(false);
                     button_1.setText("-");
                 } else {
@@ -229,77 +236,77 @@ public enum CatalogTipo {
         decoratorPanel_1 = new DecoratorPanel();
         verticalPanel.add(decoratorPanel_1);
         decoratorPanel_1.setWidth("");
-
-//        richTextArea.setHTML(annotation.getComment().toString());
-//        richTextArea.setHeight("177px");
-//        verticalPanel.add(richTextArea);
-//        richTextArea.setEnabled(false);
         
-        richTextArea2 = new FocusPanel();
-        decoratorPanel_1.setWidget(richTextArea2);
-        richTextArea2.setSize("297px", "190px");
-        ScrollPanel = new ScrollPanel();
-        richTextArea2.setWidget(ScrollPanel);
-        ScrollPanel.setSize("100%", "100%");
-        
-        panel = new HTMLPanel(annotation.getComment().toString());
-        ScrollPanel.setWidget(panel);
-        panel.setSize("100%", "100%");
-        decoratorPanel_1.setVisible(false);
-        richTextArea2.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-            	MainEntryPoint.hidePopUpSelector();
-				MainEntryPoint.hideDENSelector();
-                if (annotation.isEditable()||(annotation.getUserId().equals(ActualUser.getUser().getId())))
-                	{
-                	TextComentEdit TCE = new TextComentEdit(annotation,SE);
-                	TCE.center();
-                	}
-                else {
-                	TextComentNoEdit TCE= new TextComentNoEdit(annotation, SE);
-                	TCE.center();
-                }
+        //        richTextArea.setHTML(annotation.getComment().toString());
+        //        richTextArea.setHeight("177px");
+        //        verticalPanel.add(richTextArea);
+        //        richTextArea.setEnabled(false);
                 
+                richTextArea2 = new FocusPanel();
+                decoratorPanel_1.setWidget(richTextArea2);
+                richTextArea2.setSize("297px", "100%");
+                ScrollPanel = new ScrollPanel();
+                richTextArea2.setWidget(ScrollPanel);
+                ScrollPanel.setSize("297px", "100%");
+                
+                panel = new HTMLPanel(annotation.getComment().toString());
+                ScrollPanel.setWidget(panel);
+                panel.setSize("100%", "100%");
+                decoratorPanel_1.setVisible(false);
+                richTextArea2.addClickHandler(new ClickHandler() {
 
-            }
-        });
+                    public void onClick(ClickEvent event) {
+                    	MainEntryPoint.hidePopUpSelector();
+				MainEntryPoint.hideDENSelector();
+                        if (annotation.isEditable()||(annotation.getUserId().equals(ActualUser.getUser().getId())))
+                        	{
+                        	TextComentEdit TCE = new TextComentEdit(annotation,SE);
+                        	TCE.center();
+                        	}
+                        else {
+                        	TextComentNoEdit TCE= new TextComentNoEdit(annotation, SE);
+                        	TCE.center();
+                        }
+                        
 
-        richTextArea2.addMouseOutHandler(new MouseOutHandler() {
-
-            public void onMouseOut(MouseOutEvent event) {
-            	if (!Estado){
-            		 if (SE != null) {
-                      	for (SelectorPanel SP : SE) {
-                      		SP.hide();
-      					}
-                      }
-            	}
-            }
-        });
-
-        richTextArea2.addMouseOverHandler(new MouseOverHandler() {
-
-            public void onMouseOver(MouseOverEvent event) {
-            	if (!Estado){
-            		 if (SE != null) {
-                      	for (SelectorPanel SP : SE) {
-                      		SP.hide();
-      					}
-                      }
-            		 SE=new ArrayList<SelectorPanel>();
-                	 for (TextSelector TS : annotation.getTextSelectors()) {
-                		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
-                				 TS.getY().intValue(),
-                                 Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
-                                 TS.getWidth().intValue(),
-                                 TS.getHeight().intValue());
-                         if (!Estado) SEE.show();
-                         SE.add(SEE);
-    				}
-                }
-            }
-        });
+                    }
+                });
+                
+                        richTextArea2.addMouseOutHandler(new MouseOutHandler() {
+                
+                            public void onMouseOut(MouseOutEvent event) {
+                            	if (!Estado){
+                            		 if (SE != null) {
+                                      	for (SelectorPanel SP : SE) {
+                                      		SP.hide();
+                      					}
+                                      }
+                            	}
+                            }
+                        });
+                        
+                                richTextArea2.addMouseOverHandler(new MouseOverHandler() {
+                        
+                                    public void onMouseOver(MouseOverEvent event) {
+                                    	if (!Estado){
+                                    		 if (SE != null) {
+                                              	for (SelectorPanel SP : SE) {
+                                              		SP.hide();
+                              					}
+                                              }
+                                    		 SE=new ArrayList<SelectorPanel>();
+                                        	 for (TextSelector TS : annotation.getTextSelectors()) {
+                                        		 SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+                                        				 TS.getY().intValue(),
+                                                         Imagen.getAbsoluteLeft(), Imagen.getAbsoluteTop(),
+                                                         TS.getWidth().intValue(),
+                                                         TS.getHeight().intValue());
+                                                 if (!Estado) SEE.show();
+                                                 SE.add(SEE);
+                            				}
+                                        }
+                                    }
+                                });
 //        richTextArea2.setVisible(false);
         
         simplePanel = new SimplePanel();
@@ -310,12 +317,14 @@ public enum CatalogTipo {
         simplePanel.setWidget(scrollPanel);
         scrollPanel.setAlwaysShowScrollBars(true);
         simplePanel.setVisible(false);
-        scrollPanel.setSize("", "45px");
+        scrollPanel.setSize("", "50px");
         PanelTexto= new HorizontalPanel();
+        PanelTexto.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         scrollPanel.setWidget(PanelTexto);
-        PanelTexto.setSize("447px", "27px");
+        PanelTexto.setSize("447px", "31px");
         
         verticalPanel.add(menuBar);
+        menuBar.setWidth("306px");
         
         mntmNewItem = new MenuItem("New item", false, new Command() {
         	public void execute() {

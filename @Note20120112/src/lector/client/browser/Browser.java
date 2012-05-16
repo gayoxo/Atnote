@@ -286,12 +286,13 @@ public class Browser implements EntryPoint {
 			
 			public void onSuccess(ArrayList<Annotation> result) {
 				VerticalPanel AnnotationPanel=new VerticalPanel();
+				AnotationResultPanel APR=new AnotationResultPanel(AnnotationPanel);
 				AnnotationPanel.clear();
 				for (Annotation AIndiv : result) {
-					AnnotationPanel.add(new CommentPanelBrowser(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber()))));
+					AnnotationPanel.add(new CommentPanelBrowser(AIndiv, new Image(ActualUser.getBook().getWebLinks().get(AIndiv.getPageNumber())),APR.getHeight()));
 				}
 				LoadingPanel.getInstance().hide();
-				AnotationResultPanel APR=new AnotationResultPanel(AnnotationPanel);
+				
 				APR.center();
 			}
 			

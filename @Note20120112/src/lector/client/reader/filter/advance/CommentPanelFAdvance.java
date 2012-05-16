@@ -38,9 +38,8 @@ public class CommentPanelFAdvance extends Composite {
     private Button button_1 = new Button("+");
     private Image Imagen;
     private Button button;
-    private final VerticalPanel verticalPanel_1 = new VerticalPanel();
     private final MenuBar menuBar = new MenuBar(false);
-	private MenuItem mntmNewItem;
+//	private MenuItem mntmNewItem;
 	private MenuItem mntmNewItem_2;
 	private FocusPanel richTextArea2 = new FocusPanel();
 	private ScrollPanel scrollPanel = new ScrollPanel();
@@ -48,12 +47,12 @@ public class CommentPanelFAdvance extends Composite {
 	private HTMLPanel panel = new HTMLPanel("New HTML");
     
 
-    public CommentPanelFAdvance(Annotation annotationin, Image originalBook) {
+    public CommentPanelFAdvance(Annotation annotationin, Image originalBook,String width) {
 
         annotation = annotationin;
         Imagen = originalBook;
         SimplePanel decoratorPanel = new SimplePanel();
-        decoratorPanel.setSize("", "");
+        decoratorPanel.setSize("100%", "");
         initWidget(decoratorPanel);
 
         decoratorPanel.setWidget(verticalPanel);
@@ -62,9 +61,9 @@ public class CommentPanelFAdvance extends Composite {
         final HorizontalPanel horizontalPanel = new HorizontalPanel();
         horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         verticalPanel.add(horizontalPanel);
-        horizontalPanel.setWidth("100%");
-        horizontalPanel.add(verticalPanel_1);
-        verticalPanel_1.setSize("100%", "100%");
+        horizontalPanel.setWidth("");
+        
+      
 
         String Showbutton= annotation.getComment().toString();
         Showbutton=Showbutton.replaceAll("\\<.*?\\>","");
@@ -73,15 +72,8 @@ public class CommentPanelFAdvance extends Composite {
         	Showbutton=Showbutton.substring(0,20);
         	Showbutton=Showbutton+" ...";
         }else{
-       	 while (Showbutton.length()<20) Showbutton=Showbutton+" ";
+       	 while (Showbutton.length()<24) Showbutton=Showbutton+" ";
         }
-        
-        button = new Button(Showbutton);
-        verticalPanel_1.add(button);
-        button.setHTML(Showbutton);
-        button.setEnabled(true);
-        button.setSize("100%", "42px");
-        button.setStyleName("gwt-ButtonIzquierda");
 //        button.addMouseOutHandler(new MouseOutHandler() {
 //			public void onMouseOut(MouseOutEvent event) {
 //				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
@@ -99,6 +91,12 @@ public class CommentPanelFAdvance extends Composite {
 //		});
 
 
+        button = new Button(Showbutton);
+        horizontalPanel.add(button);
+        button.setHTML(Showbutton);
+        button.setEnabled(true);
+        button.setSize("400px", "42px");
+        button.setStyleName("gwt-ButtonIzquierda");
         button_1.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
@@ -106,6 +104,11 @@ public class CommentPanelFAdvance extends Composite {
                     //verticalPanel.add(richTextArea);
                 	Ocultador.setVisible(true);
                     menuBar.setVisible(true);
+                    if (panel.getOffsetHeight()>174)
+	                    {
+                    	 scrollPanel.setHeight("174px");
+	                    //	Window.alert("Tamaño reducido");
+	                    }
                   //  button.setVisible(true);
 //                    richTextAreaBoton.setVisible(false);
                     button_1.setText("-");
@@ -142,7 +145,7 @@ public class CommentPanelFAdvance extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
 			}
 		});
-        button_1.setSize("100%", "42px");
+        button_1.setSize("47px", "42px");
 
         
 
@@ -170,11 +173,11 @@ public class CommentPanelFAdvance extends Composite {
  verticalPanel.add(Ocultador);
  Ocultador.setSize("100%", "100%");
  Ocultador.add(richTextArea2);
- richTextArea2.setHeight("174px");
+ richTextArea2.setSize("100%", "100%");
  Ocultador.setVisible(false);
  
  richTextArea2.setWidget(scrollPanel);
- scrollPanel.setSize("100%", "100%");
+ scrollPanel.setSize(width, "100%");
  
  scrollPanel.setWidget(panel);
  panel.setSize("100%", "100%");

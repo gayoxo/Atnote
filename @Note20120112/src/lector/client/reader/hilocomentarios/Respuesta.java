@@ -170,6 +170,11 @@ public class Respuesta extends Composite {
 	                    //verticalPanel.add(richTextArea);
 	                	decoratorPanel_1.setVisible(true);
 	                    menuBar.setVisible(true);
+	                    if (panel.getOffsetHeight()>174)
+	                    {
+	                    	richTextArea2.setHeight("174px");
+	                    //	Window.alert("Tamaño reducido");
+	                    }
 	                  //  button.setVisible(true);
 //	                    richTextAreaBoton.setVisible(false);
 	                    button_1.setText("-");
@@ -226,7 +231,7 @@ public class Respuesta extends Composite {
 	        richTextArea2 = new ScrollPanel();
 	        decoratorPanel_1.setWidget(richTextArea2);
 	        panel = new HTMLPanel(annotation.getComment().toString());
-	        richTextArea2.setSize("296px", "174px");
+	        richTextArea2.setSize("296px", "100%");
 	        
 	        
 	        richTextArea2.setWidget(panel);
@@ -234,6 +239,7 @@ public class Respuesta extends Composite {
 	        decoratorPanel_1.setVisible(false);
 	        
 	        verticalPanel.add(menuBar);
+	        menuBar.setWidth("306px");
 	        
 	        mntmNewItem = new MenuItem("New item", false, new Command() {
 	        	public void execute() {

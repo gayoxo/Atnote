@@ -75,8 +75,8 @@ public class Welcome implements EntryPoint {
 		verticalPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setStyleName("Root");
-	//	rootPanel.add(verticalPanel,0,0);
-		rootPanel.add(verticalPanel);
+		rootPanel.add(verticalPanel,0,0);
+	//	rootPanel.add(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
 		
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
