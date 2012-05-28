@@ -3,11 +3,14 @@ package lector.client.admin.users;
 import java.util.ArrayList;
 import java.util.Stack;
 
+
+
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.StackPanelMio;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
+import lector.client.controler.ErrorConstants;
 import lector.client.login.UserApp;
 import lector.client.reader.LoadingPanel;
 
@@ -49,6 +52,7 @@ public class NewUserAdministrator implements EntryPoint {
 	private Button SaveNewUsers;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
+	private NewUserAdministrator YO;
 
 	public void onModuleLoad() {
 		RootPanel RootTXOriginal = RootPanel.get();
@@ -57,6 +61,7 @@ public class NewUserAdministrator implements EntryPoint {
 		RootMenu.setStyleName("Root");
 		RootTXOriginal.setStyleName("Root");
 
+		YO=this;
 		MenuBar menuBar = new MenuBar(false);
 		RootMenu.add(menuBar);
 		menuBar.setWidth("100%");
@@ -76,6 +81,16 @@ public class NewUserAdministrator implements EntryPoint {
 			}
 		});
 		menuBar.addItem(mntmBack);
+		
+		MenuItem AddLots = new MenuItem("Masive add", false, new Command() {
+			public void execute() {
+				PanelAddMasibo PAM=new PanelAddMasibo(YO);
+				PAM.setVisible(true);
+				PAM.center();
+			}
+		});
+		AddLots.setHTML("Masive add");
+		menuBar.addItem(AddLots);
 
 		HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
 		RootTXOriginal.add(horizontalSplitPanel, 0, 25);
@@ -138,54 +153,21 @@ public class NewUserAdministrator implements EntryPoint {
 		btnNewButton.setStyleName("gwt-ButtonCenter");
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				textBox.setText(ClearText(textBox.getText()));
-				if (!textBox.getText().isEmpty()
-						&& textBox.getText().length() > 2) {
-					Button btnNewButton_1 = new Button(
-							"<img src=\"Users.gif\">" + textBox.getText());
-					btnNewButton_1.addClickHandler(new ClickHandler() {
-						public void onClick(ClickEvent event) {
-							Button sourceB = ((Button) event.getSource());
-							verticalPanel_1.remove(sourceB);
-							if (verticalPanel_1.getWidgetCount()==0) SaveNewUsers.setVisible(false);
-						}
-					});
-					btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
-						public void onMouseDown(MouseDownEvent event) {
-							((Button)event.getSource()).setStyleName("gwt-ButtonPush");
-						}
-					});
-					btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
-						public void onMouseOut(MouseOutEvent event) {
-							((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
-						}
-					});
-					btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
-						public void onMouseOver(MouseOverEvent event) {
-							((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
-						}
-					});
-					btnNewButton_1.setStyleName("gwt-ButtonTOP");
-					btnNewButton_1.setText(textBox.getText());
-					btnNewButton_1.setHTML("<img src=\"Users.gif\">" + textBox.getText());
-					verticalPanel_1.add(btnNewButton_1);
-					textBox.setText("");
-					btnNewButton_1.setSize("100%", "100%");
-					SaveNewUsers.setVisible(true);
-				} else
-					Window.alert("The User need to be a valid reference");
+				String S=ClearText(textBox.getText());
+				if (isValidEmail(S))
+						addText(S);
+				else Window.alert(ErrorConstants.ERROR_NO_EMAIL_VALIDO + S);
+				textBox.setText("");
 			}
-
-			private String ClearText(String text) {
-				StringBuffer Sout=new StringBuffer();
-				for (int i = 0; i < text.length(); i++) {
-					if (text.charAt(i)!=' ')
-						Sout.append(text.charAt(i));
-						
-				}
-				return Sout.toString();
-			}
+			
+			private native boolean isValidEmail(String email) /*-{ 
+	        var reg1 = /(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/; // not valid 
+	        var reg2 = /^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/; // valid 
+	        	return !reg1.test(email) && reg2.test(email); 
+			}-*/; 
+			
 		});
+		
 		horizontalPanel.add(btnNewButton);
 		btnNewButton.setWidth("66px");
 		btnNewButton.setHTML("+");
@@ -420,5 +402,54 @@ public class NewUserAdministrator implements EntryPoint {
 		
 		stackPanel_1.setSize("100%", "100%");
 
+	}
+	
+	
+	public void addText(String TextoBoton) {
+
+//		if (!TextoBoton.isEmpty()
+//				&& TextoBoton.length() > 2) {
+			Button btnNewButton_1 = new Button(
+					"<img src=\"Users.gif\">" + TextoBoton);
+			btnNewButton_1.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					Button sourceB = ((Button) event.getSource());
+					verticalPanel_1.remove(sourceB);
+					if (verticalPanel_1.getWidgetCount()==0) SaveNewUsers.setVisible(false);
+				}
+			});
+			btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+				}
+			});
+			btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+				}
+			});
+			btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+				}
+			});
+			btnNewButton_1.setStyleName("gwt-ButtonTOP");
+			btnNewButton_1.setText(TextoBoton);
+			btnNewButton_1.setHTML("<img src=\"Users.gif\">" + TextoBoton);
+			verticalPanel_1.add(btnNewButton_1);
+			btnNewButton_1.setSize("100%", "100%");
+			SaveNewUsers.setVisible(true);
+//		} else
+//			Window.alert("The User need to be a valid reference");
+	}
+	
+	private String ClearText(String text) {
+		StringBuffer Sout=new StringBuffer();
+		for (int i = 0; i < text.length(); i++) {
+			if (text.charAt(i)!=' ')
+				Sout.append(text.charAt(i));
+				
+		}
+		return Sout.toString();
 	}
 }

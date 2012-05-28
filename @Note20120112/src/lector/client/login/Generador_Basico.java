@@ -18,7 +18,7 @@ public class Generador_Basico implements EntryPoint {
 	
 	public void onModuleLoad() {
 //		UserApp adminUser = new UserApp();
-//		adminUser.setEmail("root");
+//		adminUser.setEmail("root@gmail.com");
 //		adminUser.setProfile(Constants.PROFESSOR);
 //		bookReaderServiceHolder.saveUser(adminUser, new AsyncCallback<Boolean>() {
 //

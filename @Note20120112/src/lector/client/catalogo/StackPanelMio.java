@@ -1,6 +1,8 @@
 package lector.client.catalogo;
 
 
+import java.util.ArrayList;
+
 import lector.client.admin.admins.EntidadAdmin;
 import lector.client.admin.book.EntidadLibro;
 import lector.client.admin.users.EntidadUser;
@@ -21,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 
 public class StackPanelMio extends StackPanel {
@@ -47,6 +50,7 @@ public class StackPanelMio extends StackPanel {
     VerticalPanel S;
     VerticalPanel T;
     VerticalPanel U;
+    VerticalPanel V;
     VerticalPanel W;
     VerticalPanel X;
     VerticalPanel Y;
@@ -163,6 +167,10 @@ public class StackPanelMio extends StackPanel {
   //      add(U, "U", false);
         U.setSize("100%", "100%");
         
+        V = new VerticalPanel();
+        //      add(U, "U", false);
+              V.setSize("100%", "100%");
+              
          W = new VerticalPanel();
    //     add(W, "W", false);
         W.setSize("100%", "100%");
@@ -213,7 +221,8 @@ public class StackPanelMio extends StackPanel {
 		R.clear(); 
 		S.clear(); 
 		T.clear(); 
-		U.clear(); 
+		U.clear();
+		V.clear();
 		W.clear(); 
 		X.clear(); 
 		Y.clear(); 
@@ -247,6 +256,7 @@ public class StackPanelMio extends StackPanel {
 		if (S.getWidgetCount()!=0)add(S, "S", false);
 		if (T.getWidgetCount()!=0)add(T, "T", false);
 		if (U.getWidgetCount()!=0)add(U, "U", false);
+		if (V.getWidgetCount()!=0)add(V, "V", false);
 		if (W.getWidgetCount()!=0)add(W, "W", false);
 		if (X.getWidgetCount()!=0)add(X, "X", false);
 		if (Y.getWidgetCount()!=0)add(Y, "Y", false);
@@ -264,7 +274,7 @@ public class StackPanelMio extends StackPanel {
 			case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':case '0':
 				Actual=Numbers;
 				break;
-			case 'A':case 'a':
+			case 'A':case 'a': 
 				Actual=A;
 				break;
 			case 'B':case 'b':
@@ -276,7 +286,7 @@ public class StackPanelMio extends StackPanel {
 			case 'D':case 'd':
 				Actual=D;
 				break;
-			case 'E':case 'e':
+			case 'E':case 'e': 
 				Actual=E;
 				break;
 			case 'F':case 'f':
@@ -288,7 +298,7 @@ public class StackPanelMio extends StackPanel {
 			case 'H':case 'h':
 				Actual=H;
 				break;
-			case 'I':case 'i':
+			case 'I':case 'i': 
 				Actual=I;
 				break;
 			case 'J':case 'j':
@@ -306,7 +316,7 @@ public class StackPanelMio extends StackPanel {
 			case'N':case 'n':
 				Actual=N;
 				break;
-			case 'O':case 'o':
+			case 'O':case 'o': 
 				Actual=O;
 				break;
 			case 'P':case 'p':
@@ -324,8 +334,11 @@ public class StackPanelMio extends StackPanel {
 			case 'T':case 't':
 				Actual=T;
 				break;
-			case 'U':case 'u':
+			case 'U':case 'u': 
 				Actual=U;
+				break;
+			case 'V':case 'v':
+				Actual=V;
 				break;
 			case 'W':case 'w':
 				Actual=W;
@@ -404,8 +417,102 @@ public class StackPanelMio extends StackPanel {
 
 				Act.setWidth("100%");
 				Act.setHeight("100%");
+				
+				ArrayList<Entity> ListaRep=new ArrayList<Entity>();
+			for (int i = 0; i < Actual.getWidgetCount(); i++) {
+				Widget W=Actual.getWidget(i);
+				BotonesStackPanelMio BSPM=(BotonesStackPanelMio)W;
+				ListaRep.add(BSPM.getEntidad());
+			}
+			sortStringExchange(ListaRep);
+			Actual.clear();
+			for (Entity A:ListaRep) {
+				
+				Act = BotonTipo.Clone();
+				Act.setEntidad(A);
+				Act.setHTML(A.getName());
+				
+				if (A instanceof File) Act.setIcon("File.gif",A.getName());
+				else if (A instanceof Folder)Act.setIcon("Folder.gif",A.getName());
+				else if (A instanceof EntidadLibro) Act.setIcon("Book.gif",A.getName());
+				else if (A instanceof TagEntity) Act.setIcon("File2.gif",A.getName());
+				else if (A instanceof EntidadUser) Act.setIcon("Users.gif",A.getName());
+				else if (A instanceof EntidadAdmin) Act.setIcon("Admin.gif",A.getName());
+				
+				Act.setActual(Actual);
+				Act.addClickHandler(BotonClick);
+				Act.addClickHandler(new ClickHandler() {
+					
+					public void onClick(ClickEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+						
+					}
+				});
+				if (BotonDown==null) {
+					BotonDown=new MouseDownHandler() {
+						public void onMouseDown(MouseDownEvent event) {
+							((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+						}
+					};
+				}
+				Act.addMouseDownHandler(BotonDown);
+				
+				if (BotonOut==null)
+					{
+					BotonOut=new MouseOutHandler() {
+						public void onMouseOut(MouseOutEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+						}
+					};
+					}
+				Act.addMouseOutHandler(BotonOut);
+				
+				if (BotonOver==null)
+					{
+					BotonOver=new MouseOverHandler() {
+						public void onMouseOver(MouseOverEvent event) {
+							
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+							
+						}
+					};
+					}
+				Act.addMouseOverHandler(BotonOver);
+				
+				
+				if (StileName==null){
+					StileName="gwt-ButtonCenter";
+				} 
+				Act.setStyleName(StileName);
+				
+
+					Act.setWidth("100%");
+					Act.setHeight("100%");
+					
+			}
 
 	}
+	
+	 public void sortStringExchange( ArrayList<Entity>  x )
+     {
+           int i, j;
+           Entity temp;
+
+           for ( i = 0;  i < x.size() - 1;  i++ )
+           {
+               for ( j = i + 1;  j < x.size();  j++ )
+               {  
+                        if ( x.get(i).getName().compareToIgnoreCase( x.get(j).getName()) > 0 )
+                         {                                             // ascending sort
+                                     temp = x.get(i);
+                                     x.set(i, x.get(j));    // swapping
+                                     x.set(j, temp); 
+                                     
+                          } 
+                  } 
+            } 
+     } 
+
 	
 	public void addBotonLessTen(Entity S) {
 		if (S.getName().isEmpty()) Window.alert("el string jamas deberia ser vacio");
