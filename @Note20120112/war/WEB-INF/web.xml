@@ -19,7 +19,10 @@
 		<servlet-name>LoggerService</servlet-name>
 		<servlet-class>lector.server.LoggerServiceImpl</servlet-class>
 	</servlet>
-	
+	<servlet>
+		<servlet-name>ExportService</servlet-name>
+		<servlet-class>lector.server.ExportServiceImpl</servlet-class>
+	</servlet>
 	<servlet>
 		<servlet-name>Upload</servlet-name>
 		<servlet-class>lector.server.Upload</servlet-class>
@@ -47,6 +50,10 @@
 	<servlet-mapping>
 		<servlet-name>LoggerService</servlet-name>
 		<url-pattern>/BookReader/book.reader/loggerservice</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportService</servlet-name>
+		<url-pattern>/BookReader/book.reader/exportservice</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ServletAdaptor</servlet-name>
