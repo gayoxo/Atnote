@@ -52,6 +52,16 @@ public class NewUser2group extends PopupPanel {
 		});
 		menuBar.addItem(mntmClose);
 		
+		MenuItem CreateAndAdd = new MenuItem("CreateAndAdd", false, new Command() {
+			public void execute() {
+				hide();
+				CreateAndAdd CAA=new CreateAndAdd(GAUP);
+				CAA.center();
+				CAA.setVisible(true);
+			}
+		});
+		menuBar.addItem(CreateAndAdd);
+		
 		
 		
 		

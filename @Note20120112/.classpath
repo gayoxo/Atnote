@@ -19,7 +19,7 @@
 	<classpathentry kind="lib" path="libs/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="libs/jsr173_api.jar"/>
 	<classpathentry kind="lib" path="libs/gwt-incubator-20101117-r1766.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (1)"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
