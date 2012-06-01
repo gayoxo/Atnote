@@ -53,18 +53,29 @@ public class PanelGrafo extends Composite {
 	private VerticalPanel zoomPanel;
 	private Button btnNewButton;
 	private Button btnNewButton_1;
-	private float multiplicador;
+	private static float multiplicador;
 	private String Result;
 	private Button btnNewButton_2;
 	private HorizontalPanel horizontalPanel;
 	private static int ContadorErrores;
-
+	private static TipeGraph Visualize;
+	private VerticalPanel verticalPanel;
+	private Button dot;
+	private HorizontalPanel horizontalPanel_1;
+	private Button neato;
+	private Button twopi;
+	private Button circo;
+	private Button fdp;
+	
+	
+	
 	public PanelGrafo(Long Catalog) {
 
 		Catalogo = Catalog;
-		multiplicador=1.0f;
+		if (multiplicador<=0.0f) multiplicador=1.0f;
 		Result=null;
-
+		Visualize=TipeGraph.dot;
+		
 		horizontalPanel = new HorizontalPanel();
 		initWidget(horizontalPanel);
 
@@ -105,7 +116,7 @@ public class PanelGrafo extends Composite {
 				btnNewButton_2.setEnabled(false);
 				absolutePanel.clear();
 				absolutePanel.add(sPanel, 0, 0);
-				if (multiplicador-0.1f>0.3f) multiplicador=multiplicador-0.1f;
+				if (multiplicador-0.1f>0.2f) multiplicador=multiplicador-0.1f;
 				Play() ;
 //				LlamadaServicio(
 ////						(int) Math.round(OldSizehight / 1.3),
@@ -149,9 +160,265 @@ public class PanelGrafo extends Composite {
 				HasVerticalAlignment.ALIGN_MIDDLE);
 		zoomPanel.setCellHorizontalAlignment(btnNewButton_2,
 				HasHorizontalAlignment.ALIGN_CENTER);
+		
+		verticalPanel = new VerticalPanel();
+		horizontalPanel.add(verticalPanel);
+		
+		horizontalPanel_1 = new HorizontalPanel();
+		verticalPanel.add(horizontalPanel_1);
+		
+		dot = new Button("dot");
+		dot.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Visualize=TipeGraph.dot;
+				DisableStyles();
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio();
+			}
+		});
+		
+		dot.addClickHandler(new ClickHandler() {
 
+			public void onClick(ClickEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+
+			}
+		});
+
+		dot.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphPush");
+			}
+		});
+
+		dot.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+			}
+		});
+
+		dot.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphOver");
+
+			}
+		});
+
+		dot.setStyleName("gwt-ButtonCenterGraph");
+		
+		horizontalPanel_1.add(dot);
+		
+		neato = new Button("neato");
+		neato.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Visualize=TipeGraph.neato;
+				DisableStyles();
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio();
+			}
+		});
+		horizontalPanel_1.add(neato);
+		
+		neato.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+
+			}
+		});
+
+		neato.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphPush");
+			}
+		});
+
+		neato.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+			}
+		});
+
+		neato.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphOver");
+
+			}
+		});
+
+		neato.setStyleName("gwt-ButtonCenterGraph");
+		
+		
+		twopi = new Button("twopi");
+		twopi.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Visualize=TipeGraph.twopi;
+				DisableStyles();
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio();
+			}
+		});
+		horizontalPanel_1.add(twopi);
+		
+		twopi.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+
+			}
+		});
+
+		twopi.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphPush");
+			}
+		});
+
+		twopi.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+			}
+		});
+
+		twopi.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphOver");
+
+			}
+		});
+
+		twopi.setStyleName("gwt-ButtonCenterGraph");
+		
+		
+		circo = new Button("circo");
+		circo.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Visualize=TipeGraph.circo;
+				DisableStyles();
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio();
+			}
+		});
+		horizontalPanel_1.add(circo);
+		
+		circo.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+
+			}
+		});
+
+		circo.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphPush");
+			}
+		});
+
+		circo.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+			}
+		});
+
+		circo.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphOver");
+
+			}
+		});
+
+		circo.setStyleName("gwt-ButtonCenterGraph");
+		
+		
+		fdp = new Button("fdp");
+		fdp.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Visualize=TipeGraph.fdp;
+				DisableStyles();
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(false);
+				btnNewButton_2.setEnabled(false);
+				absolutePanel.clear();
+				absolutePanel.add(sPanel, 0, 0);
+				LlamadaServicio();
+			}
+		});
+		horizontalPanel_1.add(fdp);
+		
+		fdp.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+
+			}
+		});
+
+		fdp.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphPush");
+			}
+		});
+
+		fdp.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraph");
+			}
+		});
+
+		fdp.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+
+				((Button) event.getSource())
+						.setStyleName("gwt-ButtonCenterGraphOver");
+
+			}
+		});
+
+		fdp.setStyleName("gwt-ButtonCenterGraph");
+
+		DisableStyles();
 		absolutePanel = new AbsolutePanel();
-		horizontalPanel.add(absolutePanel);
+		verticalPanel.add(absolutePanel);
 		absolutePanel.setSize("400px", "400px");
 
 		sPanel = new SimplePanel();
@@ -186,6 +453,22 @@ public class PanelGrafo extends Composite {
 
 	}
 
+	protected void DisableStyles() {
+		dot.setVisible(false);
+		neato.setVisible(false);
+		twopi.setVisible(false);
+		circo.setVisible(false);
+		fdp.setVisible(false);		
+	}
+
+	private void EnableStyles() {
+		dot.setVisible(true);
+		neato.setVisible(true);
+		twopi.setVisible(true);
+		circo.setVisible(true);
+		fdp.setVisible(true);
+	}
+	
 	public void refresca(Long Catalog) {
 		absolutePanel.clear();
 		absolutePanel.add(sPanel, 0, 0);
@@ -244,7 +527,7 @@ public class PanelGrafo extends Composite {
 //		}
 		if (!URLReq.isEmpty()) {
 //			if (!sizeset)	
-			URLReq = "cht=gv:dot&chl=digraph{"
+			URLReq = "cht=gv:"+Visualize+"&chl=digraph{"
 						+ URLReq + "}&chof=json";
 //			else
 //				URLReq = "https://chart.googleapis.com/chart?cht=gv:dot&chl=digraph{"
@@ -366,6 +649,7 @@ public class PanelGrafo extends Composite {
 			btnNewButton.setEnabled(true);
 			btnNewButton_1.setEnabled(true);
 			btnNewButton_2.setEnabled(true);
+			EnableStyles();
 
 			absolutePanel.setSize(W + "px", H + "px");
 
@@ -462,6 +746,8 @@ public class PanelGrafo extends Composite {
 		}
 
 	}
+
+	
 
 	private Rectangulo GetLienzo(String string) {
 		String[] S = string.split(",");
