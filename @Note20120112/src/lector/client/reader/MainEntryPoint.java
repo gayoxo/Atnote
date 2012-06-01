@@ -72,6 +72,8 @@ public class MainEntryPoint implements EntryPoint {
 		AllAnnotations, SelectedFree, SelectedBloked, NoAnnotations
 	};
 
+	
+	
 	private static Image originalBook = new Image("");
 	private static Button pageBack = new Button("<");
 	private static Button pageForward = new Button(">");

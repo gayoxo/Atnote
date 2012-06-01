@@ -210,7 +210,7 @@ height: 100%;
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 }
@@ -234,7 +234,7 @@ background: transparent url('/BotonesLista/BotonArriba.jpg') no-repeat center ce
 		    background-size:  100% 100%;
 	color: royalblue;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 }
@@ -259,7 +259,7 @@ background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center cen
     float: left;
     font: normal 12px arial, sans-serif;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 		  background-size:  100% 100%;
@@ -270,7 +270,7 @@ background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center cen
     font: normal 12px arial, sans-serif;
 	color: royalblue;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 	  background-size:  100% 100%;
@@ -313,7 +313,7 @@ background: transparent url('/BotonesLista/BotonAbajo.jpg') no-repeat center cen
 	color: Red;
 	text-decoration: none;
 	border: 0px solid;
-		font-size: 35px;
+		font-size: 24px;
 }
 .gwt-ButtonBottonSavePush {
 display: block;
@@ -321,7 +321,7 @@ display: block;
     font: normal 12px arial, sans-serif;
 	color: Red;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 	  background-size:  100% 100%;
@@ -347,7 +347,7 @@ font-size: 11px;
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 }
@@ -371,7 +371,7 @@ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center
 		    background-size:  100% 100%;
 	color: royalblue;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 }
@@ -394,7 +394,7 @@ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 }
@@ -441,7 +441,7 @@ background: transparent url('/BotonesLista/BotonArribaGris.jpg') no-repeat cente
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
 }
@@ -465,7 +465,7 @@ background: transparent url('/BotonesLista/BotonAbajoGris.jpg') no-repeat center
 		    background-size:  100% 100%;
 	color: royalblue;
 	border: 0px solid;
-	font-size: 35px;
+	font-size: 24px;
 	text-decoration: none;
 	background-color: White;
 }
@@ -708,9 +708,9 @@ font-size: 11px;
     font: normal 12px arial, sans-serif;
 		    background-size:  100% 100%;
 	color: Scrollbar;
-	font-size: 21px;
 	text-decoration: none;
 		border: 0px solid;
+		font-size: 11px;
 }
 
 .gwt-ButtonCenterPequSelect {
