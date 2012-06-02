@@ -32,7 +32,8 @@ public interface ExportService extends RemoteService {
 
 	public void deleteTemplateCategory(Long templateCategoryId);
 
-	public Template removeCategoriesFromTemplate(Long templateId, ArrayList<Long> categoriesIds);
+	public Template removeCategoriesFromTemplate(Long templateId,
+			ArrayList<Long> categoriesIds);
 
 	public ArrayList<Template> getTemplates();
 
@@ -40,5 +41,7 @@ public interface ExportService extends RemoteService {
 
 	public ArrayList<TemplateCategory> getTemplateCategoriesByIds(
 			ArrayList<Long> categoriesIds);
+
+	public ArrayList<Template> getTemplatesByIds(ArrayList<Long> ids);
 
 }

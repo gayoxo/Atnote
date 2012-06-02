@@ -29,6 +29,9 @@ public interface ExportServiceAsync {
 	void getTemplateCategoriesByIds(ArrayList<Long> categoriesIds,
 			AsyncCallback<ArrayList<TemplateCategory>> callback);
 
+	void getTemplatesByIds(ArrayList<Long> ids,
+			AsyncCallback<ArrayList<Template>> callback);
+
 
 
 }
