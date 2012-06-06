@@ -141,6 +141,32 @@ public class Administrador implements EntryPoint {
 		verticalPanel.add(btnLanguagesAdministration);
 		btnLanguagesAdministration.setSize("100%", "100%");
 		
+		Button btnTemplatesAdministration = new Button("Export Templates");
+		btnTemplatesAdministration.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOP");
+			}
+		});
+		btnTemplatesAdministration.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonTOPOver");
+			}
+		});
+		btnTemplatesAdministration.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonPush");
+			}
+		});
+		btnTemplatesAdministration.setStyleName("gwt-ButtonTOP");
+		btnTemplatesAdministration.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Controlador.change2AdminTemplate();
+			}
+		});
+		verticalPanel.add(btnTemplatesAdministration);
+		btnTemplatesAdministration.setSize("100%", "100%");
+		
+		
 		
 		Button btnNewButton_9 = new Button("Activity");
 		btnNewButton_9.addMouseOutHandler(new MouseOutHandler() {

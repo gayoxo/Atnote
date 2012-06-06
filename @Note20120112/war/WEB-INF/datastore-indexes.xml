@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+    <datastore-index kind="Annotation" ancestor="false">
+        <property name="id" direction="asc" />
+        <property name="readingActivity" direction="asc" />
+    </datastore-index>
+    <datastore-index kind="Annotation" ancestor="false">
+        <property name="pageNumber" direction="asc" />
+        <property name="bookId" direction="asc" />
+        <property name="readingActivity" direction="asc" />
+    </datastore-index>
+    <datastore-index kind="Annotation" ancestor="false">
+        <property name="pageNumber" direction="asc" />
+        <property name="bookId" direction="asc" />
+        <property name="annotationType" direction="asc" />
+    </datastore-index>
+    <datastore-index kind="AnnotationThread" ancestor="false">
+        <property name="annotationId" direction="asc" />
+        <property name="threadFatherId" direction="asc" />
+    </datastore-index>
+</datastore-indexes>

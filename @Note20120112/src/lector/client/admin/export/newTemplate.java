@@ -1,11 +1,17 @@
 package lector.client.admin.export;
 
 import lector.client.admin.export.template.Template;
+import lector.client.book.reader.ExportService;
+import lector.client.book.reader.ExportServiceAsync;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.controler.ErrorConstants;
 import lector.client.controler.InformationConstants;
 import lector.client.login.ActualUser;
+import lector.client.reader.LoadingPanel;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -23,8 +29,9 @@ public class newTemplate extends PopupPanel {
 
 	private TextBox textBox;
 	private NewAdminTemplate Yo;
-	private GWTServiceAsync bookReaderServiceHolder = GWT
-			.create(GWTService.class);
+	private ExportServiceAsync exportServiceHolder = GWT
+			.create(ExportService.class);
+	private CheckBox chckbxNewCheckBox;
 
 	public newTemplate(NewAdminTemplate yo) {
 		super(true);
@@ -57,7 +64,7 @@ public class newTemplate extends PopupPanel {
 		verticalPanel.add(horizontalPanel_2);
 		horizontalPanel_2.setSize("100%", "100%");
 		
-		CheckBox chckbxNewCheckBox = new CheckBox(InformationConstants.ORDER_EDITABLE);
+		chckbxNewCheckBox = new CheckBox(InformationConstants.ORDER_EDITABLE);
 		horizontalPanel_2.add(chckbxNewCheckBox);
 		chckbxNewCheckBox.setSize("240px", "19px");
 		
@@ -74,7 +81,24 @@ public class newTemplate extends PopupPanel {
 				Template T=new Template();
 				T.setName(textBox.getText());
 				T.setUserApp(ActualUser.getUser().getId());
-				//TODO LLamada
+				T.setModifyable(chckbxNewCheckBox.getValue());
+				LoadingPanel.getInstance().center();
+				LoadingPanel.getInstance().setLabelTexto("Loading...");
+				exportServiceHolder.saveTemplate(T, new AsyncCallback<Void>() {
+					
+					public void onSuccess(Void result) {
+						LoadingPanel.getInstance().hide();
+						Yo.refresh();
+						hide();
+						
+					}
+					
+					public void onFailure(Throwable caught) {
+						LoadingPanel.getInstance().hide();
+						Window.alert(ErrorConstants.ERROR_SAVING_TEMPLATE);
+						
+					}
+				});
 				}
 		});
 		horizontalPanel.add(Create);

@@ -11,5 +11,10 @@ public class ErrorConstants {
 	public static String ERROR_ADDING_USERS2GROUP1="The user ";
 	public static String ERROR_ADDING_USERS2GROUP2=" could not be added to the group ";
 	public static String ERROR_ADDING_USERS2GROUP3=" at this moment";
+	public static String ERROR_REFRESH_TEMPLATES="Error refreshing templates, please go back and in again to try again.";
+	public static String ERROR_SAVING_TEMPLATE="Error Saving Template";
+	public static String ERROR_UPDATING_TEMPLATE="Error updating template";
+	public static String ERROR_DELETING_TEMPLATE="Error deleting template";
+	public static String ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH="Error retriving template thread refresh the Template to continue";
 
 }
