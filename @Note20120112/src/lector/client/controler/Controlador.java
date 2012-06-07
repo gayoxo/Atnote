@@ -20,6 +20,7 @@ import lector.client.login.activitysel.VisorEntry;
 import lector.client.login.bookselec.MyBooks;
 import lector.client.reader.Book;
 import lector.client.reader.MainEntryPoint;
+import lector.client.reader.export.ExportResult;
 import lector.client.reader.filter.advance.FilterAdvance;
 import lector.client.search.Searcher;
 import lector.client.welcome.Welcome;
@@ -56,6 +57,7 @@ public class Controlador implements EntryPoint {
     private static UserEdition UserEdition = new UserEdition();
 	private static BookLoader BooKLoader=new BookLoader();
 	private static NewAdminTemplate AdminTemplate=new NewAdminTemplate();
+	private static ExportResult ExportResultado=new ExportResult();
 
     /**
      * @wbp.parser.entryPoint
@@ -230,6 +232,13 @@ public class Controlador implements EntryPoint {
 	public static void change2AdminTemplate() {
 		clear();
 		Actual = AdminTemplate;
+		Actual.onModuleLoad();
+		
+	}
+
+	public static void change2ExportResult() {
+		clear();
+		Actual = ExportResultado;
 		Actual.onModuleLoad();
 		
 	}

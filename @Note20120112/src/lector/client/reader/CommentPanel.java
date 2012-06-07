@@ -112,6 +112,12 @@ public enum CatalogTipo {
         	Showbutton=Showbutton+" ...";
         }  
         button = new Button(Showbutton);
+        button.addClickHandler(new ClickHandler() {
+        	public void onClick(ClickEvent event) {
+        		PopUPEXportacion PEX=MainEntryPoint.getPEX();
+        		PEX.addAlement(new ElementoExportacion(annotation,Imagen));
+        	}
+        });
         button.setHTML(Showbutton);
         horizontalPanel.add(button);
         button.setEnabled(true);
@@ -161,6 +167,16 @@ public enum CatalogTipo {
 				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
 			}
 		});
+        button.addMouseDownHandler(new MouseDownHandler() {
+			public void onMouseDown(MouseDownEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+			}
+		});
+        button.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+			}
+		});
 
         horizontalPanel.add(button);
 //        button.setEnabled(true);
@@ -189,6 +205,11 @@ public enum CatalogTipo {
                     	ScrollPanel.setHeight("174px");
                     //	Window.alert("Tamaño reducido");
                     }
+                    if (panel.getOffsetHeight()<1)
+                    {
+                    	ScrollPanel.setHeight("20px");
+                    //	Window.alert("Tamaño reducido");
+                    } 
                     	//  button.setVisible(true);
 //                    richTextAreaBoton.setVisible(false);
                     button_1.setText("-");

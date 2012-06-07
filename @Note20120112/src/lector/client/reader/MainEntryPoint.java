@@ -19,6 +19,9 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.uibinder.client.UiChild;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window.ScrollEvent;
+import com.google.gwt.user.client.Window.ScrollHandler;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -49,6 +52,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -118,6 +123,11 @@ public class MainEntryPoint implements EntryPoint {
 	private HorizontalPanel panelbase ;
 	private VerticalPanel PanelBotoneseImagen;
 	private HorizontalPanel PanelBaseCentrado;
+	private MenuItem Exportacion;
+	private SimplePanel GLueExportacion;
+	private static PopUPEXportacion PEX;
+	private static final int DesviacionVentanaExportacion=34;
+	private static final int DesviacionVentanaExportacionH=11;
 
 	public MainEntryPoint() {
 		
@@ -267,6 +277,44 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		filtroAnotPar=new ArrayList<Long>();
 		originalBook=new Image();
 		
+		Window.addResizeHandler(new ResizeHandler() {
+			
+			public void onResize(ResizeEvent event) {
+				hideDENSelector();
+					if (SE!=null) 
+						for (SelectorPanel SP : SE) {
+							TextSelector TS=SP.getSelector(); 
+							SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
+	                				 TS.getY().intValue(),
+	                                 originalBook.getAbsoluteLeft(), originalBook.getAbsoluteTop(),
+	                                 TS.getWidth().intValue(),
+	                                 TS.getHeight().intValue());
+	                         SEE.show();
+					}
+					if (PEX!=null&&PEX.isShowing())
+						{ 
+						PEX.setPopupPosition(Window.getClientWidth()+Window.getScrollLeft()-PopUPEXportacion.getLongitud()-DesviacionVentanaExportacionH, DesviacionVentanaExportacion+Window.getScrollTop());
+						PEX.show();
+						}
+					
+				
+				
+			}
+		});
+		
+		Window.addWindowScrollHandler(new ScrollHandler() {
+			
+			public void onWindowScroll(ScrollEvent event) {
+				if (PEX!=null&&PEX.isShowing())
+				{ 
+				PEX.setPopupPosition(Window.getClientWidth()+Window.getScrollLeft()-PopUPEXportacion.getLongitud()-DesviacionVentanaExportacionH, DesviacionVentanaExportacion+Window.getScrollTop());
+				PEX.show();
+				}
+			}
+		});
+		
+	
+		
 	}
 
 	public void onModuleLoad() {
@@ -291,6 +339,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		menuBar.clearItems();
 		menuBar.setAnimationEnabled(true);
 		RootMenu.add(menuBar);
+		menuBar.setWidth("100%");
 
 		AboutMenuButton = new MenuItem(ActualLang.getNamePage(), false, new Command() {
 			public void execute() {
@@ -347,6 +396,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				mntmBrowser.setVisible(false);
 				DensidadAnot.setEnabled(false);
 				DensidadAnot.setVisible(false);
+				GLueExportacion.setVisible(false);
+				Exportacion.setVisible(false);
 			}
 		});
 		menuBar_1.addItem(mntmNoAnnotacion);
@@ -374,6 +425,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmBrowser.setVisible(true);
 						DensidadAnot.setEnabled(true);
 						DensidadAnot.setVisible(true);
+						GLueExportacion.setVisible(true);
+						Exportacion.setVisible(true);
 						refreshP();
 					}
 				});
@@ -404,6 +457,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						mntmBrowser.setVisible(true);
 						DensidadAnot.setEnabled(true);
 						DensidadAnot.setVisible(true);
+						GLueExportacion.setVisible(true);
+						Exportacion.setVisible(true);
 					}
 				});
 		menuBar_1.addItem(mntmShowSelectedComments);
@@ -428,6 +483,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	                                 originalBook.getAbsoluteLeft(), originalBook.getAbsoluteTop(),
 	                                 TS.getWidth().intValue(),
 	                                 TS.getHeight().intValue());
+	                		 SEE.setSelector(TS);
 	                         SEE.show();
 	                         SE.add(SEE);
 	    				}
@@ -498,6 +554,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				hideDENSelector();
 				ActualUser.setBook(book);
 				Controlador.change2Browser();
+				PEX.hide();
 			}
 		});
 		mntmBrowser.setHTML(ActualLang.getBrowserMainButton());
@@ -515,6 +572,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						hideDENSelector();
 						ActualUser.setBook(book);
 						Controlador.change2Administrator();
+						if (PEX!=null)
+							PEX.hide();
 					}
 				});
 		mntmManage.setHTML(ActualLang.getBackAdministrationButton());
@@ -532,6 +591,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				hideDENSelector();
 				ActualUser.setBook(book);
 				Controlador.change2MyActivities();
+				PEX.hide();
 			}
 		});
 		mntmManage2.setHTML(ActualLang.getBackUserButton());
@@ -554,6 +614,19 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		if (filtroTypes.size()==1 && filtroTypes.get(0)==Long.MIN_VALUE && filtroUsers.isEmpty())
 			setfilterinfo(false);
 		else setfilterinfo(true);
+		
+		Exportacion = new MenuItem("", false, new Command() {
+
+			public void execute() {
+				PEX=new PopUPEXportacion();
+				PEX.setPopupPosition(Window.getClientWidth()+Window.getScrollLeft()-PopUPEXportacion.getLongitud()-DesviacionVentanaExportacionH, DesviacionVentanaExportacion+Window.getScrollTop());
+				PEX.show();
+			}
+		});
+		//TODO Anadir a LEnguaje
+		Exportacion.setHTML("Exportacion");
+		Exportacion.setVisible(false);
+		menuBar.addItem(Exportacion);
 		FilterInfo.setStyleName("gwt-MenuItemFiltering");
 		menuBar.addItem(FilterInfo);
 		
@@ -601,6 +674,11 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		ScrollAnnotationsPanel.setWidget(verticalAnnotationsPanel);
 		ScrollAnnotationsPanel.setHeight("875px");
 		ScrollAnnotationsPanel.setWidth("");
+		
+		GLueExportacion = new SimplePanel();
+		panelbase.add(GLueExportacion);
+		GLueExportacion.setWidth("473px");
+		GLueExportacion.setVisible(false);
 		//verticalAnnotationsPanel.setSize("100%", "100%");
 		//ScrollAnnotationsPanel.setSize("340px", "875px");
 		ScrollAnnotationsPanel.setVisible(false);
@@ -643,6 +721,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBrowser.setVisible(true);
 			DensidadAnot.setEnabled(true);
 			DensidadAnot.setVisible(true);
+			GLueExportacion.setVisible(false);
+			Exportacion.setVisible(true);
 			break;
 
 		case NoAnnotations:
@@ -659,6 +739,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBrowser.setVisible(false);
 			DensidadAnot.setEnabled(false);
 			DensidadAnot.setVisible(false);
+			GLueExportacion.setVisible(true);
+			Exportacion.setVisible(false);
 			break;
 
 		case SelectedBloked:
@@ -676,6 +758,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBrowser.setVisible(true);
 			DensidadAnot.setEnabled(true);
 			DensidadAnot.setVisible(true);
+			GLueExportacion.setVisible(true);
+			Exportacion.setVisible(true);
 			break;
 		case SelectedFree:
 			mntmNoAnnotacion.setEnabled(true);
@@ -692,6 +776,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			mntmBrowser.setVisible(true);
 			DensidadAnot.setEnabled(true);
 			DensidadAnot.setVisible(true);
+			GLueExportacion.setVisible(true);
+			Exportacion.setVisible(true);
 			break;
 		default:
 			break;
@@ -1155,7 +1241,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 							
 							}
 						
-						refreshC(event.getX(), event.getY());
+						if (state != State.AllAnnotations) refreshC(event.getX(), event.getY());
 						
 						
 						if (event.isControlKeyDown()
@@ -1283,4 +1369,9 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	public static Image getOriginalBook() {
 		return originalBook;
 	}
+	
+	public static PopUPEXportacion getPEX() {
+		return PEX;
+	}
+	
 }
