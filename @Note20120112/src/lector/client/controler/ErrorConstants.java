@@ -17,5 +17,7 @@ public class ErrorConstants {
 	public static String ERROR_DELETING_TEMPLATE="Error deleting template";
 	public static String ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH="Error retriving template thread refresh the Template to continue";
 	public static String ERROR_RETRIVING_CATALOG="Error Retriving catalog, please reload";
+	public static String ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES1="Error retriving internal categories for template";
+	public static String ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES2=". Please go back and reload it";
 
 }

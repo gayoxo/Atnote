@@ -15,14 +15,14 @@ import lector.client.reader.LoadingPanel;
 
 public class ArbitroLlamadasTemplates {
 
-	private Stack<ElementoLlamada> Pila =new Stack<ElementoLlamada>();
+	private Stack<RepresentacionTemplateCategory> Pila =new Stack<RepresentacionTemplateCategory>();
 	private boolean finales=true;
 	private static ArbitroLlamadasTemplates YO;
 	private ExportServiceAsync exportServiceHolder = GWT
 			.create(ExportService.class);
 	
 	public ArbitroLlamadasTemplates() {
-		Pila =new Stack<ElementoLlamada>();
+		Pila =new Stack<RepresentacionTemplateCategory>();
 		finales=true;
 	}
 	
@@ -31,7 +31,7 @@ public class ArbitroLlamadasTemplates {
 		return YO;
 	}
 	
-	public void addElement(ElementoLlamada EL){
+	public void addElement(RepresentacionTemplateCategory EL){
 		Pila.add(EL);
 		if (finales)
 			{
@@ -43,7 +43,7 @@ public class ArbitroLlamadasTemplates {
 	private void llamadacontinua() {
 
 		finales=false;
-		ElementoLlamada EL=Pila.peek();
+		RepresentacionTemplateCategory EL=Pila.peek();
 		TemplateCategory TC=EL.getT();
 		if (TC.getSubCategories()!=null&&!TC.getSubCategories().isEmpty()){
 			LoadingPanel.getInstance().center();
@@ -53,22 +53,38 @@ public class ArbitroLlamadasTemplates {
 				public void onSuccess(ArrayList<TemplateCategory> result) {
 					LoadingPanel.getInstance().hide();
 					procesallamada(result,Pila.pop());
+					if (!Pila.isEmpty())
+						llamadacontinua();
+					else finales=true;
 				}
 				
 				public void onFailure(Throwable caught) {
 					LoadingPanel.getInstance().hide();
 					Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH);
-					Pila=new Stack<ElementoLlamada>();
+					Pila=new Stack<RepresentacionTemplateCategory>();
 					finales=true;
 					
 				}
 			});
 		}
+		else {
+			Pila.pop();
+			if (!Pila.isEmpty())
+				llamadacontinua();
+			else finales=true;
+		}
 		
 	}
 
-	protected void procesallamada(ArrayList<TemplateCategory> result, ElementoLlamada elementoLlamada) {
-		// TODO Auto-generated method stub
+	protected void procesallamada(ArrayList<TemplateCategory> result, RepresentacionTemplateCategory elementoLlamada) {
+		RepresentacionTemplateCategory Padre=elementoLlamada;
+		for (TemplateCategory templateCategory : result) {
+			RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Padre);
+			Padre.addSon(Nuevo);
+			Pila.push(Nuevo);
+		}
+		
+		
 		
 	}
 	

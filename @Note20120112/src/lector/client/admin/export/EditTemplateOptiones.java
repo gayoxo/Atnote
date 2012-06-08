@@ -23,6 +23,9 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class EditTemplateOptiones extends PopupPanel {
 
@@ -30,6 +33,8 @@ public class EditTemplateOptiones extends PopupPanel {
 	private ExportServiceAsync exportServiceHolder = GWT
 			.create(ExportService.class);
 	private NewAdminTemplate YO;
+	private TextBox textBox;
+	private CheckBox checkBox;
 	
 	public EditTemplateOptiones(Template t, NewAdminTemplate yo) {
 		super(true);
@@ -38,7 +43,7 @@ public class EditTemplateOptiones extends PopupPanel {
 		YO=yo;
 		DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.EM);
 		setWidget(dockLayoutPanel);
-		dockLayoutPanel.setSize("221px", "139px");
+		dockLayoutPanel.setSize("271px", "179px");
 		
 		MenuBar menuBar = new MenuBar(false);
 		dockLayoutPanel.addNorth(menuBar, 2.2);
@@ -56,13 +61,27 @@ public class EditTemplateOptiones extends PopupPanel {
 		dockLayoutPanel.add(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
 		
-		CheckBox checkBox = new CheckBox(InformationConstants.ORDER_EDITABLE);
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.add(horizontalPanel);
+		
+		Label lblNewLabel = new Label("New Name");
+		horizontalPanel.add(lblNewLabel);
+		
+		textBox = new TextBox();
+		horizontalPanel.add(textBox);
+		textBox.setText(T.getName());
+		
+		checkBox = new CheckBox(InformationConstants.ORDER_EDITABLE);
 		verticalPanel.add(checkBox);
 		checkBox.setValue(T.isModifyable());
 		
 		Button btnNewButton = new Button("Save");
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				T.setModifyable(checkBox.getValue());
+				T.setName(checkBox.getText());
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");
 				exportServiceHolder.saveTemplate(T, new AsyncCallback<Void>() {

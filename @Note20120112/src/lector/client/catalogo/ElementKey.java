@@ -36,6 +36,7 @@ public class ElementKey extends Composite{
 	private Image Large;
 	private Image Compact;
 	private Button NoSOns;
+	private HorizontalPanel horizontalPanel_1;
 	
 	public ElementKey(Entity ent) {
 		
@@ -50,31 +51,31 @@ public class ElementKey extends Composite{
 		BotonT.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		BotonT.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.add(BotonT);
-		BotonT.setSize("", "100%");
+		BotonT.setSize("100%", "100%");
 		
 		Label = new ButtonKey("New button",this);
 		//Label = new ButtonKey("New button",null);
 		BotonT.add(Label);
 		Label.setSize("100%", "43px");
-		Label.setStyleName("gwt-ButtonIzquierda");
+		Label.setStyleName("gwt-ButtonIzquierdaMIN");
 		Label.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaMIN");
 			}
 		});
 		Label.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOverMIN");
 			}
 		});
 		Label.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPushMIN");
 			}
 		});
 		Label.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaMIN");
 			}
 		});
         
@@ -82,27 +83,27 @@ public class ElementKey extends Composite{
 		//Mas = new ButtonKey("+",null);
 		BotonT.add(Mas);
 		Mas.setSize("48px", "43px");
-		Mas.setStyleName("gwt-ButtonDerecha");
+		Mas.setStyleName("gwt-ButtonDerechaMIN");
 		
 		
 		Mas.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaMIN");
 			}
 		});
 		Mas.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOverMIN");
 			}
 		});
 		Mas.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPushMIN");
 			}
 		});
 		Mas.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaMIN");
 			}
 		});
 		
@@ -114,14 +115,20 @@ public class ElementKey extends Composite{
 		
 		NoSOns.setVisible(false);
 		
+		horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(horizontalPanel_1);
+		horizontalPanel_1.setWidth("35px");
+		
 		Large = new Image("ArbolLine.jpg");
-		horizontalPanel.add(Large);
+		horizontalPanel_1.add(Large);
 		Large.setVisible(false);
-		Actual=State.Close;
 		Large.setSize("35px", "100%");
 		
 		Compact = new Image("ArbolLineChico.jpg");
-		horizontalPanel.add(Compact);
+		horizontalPanel_1.add(Compact);
+		Actual=State.Close;
 		
 		NextBotones = new VerticalPanel();
 		NextBotones.setVisible(false);

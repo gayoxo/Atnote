@@ -7,19 +7,19 @@ import lector.client.admin.export.template.TemplateCategory;
 
 public class ElementoLlamada {
 
-	private TemplateCategory T;
+	private RepresentacionTemplateCategory T;
 	private VerticalPanel Contenedor;
 	
-	public ElementoLlamada(TemplateCategory t, VerticalPanel contenedor) {
+	public ElementoLlamada(RepresentacionTemplateCategory t, VerticalPanel contenedor) {
 		T=t;
 		Contenedor=contenedor;
 	}
 
-	public TemplateCategory getT() {
+	public RepresentacionTemplateCategory getT() {
 		return T;
 	}
 
-	public void setT(TemplateCategory t) {
+	public void setT(RepresentacionTemplateCategory t) {
 		T = t;
 	}
 
