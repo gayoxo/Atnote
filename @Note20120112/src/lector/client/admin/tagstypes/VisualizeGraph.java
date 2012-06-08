@@ -4,6 +4,9 @@ import lector.client.catalogo.grafo.PanelGrafo;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -38,6 +41,8 @@ public class VisualizeGraph extends DialogBox {
 		simplePanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-124+"px");
 		PanelGrafo PG=new PanelGrafo(long1);
 		simplePanel.add(PG);
+//		PanelFinderKey PFK=new PanelFinderKey(long1);
+//		simplePanel.add(PFK);
 		
 		
 	}

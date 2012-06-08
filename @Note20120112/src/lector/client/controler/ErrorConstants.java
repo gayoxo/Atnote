@@ -16,5 +16,6 @@ public class ErrorConstants {
 	public static String ERROR_UPDATING_TEMPLATE="Error updating template";
 	public static String ERROR_DELETING_TEMPLATE="Error deleting template";
 	public static String ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH="Error retriving template thread refresh the Template to continue";
+	public static String ERROR_RETRIVING_CATALOG="Error Retriving catalog, please reload";
 
 }
