@@ -9,6 +9,7 @@ public class Constants {
 	public static Long ALL = Long.MIN_VALUE;
 	public static final Long CATALOGID = -1l;
 	public static final Long THREADFATHERNULLID = -1l;
+	public static final Long TEMPLATEID=-1l;
 	// USERS
 	public static String PROFESSOR = "Professor";
 	public static String STUDENT = "Student";
@@ -26,4 +27,5 @@ public class Constants {
 	public static String BLOB_AUTHOR = "author";
 	public static String BLOB_PUBLISHED_YEAR = "publishedyear";
 	public static String BLOB_TITLE = "title";
+	
 }

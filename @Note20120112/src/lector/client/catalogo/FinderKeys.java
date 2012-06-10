@@ -73,13 +73,16 @@ public class FinderKeys extends Finder {
 		scrollPanel.add(EK);
 		EK=new ElementKey(new Folder("Cataolo", Constants.CATALOGID, Constants.CATALOGID));
 		Lista=new ArrayList<EstadoElementKey>();
-		Lista.add(new EstadoElementKey(EK,false));
+		
+		AddElementLista(new EstadoElementKey(EK,false));
 		CHM=new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
+			
 				ButtonKey B0=(ButtonKey)event.getSource();
-				ActualEle=B0.getPadreKey();
-				cargaLaRama();
+				B0.getPadreKey();
+				FinderKeysArbitro.getInstance().addfather(B0.getPadreKey());
+				cargaLaRama(B0.getPadreKey());
 				
 			}
 		};
@@ -88,10 +91,35 @@ public class FinderKeys extends Finder {
 			
 			public void onClick(ClickEvent event) {
 				ButtonKey Bk=(ButtonKey)event.getSource();
-				ActualEle=Bk.getPadreKey();
-				if (ActualEle.getEntidad().getID()!=Constants.CATALOGID)
-					Selecciona();
+				ElementKey ActualRamaNew = Bk.getPadreKey();
 				
+				Long acLong=System.currentTimeMillis();
+				Long Dist=acLong-NanotimeOld;
+				Boolean Seleccionador=(Dist<1000);
+				
+					if (ActualEle!=ActualRamaNew){
+						NanotimeOld=System.currentTimeMillis();
+						ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaMIN");
+						ActualEle.setSelected(false);
+						ActualEle=ActualRamaNew;
+						ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaSelectMIN");
+						ActualEle.setSelected(true);
+					}
+					else
+					{
+						if (Seleccionador)
+							if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID)
+								{
+								Selecciona();
+								ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaMIN");
+								ActualEle.setSelected(false);
+								}
+						
+							else {}
+						else NanotimeOld=System.currentTimeMillis();
+					}
+					
+									
 			}
 			
 			private void Selecciona() {
@@ -141,6 +169,7 @@ public class FinderKeys extends Finder {
 		EK.addClickButton(CHS);
 		ActualEle=EK;
 		scrollPanel.add(EK);
+
 		
 
 			
@@ -152,7 +181,42 @@ public class FinderKeys extends Finder {
 
 
 
-	protected void cargaLaRama() {
+	private void AddElementLista(EstadoElementKey estadoElementKey) {
+		
+		ElementKey EK=IsIn(estadoElementKey.getEK());
+		if (EK==null)
+		{
+			Lista.add(estadoElementKey);
+		}
+		else 
+		{
+			ElementKey eKNuevo=estadoElementKey.getEK();
+			EK.getOthers().setVisible(true);
+			eKNuevo.getOthers().setVisible(true);
+			EK.getOtros().add(eKNuevo);
+			ArrayList<ElementKey> ListaEK=EK.getOtros();
+			for (ElementKey elementKey : ListaEK) {
+				elementKey.setOtros(ListaEK);
+				elementKey.getOthers().setVisible(true);
+			}
+
+		}
+		
+	}
+
+
+
+	private ElementKey IsIn(ElementKey ek2) {
+		for (EstadoElementKey Element : Lista) {
+			if (Element.getEK().getEntidad().getID().equals(ek2.getEntidad().getID()))
+				return Element.getEK();
+		}
+		return null;
+	}
+
+
+
+	protected void cargaLaRama(ElementKey elementKeyllamada) {
 		AsyncCallback<ArrayList<Entity>> callback1 = new AsyncCallback<ArrayList<Entity>>() {
 
 			public void onFailure(Throwable caught) {
@@ -163,11 +227,14 @@ public class FinderKeys extends Finder {
 
 			public void onSuccess(ArrayList<Entity> result) {
 				
-				sortStringExchange(result);
 				
-				ActualEle.removeItems();
+				sortStringExchange(result);
+				ArrayList<ElementKey> ListaTemp=new ArrayList<ElementKey>();
+				
+				ElementKey PadreEle = FinderKeysArbitro.getInstance().getPadre();
+				PadreEle.removeItems();
 				for (Entity entity : result) {
-					entity.setActualFather(ActualEle.getEntidad());
+					entity.setActualFather(PadreEle.getEntidad());
 				}
 				for (Entity entitynew : result) {
 					ElementKey A=new ElementKey(entitynew);
@@ -176,11 +243,19 @@ public class FinderKeys extends Finder {
 						A.setHTML("File.gif",entitynew.getName());
 						A.isAFile();
 					}
-					ActualEle.addItem(A);
+					PadreEle.addItem(A);
 					A.addClickButtonMas(CHM);					
 					A.addClickButton(CHS);
+					ListaTemp.add(A);
+					AddElementLista(new EstadoElementKey(A,false));
 					}
+				//TODO
+				FinderKeysArbitro.getInstance().setfalse();
+				for (ElementKey elementKey : ListaTemp) {
+					FinderKeysArbitro.getInstance().add(elementKey);
+				}
 				LoadingPanel.getInstance().hide();
+				
 			}
 			
 			  public void sortStringExchange( ArrayList<Entity>  x )
@@ -210,7 +285,7 @@ public class FinderKeys extends Finder {
 /*		if (ActualRama.getEntidad().getID())
 			IdPathActual = null;
 		else*/
-			IdPathActual = ActualEle.getEntidad().getID();
+			IdPathActual = elementKeyllamada.getEntidad().getID();
 		bookReaderServiceHolder.getSons(IdPathActual, C
 				.getId(), callback1);
 		
@@ -234,7 +309,10 @@ public class FinderKeys extends Finder {
 		C = c;
 		ActualEle=EK;
 		EK.setText(C.getCatalogName());
-		cargaLaRama();
+		ActualEle.setSelected(true);
+		ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaSelectMIN");
+		ActualEle.setSelected(true);
+//		cargaLaRama();
 	}
 	
 	public void setButtonTipo(BotonesStackPanelMio buttonMio) {
@@ -252,8 +330,13 @@ public class FinderKeys extends Finder {
 	
 	public void RefrescaLosDatos()
 	{
+		Lista.clear();
 		ActualEle=EK;
-		cargaLaRama();
+		ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaSelectMIN");
+		ActualEle.setSelected(true);
+		FinderKeysArbitro.getInstance().refresh();
+		FinderKeysArbitro.getInstance().addfather(EK);
+		cargaLaRama(EK);
 		//simplePanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
 		//horizontalSplitPanel.setHeight(Integer.toString(Window.getClientHeight())+"px");
 	}

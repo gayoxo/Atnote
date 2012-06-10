@@ -1,5 +1,6 @@
 package lector.client.admin.export.admin;
 
+
 import lector.client.admin.export.template.Template;
 import lector.client.admin.export.template.TemplateCategory;
 
@@ -7,12 +8,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 
 public class RepresentacionTemplateCategory extends Composite {
 
 	private TemplateCategory T;
 	private VerticalPanel AnnotPanel;
 	private RepresentacionTemplateCategory Father;
+	private ButtonTemplateRep btnNewButton;
 	
 	public RepresentacionTemplateCategory(TemplateCategory t,RepresentacionTemplateCategory father) {
 		
@@ -38,7 +42,8 @@ public class RepresentacionTemplateCategory extends Composite {
 		horizontalPanel_1.add(btnNewButton_2);
 		btnNewButton_2.setHeight("49px");
 		
-		Button btnNewButton = new Button(T.getName());
+		btnNewButton = new ButtonTemplateRep(T.getName(),T);
+	
 		horizontalPanel.add(btnNewButton);
 		btnNewButton.setSize("77px", "49px");
 		
@@ -68,6 +73,12 @@ public class RepresentacionTemplateCategory extends Composite {
 
 	public void addSon(RepresentacionTemplateCategory nuevo) {
 		AnnotPanel.add(nuevo);
+		
+	}
+
+
+	public void setclickHandel(ClickHandler clickHandler) {
+		btnNewButton.addClickHandler(clickHandler);
 		
 	}
 }

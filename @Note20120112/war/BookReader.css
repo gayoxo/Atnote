@@ -736,3 +736,93 @@ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center
 	text-decoration: none;
 	background-color: White;
 }
+
+.gwt-ButtonDerechaMIN {
+ background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+}
+.gwt-ButtonDerechaOverMIN {
+ background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonDerechaSelectMIN {
+background: transparent url('/BotonesSueltos/BotonDer.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+		  background-size:  100% 100%;
+}
+
+.gwt-ButtonDerechaPushMIN {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	text-decoration: none;
+	background-color: White;
+}
+
+.gwt-ButtonIzquierdaMIN {
+ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+     background-size:  100% 100%;
+	color: White;
+	text-decoration: none;
+	border: 0px solid;
+}
+.gwt-ButtonIzquierdaOverMIN {
+ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat  center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: Scrollbar;
+	text-decoration: none;
+		border: 0px solid;
+}
+
+.gwt-ButtonIzquierdaSelectMIN {
+background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center center;
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		  background-size:  100% 100%;
+	color: red;
+	border: 0px solid;
+	text-decoration: none;
+}
+
+.gwt-ButtonIzquierdaPushMIN {
+ display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+		    background-size:  100% 100%;
+	color: royalblue;
+	border: 0px solid;
+	text-decoration: none;
+	background-color: White;
+}
+.gwt-LabelShowMore {
+	color: orangered;
+
+}
