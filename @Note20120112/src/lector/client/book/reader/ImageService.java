@@ -24,4 +24,6 @@ public interface ImageService extends RemoteService {
 	public ArrayList<BookBlob> getBookBlobsByUserId(Long userAppId);
 	
 	public BookBlob loadBookBlobById(Long id);
+	
+	public void saveBookBlob(BookBlob bookBlob); 
 }

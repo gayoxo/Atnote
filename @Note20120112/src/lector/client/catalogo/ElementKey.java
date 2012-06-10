@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.i18n.client.HasDirection.Direction;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
+
 
 public class ElementKey extends Composite{
 	

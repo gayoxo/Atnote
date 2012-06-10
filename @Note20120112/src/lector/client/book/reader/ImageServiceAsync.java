@@ -24,4 +24,7 @@ public interface ImageServiceAsync {
 
 	void loadBookBlobById(Long id, AsyncCallback<BookBlob> callback);
 
+
+	void saveBookBlob(BookBlob bookBlob, AsyncCallback<Void> callback);
+
 }
