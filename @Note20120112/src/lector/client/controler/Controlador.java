@@ -7,6 +7,7 @@ import lector.client.admin.book.BookAdministration;
 import lector.client.admin.bookblob.BookLoader;
 import lector.client.admin.catalog.NewAdminCatalogs;
 import lector.client.admin.export.NewAdminTemplate;
+import lector.client.admin.export.admin.EditTemplate;
 import lector.client.admin.group.Groupadministration;
 import lector.client.admin.langedit.EditordeLenguajes;
 import lector.client.admin.langedit.NewAdminLangs;
@@ -58,6 +59,7 @@ public class Controlador implements EntryPoint {
 	private static BookLoader BooKLoader=new BookLoader();
 	private static NewAdminTemplate AdminTemplate=new NewAdminTemplate();
 	private static ExportResult ExportResultado=new ExportResult();
+	private static EditTemplate EditTemplateE=new EditTemplate();
 
     /**
      * @wbp.parser.entryPoint
@@ -239,6 +241,13 @@ public class Controlador implements EntryPoint {
 	public static void change2ExportResult() {
 		clear();
 		Actual = ExportResultado;
+		Actual.onModuleLoad();
+		
+	}
+
+	public static void change2EditTemplate() {
+		clear();
+		Actual = EditTemplateE;
 		Actual.onModuleLoad();
 		
 	}

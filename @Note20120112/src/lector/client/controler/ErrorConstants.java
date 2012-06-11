@@ -19,5 +19,6 @@ public class ErrorConstants {
 	public static String ERROR_RETRIVING_CATALOG="Error Retriving catalog, please reload";
 	public static String ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES1="Error retriving internal categories for template";
 	public static String ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES2=". Please go back and reload it";
+	public static String ERROR_SAVING_NEW_TEMPLATE_CATEGORY="Error saving new template category, please try again";
 
 }

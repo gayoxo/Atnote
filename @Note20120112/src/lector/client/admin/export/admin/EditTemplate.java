@@ -34,16 +34,18 @@ public class EditTemplate implements EntryPoint {
 	private static ScrollPanel scrollPanel;
 	private static Template T;
 	private static PanelGestionTemplate PGT;
+	private EditTemplate YO;
 
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
 		
+		YO=this;
 		DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.EM);
 		rootPanel.add(dockLayoutPanel, 0, 0);
 		dockLayoutPanel.setSize("100%", "100%");
 		
 		MenuBar menuBar = new MenuBar(false);
-		dockLayoutPanel.addNorth(menuBar, 1.6);
+		dockLayoutPanel.addNorth(menuBar, 2);
 		
 		MenuItem mntmNewItem = new MenuItem("New item", false, (Command) null);
 		mntmNewItem.setHTML("Template Administration");
@@ -83,7 +85,7 @@ public class EditTemplate implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 				TemplateCategory TC=PGT.getActualNode();
-				PanelNewTemplateCategory PNTC=new PanelNewTemplateCategory(TC);
+				PanelNewTemplateCategory PNTC=new PanelNewTemplateCategory(TC,YO);
 				PNTC.center();
 				
 			}
@@ -188,5 +190,11 @@ public class EditTemplate implements EntryPoint {
 		T = t;
 		PGT=new PanelGestionTemplate(T);
 		scrollPanel.add(PGT);
+	}
+
+
+	public void refresh() {
+		PGT.refresh();
+		
 	}
 }
