@@ -23,6 +23,7 @@ public class TemplateCategory implements Serializable {
 	private ArrayList<Long> annotationsIds = new ArrayList<Long>();
 	private Long fatherId;
 	private Long templateId;
+	private Integer order = 0;
 
 	public TemplateCategory() {
 		subCategories = new ArrayList<Long>();
@@ -77,6 +78,14 @@ public class TemplateCategory implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getOrder() {
+		return order;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
 	}
 
 	public Long getId() {

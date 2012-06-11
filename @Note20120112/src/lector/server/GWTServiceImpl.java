@@ -2748,6 +2748,35 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return fileDBs;
 	}
 
+	public ArrayList<String> getFileNamesByIds(ArrayList<Long> ids){
+		ArrayList<String> fileNames = new ArrayList<String>();
+		for (int i = 0; i < ids.size(); i++) {
+			String fileName = loadFileNameById(ids.get(i));
+			fileNames.add(fileName);
+		}
+
+		return fileNames;
+		
+	}
+
+	private String loadFileNameById(Long id) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<String> list;
+		ArrayList<String> finalList;
+		String sql = "SELECT DISTINCT g.name FROM FileDB g WHERE g.id=" + id;
+		list = entityManager.createQuery(sql).getResultList();
+		finalList = new ArrayList<String>(list);
+		String fileName = null;
+		if (!finalList.isEmpty()) {
+			fileName = finalList.get(0);
+		}
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return fileName;
+
+	}
+
 	private FileDB loadFileDBByNameAndCatalogId(String name, Long id) {
 		EntityManager entityManager;
 		entityManager = EMF.get().createEntityManager();

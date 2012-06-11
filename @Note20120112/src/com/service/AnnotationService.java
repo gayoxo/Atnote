@@ -15,15 +15,23 @@ import java.util.StringTokenizer;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
+import lector.client.book.reader.ImageService;
 import lector.client.catalogo.server.Catalogo;
 import lector.client.catalogo.server.FileDB;
 import lector.client.catalogo.server.FolderDB;
@@ -32,9 +40,11 @@ import lector.client.login.UserApp;
 import lector.client.login.UserNotFoundException;
 import lector.client.reader.Annotation;
 import lector.client.reader.Book;
+import lector.client.reader.BookBlob;
 import lector.client.service.AnnotationSchema;
 import lector.server.EMF;
 import lector.server.GWTServiceImpl;
+import lector.server.ImageServiceImpl;
 import lector.server.JSONArray;
 import lector.server.JSONException;
 import lector.server.JSONObject;
@@ -52,6 +62,8 @@ public class AnnotationService {
 	@PersistenceContext(unitName = "System")
 	EntityManager em;
 	private static List<Long> sonIds;
+
+	ImageService imageService = new ImageServiceImpl();
 
 	// TESTED
 	@GET
@@ -85,6 +97,23 @@ public class AnnotationService {
 
 		return annotationsToExport;
 	}
+
+	@POST
+	@Path("html/produce")
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String getHTML(@FormParam("html") String html)
+			throws IOException {
+		return html;
+	}
+
+//	@GET
+//	@Path("html/produce/image")
+//	@Produces(MediaType.TEXT_HTML)
+//	public String getHTML() throws IOException {
+//		return imageService.imageTransformed("hola");
+//
+//	}
 
 	// TESTED
 	@GET
@@ -173,7 +202,6 @@ public class AnnotationService {
 		// return schemaList;
 	}
 
-
 	@GET
 	@Path("annotations/schema/")
 	public ListOfList getAllSchemas() throws IOException {
@@ -228,7 +256,7 @@ public class AnnotationService {
 		sonIds = new ArrayList<Long>();
 		Catalogo catalogo = loadCatalogById(catalogId);
 		AnnotationSchema annotationSchema = new AnnotationSchema(catalogId,
-				catalogo.getCatalogName(), catalogo.getEntryIds(),true);
+				catalogo.getCatalogName(), catalogo.getEntryIds(), true);
 		schema.add(annotationSchema);
 		for (int j = 0; j < catalogo.getEntryIds().size(); j++) {
 			deepingRoot(catalogo.getEntryIds().get(j));
@@ -272,12 +300,11 @@ public class AnnotationService {
 			FolderDB folder = loadFolderById(id);
 			if (folder != null) {
 				AnnotationSchema son = new AnnotationSchema(id,
-						folder.getName(), folder.getEntryIds(),true);
+						folder.getName(), folder.getEntryIds(), true);
 				schema.add(son);
 			}
 		}
 
-		
 		return schema;
 	}
 

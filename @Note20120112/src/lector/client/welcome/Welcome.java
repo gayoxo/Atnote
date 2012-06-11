@@ -13,14 +13,18 @@ import lector.client.login.UserApp;
 import lector.client.reader.About;
 import lector.client.reader.BookBlob;
 
+import com.google.appengine.api.datastore.Text;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
@@ -45,60 +49,48 @@ public class Welcome implements EntryPoint {
 	private HorizontalPanel horizontalPanel;
 	private RootPanel Footer;
 
-	// DESCOMENTAR EN DESARROLLO, CREA UN USUARIO ROOT.
-	// private void callUserRoot() {
-	// UserApp adminUser2 = new UserApp();
-	// adminUser2.setEmail("root");
-	// adminUser2.setProfile(Constants.PROFESSOR);
-	// bookReaderServiceHolder.saveUser(adminUser2,
-	// new AsyncCallback<Boolean>() {
-	// public void onSuccess(Boolean result) {
-	// }
-	//
-	// public void onFailure(Throwable caught) {
-	// Window.alert("Ha fallado Cesar");
-	// }
-	// });
-	// }
+//	 DESCOMENTAR EN DESARROLLO, CREA UN USUARIO ROOT.
+//	 private void callUserRoot() {
+//	 UserApp adminUser2 = new UserApp();
+//	 adminUser2.setEmail("root");
+//	 adminUser2.setProfile(Constants.PROFESSOR);
+//	 bookReaderServiceHolder.saveUser(adminUser2,
+//	 new AsyncCallback<Boolean>() {
+//	 public void onSuccess(Boolean result) {
+//	 }
+//	
+//	 public void onFailure(Throwable caught) {
+//	 Window.alert("Ha fallado Cesar");
+//	 }
+//	 });
+//	 }
+	FormPanel formPanel = new FormPanel();
 
 	public void onModuleLoad() {
-
-//		imageServiceHolder.loadBookBlobById(194002L,
-//				new AsyncCallback<BookBlob>() {
-//
-//					public void onFailure(Throwable caught) {
-//						// TODO Auto-generated method stub
-//
-//					}
-//
-//					public void onSuccess(BookBlob result) {
-//						String pag2 = "/serve?blob-key=AMIfv954_m62pmYcOvOstnF-YQvsBvmFb5v_Ajzf1dAXTM6DmqKy4dEPhw6r0tDlLW2BeYiauz_tGvOEsPulVIyEsnSoetF9Oz0QpsheKtVh9UZnOq1DKewPoNkyQDIGVjpnfqR99bXjhgJdLpBDymXzSAdoOo1uyQ";
-//						String pag3 = "/serve?blob-key=AMIfv97axsXwF4AhrzG3lkpXLYWvfcnRFP_3mxiArkwflkDEOcxyOBfgLW16amvEm2-NLYvk6jeGz9OfLt7w5191atbN01aEs7ePXPaK6GyhCzgJmHIUMPPUWcdWkn5zShYPZYpBNeR1bod8iu3jmrubEp6GQ_UZ9Q";
-//						String pag4 = "/serve?blob-key=AMIfv97WycrtOFO9f-iBGGmTnNRRGnksddKphV5u_31XfvYant5pUo7-TzquU21-WcE69--tJwEKhIveWvEpockoATzTDmNKSCGqk8UxQhBf25Sx0qiTjPSBAraqKdwv5-JRLZK3YT67-2-40EHLONKwwjNpiouUQQ";
-//						String pag7 = "/serve?blob-key=AMIfv96qrdq-4_TMVyHQ5R3ywDUR4ATgOiyJAjP6AsI2EMSCWZM5aVat0q_1sUndL14cKW6uvLB5oDzTlWBNdX9wV3_yL4bdtsBSQ-4ciBS9DtVNmHcOyQfpL42K5C3hBYlQgIo4LCUSWXgJh8OPrpcv9ESSxRO7gw";
-//
-//						result.getWebLinks().set(1, pag2);
-//						result.getWebLinks().set(2, pag3);
-//						result.getWebLinks().set(3, pag4);
-//						result.getWebLinks().set(6, pag7);
-//
-//						imageServiceHolder.saveBookBlob(result,
-//								new AsyncCallback<Void>() {
-//
-//									public void onFailure(Throwable caught) {
-//										Window.alert("Todo Mal");
-//
-//									}
-//
-//									public void onSuccess(Void result) {
-//										Window.alert("Todo Bien");
-//
-//									}
-//								});
-//					}
-//				});
-
 		// callUserRoot();
+
+		// POST request test
+
+//		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+//		formPanel.setMethod(FormPanel.METHOD_POST);
+//		formPanel.addStyleName("table-center");
+//		formPanel.addStyleName("demo-FormPanel");
+//		TextArea textArea = new TextArea();
+//		textArea.setText("Esto es una descripción");
+//		textArea.setName("description");
+//		formPanel.add(textArea);
+//		formPanel.setAction("http://127.0.0.1:8888/rs/AtNote/html/produce");
+//		formPanel.submit();
+//		
+		Button button = new Button("loading");
+		button.setEnabled(false);
+		button.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				formPanel.submit();
+			}
+		});
+
 		RootPanel rootPanel = RootPanel.get();
 		Footer = RootPanel.get("footer");
 		rootPanel.setSize("100%", "100%");

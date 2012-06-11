@@ -236,4 +236,7 @@ public interface GWTServiceAsync {
 
 	void deleteBook(String bookId, Long userId, AsyncCallback<Void> callback);
 
+	void getFileNamesByIds(ArrayList<Long> ids,
+			AsyncCallback<ArrayList<String>> callback);
+
 }

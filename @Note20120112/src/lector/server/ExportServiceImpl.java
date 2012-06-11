@@ -2,26 +2,13 @@ package lector.server;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import lector.client.admin.export.template.Template;
 import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
-import lector.client.book.reader.ImageService;
-import lector.client.book.reader.LoggerService;
-import lector.client.catalogo.server.FileDB;
-import lector.client.catalogo.server.FolderDB;
-import lector.client.login.UserApp;
-import lector.client.reader.BookBlob;
+import lector.client.controler.Constants;
 
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -60,6 +47,14 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.close();
+
+		if (templateCategory.getFatherId().equals(Constants.TEMPLATEID)) {
+			Template template = loadTemplateById(templateCategory.getTemplateId());
+			template.getCategories().add(templateCategory.getId());
+		}else{
+			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory.getFatherId());
+			templateCategoryFather.getSubCategories().add(templateCategory.getId());
+		}
 	}
 
 	public void deleteTemplate(Long templateId) {

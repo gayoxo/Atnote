@@ -237,4 +237,6 @@ public interface GWTService extends RemoteService {
 	public void updateRenameOfUser(Long userId); 
 	
 	public void deleteBook(String bookId, Long userId);
+	
+	public ArrayList<String> getFileNamesByIds(ArrayList<Long> ids);
 }
