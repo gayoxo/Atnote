@@ -29,6 +29,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.i18n.client.HasDirection.Direction;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 
 
 public class ElementKey extends Composite{
@@ -40,7 +45,7 @@ public class ElementKey extends Composite{
 	private VerticalPanelEspacial NextBotones;
 	private enum State {Open,Close};
 	private State Actual;
-	private Image Large;
+	//private Image LargeP;
 	private Image Compact;
 	private Button NoSOns;
 	private VerticalPanel verticalPanel;
@@ -49,6 +54,7 @@ public class ElementKey extends Composite{
 	private ButtonKey Actulizador;
 	private ArrayList<ElementKey> Otros;
 	private String StlieOld;
+	private Image LargeN;
 	
 	public ElementKey(Entity ent) {
 		
@@ -112,14 +118,16 @@ Mas.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (Actual==State.Close)
 				{
-				Large.setVisible(true);
+			//	LargeP.setVisible(true);
+				LargeN.setVisible(true);
 				NextBotones.setVisible(true);
 				Mas.setText("-");
 				Actual=State.Open;
 				Compact.setVisible(false);			
 				}else 
 				{
-					Large.setVisible(false);
+				//	LargeP.setVisible(false);
+					LargeN.setVisible(false);
 					NextBotones.setVisible(false);
 					Mas.setText("+");
 					Actual=State.Close;
@@ -207,13 +215,23 @@ Mas.addClickHandler(new ClickHandler() {
 		
 		NoSOns.setVisible(false);
 		
-		Large = new Image("ArbolLine.jpg");
-		horizontalPanel.add(Large);
-				Large.setVisible(true);
-				Large.setSize("35px", "100%");
+		LargeN = new Image("TreeKey/17.jpg");
+		horizontalPanel.add(LargeN);
+		LargeN.setSize("10px", "100%");
+		
+//		Large = new VerticalPanel();
+//		horizontalPanel.add(Large);
+//		horizontalPanel.setCellHorizontalAlignment(Large, HasHorizontalAlignment.ALIGN_CENTER);
+//		Large.setSize("40px", "100%");
+//		
+//		LargeP = new Image("ArbolLine.jpg");
+//		horizontalPanel.add(LargeP);
+//				LargeP.setVisible(true);
+//				LargeP.setSize("35px", "100%");
 		
 		Compact = new Image("ArbolLineChico.jpg");
 		horizontalPanel.add(Compact);
+		Compact.setSize("10px", "55px");
 		Compact.setVisible(false);
 		Actual=State.Open;
 		
@@ -250,7 +268,8 @@ Mas.addClickHandler(new ClickHandler() {
 	}
 
 	private void setOpen() {
-		Large.setVisible(true);
+		//LargeP.setVisible(true);
+		LargeN.setVisible(true);
 		NextBotones.setVisible(true);
 		Mas.setText("-");
 		Actual=State.Open;
@@ -301,7 +320,8 @@ Mas.addClickHandler(new ClickHandler() {
 		Mas.setVisible(false);
 		NoSOns.setVisible(true);
 		Compact.setVisible(false);
-		Large.setVisible(false);
+		//LargeP.setVisible(false);
+		LargeN.setVisible(false);
 		NextBotones.setVisible(false);
 		
 	}

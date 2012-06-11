@@ -178,7 +178,8 @@ public class EditorActivity extends PopupPanel {
 			}
 
 			private boolean checkbook() {
-			 return ((SelectedBook != null) && (SelectedBookOld != null) && !(SelectedBook.equals(SelectedBookOld)));
+		//		return false;
+		 return ((SelectedBook != null) && (SelectedBookOld != null) && !(SelectedBook.equals(SelectedBookOld)));
 			}
 
 			private boolean checkcatalog() {
