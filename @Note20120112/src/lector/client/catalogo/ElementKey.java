@@ -55,6 +55,10 @@ public class ElementKey extends Composite{
 	private ArrayList<ElementKey> Otros;
 	private String StlieOld;
 	private Image LargeN;
+	private VerticalPanel verticalPanel_1;
+	private HorizontalPanel horizontalPanel_1;
+	private Image Large1;
+	private Image Large2;
 	
 	public ElementKey(Entity ent) {
 		
@@ -120,6 +124,8 @@ Mas.addClickHandler(new ClickHandler() {
 				{
 			//	LargeP.setVisible(true);
 				LargeN.setVisible(true);
+				Large1.setVisible(true);
+				Large2.setVisible(true);
 				NextBotones.setVisible(true);
 				Mas.setText("-");
 				Actual=State.Open;
@@ -128,6 +134,8 @@ Mas.addClickHandler(new ClickHandler() {
 				{
 				//	LargeP.setVisible(false);
 					LargeN.setVisible(false);
+					Large1.setVisible(false);
+					Large2.setVisible(false);
 					NextBotones.setVisible(false);
 					Mas.setText("+");
 					Actual=State.Close;
@@ -214,10 +222,24 @@ Mas.addClickHandler(new ClickHandler() {
 		Actulizador.setVisible(false);
 		
 		NoSOns.setVisible(false);
+		Actual=State.Open;
 		
-		LargeN = new Image("TreeKey/17.jpg");
-		horizontalPanel.add(LargeN);
-		LargeN.setSize("10px", "100%");
+		verticalPanel_1 = new VerticalPanel();
+		horizontalPanel.add(verticalPanel_1);
+		
+		Large1 = new Image("TreeKey/11.jpg");
+		verticalPanel_1.add(Large1);
+		Large1.setSize("40px", "100%");
+		
+		horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel_1.add(horizontalPanel_1);
+		
+		LargeN = new Image("TreeKey/13.jpg");
+		horizontalPanel_1.add(LargeN);
+		horizontalPanel_1.setCellHorizontalAlignment(LargeN, HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_1.setCellVerticalAlignment(LargeN, HasVerticalAlignment.ALIGN_MIDDLE);
+		LargeN.setSize("40px", "106%");
 		
 //		Large = new VerticalPanel();
 //		horizontalPanel.add(Large);
@@ -230,15 +252,18 @@ Mas.addClickHandler(new ClickHandler() {
 //				LargeP.setSize("35px", "100%");
 		
 		Compact = new Image("ArbolLineChico.jpg");
-		horizontalPanel.add(Compact);
+		horizontalPanel_1.add(Compact);
 		Compact.setSize("10px", "55px");
-		Compact.setVisible(false);
-		Actual=State.Open;
 		
 		NextBotones = new VerticalPanelEspacial(this);
+		horizontalPanel_1.add(NextBotones);
 		NextBotones.setVisible(true);
-		horizontalPanel.add(NextBotones);
 		NextBotones.setSize("100%", "");
+		
+		Large2 = new Image("TreeKey/15.jpg");
+		verticalPanel_1.add(Large2);
+		Large2.setSize("40px", "100%");
+		Compact.setVisible(false);
 		
 	}
 
@@ -270,6 +295,8 @@ Mas.addClickHandler(new ClickHandler() {
 	private void setOpen() {
 		//LargeP.setVisible(true);
 		LargeN.setVisible(true);
+		Large1.setVisible(true);
+		Large2.setVisible(true);
 		NextBotones.setVisible(true);
 		Mas.setText("-");
 		Actual=State.Open;
@@ -322,6 +349,8 @@ Mas.addClickHandler(new ClickHandler() {
 		Compact.setVisible(false);
 		//LargeP.setVisible(false);
 		LargeN.setVisible(false);
+		Large1.setVisible(false);
+		Large2.setVisible(false);
 		NextBotones.setVisible(false);
 		
 	}
