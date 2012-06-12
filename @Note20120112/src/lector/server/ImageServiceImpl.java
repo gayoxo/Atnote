@@ -3,6 +3,7 @@ package lector.server;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -257,29 +258,47 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public String loadHTMLStringForExport(ArrayList<ExportObject> exportObjects) {
-		String html = "<table>";
+		StringBuffer html = new StringBuffer(
+				"<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>");
+		html.append("<title>Export:");
+		html.append(System.nanoTime());
+		html.append("</title><body>");
+		html.append("<table  align=\"center\" border=\"1\">");
 		for (ExportObject exportObject : exportObjects) {
-			html += "<tr>";
+			html.append("<tr>");
 			String imageURL = exportObject.getImageURL();
 			ArrayList<TextSelector> anchors = exportObject.getAnnotation()
 					.getTextSelectors();
 			int imageWidth = exportObject.getWidth();
 			int imageHeight = exportObject.getHeight();
-			html += "<td>"
+			html.append("<td>"
 					+ produceCutImagesList(imageURL, anchors, imageWidth,
-							imageHeight) + "</td><td>";
-			html += exportObject.getAnnotation().getComment().getValue()
-					+ "</td>";
+							imageHeight) + "</td><td>");
+			String Clear;
+			try {
+				Clear = new String(exportObject.getAnnotation().getComment()
+						.getValue().getBytes(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				Clear = exportObject.getAnnotation().getComment().getValue();
+			}
+			html.append(Clear + "</td>");
 			ArrayList<String> fileNames = generalAppService
 					.getFileNamesByIds(exportObject.getAnnotation()
 							.getFileIds());
 			for (String fileName : fileNames) {
-				html += "<td>" + fileName + ", </td>";
+				html.append("<td>" + fileName + ", </td>");
 			}
-			html += "</tr>";
+			html.append("</tr>");
 		}
-		html += "</table>";
-		return html;
+		html.append("</table></body></html>");
+		try {
+			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
+			return htmlUTF;
+		} catch (UnsupportedEncodingException e) {
+
+			return html.toString();
+		}
+
 	}
 
 }

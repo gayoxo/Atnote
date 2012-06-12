@@ -82,7 +82,7 @@ public class PopUPEXportacion extends PopupPanel {
 									textArea.setName("html");
 									formPanel.add(textArea);
 									formPanel
-											.setAction("http://127.0.0.1:8888/rs/AtNote/html/produce");
+											.setAction("../rs/AtNote/html/produce");
 									formPanel.submit();
 
 								}
