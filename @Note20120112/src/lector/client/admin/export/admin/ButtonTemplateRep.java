@@ -6,14 +6,18 @@ import com.google.gwt.user.client.ui.Button;
 
 public class ButtonTemplateRep extends Button {
 
-	private TemplateCategory T;
+	private RepresentacionTemplateCategory T;
 	
-	public ButtonTemplateRep(String name, TemplateCategory t) {
+	public ButtonTemplateRep(String name, RepresentacionTemplateCategory t) {
 		super(name);
 		T=t;
 	}
 	
 	public TemplateCategory getT() {
+		return T.getT();
+	}
+	
+	public RepresentacionTemplateCategory getTRep() {
 		return T;
 	}
 

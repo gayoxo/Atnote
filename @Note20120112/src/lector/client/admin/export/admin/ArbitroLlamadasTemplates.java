@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -26,6 +28,12 @@ public class ArbitroLlamadasTemplates {
 		finales=true;
 	}
 	
+	
+	public void clear() {
+		Pila =new Stack<RepresentacionTemplateCategory>();
+		finales=true;
+
+	}
 	public static ArbitroLlamadasTemplates getInstance(){
 		if (YO==null) YO=new ArbitroLlamadasTemplates();
 		return YO;
@@ -81,7 +89,15 @@ public class ArbitroLlamadasTemplates {
 		for (TemplateCategory templateCategory : result) {
 			RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Padre);
 			Padre.addSon(Nuevo);
-			Pila.push(Nuevo);
+			Nuevo.setclickHandel(new ClickHandler() {
+				
+				public void onClick(ClickEvent event) {
+					ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
+					PanelGestionTemplate.setActual(Mas.getTRep());
+					
+				}
+			});
+			Pila.addElement(Nuevo);
 		}
 		
 		

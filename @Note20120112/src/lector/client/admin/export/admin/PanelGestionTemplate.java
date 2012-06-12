@@ -24,17 +24,34 @@ public class PanelGestionTemplate extends Composite {
 	private VerticalPanel PanelTemplate;
 	private ExportServiceAsync exportServiceHolder = GWT
 			.create(ExportService.class);
-	private TemplateCategory ActualBase;
-	private static TemplateCategory Actual;
+	private RepresentacionTemplateCategory ActualBase;
+	private TemplateCategory ActualBaseT;
+	private static RepresentacionTemplateCategory Actual;
 	
 	public PanelGestionTemplate(Template t) {
 		
 		T=t;
-		ActualBase=new TemplateCategory(T.getName(),T.getCategories(),
+		ActualBaseT = new TemplateCategory(T.getName(),T.getCategories(),
 				new ArrayList<Long>(), Constants.TEMPLATEID, T.getId());
+		ActualBaseT.setId(Constants.TEMPLATEID);
+		ActualBase=new RepresentacionTemplateCategory(ActualBaseT,null);
 		Actual=ActualBase;
-		Actual.setId(Constants.TEMPLATEID);
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+		Actual.setSelected(true);
+		ActualBase.setclickHandel(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
+				Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+				Actual.setSelected(false);
+				Actual=Mas.getTRep();
+				Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+				Actual.setSelected(true);
+				
+			}
+		});
 		PanelTemplate = new VerticalPanel();
+		PanelTemplate.add(Actual);
 		initWidget(PanelTemplate);
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
@@ -43,16 +60,20 @@ public class PanelGestionTemplate extends Composite {
 			public void onSuccess(ArrayList<TemplateCategory> result) {
 				LoadingPanel.getInstance().hide();
 				for (TemplateCategory templateCategory : result) {
-					RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, null);
+					RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual);
 					Nuevo.setclickHandel(new ClickHandler() {
 						
 						public void onClick(ClickEvent event) {
 							ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
-							Actual=Mas.getT();
+							Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+							Actual.setSelected(false);
+							Actual=Mas.getTRep();
+							Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+							Actual.setSelected(true);
 							
 						}
 					});
-					PanelTemplate.add(Nuevo);
+					ActualBase.addSon(Nuevo);
 					ArbitroLlamadasTemplates.getInstance().addElement(Nuevo);
 				}
 				
@@ -71,46 +92,79 @@ public class PanelGestionTemplate extends Composite {
 	}
 
 	public TemplateCategory getActualNode() {
-		return Actual;
+		return Actual.getT();
 	}
 	
-	public static void setActual(TemplateCategory actual) {
+	public static void setActual(RepresentacionTemplateCategory actual) {
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+		Actual.setSelected(false);
 		Actual = actual;
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+		Actual.setSelected(true);
 	}
 
 	public void refresh() {
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+		Actual.setSelected(false);
 		Actual=ActualBase;
-		Actual.setId(Constants.TEMPLATEID);
-		PanelTemplate = new VerticalPanel();
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+		Actual.setSelected(true);
+		ActualBase.clear();
+		PanelTemplate.clear();
+		ArbitroLlamadasTemplates.getInstance().clear();
+		PanelTemplate.add(Actual);
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
-		exportServiceHolder.getTemplateCategoriesByIds(T.getCategories(), new AsyncCallback<ArrayList<TemplateCategory>>() {
+		exportServiceHolder.loadTemplateById(T.getId(), new AsyncCallback<Template>() {
 			
-			public void onSuccess(ArrayList<TemplateCategory> result) {
-				LoadingPanel.getInstance().hide();
-				for (TemplateCategory templateCategory : result) {
-					RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, null);
-					Nuevo.setclickHandel(new ClickHandler() {
-						
-						public void onClick(ClickEvent event) {
-							ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
-							Actual=Mas.getT();
-							
+			public void onSuccess(Template result) {
+				
+				ActualBaseT.setSubCategories(result.getCategories());
+				T=result;
+				exportServiceHolder.getTemplateCategoriesByIds(T.getCategories(), new AsyncCallback<ArrayList<TemplateCategory>>() {
+					
+					public void onSuccess(ArrayList<TemplateCategory> result) {
+						LoadingPanel.getInstance().hide();
+						for (TemplateCategory templateCategory : result) {
+							RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual);
+							Nuevo.setclickHandel(new ClickHandler() {
+								
+								public void onClick(ClickEvent event) {
+									ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
+									Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+									Actual.setSelected(false);
+									Actual=Mas.getTRep();
+									Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+									Actual.setSelected(true);
+									
+								}
+							});
+							ActualBase.addSon(Nuevo);
+							ArbitroLlamadasTemplates.getInstance().addElement(Nuevo);
 						}
-					});
-					PanelTemplate.add(Nuevo);
-					ArbitroLlamadasTemplates.getInstance().addElement(Nuevo);
-				}
-				
-				
+						
+						
+					}
+					
+					public void onFailure(Throwable caught) {
+						LoadingPanel.getInstance().hide();
+						Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES1+ T.getName() + ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES2);
+						
+					}
+				});
 			}
 			
 			public void onFailure(Throwable caught) {
 				LoadingPanel.getInstance().hide();
-				Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES1+ T.getName() + ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES2);
+				Window.alert(ErrorConstants.ERROR_REFRESH_TEMPLATES);
 				
 			}
 		});
+		
+	}
+	
+	public static RepresentacionTemplateCategory getActual() {
+		return Actual;
 	}
 
 }

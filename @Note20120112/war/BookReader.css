@@ -357,7 +357,7 @@ background: transparent url('/BotonesSueltos/Boton.jpg') no-repeat center center
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
-	color: Scrollbar;
+	color: red;
 	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;

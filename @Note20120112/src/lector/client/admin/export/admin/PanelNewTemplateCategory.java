@@ -76,7 +76,7 @@ public class PanelNewTemplateCategory extends PopupPanel {
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (!textBox.getText().isEmpty()){
-					TemplateCategory T=new TemplateCategory(textBox.getName(), new ArrayList<Long>(), new ArrayList<Long>(), TC.getId(), TC.getTemplateId());
+					TemplateCategory T=new TemplateCategory(textBox.getText(), new ArrayList<Long>(), new ArrayList<Long>(), TC.getId(), TC.getTemplateId());
 					exportServiceHolder.saveTemplateCategory(T , new AsyncCallback<Void>() {
 						
 						public void onSuccess(Void result) {
