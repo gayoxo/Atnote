@@ -49,12 +49,34 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityManager.close();
 
 		if (templateCategory.getFatherId().equals(Constants.TEMPLATEID)) {
-			Template template = loadTemplateById(templateCategory.getTemplateId());
+			Template template = loadTemplateById(templateCategory
+					.getTemplateId());
 			template.getCategories().add(templateCategory.getId());
-		}else{
-			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory.getFatherId());
-			templateCategoryFather.getSubCategories().add(templateCategory.getId());
+			saveTemplate(template);
+		} else {
+			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory
+					.getFatherId());
+			templateCategoryFather.getSubCategories().add(
+					templateCategory.getId());
+			savePlainCategory(templateCategoryFather);
 		}
+
+	}
+
+	public void savePlainCategory(TemplateCategory templateCategory) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		if (templateCategory.getId() == null) {
+			entityManager.persist(templateCategory);
+		} else {
+
+			entityManager.merge(templateCategory);
+		}
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.close();
+
 	}
 
 	public void deleteTemplate(Long templateId) {
