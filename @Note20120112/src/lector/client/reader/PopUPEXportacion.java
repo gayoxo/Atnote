@@ -75,7 +75,7 @@ public class PopUPEXportacion extends PopupPanel {
 								public void onSuccess(String result) {
 									FormPanel formPanel = new FormPanel();
 									formPanel
-											.setEncoding(FormPanel.ENCODING_MULTIPART);
+											.setEncoding(FormPanel.ENCODING_URLENCODED);
 									formPanel.setMethod(FormPanel.METHOD_POST);
 									TextArea textArea = new TextArea();
 									textArea.setText(result);

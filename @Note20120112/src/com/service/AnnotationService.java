@@ -101,7 +101,7 @@ public class AnnotationService {
 	@POST
 	@Path("html/produce")
 	@Produces(MediaType.TEXT_HTML)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String getHTML(@FormParam("html") String html)
 			throws IOException {
 		return html;
