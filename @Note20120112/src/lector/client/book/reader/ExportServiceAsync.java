@@ -32,6 +32,9 @@ public interface ExportServiceAsync {
 	void getTemplatesByIds(ArrayList<Long> ids,
 			AsyncCallback<ArrayList<Template>> callback);
 
+	void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId,
+			AsyncCallback<Void> callback);
+
 
 
 }

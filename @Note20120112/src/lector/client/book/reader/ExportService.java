@@ -8,12 +8,6 @@ import java.util.ArrayList;
 
 import lector.client.admin.export.template.Template;
 import lector.client.admin.export.template.TemplateCategory;
-import lector.client.login.GroupApp;
-import lector.client.reader.Book;
-import lector.client.reader.BookNotFoundException;
-import lector.client.reader.GeneralException;
-import lector.client.reader.NullParameterException;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -43,5 +37,7 @@ public interface ExportService extends RemoteService {
 			ArrayList<Long> categoriesIds);
 
 	public ArrayList<Template> getTemplatesByIds(ArrayList<Long> ids);
+	
+	public void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId);
 
 }

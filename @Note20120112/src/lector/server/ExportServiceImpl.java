@@ -219,4 +219,44 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		return listTemplates;
 	}
 
+	public void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId) {
+		removeCategoryFromParent(fromFatherId, categoryId);
+		addNewFatherToCategory(toFatherId, categoryId);
+		if (toFatherId.equals(Constants.TEMPLATEID)) {
+			addChildToTemplate(categoryId, toFatherId);
+		} else {
+			addChildToCategory(categoryId, toFatherId);
+		}
+
+	}
+
+	private void addChildToCategory(Long categoryId, Long toFatherId) {
+		TemplateCategory templateCategory = loadTemplateCategoryById(toFatherId);
+		templateCategory.getSubCategories().add(categoryId);
+		saveTemplateCategory(templateCategory);
+
+	}
+
+	private void addChildToTemplate(Long categoryId, Long toFatherId) {
+		Template template = loadTemplateById(toFatherId);
+		template.getCategories().add(categoryId);
+		saveTemplate(template);
+	}
+
+	private void addNewFatherToCategory(Long toFatherId, Long categoryId) {
+		TemplateCategory templateCategory = loadTemplateCategoryById(categoryId);
+		templateCategory.setFatherId(toFatherId);
+		saveTemplateCategory(templateCategory);
+
+	}
+
+	private void removeCategoryFromParent(Long fromFatherId, Long categoryId) {
+		TemplateCategory templateCategoryFather = loadTemplateCategoryById(fromFatherId);
+		if (templateCategoryFather.getSubCategories().contains(categoryId)) {
+			templateCategoryFather.getSubCategories().remove(categoryId);
+			saveTemplateCategory(templateCategoryFather);
+		}
+
+	}
+
 }
