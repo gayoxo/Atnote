@@ -48,30 +48,26 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityTransaction.commit();
 		entityManager.close();
 
+		 try {
+		 Thread.sleep(1000l);
+		 } catch (InterruptedException e) {
+		 // TODO Auto-generated catch block
+		 e.printStackTrace();
+		 }
+
 		if (templateCategory.getFatherId().equals(Constants.TEMPLATEID)) {
 			Template template = loadTemplateById(templateCategory
 					.getTemplateId());
-			//Template templateToSave = swapTemplate(template);
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			template.getCategories().add(templateCategory.getId());
-			saveTemplate(template);
+			Template templateToSave = swapTemplate(template);
+			saveTemplate(templateToSave);
 		} else {
 			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory
 					.getFatherId());
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			templateCategoryFather.getSubCategories().add(
 					templateCategory.getId());
-			savePlainCategory(templateCategoryFather);
+			TemplateCategory categoryToSave = swapCategory(templateCategoryFather);
+			savePlainCategory(categoryToSave);
 		}
 
 	}
@@ -117,8 +113,13 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 				+ templateCategoryId;
 		templateCategorys = entityManager.createQuery(sql).getResultList();
 		if (!templateCategorys.isEmpty()) {
+			for (Long categoryId : templateCategorys.get(0).getSubCategories()) {
+				deleteTemplateCategory(categoryId);
+			}
 			entityManager.remove(templateCategorys.get(0));
 			entityTransaction.commit();
+			entityManager.close();
+
 		}
 
 	}
@@ -232,11 +233,12 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		return listTemplates;
 	}
 
-	public void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId) {
-		removeCategoryFromParent(fromFatherId, categoryId);
+	public void moveCategory(Long fromFatherId, Long toFatherId,
+			Long categoryId, Long templateId) {
+		removeCategoryFromParent(fromFatherId, categoryId, templateId);
 		addNewFatherToCategory(toFatherId, categoryId);
 		if (toFatherId.equals(Constants.TEMPLATEID)) {
-			addChildToTemplate(categoryId, toFatherId);
+			addChildToTemplate(categoryId, templateId);
 		} else {
 			addChildToCategory(categoryId, toFatherId);
 		}
@@ -259,17 +261,51 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	private void addNewFatherToCategory(Long toFatherId, Long categoryId) {
 		TemplateCategory templateCategory = loadTemplateCategoryById(categoryId);
 		templateCategory.setFatherId(toFatherId);
-		saveTemplateCategory(templateCategory);
+		savePlainCategory(templateCategory);
 
 	}
 
-	private void removeCategoryFromParent(Long fromFatherId, Long categoryId) {
-		TemplateCategory templateCategoryFather = loadTemplateCategoryById(fromFatherId);
-		if (templateCategoryFather.getSubCategories().contains(categoryId)) {
-			templateCategoryFather.getSubCategories().remove(categoryId);
-			saveTemplateCategory(templateCategoryFather);
+	private void removeCategoryFromParent(Long fromFatherId, Long categoryId,
+			Long templateId) {
+		if (fromFatherId.equals(Constants.TEMPLATEID)) {
+			Template template = loadTemplateById(templateId);
+			if (template.getCategories().contains(categoryId)) {
+				template.getCategories().remove(categoryId);
+				saveTemplate(template);
+			}
+		} else {
+			TemplateCategory templateCategoryFather = loadTemplateCategoryById(fromFatherId);
+			if (templateCategoryFather.getSubCategories().contains(categoryId)) {
+				templateCategoryFather.getSubCategories().remove(categoryId);
+				TemplateCategory categoryToSave = swapCategory(templateCategoryFather);
+				savePlainCategory(categoryToSave);
+			}
+
 		}
 
+	}
+
+	private TemplateCategory swapCategory(
+			TemplateCategory templateCategoryFather) {
+		TemplateCategory templateCategory = new TemplateCategory();
+		templateCategory.setId(templateCategoryFather.getId());
+		templateCategory.setFatherId(templateCategoryFather.getFatherId());
+		templateCategory.setName(templateCategoryFather.getName());
+		templateCategory.setOrder(templateCategoryFather.getOrder());
+		templateCategory.setSubCategories(templateCategoryFather
+				.getSubCategories());
+		templateCategory.setTemplateId(templateCategoryFather.getTemplateId());
+		return templateCategory;
+	}
+
+	private Template swapTemplate(Template templateToSwap) {
+		Template template = new Template();
+		template.setId(templateToSwap.getId());
+		template.setName(templateToSwap.getName());
+
+		template.setCategories(templateToSwap.getCategories());
+		template.setUserApp(templateToSwap.getUserApp());
+		return template;
 	}
 
 }

@@ -210,6 +210,29 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		return htmlReturn;
 	}
 
+	private String logoImage(){
+		BookBlob logo = loadBookBlobById(283002l);
+		String blobKeyString = logo.getWebLinks().get(0);
+		String[] split = blobKeyString.split("=");
+		BlobKey blobKey = new BlobKey(split[1]);
+		BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
+		BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
+
+		ImagesService imagesService = ImagesServiceFactory.getImagesService();
+		Image oldImage = ImagesServiceFactory.makeImageFromBlob(blobKey);
+		Transform resize = ImagesServiceFactory.makeResize(300,200);
+		
+		Image newImage = imagesService.applyTransform(resize, oldImage);
+		byte[] newImageData = newImage.getImageData();
+		Base64 base64codec = new Base64();
+		base64codec.encode(newImageData);
+		String encodedText = new String(Base64.encodeBase64(newImageData));
+		encodedText = "data:image/" + blobInfo.getContentType() + ";base64,"
+				+ encodedText;
+
+		String htmlReturn = "<img src=" + encodedText + ">";
+		return htmlReturn;
+	}
 	private String getImageContentType(String urlImage) {
 
 		String contentType = null;
@@ -262,18 +285,19 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 				"<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>");
 		html.append("<title>Export:");
 		html.append(System.nanoTime());
-		html.append("</title><body>");
-		html.append("<table  align=\"center\" border=\"1\">");
+		html.append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
+		html.append(System.nanoTime());
+		html.append("</h1></td><td align=\"right\">"+logoImage()+"</td></tr></table>");
 		for (ExportObject exportObject : exportObjects) {
-			html.append("<tr>");
+			html.append("<tr><hr><table align=\"center\" width=\"80%\" border=\"1\" bordercolor=\"blue\">");
 			String imageURL = exportObject.getImageURL();
 			ArrayList<TextSelector> anchors = exportObject.getAnnotation()
 					.getTextSelectors();
 			int imageWidth = exportObject.getWidth();
 			int imageHeight = exportObject.getHeight();
-			html.append("<td>"
+			html.append("<td rowspan=\"3\"><p>"
 					+ produceCutImagesList(imageURL, anchors, imageWidth,
-							imageHeight) + "</td><td>");
+							imageHeight) + "</p></td><td colspan=\"2\"><p>");
 			String Clear;
 			try {
 				Clear = new String(exportObject.getAnnotation().getComment()
@@ -281,16 +305,17 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 			} catch (UnsupportedEncodingException e) {
 				Clear = exportObject.getAnnotation().getComment().getValue();
 			}
-			html.append(Clear + "</td>");
+			html.append(Clear + "</p></td></tr><tr>");
 			ArrayList<String> fileNames = generalAppService
 					.getFileNamesByIds(exportObject.getAnnotation()
 							.getFileIds());
 			for (String fileName : fileNames) {
-				html.append("<td>" + fileName + ", </td>");
+				html.append("<td colspan=\"2\"><p>" + fileName + ", </p></td>");
 			}
-			html.append("</tr>");
+			html.append("</tr><tr><td><p>" +exportObject.getAuthorName() + "</p></td><td><p>" + exportObject.getDate() + "</p></td></tr>");
+			html.append("</table></body></html>");
 		}
-		html.append("</table></body></html>");
+	
 		try {
 			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
 			return htmlUTF;

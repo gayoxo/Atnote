@@ -38,6 +38,6 @@ public interface ExportService extends RemoteService {
 
 	public ArrayList<Template> getTemplatesByIds(ArrayList<Long> ids);
 	
-	public void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId);
+	public void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId, Long templateId);
 
 }

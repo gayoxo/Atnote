@@ -8,6 +8,8 @@ public class ExportObject implements Serializable {
 	private String imageURL;
 	private int width;
 	private int height;
+	private String authorName;
+	private String date;
 
 	public ExportObject() {
 		super();
@@ -19,6 +21,17 @@ public class ExportObject implements Serializable {
 		this.imageURL = imageURL;
 		this.width = width;
 		this.height = height;
+	}
+
+	public ExportObject(Annotation annotation, String imageURL, int width,
+			int height, String authorName, String date) {
+		super();
+		this.annotation = annotation;
+		this.imageURL = imageURL;
+		this.width = width;
+		this.height = height;
+		this.authorName = authorName;
+		this.date = date;
 	}
 
 	public Annotation getAnnotation() {
@@ -51,6 +64,22 @@ public class ExportObject implements Serializable {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 }

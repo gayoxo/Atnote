@@ -197,4 +197,8 @@ public class EditTemplate implements EntryPoint {
 		PGT.refresh();
 		
 	}
+	
+	public static PanelGestionTemplate getPGT() {
+		return PGT;
+	}
 }

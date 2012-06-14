@@ -3,11 +3,17 @@ package lector.client.admin.export.admin;
 
 import lector.client.admin.export.template.Template;
 import lector.client.admin.export.template.TemplateCategory;
+import lector.client.book.reader.ExportService;
+import lector.client.book.reader.ExportServiceAsync;
+import lector.client.controler.ErrorConstants;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -23,16 +29,20 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class RepresentacionTemplateCategory extends Composite {
 
 	private TemplateCategory T;
-	private VerticalPanel AnnotPanel;
+	private VerticalPanelTemplate AnnotPanel;
 	private RepresentacionTemplateCategory Father;
 	private ButtonTemplateRep BotonSelect;
 	private boolean Selected;
+	private RepresentacionTemplateCategory YO;
+	private ExportServiceAsync exportServiceHolder = GWT
+	.create(ExportService.class);
 	
 	public RepresentacionTemplateCategory(TemplateCategory t,RepresentacionTemplateCategory father) {
 		
 		T=t;
 		Father=father;
 		Selected=false;
+		YO=this;
 		VerticalPanel verticalPanel = new VerticalPanel();
 		initWidget(verticalPanel);
 		verticalPanel.setHeight("100%");
@@ -67,6 +77,41 @@ public class RepresentacionTemplateCategory extends Composite {
 		btnNewButton_1.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+			}
+		});
+		btnNewButton_1.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				if (YO.getParent() instanceof VerticalPanelTemplate)
+				{			
+					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
+					if (Padreact.getParent() instanceof VerticalPanelTemplate)
+					{			
+						RepresentacionTemplateCategory Padrenew=((VerticalPanelTemplate) Padreact.getParent()).getFatherObject();
+						
+						exportServiceHolder.moveCategory(Padreact.getT().getId(), Padrenew.getT().getId(), YO.getT().getId(), YO.getT().getTemplateId(), new AsyncCallback<Void>() {
+							
+							public void onSuccess(Void result) {
+								EditTemplate.getPGT().refresh();
+								
+							}
+							
+							public void onFailure(Throwable caught) {
+								Window.alert(ErrorConstants.ERROR_ON_MOVE_CATEGORY_PROMOTING);	
+								
+							}
+						});
+						
+					}else
+					{
+					Window.alert(ErrorConstants.ERROR_TOP_LEVEL_TEMPLATECATEGORY);	
+					}
+					
+				}else
+				{
+				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
+				}
+				
 			}
 		});
         
@@ -192,7 +237,7 @@ public class RepresentacionTemplateCategory extends Composite {
 		horizontalPanel_3.add(simplePanel);
 		simplePanel.setWidth("35px");
 		
-		AnnotPanel = new VerticalPanel();
+		AnnotPanel = new VerticalPanelTemplate(YO);
 		horizontalPanel_3.add(AnnotPanel);
 		AnnotPanel.setWidth("100%");
 		

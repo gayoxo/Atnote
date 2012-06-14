@@ -20,5 +20,8 @@ public class ErrorConstants {
 	public static String ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES1="Error retriving internal categories for template";
 	public static String ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES2=". Please go back and reload it";
 	public static String ERROR_SAVING_NEW_TEMPLATE_CATEGORY="Error saving new template category, please try again";
+	public static String ERROR_THIS_IS_A_TEMPLATE="This is a Template, a template cannot be promoted";
+	public static String ERROR_TOP_LEVEL_TEMPLATECATEGORY="This is the top level of the template, it cannot be promoted more";
+	public static String ERROR_ON_MOVE_CATEGORY_PROMOTING="Error promoting the category, please try again";
 
 }

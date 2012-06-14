@@ -33,7 +33,7 @@ public interface ExportServiceAsync {
 			AsyncCallback<ArrayList<Template>> callback);
 
 	void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId,
-			AsyncCallback<Void> callback);
+			Long templateId, AsyncCallback<Void> callback);
 
 
 
