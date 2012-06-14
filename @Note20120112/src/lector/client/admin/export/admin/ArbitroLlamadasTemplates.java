@@ -17,20 +17,20 @@ import lector.client.reader.LoadingPanel;
 
 public class ArbitroLlamadasTemplates {
 
-	private Stack<RepresentacionTemplateCategory> Pila =new Stack<RepresentacionTemplateCategory>();
+	private ArrayList<RepresentacionTemplateCategory> Pila =new ArrayList<RepresentacionTemplateCategory>();
 	private boolean finales=true;
 	private static ArbitroLlamadasTemplates YO;
 	private ExportServiceAsync exportServiceHolder = GWT
 			.create(ExportService.class);
 	
 	public ArbitroLlamadasTemplates() {
-		Pila =new Stack<RepresentacionTemplateCategory>();
+		Pila =new ArrayList<RepresentacionTemplateCategory>();
 		finales=true;
 	}
 	
 	
 	public void clear() {
-		Pila =new Stack<RepresentacionTemplateCategory>();
+		Pila =new ArrayList<RepresentacionTemplateCategory>();
 		finales=true;
 
 	}
@@ -51,7 +51,7 @@ public class ArbitroLlamadasTemplates {
 	private void llamadacontinua() {
 
 		finales=false;
-		RepresentacionTemplateCategory EL=Pila.peek();
+		RepresentacionTemplateCategory EL=Pila.get(0);
 		TemplateCategory TC=EL.getT();
 		if (TC.getSubCategories()!=null&&!TC.getSubCategories().isEmpty()){
 			LoadingPanel.getInstance().center();
@@ -60,7 +60,9 @@ public class ArbitroLlamadasTemplates {
 				
 				public void onSuccess(ArrayList<TemplateCategory> result) {
 					LoadingPanel.getInstance().hide();
-					procesallamada(result,Pila.pop());
+					RepresentacionTemplateCategory EL=Pila.get(0);
+					Pila.remove(EL);
+					procesallamada(result,EL);
 					if (!Pila.isEmpty())
 						llamadacontinua();
 					else finales=true;
@@ -69,14 +71,15 @@ public class ArbitroLlamadasTemplates {
 				public void onFailure(Throwable caught) {
 					LoadingPanel.getInstance().hide();
 					Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH);
-					Pila=new Stack<RepresentacionTemplateCategory>();
+					Pila=new ArrayList<RepresentacionTemplateCategory>();
 					finales=true;
 					
 				}
 			});
 		}
 		else {
-			Pila.pop();
+			RepresentacionTemplateCategory ELL=Pila.get(0);
+			Pila.remove(ELL);
 			if (!Pila.isEmpty())
 				llamadacontinua();
 			else finales=true;
@@ -97,7 +100,7 @@ public class ArbitroLlamadasTemplates {
 					
 				}
 			});
-			Pila.addElement(Nuevo);
+			Pila.add(Nuevo);
 		}
 		
 		

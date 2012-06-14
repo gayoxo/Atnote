@@ -51,11 +51,24 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		if (templateCategory.getFatherId().equals(Constants.TEMPLATEID)) {
 			Template template = loadTemplateById(templateCategory
 					.getTemplateId());
+			//Template templateToSave = swapTemplate(template);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			template.getCategories().add(templateCategory.getId());
 			saveTemplate(template);
 		} else {
 			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory
 					.getFatherId());
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			templateCategoryFather.getSubCategories().add(
 					templateCategory.getId());
 			savePlainCategory(templateCategoryFather);
