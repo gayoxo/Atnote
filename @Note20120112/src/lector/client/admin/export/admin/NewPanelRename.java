@@ -2,50 +2,45 @@ package lector.client.admin.export.admin;
 
 import java.util.ArrayList;
 
-import lector.client.admin.export.newTemplate;
 import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
-import lector.client.controler.Constants;
 import lector.client.controler.ErrorConstants;
 import lector.client.controler.InformationConstants;
 import lector.client.reader.LoadingPanel;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PanelNewTemplateCategory extends PopupPanel {
-
+public class NewPanelRename extends PopupPanel {
+	
+	
 	private static String SAVE = "Save";
 	private static String CLOSE = "Close";
 	private ExportServiceAsync exportServiceHolder = GWT
 			.create(ExportService.class);
 	private TemplateCategory TC;
 	private TextBox textBox;
-	private EditTemplate PadreLLamada;
 	
-	public PanelNewTemplateCategory(TemplateCategory tC, EditTemplate yO) {
-		
-		TC=tC;
-		PadreLLamada=yO;
+	public NewPanelRename(RepresentacionTemplateCategory tC) {
+		TC=tC.getT();
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -53,7 +48,7 @@ public class PanelNewTemplateCategory extends PopupPanel {
 		setWidget(verticalPanel);
 		verticalPanel.setSize("340px", "155px");
 		
-		Label lblNewLabel = new Label(InformationConstants.CREATE_NEW_TEMPLATECATEGORY + TC.getName());
+		Label lblNewLabel = new Label(InformationConstants.RENAME_TEMPLATE_CATEGORY + TC.getName());
 		verticalPanel.add(lblNewLabel);
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
@@ -106,15 +101,17 @@ public class PanelNewTemplateCategory extends PopupPanel {
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (!textBox.getText().isEmpty()){
-					TemplateCategory T=new TemplateCategory(textBox.getText(), new ArrayList<Long>(), new ArrayList<Long>(), TC.getId(), TC.getTemplateId());
-					T.setOrder(TC.getSubCategories().size()+1);
+					
+					TC.setName(textBox.getText()); 
+//					TemplateCategory T=new TemplateCategory(textBox.getText(), new ArrayList<Long>(), new ArrayList<Long>(), TC.getId(), TC.getTemplateId());
+//					TC.setOrder(TC.getSubCategories().size()+1);
 					LoadingPanel.getInstance().center();
 					LoadingPanel.getInstance().setLabelTexto(InformationConstants.SAVING);
-					exportServiceHolder.saveTemplateCategory(T , new AsyncCallback<Void>() {
+					exportServiceHolder.saveTemplateCategory(TC , new AsyncCallback<Void>() {
 						
 						public void onSuccess(Void result) {
 							LoadingPanel.getInstance().hide();
-							PadreLLamada.refresh();
+							EditTemplate.getPGT().refresh();
 							hide();
 							
 						}
@@ -129,7 +126,6 @@ public class PanelNewTemplateCategory extends PopupPanel {
 			}
 		});
 		Botonera.add(btnNewButton_1);
-		TC=tC;
 	
 	
 	btnNewButton_1.setStyleName("gwt-ButtonCenter");
@@ -156,4 +152,6 @@ public class PanelNewTemplateCategory extends PopupPanel {
 });
 	
 	}
+	
+
 }

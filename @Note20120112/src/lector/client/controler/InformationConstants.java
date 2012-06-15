@@ -7,5 +7,7 @@ public class InformationConstants {
 	public static String THIS_IS_A_LOCAL_BOOK = "This is a local book, can't be shown with google view";
 	public static String TYPE_NAME_FOR_THE_NEW_EXPORT_TEMPLATE= "Type a name for the new Export template";
 	public static String NAME="Name";
+	public static String SAVING="Saving...";
+	public static String RENAME_TEMPLATE_CATEGORY="Insert the new name for the Template category  ";
 
 }

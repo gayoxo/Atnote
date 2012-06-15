@@ -140,7 +140,21 @@ public class RepresentacionTemplateCategory extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
 			}
 		});
-		
+		btnNewButton_2.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				if (YO.getParent() instanceof VerticalPanelTemplate)
+				{			
+					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
+					//Borrar del padre actualizar alturas
+					
+				}else
+				{
+				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
+				}
+				
+			}
+		});
 		
 		BotonSelect = new ButtonTemplateRep(T.getName(),this);
 	
@@ -202,6 +216,21 @@ public class RepresentacionTemplateCategory extends Composite {
 				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
 			}
 		});
+		btnNewButton_3.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				if (YO.getParent() instanceof VerticalPanelTemplate)
+				{			
+					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
+					//Mover los Pesos salvar los dos
+					
+				}else
+				{
+				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
+				}
+				
+			}
+		});
 		
 		
 		Button btnNewButton_4 = new Button("DOWN");
@@ -226,6 +255,21 @@ public class RepresentacionTemplateCategory extends Composite {
 		btnNewButton_4.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
 				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+			}
+		});
+		btnNewButton_4.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				if (YO.getParent() instanceof VerticalPanelTemplate)
+				{			
+					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
+					//Mover los Pesos salvar los dos
+					
+				}else
+				{
+				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
+				}
+				
 			}
 		});
 		
@@ -276,5 +320,13 @@ public class RepresentacionTemplateCategory extends Composite {
 	
 	public void setSelected(boolean selected) {
 		Selected = selected;
+	}
+	
+	public RepresentacionTemplateCategory getFather() {
+		return Father;
+	}
+	
+	public VerticalPanelTemplate getAnnotPanel() {
+		return AnnotPanel;
 	}
 }

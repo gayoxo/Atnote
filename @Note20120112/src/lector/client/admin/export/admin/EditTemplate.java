@@ -1,8 +1,11 @@
 package lector.client.admin.export.admin;
 
+import java.util.Stack;
+
 import lector.client.admin.export.template.Template;
 import lector.client.admin.export.template.TemplateCategory;
 import lector.client.controler.Controlador;
+import lector.client.controler.ErrorConstants;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -20,11 +23,13 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Widget;
 
 public class EditTemplate implements EntryPoint {
 
@@ -145,6 +150,37 @@ public class EditTemplate implements EntryPoint {
 		}
 	});
 		
+		Delete.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				RepresentacionTemplateCategory TC=PanelGestionTemplate.getActual();
+				RepresentacionTemplateCategory TCP=TC.getFather();
+				if (TCP!=null)
+				{
+					Stack<RepresentacionTemplateCategory> Salvar=new Stack<RepresentacionTemplateCategory>();
+					for (int i = 0; i < TCP.getAnnotPanel().getWidgetCount(); i++) {
+						
+						RepresentacionTemplateCategory R=(RepresentacionTemplateCategory) TCP.getAnnotPanel().getWidget(i);
+						if (!R.getT().getId().equals(TC.getT().getId()))
+						{
+							R.getT().setOrder(i+1);
+							Salvar.add(R);
+						}
+						
+					ArbitroActualizacionTemplates A=new ArbitroActualizacionTemplates(Salvar, TC);
+					A.Delete();
+						
+					} 
+					
+				}else
+				{
+					Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE_DELETE);	
+				}
+				
+			}
+		});
+		
 		Button Rename = new Button("Rename");
 		verticalPanel.add(Rename);
 		Rename.setWidth("100%");
@@ -177,7 +213,19 @@ public class EditTemplate implements EntryPoint {
 				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
 			
 		}
+			
 	});
+		Rename.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+				RepresentacionTemplateCategory TC=PanelGestionTemplate.getActual();
+				NewPanelRename NPR=new NewPanelRename(TC);
+				NPR.center();
+				
+				
+			}
+		});
 		
 		scrollPanel = new ScrollPanel();
 		splitLayoutPanel.add(scrollPanel);

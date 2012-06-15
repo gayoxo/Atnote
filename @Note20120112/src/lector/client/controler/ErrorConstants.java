@@ -23,5 +23,7 @@ public class ErrorConstants {
 	public static String ERROR_THIS_IS_A_TEMPLATE="This is a Template, a template cannot be promoted";
 	public static String ERROR_TOP_LEVEL_TEMPLATECATEGORY="This is the top level of the template, it cannot be promoted more";
 	public static String ERROR_ON_MOVE_CATEGORY_PROMOTING="Error promoting the category, please try again";
-
+	public static String ERROR_UPDATING_TEMPLATE_CATEGORY="Error updating template category";
+	public static String ERROR_THIS_IS_A_TEMPLATE_DELETE="This is a Template, a template cannot be deleted here, go back if you want to delete the entire category";
+	public static String ERROR_DELETING_TEMPLATE_CATEGORY="Error deleting template category";
 }
