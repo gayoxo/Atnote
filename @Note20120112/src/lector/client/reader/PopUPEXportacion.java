@@ -64,7 +64,7 @@ public class PopUPEXportacion extends PopupPanel {
 					for (Widget widget : verticalPanel) {
 						ElementoExportacion EE = (ElementoExportacion) widget;
 						list.add(new ExportObject(EE.getAnnotation(), EE
-								.getImagen().getUrl(),EE.getImagen().getWidth(),EE.getImagen().getHeight()));
+								.getImagen().getUrl(),EE.getImagen().getWidth(),EE.getImagen().getHeight(),EE.getAnnotation().getUserName(),EE.getAnnotation().getCreatedDate().toGMTString()));
 						// EnvioExportacion EnEx=new
 						// EnvioExportacion(EE.getAnnotation(), EE.getImagen());
 						// ExportResult.addResult(EnEx);
