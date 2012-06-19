@@ -9,5 +9,6 @@ public class InformationConstants {
 	public static String NAME="Name";
 	public static String SAVING="Saving...";
 	public static String RENAME_TEMPLATE_CATEGORY="Insert the new name for the Template category  ";
+	public static String WAIT_RESULTS ="Export results will be opened in a new window please wait to load completly";
 
 }

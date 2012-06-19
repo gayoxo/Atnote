@@ -350,12 +350,14 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 					+ produceCutImagesList(imageURL, anchors, imageWidth,
 							imageHeight) + "</p></td><td colspan=\"2\"><p>");
 			String Clear;
-			try {
-				Clear = new String(exportObject.getAnnotation().getComment()
-						.getValue().getBytes(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				Clear = exportObject.getAnnotation().getComment().getValue();
-			}
+			Clear = exportObject.getAnnotation().getComment().getValue();
+//			try {
+//				Clear = new String(exportObject.getAnnotation().getComment()
+//						.getValue().getBytes(), "UTF-8");
+//			} catch (UnsupportedEncodingException e) {
+//				Clear = exportObject.getAnnotation().getComment().getValue();
+//			}
+
 			html.append(Clear + "</p></td></tr><tr>");
 			ArrayList<String> fileNames = generalAppService
 					.getFileNamesByIds(exportObject.getAnnotation()
@@ -370,14 +372,14 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		html.append("</table>");
 /*		}*/
 	
-		try {
-			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
-			return htmlUTF;
-		} catch (UnsupportedEncodingException e) {
-
-			return html.toString();
-		}
-
+//		try {
+//			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
+//			return htmlUTF;
+//		} catch (UnsupportedEncodingException e) {
+//
+//			return html.toString();
+//		}
+		return html.toString();
 	}
 
 }

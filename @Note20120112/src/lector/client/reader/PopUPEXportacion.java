@@ -70,7 +70,8 @@ public class PopUPEXportacion extends PopupPanel {
 						// ExportResult.addResult(EnEx);
 					}
 					
-					new arbitroLlamadas(list);
+					arbitroLlamadas A=new arbitroLlamadas(list);
+					A.llamadaBucle();
 					/*imageServiceHolder.loadHTMLStringForExport(list,
 							new AsyncCallback<String>() {
 
