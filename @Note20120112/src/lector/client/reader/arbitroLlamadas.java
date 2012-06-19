@@ -25,7 +25,7 @@ public class arbitroLlamadas {
 	Result.append(System.currentTimeMillis());
 	Result.append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
 	Result.append(System.currentTimeMillis());
-	Result.append("</h1></td><td align=\"right\"><img src=\"..\\Logo.jpg\"></td></tr></table>");;
+	Result.append("</h1></td><td align=\"right\"><img src=\"http://a-note.appspot.com/Logo.jpg\" alt=\"atnote\" height=\"200\" width=\"400\" /> </td></tr></table>");;
 	
 	llamadaBucle();
 	}
