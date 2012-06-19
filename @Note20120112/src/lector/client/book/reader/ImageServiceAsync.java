@@ -41,4 +41,8 @@ public interface ImageServiceAsync {
 	void imageFromBlob(String blobKey, TextSelector anchor, int imageWidth,
 			int imageHeight, AsyncCallback<String> callback);
 
+
+	void loadHTMLStringForExportUni(ExportObject exportObject,
+			AsyncCallback<String> callback);
+
 }

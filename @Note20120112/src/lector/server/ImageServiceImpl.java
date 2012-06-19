@@ -210,7 +210,7 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		return htmlReturn;
 	}
 
-	private String logoImage(){
+	public String logoImage(){
 		BookBlob logo = loadBookBlobById(283002l);
 		String blobKeyString = logo.getWebLinks().get(0);
 		String[] split = blobKeyString.split("=");
@@ -309,12 +309,66 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 			ArrayList<String> fileNames = generalAppService
 					.getFileNamesByIds(exportObject.getAnnotation()
 							.getFileIds());
+			html.append("<td colspan=\"2\"><p>");
 			for (String fileName : fileNames) {
-				html.append("<td colspan=\"2\"><p>" + fileName + ", </p></td>");
+				html.append(fileName + ", ");
 			}
+			html.append("</p></td>");
 			html.append("</tr><tr><td><p>" +exportObject.getAuthorName() + "</p></td><td><p>" + exportObject.getDate() + "</p></td></tr>");
-			html.append("</table></body></html>");
+			html.append("<tr><td colspan=\"2\"></td></tr>");
+			html.append("</table>");
 		}
+		html.append("</body></html>");
+	
+		try {
+			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
+			return htmlUTF;
+		} catch (UnsupportedEncodingException e) {
+
+			return html.toString();
+		}
+
+	}
+	
+	public String loadHTMLStringForExportUni(ExportObject exportObject) {
+		StringBuffer html = new StringBuffer();
+		/*StringBuffer html = new StringBuffer(
+				"<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>");
+		html.append("<title>Export:");
+		html.append(System.nanoTime());
+		html.append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
+		html.append(System.nanoTime());
+		html.append("</h1></td><td align=\"right\">"+logoImage()+"</td></tr></table>");
+		for (ExportObject exportObject : exportObjects) {*/
+			html.append("<tr><hr><table align=\"center\" width=\"80%\" border=\"1\" bordercolor=\"blue\">");
+			String imageURL = exportObject.getImageURL();
+			ArrayList<TextSelector> anchors = exportObject.getAnnotation()
+					.getTextSelectors();
+			int imageWidth = exportObject.getWidth();
+			int imageHeight = exportObject.getHeight();
+			html.append("<td rowspan=\"4\"><p>"
+					+ produceCutImagesList(imageURL, anchors, imageWidth,
+							imageHeight) + "</p></td><td colspan=\"2\"><p>");
+			String Clear;
+			try {
+				Clear = new String(exportObject.getAnnotation().getComment()
+						.getValue().getBytes(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				Clear = exportObject.getAnnotation().getComment().getValue();
+			}
+			html.append(Clear + "</p></td></tr><tr>");
+			ArrayList<String> fileNames = generalAppService
+					.getFileNamesByIds(exportObject.getAnnotation()
+							.getFileIds());
+			html.append("<td colspan=\"2\"><p>");
+			for (String fileName : fileNames) {
+				html.append(fileName + ", ");
+			}
+			html.append("</p></td>");
+			html.append("</tr><tr><td><p>" +exportObject.getAuthorName() + "</p></td><td><p>" + exportObject.getDate() + "</p></td></tr>");
+			html.append("<tr><td colspan=\"2\"></td></tr>");
+		html.append("</table>");
+/*		}*/
 	
 		try {
 			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");

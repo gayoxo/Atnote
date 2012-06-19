@@ -69,7 +69,9 @@ public class PopUPEXportacion extends PopupPanel {
 						// EnvioExportacion(EE.getAnnotation(), EE.getImagen());
 						// ExportResult.addResult(EnEx);
 					}
-					imageServiceHolder.loadHTMLStringForExport(list,
+					
+					new arbitroLlamadas(list);
+					/*imageServiceHolder.loadHTMLStringForExport(list,
 							new AsyncCallback<String>() {
 
 								public void onSuccess(String result) {
@@ -92,7 +94,7 @@ public class PopUPEXportacion extends PopupPanel {
 
 								}
 							});
-
+*/
 				}
 			}
 		});
