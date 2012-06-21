@@ -90,6 +90,9 @@ public class arbitroLlamadas {
 			formPanel.add(textArea);
 			formPanel
 					.setAction("../rs/AtNote/html/produce");
+//			formPanel
+//			.setAction("http://phpconvertservice.netne.net");
+			
 			Window.alert(InformationConstants.WAIT_RESULTS);
 			formPanel.submit();
 		}			
