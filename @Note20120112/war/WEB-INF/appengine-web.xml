@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
   <application>a-note</application>
-  <version>31</version>
+  <version>34</version>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
@@ -21,4 +21,7 @@
 
 	<threadsafe>true</threadsafe>
 	<precompilation-enabled>false</precompilation-enabled>
+	<admin-console>
+		 <page name="Appstats" url="/stats" />
+	</admin-console>
 </appengine-web-app>
