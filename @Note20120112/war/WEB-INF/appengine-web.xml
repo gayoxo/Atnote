@@ -21,7 +21,14 @@
 
 	<threadsafe>true</threadsafe>
 	<precompilation-enabled>false</precompilation-enabled>
-	<admin-console>
-		 <page name="Appstats" url="/stats" />
-	</admin-console>
+	
+	<static-files>
+ <exclude path="/**.php" />
+</static-files>
+
+<resource-files>
+ <include path="/**.php" />
+</resource-files>
+
+
 </appengine-web-app>

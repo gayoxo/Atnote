@@ -89,7 +89,7 @@ public class arbitroLlamadas {
 			textArea.getValue();
 			formPanel.add(textArea);
 			formPanel
-					.setAction("../rs/AtNote/html/produce");
+					.setAction("../Text.php");
 //			formPanel
 //			.setAction("http://phpconvertservice.netne.net");
 			
