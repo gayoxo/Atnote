@@ -58,7 +58,7 @@ public class SelectorNewBetweenTypeAndFolder extends PopupPanel {
 		comboBox.addItem("Type");
 
 		verticalPanel.add(comboBox);
-		comboBox.setWidth("98px");
+		comboBox.setWidth("145px");
 		
 		textBox = new TextBox();
 		verticalPanel.add(textBox);

@@ -10,6 +10,8 @@ import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.reader.export.EnvioExportacion;
 import lector.client.reader.export.ExportResult;
+import lector.client.reader.export.PanelSeleccionExportacion;
+import lector.client.reader.export.arbitroLlamadas;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -69,9 +71,10 @@ public class PopUPEXportacion extends PopupPanel {
 						// EnvioExportacion(EE.getAnnotation(), EE.getImagen());
 						// ExportResult.addResult(EnEx);
 					}
+					PanelSeleccionExportacion PSE=new PanelSeleccionExportacion(list);
+					PSE.center();
 					
-					arbitroLlamadas A=new arbitroLlamadas(list);
-					A.llamadaBucle();
+										
 					/*imageServiceHolder.loadHTMLStringForExport(list,
 							new AsyncCallback<String>() {
 

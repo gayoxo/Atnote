@@ -1,4 +1,4 @@
-package lector.client.reader;
+package lector.client.reader.export;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import java.util.Stack;
 import lector.client.book.reader.ImageService;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.controler.InformationConstants;
+import lector.client.reader.ExportObject;
+import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -14,14 +16,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.TextArea;
 
-public class arbitroLlamadas {
+public class arbitroLlamadasRTF {
 
 	private Stack<ExportObject> pendientes;
 	private StringBuffer Result;
 	static ImageServiceAsync imageServiceHolder = GWT
 	.create(ImageService.class);
 	
-	public arbitroLlamadas(ArrayList<ExportObject> list) {
+	public arbitroLlamadasRTF(ArrayList<ExportObject> list) {
 	pendientes=clone(list);	
 
 	Result= new StringBuffer(
@@ -49,54 +51,56 @@ public class arbitroLlamadas {
 	}
 
 	public void llamadaBucle() {
-		if (!pendientes.isEmpty())
-		{
-			ExportObject E=pendientes.pop();
-			imageServiceHolder.loadHTMLStringForExportUni(E,
-					new AsyncCallback<String>() {
-
-						public void onSuccess(String result) {
-							Result.append(result);
-							llamadaBucle();
-						}
-
-						public void onFailure(Throwable caught) {
-							llamadaBucle();
-
-						}
-					});
-
-		}else
-		{
-			
-			LoadingPanel.getInstance().hide();
-			Result.append("</body></html>");
-//			RichTextArea textArea1 = new RichTextArea();
-//			textArea1.setHTML(Result.toString());	
-			FormPanel formPanel = new FormPanel();
-			formPanel
-					.setEncoding(FormPanel.ENCODING_URLENCODED);
-			formPanel.setMethod(FormPanel.METHOD_POST);
-			TextArea textArea = new TextArea();
-			textArea.setText(Result.toString());
-//			try {
-//				textArea.setText(new String(Result.toString().getBytes("UTF-8")));
-//				
-//			} catch (UnsupportedEncodingException e) {
-//				textArea.setText(e.toString());
-//			}
-			textArea.setName("html");
-			textArea.getValue();
-			formPanel.add(textArea);
-			formPanel
-					.setAction("../Text.php");
-//			formPanel
-//			.setAction("http://phpconvertservice.netne.net");
-			
-			Window.alert(InformationConstants.WAIT_RESULTS);
-			formPanel.submit();
-		}			
 		
+						
+//		if (!pendientes.isEmpty())
+//		{
+//			ExportObject E=pendientes.pop();
+//			imageServiceHolder.loadHTMLStringForExportUni(E,
+//					new AsyncCallback<String>() {
+//
+//						public void onSuccess(String result) {
+//							Result.append(result);
+//							llamadaBucle();
+//						}
+//
+//						public void onFailure(Throwable caught) {
+//							llamadaBucle();
+//
+//						}
+//					});
+//
+//		}else
+//		{
+//			
+//			LoadingPanel.getInstance().hide();
+//			Result.append("</body></html>");
+////			RichTextArea textArea1 = new RichTextArea();
+////			textArea1.setHTML(Result.toString());	
+//			FormPanel formPanel = new FormPanel();
+//			formPanel
+//					.setEncoding(FormPanel.ENCODING_URLENCODED);
+//			formPanel.setMethod(FormPanel.METHOD_POST);
+//			TextArea textArea = new TextArea();
+//			textArea.setText(Result.toString());
+////			try {
+////				textArea.setText(new String(Result.toString().getBytes("UTF-8")));
+////				
+////			} catch (UnsupportedEncodingException e) {
+////				textArea.setText(e.toString());
+////			}
+//			textArea.setName("html");
+//			textArea.getValue();
+//			formPanel.add(textArea);
+//			formPanel
+//					.setAction("../Text.php");
+////			formPanel
+////			.setAction("http://phpconvertservice.netne.net");
+//			
+//			Window.alert(InformationConstants.WAIT_RESULTS);
+//			formPanel.submit();
+//		}			
+//		
 	}
 
 }
