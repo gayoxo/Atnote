@@ -45,4 +45,9 @@ public class SelectorPanel extends PopupPanel {
     public void setSelector(TextSelector selector) {
         this.selector = selector;
     }
+    
+    public boolean vacio_()
+    {
+    return !(transparentPanel.getOffsetHeight()>2 && transparentPanel.getOffsetWidth()>2);
+    }
 }

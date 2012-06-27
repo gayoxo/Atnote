@@ -39,6 +39,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
+import lector.client.controler.ErrorConstants;
 import lector.client.controler.HelpMessage;
 import lector.client.language.Language;
 import lector.client.login.ActualUser;
@@ -119,6 +120,7 @@ public class MainEntryPoint implements EntryPoint {
 	private MenuItem DensidadAnot;
 	private static SimplePanel Glue;
 	private static ArrayList<SelectorPanel> SE;
+	private static ArrayList<SelectorPanel> SER;
 	private HorizontalPanel panelbase ;
 	private VerticalPanel PanelBotoneseImagen;
 	private HorizontalPanel PanelBaseCentrado;
@@ -279,8 +281,12 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		Window.addResizeHandler(new ResizeHandler() {
 			
 			public void onResize(ResizeEvent event) {
-				hideDENSelector();
-					if (SE!=null) 
+				
+					if (SE!=null&&isShowDensity)
+					{
+						
+						hideDENSelector();
+						SER=new ArrayList<SelectorPanel>();
 						for (SelectorPanel SP : SE) {
 							TextSelector TS=SP.getSelector(); 
 							SelectorPanel SEE = new SelectorPanel(TS.getX().intValue(),
@@ -289,6 +295,9 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 	                                 TS.getWidth().intValue(),
 	                                 TS.getHeight().intValue());
 	                         SEE.show();
+	                         SER.add(SEE);
+						}
+						isShowDensity=true;
 					}
 					if (PEX!=null&&PEX.isShowing())
 						{ 
@@ -1111,6 +1120,12 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			for (SelectorPanel SP : SE) {
 			SP.hide();
 		}
+		if (SER!=null) 
+			for (SelectorPanel SP : SER) {
+			SP.hide();
+		}
+		
+		isShowDensity=false;
 		
 	}
 	
@@ -1213,6 +1228,10 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 						for (SelectorPanel SP : SE) {
 						SP.hide();
 					}
+					if (SER!=null) 
+						for (SelectorPanel SP : SER) {
+						SP.hide();
+					}
 				}
 				if (state != State.NoAnnotations) {
 					if (isSelectionMode == true) {
@@ -1309,8 +1328,10 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				event.preventDefault();
 				event.stopPropagation();
 				if (state != State.NoAnnotations) {
-					if (isSelectionMode) {
-						popUpSelector.add(popUpSelectoract);
+					if (isSelectionMode){
+						if (!selectorvacio(popUpSelectoract))
+							popUpSelector.add(popUpSelectoract);
+						else Window.alert(ErrorConstants.ERROR_SELECTION_TOO_SLOW);
 						
 						if (!event.isShiftKeyDown())
 						{
@@ -1321,8 +1342,13 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 							
 							ARRAT.add(PPSelect.getSelector());
 							}
+						
+						if (!ARRAT.isEmpty())
+						{	
 						TextComment TC = new TextComment(ARRAT, book);
 						TC.center();
+						}
+						
 						isShiftSelectionMode=false;
 						
 						}else 
@@ -1330,9 +1356,15 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 
 						isSelectionMode = false;
 					}
+				
 
 				}
 
+			}
+
+			private boolean selectorvacio(SelectorPanel popUpSelectoract) {
+				
+				return popUpSelectoract.vacio_();
 			}
 		});
 		

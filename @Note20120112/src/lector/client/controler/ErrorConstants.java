@@ -26,4 +26,5 @@ public class ErrorConstants {
 	public static String ERROR_UPDATING_TEMPLATE_CATEGORY="Error updating template category";
 	public static String ERROR_THIS_IS_A_TEMPLATE_DELETE="This is a Template, a template cannot be deleted here, go back if you want to delete the entire category";
 	public static String ERROR_DELETING_TEMPLATE_CATEGORY="Error deleting template category";
+	public static String ERROR_SELECTION_TOO_SLOW="The selection area is too small, please select a area more big";
 }
