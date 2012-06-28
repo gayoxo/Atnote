@@ -210,7 +210,7 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		return htmlReturn;
 	}
 
-	public String logoImage(){
+	public String logoImage() {
 		BookBlob logo = loadBookBlobById(283002l);
 		String blobKeyString = logo.getWebLinks().get(0);
 		String[] split = blobKeyString.split("=");
@@ -220,8 +220,8 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 
 		ImagesService imagesService = ImagesServiceFactory.getImagesService();
 		Image oldImage = ImagesServiceFactory.makeImageFromBlob(blobKey);
-		Transform resize = ImagesServiceFactory.makeResize(300,200);
-		
+		Transform resize = ImagesServiceFactory.makeResize(300, 200);
+
 		Image newImage = imagesService.applyTransform(resize, oldImage);
 		byte[] newImageData = newImage.getImageData();
 		Base64 base64codec = new Base64();
@@ -233,6 +233,7 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		String htmlReturn = "<img src=" + encodedText + ">";
 		return htmlReturn;
 	}
+
 	private String getImageContentType(String urlImage) {
 
 		String contentType = null;
@@ -287,7 +288,8 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		html.append(System.nanoTime());
 		html.append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
 		html.append(System.nanoTime());
-		html.append("</h1></td><td align=\"right\">"+logoImage()+"</td></tr></table>");
+		html.append("</h1></td><td align=\"right\">" + logoImage()
+				+ "</td></tr></table>");
 		for (ExportObject exportObject : exportObjects) {
 			html.append("<tr><hr><table align=\"center\" width=\"80%\" border=\"1\" bordercolor=\"blue\">");
 			String imageURL = exportObject.getImageURL();
@@ -314,12 +316,14 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 				html.append(fileName + ", ");
 			}
 			html.append("</p></td>");
-			html.append("</tr><tr><td><p>" +exportObject.getAuthorName() + "</p></td><td><p>" + exportObject.getDate() + "</p></td></tr>");
+			html.append("</tr><tr><td><p>" + exportObject.getAuthorName()
+					+ "</p></td><td><p>" + exportObject.getDate()
+					+ "</p></td></tr>");
 			html.append("<tr><td colspan=\"2\"></td></tr>");
 			html.append("</table>");
 		}
 		html.append("</body></html>");
-	
+
 		try {
 			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
 			return htmlUTF;
@@ -329,62 +333,94 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		}
 
 	}
-	
+
 	public String loadHTMLStringForExportUni(ExportObject exportObject) {
 		StringBuffer html = new StringBuffer();
-		/*StringBuffer html = new StringBuffer(
-				"<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>");
-		html.append("<title>Export:");
-		html.append(System.nanoTime());
-		html.append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
-		html.append(System.nanoTime());
-		html.append("</h1></td><td align=\"right\">"+logoImage()+"</td></tr></table>");
-		for (ExportObject exportObject : exportObjects) {*/
-			html.append("<tr><hr><table align=\"center\" width=\"80%\" border=\"1\" bordercolor=\"blue\">");
-			String imageURL = exportObject.getImageURL();
-			ArrayList<TextSelector> anchors = exportObject.getAnnotation()
-					.getTextSelectors();
-			int imageWidth = exportObject.getWidth();
-			int imageHeight = exportObject.getHeight();
-			html.append("<td rowspan=\"4\"><p>"
-					+ produceCutImagesList(imageURL, anchors, imageWidth,
-							imageHeight) + "</p></td><td colspan=\"2\"><p>");
-			String Clear;
-			Clear = exportObject.getAnnotation().getComment().getValue();
-//			try {
-//				Clear = new String(exportObject.getAnnotation().getComment()
-//						.getValue().getBytes(), "UTF-8");
-//			} catch (UnsupportedEncodingException e) {
-//				Clear = exportObject.getAnnotation().getComment().getValue();
-//			}
+		/*
+		 * StringBuffer html = new StringBuffer(
+		 * "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>"
+		 * ); html.append("<title>Export:"); html.append(System.nanoTime());
+		 * html
+		 * .append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
+		 * html.append(System.nanoTime());
+		 * html.append("</h1></td><td align=\"right\">"
+		 * +logoImage()+"</td></tr></table>"); for (ExportObject exportObject :
+		 * exportObjects) {
+		 */
+		html.append("<tr><hr><table align=\"center\" width=\"80%\" border=\"1\" bordercolor=\"blue\">");
+		String imageURL = exportObject.getImageURL();
+		ArrayList<TextSelector> anchors = exportObject.getAnnotation()
+				.getTextSelectors();
+		int imageWidth = exportObject.getWidth();
+		int imageHeight = exportObject.getHeight();
+		html.append("<td rowspan=\"4\"><p>"
+				+ produceCutImagesList(imageURL, anchors, imageWidth,
+						imageHeight) + "</p></td><td colspan=\"2\"><p>");
+		String clear;
+		clear = exportObject.getAnnotation().getComment().getValue();
+		// try {
+		// Clear = new String(exportObject.getAnnotation().getComment()
+		// .getValue().getBytes(), "UTF-8");
+		// } catch (UnsupportedEncodingException e) {
+		// Clear = exportObject.getAnnotation().getComment().getValue();
+		// }
 
-			html.append(Clear + "</p></td></tr><tr>");
-			ArrayList<String> fileNames = generalAppService
-					.getFileNamesByIds(exportObject.getAnnotation()
-							.getFileIds());
-			html.append("<td colspan=\"2\"><p>");
-			for (String fileName : fileNames) {
-				html.append(fileName + ", ");
-			}
-			html.append("</p></td>");
-			html.append("</tr><tr><td><p>" +exportObject.getAuthorName() + "</p></td><td><p>" + exportObject.getDate() + "</p></td></tr>");
-			html.append("<tr><td colspan=\"2\"></td></tr>");
+		html.append(clear + "</p></td></tr><tr>");
+		ArrayList<String> fileNames = generalAppService
+				.getFileNamesByIds(exportObject.getAnnotation().getFileIds());
+		html.append("<td colspan=\"2\"><p>");
+		for (String fileName : fileNames) {
+			html.append(fileName + ", ");
+		}
+		html.append("</p></td>");
+		html.append("</tr><tr><td><p>" + exportObject.getAuthorName()
+				+ "</p></td><td><p>" + exportObject.getDate()
+				+ "</p></td></tr>");
+		html.append("<tr><td colspan=\"2\"></td></tr>");
 		html.append("</table>");
-/*		}*/
-	
-//		try {
-//			String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
-//			return htmlUTF;
-//		} catch (UnsupportedEncodingException e) {
-//
-//			return html.toString();
-//		}
+		/* } */
+
+		// try {
+		// String htmlUTF = new String(html.toString().getBytes(), "UTF-8");
+		// return htmlUTF;
+		// } catch (UnsupportedEncodingException e) {
+		//
+		// return html.toString();
+		// }
 		return html.toString();
 	}
 
 	public String loadRTFStringForExportUni(ExportObject exportObject) {
-		// TODO Export
+		StringBuffer rtf = new StringBuffer();
+		String imageURL = exportObject.getImageURL();
+		ArrayList<TextSelector> anchors = exportObject.getAnnotation()
+				.getTextSelectors();
+		int imageWidth = exportObject.getWidth();
+		int imageHeight = exportObject.getHeight();
+		String clear = exportObject.getAnnotation().getComment().getValue();
+		rtf.append("\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
+				+ "\\clvmgf\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\sb100\\sa100\\cf1\\fs27"
+				+ produceCutImagesList(imageURL, anchors, imageWidth,
+						imageHeight)
+				+ "\\cell"
+				+ clear
+				+ "\\cell\\row\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
+				+ "\\clvmrg\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\cell\\pard\\intbl\\nowidctlpar\\sb100\\sa100"
+				+ getFileNames(exportObject.getAnnotation().getFileIds())
+				+ "\\cell\\row\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
+				+ "\\clvmrg\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx4722\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\cell\\pard\\intbl\\nowidctlpar\\sb100\\sa100 " + exportObject.getAuthorName() + " \\cell " +exportObject.getDate() + "\\cell\\row\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
+				+ "\\clvmrg\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx4722\\clvertalc\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\cell\\cf0\\fs24\\cell\\fs20\\cell\\row\\pard\\nowidctlpar\\fs24\\par");
+		rtf.append("");
 		return null;
+	}
+
+	private String getFileNames(ArrayList<Long> ids) {
+		String tags = "";
+		ArrayList<String> fileNames = generalAppService.getFileNamesByIds(ids);
+		for (String fileName : fileNames) {
+			tags += fileName + ", ";
+		}
+		return tags;
 	}
 
 }
