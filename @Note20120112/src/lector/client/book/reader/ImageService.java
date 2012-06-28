@@ -35,4 +35,6 @@ public interface ImageService extends RemoteService {
 	public String loadHTMLStringForExport(ArrayList<ExportObject> exportObjects);
 	
 	public String loadHTMLStringForExportUni(ExportObject exportObject);
+	
+	public String loadRTFStringForExportUni(ExportObject exportObject);
 }

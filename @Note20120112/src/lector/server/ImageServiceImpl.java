@@ -382,4 +382,9 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		return html.toString();
 	}
 
+	public String loadRTFStringForExportUni(ExportObject exportObject) {
+		// TODO Export
+		return null;
+	}
+
 }

@@ -45,4 +45,8 @@ public interface ImageServiceAsync {
 	void loadHTMLStringForExportUni(ExportObject exportObject,
 			AsyncCallback<String> callback);
 
+
+	void loadRTFStringForExportUni(ExportObject exportObject,
+			AsyncCallback<String> callback);
+
 }
