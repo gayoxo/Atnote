@@ -28,10 +28,6 @@ public interface ImageService extends RemoteService {
 
 	public void saveBookBlob(BookBlob bookBlob);
 
-	public String imageTransformed(String imageURL, TextSelector anchor,int imageWidth, int imageHeight);
-
-	public String imageFromBlob(String blobKey, TextSelector anchor,int imageWidth, int imageHeight);
-	
 	public String loadHTMLStringForExport(ArrayList<ExportObject> exportObjects);
 	
 	public String loadHTMLStringForExportUni(ExportObject exportObject);

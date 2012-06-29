@@ -114,37 +114,38 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 	}
 
 	private String produceCutImagesList(String imageURL,
-			ArrayList<TextSelector> anchors, int imageWidth, int imageHeight) {
+			ArrayList<TextSelector> anchors, int imageWidth, int imageHeight, boolean isRTF) {
 		ArrayList<String> images = new ArrayList<String>();
 		if (imageURL.startsWith("/serve")) {
 			for (TextSelector anchor : anchors) {
 				images.add(imageFromBlob(imageURL, anchor, imageWidth,
-						imageHeight));
+						imageHeight,isRTF));
 			}
 
 		} else {
 			for (TextSelector anchor : anchors) {
 				images.add(imageTransformed(imageURL, anchor, imageWidth,
-						imageHeight));
+						imageHeight, isRTF));
 			}
 		}
 
-		return produceImagesFormatted(images);
+		return produceImagesFormatted(images,isRTF);
 	}
 
-	private String produceImagesFormatted(ArrayList<String> images) {
+	private String produceImagesFormatted(ArrayList<String> images, boolean isRTF) {
 		String format = "";
 		for (String image : images) {
-			format += image + "<br />";
+			if (isRTF) format += image + "\\par";
+			else format += image + "<br />";
 		}
 
 		return format;
 	}
 
 	public String imageTransformed(String imageURL, TextSelector anchor,
-			int imageWidth, int imageHeight) {
+			int imageWidth, int imageHeight, boolean isRTF) {
 		float height = imageHeight;
-		float width = imageWidth;
+		float width = imageWidth; 
 		float prop = height / 830;
 		float widthResize = (width / prop);
 		String contentType = getImageContentType(imageURL);
@@ -164,6 +165,26 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		Image newImage = imagesService.applyTransform(resize, oldImage);
 		newImage = imagesService.applyTransform(crop, newImage);
 		byte[] newImageData = newImage.getImageData();
+		if(isRTF){
+
+			StringBuffer sb = new StringBuffer();
+
+			sb.append("\n{\\*\\shppict{\\pict")
+			.append("\\picw").append(newImage.getWidth())
+			.append("\\pich").append(newImage.getHeight())
+			.append("\\")
+			.append(contentType.replaceAll("image/", ""))
+			.append("blip\n"); // for PNG images, use \pngblip
+
+			String A=getHex(newImageData);
+			
+			//int mod= A.length()/64;
+			
+			sb.append(A);
+			
+			sb.append("\n}}");
+			return sb.toString();
+		}
 		Base64 base64codec = new Base64();
 		base64codec.encode(newImageData);
 		String encodedText = new String(Base64.encodeBase64(newImageData));
@@ -173,8 +194,22 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 
 	}
 
-	public String imageFromBlob(String blobKeyString, TextSelector anchor,
-			int imageWidth, int imageHeight) {
+	static final String HEXES = "0123456789ABCDEF";
+	
+	  public static String getHex( byte [] raw ) {
+	    if ( raw == null ) {
+	      return null;
+	    }
+	    final StringBuilder hex = new StringBuilder( 2 * raw.length );
+	    for ( final byte b : raw ) {
+	      hex.append(HEXES.charAt((b & 0xF0) >> 4))
+	         .append(HEXES.charAt((b & 0x0F)));
+	    }
+	    return hex.toString();
+	  }
+	
+	private String imageFromBlob(String blobKeyString, TextSelector anchor,
+			int imageWidth, int imageHeight, boolean isRTF) {
 		String[] split = blobKeyString.split("=");
 		BlobKey blobKey = new BlobKey(split[1]);
 		BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
@@ -200,6 +235,26 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		newImage = imagesService.applyTransform(crop, newImage);
 
 		byte[] newImageData = newImage.getImageData();
+		if(isRTF){
+
+			StringBuffer sb = new StringBuffer();
+
+			sb.append("\n{\\*\\shppict{\\pict")
+			.append("\\picw").append(newImage.getWidth())
+			.append("\\pich").append(newImage.getHeight())
+			.append("\\")
+			.append(blobInfo.getContentType())
+			.append("blip\n"); // for PNG images, use \pngblip
+
+			String A=getHex(newImageData);
+			
+			//int mod= A.length()/64;
+			
+			sb.append(A);
+			
+			sb.append("\n}}");
+			return sb.toString();
+		}
 		Base64 base64codec = new Base64();
 		base64codec.encode(newImageData);
 		String encodedText = new String(Base64.encodeBase64(newImageData));
@@ -299,7 +354,7 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 			int imageHeight = exportObject.getHeight();
 			html.append("<td rowspan=\"3\"><p>"
 					+ produceCutImagesList(imageURL, anchors, imageWidth,
-							imageHeight) + "</p></td><td colspan=\"2\"><p>");
+							imageHeight, false) + "</p></td><td colspan=\"2\"><p>");
 			String Clear;
 			try {
 				Clear = new String(exportObject.getAnnotation().getComment()
@@ -355,7 +410,7 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		int imageHeight = exportObject.getHeight();
 		html.append("<td rowspan=\"4\"><p>"
 				+ produceCutImagesList(imageURL, anchors, imageWidth,
-						imageHeight) + "</p></td><td colspan=\"2\"><p>");
+						imageHeight,false) + "</p></td><td colspan=\"2\"><p>");
 		String clear;
 		clear = exportObject.getAnnotation().getComment().getValue();
 		// try {
@@ -398,11 +453,12 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		int imageWidth = exportObject.getWidth();
 		int imageHeight = exportObject.getHeight();
 		String clear = exportObject.getAnnotation().getComment().getValue();
+		clear=clear.replaceAll("\\<.*?\\>","");
 		rtf.append("\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
 				+ "\\clvmgf\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\sb100\\sa100\\cf1\\fs27"
 				+ produceCutImagesList(imageURL, anchors, imageWidth,
-						imageHeight)
-				+ "\\cell"
+						imageHeight,true)
+				+ "\\cell "
 				+ clear
 				+ "\\cell\\row\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
 				+ "\\clvmrg\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\cell\\pard\\intbl\\nowidctlpar\\sb100\\sa100"
@@ -410,8 +466,8 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 				+ "\\cell\\row\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
 				+ "\\clvmrg\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx4722\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\cell\\pard\\intbl\\nowidctlpar\\sb100\\sa100 " + exportObject.getAuthorName() + " \\cell " +exportObject.getDate() + "\\cell\\row\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
 				+ "\\clvmrg\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx4722\\clvertalc\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\cell\\cf0\\fs24\\cell\\fs20\\cell\\row\\pard\\nowidctlpar\\fs24\\par");
-		rtf.append("");
-		return null;
+		
+		return rtf.toString();
 	}
 
 	private String getFileNames(ArrayList<Long> ids) {

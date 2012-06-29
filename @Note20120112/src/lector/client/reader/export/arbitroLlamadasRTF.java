@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class arbitroLlamadasRTF {
 
@@ -26,14 +27,8 @@ public class arbitroLlamadasRTF {
 	public arbitroLlamadasRTF(ArrayList<ExportObject> list) {
 	pendientes=clone(list);	
 
-	Result= new StringBuffer(
-	"<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head>");
-	Result.append("<title>Export:");
-	Result.append(System.currentTimeMillis());
-	Result.append("</title><body><table width=\"100%\"><tr><td><h1>Export:");
-	Result.append(System.currentTimeMillis());
-	Result.append("</h1></td><td align=\"right\"><img src=\"http://a-note.appspot.com/Logo.jpg\" alt=\"atnote\" height=\"200\" width=\"400\" /> </td></tr></table>");;
-	
+	Result= new StringBuffer();
+
 	LoadingPanel.getInstance().center();
 	LoadingPanel.getInstance().setLabelTexto("Loading...");
 	//llamadaBucle();
@@ -56,7 +51,7 @@ public class arbitroLlamadasRTF {
 		if (!pendientes.isEmpty())
 		{
 			ExportObject E=pendientes.pop();
-			imageServiceHolder.loadHTMLStringForExportUni(E,
+			imageServiceHolder.loadRTFStringForExportUni(E,
 					new AsyncCallback<String>() {
 
 						public void onSuccess(String result) {
@@ -74,7 +69,7 @@ public class arbitroLlamadasRTF {
 		{
 			
 			LoadingPanel.getInstance().hide();
-			Result.append("</body></html>");
+		//	Result.append("</body></html>");
 //			RichTextArea textArea1 = new RichTextArea();
 //			textArea1.setHTML(Result.toString());	
 			FormPanel formPanel = new FormPanel();
@@ -91,11 +86,24 @@ public class arbitroLlamadasRTF {
 //			}
 			textArea.setName("html");
 			textArea.getValue();
-			formPanel.add(textArea);
-//			formPanel
-//					.setAction("../Text.php");
+			VerticalPanel V=new VerticalPanel();
+			formPanel.add(V);
+			V.add(textArea);
+			TextArea textArea2 = new TextArea();
+			textArea2.setText(Long.toString(System.currentTimeMillis()));
+//			try {
+//				textArea.setText(new String(Result.toString().getBytes("UTF-8")));
+//				
+//			} catch (UnsupportedEncodingException e) {
+//				textArea.setText(e.toString());
+//			}
+			textArea2.setName("ExportN");
+			textArea2.getValue();
+			V.add(textArea2);
 			formPanel
-			.setAction("http://phpconvertservice.netne.net");
+					.setAction("../Text.php");
+//			formPanel
+//			.setAction("http://phpconvertservice.netne.net");
 			
 			Window.alert(InformationConstants.WAIT_RESULTS);
 			formPanel.submit();
