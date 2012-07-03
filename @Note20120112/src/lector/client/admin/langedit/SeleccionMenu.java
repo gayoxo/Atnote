@@ -3,6 +3,8 @@ package lector.client.admin.langedit;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
+import lector.client.controler.InformationConstants;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -47,6 +49,9 @@ public class SeleccionMenu extends PopupPanel {
 		Button btnNewButton_1 = new Button("Delete");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				if (Window
+						.confirm(InformationConstants.ARE_YOU_SURE_DELETE_LANGUAGE + BLan.getLanguage().getName()))
+				{
 				bookReaderServiceHolder.deleteLanguage(BLan.getLanguage().getName(), new AsyncCallback<Integer>() {
 					
 					public void onSuccess(Integer result) {
@@ -60,7 +65,7 @@ public class SeleccionMenu extends PopupPanel {
 						
 					}
 				});
-		
+				}
 			}
 		});
 		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {

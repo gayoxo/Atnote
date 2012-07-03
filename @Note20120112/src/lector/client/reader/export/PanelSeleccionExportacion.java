@@ -57,7 +57,7 @@ public class PanelSeleccionExportacion extends PopupPanel {
 		verticalPanel.add(horizontalPanel);
 		verticalPanel.setCellVerticalAlignment(horizontalPanel,
 				HasVerticalAlignment.ALIGN_MIDDLE);
-		horizontalPanel.setWidth("100%");
+		horizontalPanel.setWidth("");
 
 		Button btnNewButton = new Button("HTML");
 		horizontalPanel.add(btnNewButton);
@@ -66,7 +66,7 @@ public class PanelSeleccionExportacion extends PopupPanel {
 
 			public void onClick(ClickEvent event) {
 				((Button) event.getSource()).setStyleName("gwt-ButtonCenter");
-				arbitroLlamadas A=new arbitroLlamadas(pendientes);
+				arbitroLlamadasHTML A=new arbitroLlamadasHTML(pendientes);
 				A.llamadaBucle();
 				hide();
 			}

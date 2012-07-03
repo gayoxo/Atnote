@@ -4,6 +4,8 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.server.Catalogo;
+import lector.client.controler.ErrorConstants;
+import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,6 +36,13 @@ public class Change_Visivility extends PopupPanel {
 	public Change_Visivility(Catalog Cin,NewAdminCatalogs Fatherin) {
 		super(false);
 		setModal(true);
+		
+		if (!Cin.getProfessorId().equals(ActualUser.getUser().getId()))
+			{
+			Window.alert(ErrorConstants.ERROR_CANTPRIVATICE_A_CATALOG_THAT_YOU_DONT_CREATE);
+			hide();
+			}
+		
 		Yo=this;
 		Father=Fatherin;
 		C=Cin;

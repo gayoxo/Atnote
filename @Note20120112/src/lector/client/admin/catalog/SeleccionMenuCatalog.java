@@ -6,6 +6,7 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
 
 import lector.client.reader.LoadingPanel;
+import lector.client.controler.InformationConstants;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -51,6 +52,11 @@ public class SeleccionMenuCatalog extends PopupPanel {
 		Button btnNewButton_1 = new Button("Delete");
 		btnNewButton_1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				
+				if (Window
+						.confirm(InformationConstants.ARE_YOU_SURE_DELETE_CATALOG
+								+ BLan.getCatalog().getCatalogName()))
+				{
 				hide();
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Deleting...");
@@ -69,7 +75,7 @@ public class SeleccionMenuCatalog extends PopupPanel {
 					}
 				});
 				
-				
+				}
 			}
 		});
 		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {

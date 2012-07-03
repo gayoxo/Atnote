@@ -826,3 +826,7 @@ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center cen
 	color: orangered;
 
 }
+.gwt-DecoratorPanel .middleCenter {
+height: 100%;
+   width: 100%;
+}

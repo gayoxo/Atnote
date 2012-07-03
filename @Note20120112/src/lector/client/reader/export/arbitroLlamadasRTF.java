@@ -101,7 +101,7 @@ public class arbitroLlamadasRTF {
 			textArea2.getValue();
 			V.add(textArea2);
 			formPanel
-					.setAction("../Text.php");
+					.setAction("../RTF.php");
 //			formPanel
 //			.setAction("http://phpconvertservice.netne.net");
 			

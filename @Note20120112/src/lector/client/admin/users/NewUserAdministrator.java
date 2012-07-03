@@ -11,6 +11,7 @@ import lector.client.catalogo.StackPanelMio;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
+import lector.client.controler.InformationConstants;
 import lector.client.login.UserApp;
 import lector.client.reader.LoadingPanel;
 
@@ -277,8 +278,8 @@ public class NewUserAdministrator implements EntryPoint {
 								if (result.getGroupIds()==null) result.setGroupIds(new ArrayList<Long>());
 								if (!result.getGroupIds().isEmpty())
 									if (Window
-											.confirm("Are you sure you want to delete this user?, he is a member to a "
-													+ result.getGroupIds().size() + " groups"))
+											.confirm(InformationConstants.ARE_YOU_SURE_DELETE_USER
+													+ result.getGroupIds().size() + InformationConstants.ARE_YOU_SURE_DELETE_USER2))
 
 										remove(result.getId());
 
