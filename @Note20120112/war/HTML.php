@@ -26,6 +26,7 @@ function utf8($txt) {
 	return $txt;
 }
 
+
 /*  Enviamos el documento completo a la salida  */
 echo $output; 
 ?>

@@ -73,7 +73,7 @@ public class arbitroLlamadasHTML {
 		{
 			
 			LoadingPanel.getInstance().hide();
-			//	Result.append("</body></html>");
+				Result.append("</body></html>");
 //				RichTextArea textArea1 = new RichTextArea();
 //				textArea1.setHTML(Result.toString());	
 				FormPanel formPanel = new FormPanel();
