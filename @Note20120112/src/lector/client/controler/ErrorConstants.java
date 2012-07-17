@@ -28,4 +28,7 @@ public class ErrorConstants {
 	public static String ERROR_DELETING_TEMPLATE_CATEGORY="Error deleting template category";
 	public static String ERROR_SELECTION_TOO_SLOW="The selection area is too small, please select a area more big";
 	public static String ERROR_CANTPRIVATICE_A_CATALOG_THAT_YOU_DONT_CREATE="you can not privatize a catalog that you did not create";
+	public static String ERROR_ON_MOVE_CATEGORY_DEGRADING="Error degrading the category, please try again";
+	public static String ERROR_THERE_ARE_NOT_UP_BROTHER="There are not a up brother to degrade the category";
+	
 }

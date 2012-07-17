@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -55,7 +56,7 @@ public class RepresentacionTemplateCategory extends Composite {
 		horizontalPanel.add(horizontalPanel_1);
 		horizontalPanel_1.setSize("100%", "100%");
 		
-		Button btnNewButton_1 = new Button("<-");
+		Button btnNewButton_1 = new Button("<img src=\"/BotonesTemplate/Izquierda.gif\" alt=\"<-\">");
 		horizontalPanel_1.add(btnNewButton_1);
 		btnNewButton_1.setSize("100%", "100%");
 		btnNewButton_1.setStyleName("gwt-ButtonIzquierda");
@@ -116,7 +117,7 @@ public class RepresentacionTemplateCategory extends Composite {
 		});
         
 		
-		Button btnNewButton_2 = new Button("->");
+		Button btnNewButton_2 = new Button("<img src=\"/BotonesTemplate/Derecha.gif\" alt=\"<-\">");
 		horizontalPanel_1.add(btnNewButton_2);
 		btnNewButton_2.setSize("100%", "100%");
 		btnNewButton_2.setStyleName("gwt-ButtonDerecha");
@@ -146,13 +147,46 @@ public class RepresentacionTemplateCategory extends Composite {
 				if (YO.getParent() instanceof VerticalPanelTemplate)
 				{			
 					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
-					//Borrar del padre actualizar alturas
-					
+					RepresentacionTemplateCategory nuevoPadre=NuevoPadre(Padreact);
+					if (nuevoPadre!=null)
+							exportServiceHolder.moveCategory(Padreact.getT().getId(), nuevoPadre.getT().getId(), YO.getT().getId(), YO.getT().getTemplateId(), new AsyncCallback<Void>() {
+							
+							public void onSuccess(Void result) {
+								EditTemplate.getPGT().refresh();
+								
+							}
+							
+							public void onFailure(Throwable caught) {
+								Window.alert(ErrorConstants.ERROR_ON_MOVE_CATEGORY_DEGRADING);	
+								
+							}
+						});
+						else
+						{
+							Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_UP_BROTHER);	
+						}
 				}else
 				{
 				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
 				}
 				
+			}
+
+			private RepresentacionTemplateCategory NuevoPadre(
+					RepresentacionTemplateCategory padreact) {
+				VerticalPanelTemplate VPT=padreact.getAnnotPanel();
+				boolean encontrado=false;
+				int iterador=0;
+				while (!encontrado&&iterador<VPT.getWidgetCount())
+				{
+					RepresentacionTemplateCategory act=((RepresentacionTemplateCategory) VPT.getWidget(iterador));
+					if (act==YO)
+						encontrado=true;
+					iterador++;
+				}
+				if (encontrado)
+					return ((RepresentacionTemplateCategory) VPT.getWidget(iterador-1));
+				return null;
 			}
 		});
 		
@@ -192,7 +226,7 @@ public class RepresentacionTemplateCategory extends Composite {
 		horizontalPanel.add(horizontalPanel_2);
 		horizontalPanel_2.setHeight("100%");
 		
-		Button btnNewButton_3 = new Button("UP");
+		Button btnNewButton_3 = new Button("<img src=\"/BotonesTemplate/Arriba.gif\" alt=\"<-\">");
 		horizontalPanel_2.add(btnNewButton_3);
 		btnNewButton_3.setSize("100%", "100%");
 		btnNewButton_3.setStyleName("gwt-ButtonIzquierda");
@@ -223,7 +257,7 @@ public class RepresentacionTemplateCategory extends Composite {
 				{			
 					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
 					//Mover los Pesos salvar los dos
-					
+					//SWAP PESOS
 				}else
 				{
 				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
@@ -233,7 +267,7 @@ public class RepresentacionTemplateCategory extends Composite {
 		});
 		
 		
-		Button btnNewButton_4 = new Button("DOWN");
+		Button btnNewButton_4 = new Button("<img src=\"/BotonesTemplate/Abajo.gif\" alt=\"<-\">");
 		horizontalPanel_2.add(btnNewButton_4);
 		btnNewButton_4.setSize("100%", "100%");
 		btnNewButton_4.setStyleName("gwt-ButtonDerecha");
@@ -264,7 +298,7 @@ public class RepresentacionTemplateCategory extends Composite {
 				{			
 					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
 					//Mover los Pesos salvar los dos
-					
+					//SWAP Pesos			
 				}else
 				{
 				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	

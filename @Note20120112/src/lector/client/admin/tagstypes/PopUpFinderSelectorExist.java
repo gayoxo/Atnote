@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.DockPanel;
 
 public class PopUpFinderSelectorExist extends PopupPanel {
 
+	
+	//Cambiar finder
 	private FinderGrafo finder;
 	private Entity father;
 

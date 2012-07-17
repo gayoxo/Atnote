@@ -7,7 +7,9 @@ public class VerticalPanelTemplate extends VerticalPanel {
 	private RepresentacionTemplateCategory FatherObject;
 	
 	public VerticalPanelTemplate(RepresentacionTemplateCategory yO) {
+		
 		super();
+		FatherObject=yO;
 	}
 
 	public RepresentacionTemplateCategory getFatherObject() {

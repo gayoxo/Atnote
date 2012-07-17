@@ -29,7 +29,14 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 
 			entityManager.merge(template);
 		}
+		
 		entityManager.flush();
+		try {
+			 Thread.sleep(1000l);
+			 } catch (InterruptedException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+			 }
 		entityTransaction.commit();
 		entityManager.close();
 	}
@@ -48,28 +55,31 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityTransaction.commit();
 		entityManager.close();
 
-		 try {
-		 Thread.sleep(1000l);
-		 } catch (InterruptedException e) {
-		 // TODO Auto-generated catch block
-		 e.printStackTrace();
-		 }
+		 
 
 		if (templateCategory.getFatherId().equals(Constants.TEMPLATEID)) {
 			Template template = loadTemplateById(templateCategory
 					.getTemplateId());
+			
 			template.getCategories().add(templateCategory.getId());
 			Template templateToSave = swapTemplate(template);
 			saveTemplate(templateToSave);
 		} else {
 			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory
 					.getFatherId());
+			
 			templateCategoryFather.getSubCategories().add(
 					templateCategory.getId());
 			TemplateCategory categoryToSave = swapCategory(templateCategoryFather);
 			savePlainCategory(categoryToSave);
+			
 		}
-
+		try {
+			 Thread.sleep(1000l);
+			 } catch (InterruptedException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+			 }
 	}
 
 	public void savePlainCategory(TemplateCategory templateCategory) {
@@ -82,6 +92,12 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 
 			entityManager.merge(templateCategory);
 		}
+		try {
+			 Thread.sleep(1000l);
+			 } catch (InterruptedException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+			 }
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.close();

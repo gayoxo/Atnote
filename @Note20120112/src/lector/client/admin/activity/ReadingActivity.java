@@ -23,6 +23,9 @@ public class ReadingActivity implements Serializable, IsSerializable {
 	private Long professorId;
 	private Long catalogId;
 	private Long openCatalogId;
+	private String Visualizacion;
+	private Long TemplateId;
+	private Boolean TemplateLibre;
 
 	public ReadingActivity() {
 	}
@@ -99,4 +102,30 @@ public class ReadingActivity implements Serializable, IsSerializable {
 	public void setOpenCatalogId(Long openCatalogId) {
 		this.openCatalogId = openCatalogId;
 	}
+
+	public String getVisualizacion() {
+		return Visualizacion;
+	}
+
+	public void setVisualizacion(String visualizacion) {
+		Visualizacion = visualizacion;
+	}
+
+	public Long getTemplateId() {
+		return TemplateId;
+	}
+
+	public void setTemplateId(Long templateId) {
+		TemplateId = templateId;
+	}
+
+	public Boolean getTemplateLibre() {
+		return TemplateLibre;
+	}
+
+	public void setTemplateLibre(Boolean templateLibre) {
+		TemplateLibre = templateLibre;
+	}
+	
+	
 }
