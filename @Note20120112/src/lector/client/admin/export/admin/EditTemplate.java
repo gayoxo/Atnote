@@ -4,10 +4,16 @@ import java.util.Stack;
 
 import lector.client.admin.export.template.Template;
 import lector.client.admin.export.template.TemplateCategory;
+import lector.client.book.reader.ExportService;
+import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
+import lector.client.controler.InformationConstants;
+import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.dom.client.Style.Unit;
@@ -40,6 +46,8 @@ public class EditTemplate implements EntryPoint {
 	private static Template T;
 	private static PanelGestionTemplate PGT;
 	private EditTemplate YO;
+	private ExportServiceAsync exportServiceHolder = GWT
+			.create(ExportService.class);
 
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
@@ -158,20 +166,24 @@ public class EditTemplate implements EntryPoint {
 				RepresentacionTemplateCategory TCP=TC.getFather();
 				if (TCP!=null)
 				{
-					Stack<RepresentacionTemplateCategory> Salvar=new Stack<RepresentacionTemplateCategory>();
-					for (int i = 0; i < TCP.getAnnotPanel().getWidgetCount(); i++) {
-						
-						RepresentacionTemplateCategory R=(RepresentacionTemplateCategory) TCP.getAnnotPanel().getWidget(i);
-						if (!R.getT().getId().equals(TC.getT().getId()))
-						{
-							R.getT().setOrder(i+1);
-							Salvar.add(R);
+					LoadingPanel.getInstance().center();
+					LoadingPanel.getInstance().setLabelTexto(InformationConstants.SAVING);
+					exportServiceHolder.deleteTemplateCategory(TC.getT().getId(), new AsyncCallback<Void>() {
+
+						public void onFailure(Throwable caught) {
+							LoadingPanel.getInstance().hide();
+							Window.alert(ErrorConstants.ERROR_DELETING_TEMPLATE_CATEGORY);
+							
 						}
+
+						public void onSuccess(Void result) {
+							
+							LoadingPanel.getInstance().hide();
+							PGT.refresh();
+						}
+					});
 						
-					ArbitroActualizacionTemplates A=new ArbitroActualizacionTemplates(Salvar, TC);
-					A.Delete();
-						
-					} 
+					
 					
 				}else
 				{

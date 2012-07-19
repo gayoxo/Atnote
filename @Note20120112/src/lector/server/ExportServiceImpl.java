@@ -25,20 +25,24 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityTransaction.begin();
 		if (template.getId() == null) {
 			entityManager.persist(template);
+			entityManager.flush();
 		} else {
 
 			entityManager.merge(template);
+			entityManager.flush();
 		}
 		
-		entityManager.flush();
 		try {
 			 Thread.sleep(1000l);
 			 } catch (InterruptedException e) {
 			 // TODO Auto-generated catch block
 			 e.printStackTrace();
 			 }
+		
 		entityTransaction.commit();
 		entityManager.close();
+//		Template T=loadTemplateById(template.getId());
+
 	}
 
 	public void saveTemplateCategory(TemplateCategory templateCategory) {
@@ -127,14 +131,19 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityTransaction.begin();
 		String sql = "SELECT a FROM TemplateCategory a WHERE a.id="
 				+ templateCategoryId;
-		templateCategorys = entityManager.createQuery(sql).getResultList();
+		templateCategorys = entityManager.createQuery(sql).getResultList();		
 		if (!templateCategorys.isEmpty()) {
+			TemplateCategory T=templateCategorys.get(0);
+			Long Padre=T.getFatherId();
+			Long Hijo=T.getId();
+			Long Template=T.getTemplateId();
 			for (Long categoryId : templateCategorys.get(0).getSubCategories()) {
 				deleteTemplateCategory(categoryId);
 			}
 			entityManager.remove(templateCategorys.get(0));
 			entityTransaction.commit();
 			entityManager.close();
+			removeCategoryFromParent(Padre,Hijo,Template);
 
 		}
 

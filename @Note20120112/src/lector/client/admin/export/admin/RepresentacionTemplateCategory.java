@@ -163,7 +163,7 @@ public class RepresentacionTemplateCategory extends Composite {
 						});
 						else
 						{
-							Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_UP_BROTHER);	
+							Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_UP_BROTHER_TO_DEGRADE);	
 						}
 				}else
 				{
@@ -184,8 +184,8 @@ public class RepresentacionTemplateCategory extends Composite {
 						encontrado=true;
 					iterador++;
 				}
-				if (encontrado)
-					return ((RepresentacionTemplateCategory) VPT.getWidget(iterador-1));
+				if ((encontrado)&&(iterador>=1))
+					return ((RepresentacionTemplateCategory) VPT.getWidget(iterador-2));
 				return null;
 			}
 		});
@@ -256,13 +256,36 @@ public class RepresentacionTemplateCategory extends Composite {
 				if (YO.getParent() instanceof VerticalPanelTemplate)
 				{			
 					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
-					//Mover los Pesos salvar los dos
-					//SWAP PESOS
+					RepresentacionTemplateCategory HermanoArriba=SwapElementUp(Padreact);
+					if (HermanoArriba!=null) 
+					{
+						//TODO SWAP PESOS
+					}else 
+					{
+						Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_UP_BROTHER);		
+					}					
 				}else
 				{
 				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
 				}
 				
+			}
+
+			private RepresentacionTemplateCategory SwapElementUp(
+					RepresentacionTemplateCategory padreact) {
+				VerticalPanelTemplate VPT=padreact.getAnnotPanel();
+				boolean encontrado=false;
+				int iterador=0;
+				while (!encontrado&&iterador<VPT.getWidgetCount())
+				{
+					RepresentacionTemplateCategory act=((RepresentacionTemplateCategory) VPT.getWidget(iterador));
+					if (act==YO)
+						encontrado=true;
+					iterador++;
+				}
+				if ((encontrado)&&(iterador>=1))
+					return ((RepresentacionTemplateCategory) VPT.getWidget(iterador-2));
+				return null;
 			}
 		});
 		
@@ -297,13 +320,36 @@ public class RepresentacionTemplateCategory extends Composite {
 				if (YO.getParent() instanceof VerticalPanelTemplate)
 				{			
 					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
-					//Mover los Pesos salvar los dos
-					//SWAP Pesos			
+					RepresentacionTemplateCategory HermanoArriba=SwapElementDown(Padreact);
+					if (HermanoArriba!=null) 
+					{
+						//TODO SWAP PESOS
+					}else 
+					{
+						Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_DOWN_BROTHER);		
+					}		
 				}else
 				{
 				Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE);	
 				}
 				
+			}
+
+			private RepresentacionTemplateCategory SwapElementDown(
+					RepresentacionTemplateCategory padreact) {
+				VerticalPanelTemplate VPT=padreact.getAnnotPanel();
+				boolean encontrado=false;
+				int iterador=0;
+				while (!encontrado&&iterador<VPT.getWidgetCount())
+				{
+					RepresentacionTemplateCategory act=((RepresentacionTemplateCategory) VPT.getWidget(iterador));
+					if (act==YO)
+						encontrado=true;
+					iterador++;
+				}
+				if ((encontrado)&&(iterador<VPT.getWidgetCount()))
+					return ((RepresentacionTemplateCategory) VPT.getWidget(iterador));
+				return null;
 			}
 		});
 		
