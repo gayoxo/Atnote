@@ -6,6 +6,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
+import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.controler.Constants;
@@ -30,8 +31,8 @@ import com.google.gwt.user.client.ui.DockPanel;
 public class PopUpFinderSelectorExist extends PopupPanel {
 
 	
-	//Cambiar finder
-	private FinderGrafo finder;
+	//TODO Cambiar finder
+	private FinderKeys finder;
 	private Entity father;
 
 	public PopUpFinderSelectorExist(Catalog CatalogoIn, Entity entity) {
@@ -49,14 +50,15 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		
 		
 		father=entity;
-		finder = new FinderGrafo(CatalogoIn);
+		finder = new FinderKeys();
+		finder.setCatalogo(CatalogoIn);
 		SimplePanel S= new SimplePanel();
 		S.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
 		S.setWidget(finder);
-		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelAdministracionMio(
+		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
 				"prototipo", new VerticalPanel(), new VerticalPanel(),finder));
 		
-		FinderGrafo.setBotonClickGrafo(new ClickHandlerMioSeleccion(this)
+		finder.setBotonClick(new ClickHandlerMioSeleccion(this)
 				
 //				new ClickHandler() {
 //
@@ -100,6 +102,7 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		menuBar.addItem(mntmClose);
 		DLP.add(S);
 		finder.setSize("100", "100%");
+		finder.RefrescaLosDatos();
 
 	}
 	

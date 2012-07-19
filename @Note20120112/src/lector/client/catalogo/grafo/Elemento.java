@@ -35,7 +35,6 @@ public class Elemento {
 			{
 			encontrado=true;	
 			AnnotationSchema A=Lista.get(i);
-				//TODO Necesito que la gerarquia contenga el tipo!!!!!
 			if (A.getFile())
 				{
 				E=new File(A.getName(), A.getId(), Catalogo);

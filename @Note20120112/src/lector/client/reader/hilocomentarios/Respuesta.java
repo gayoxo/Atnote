@@ -261,7 +261,7 @@ public class Respuesta extends Composite {
 						
 						public void onFailure(Throwable caught) {
 							Window.alert(ActualUser.getLanguage().getE_DeleteReply());
-							//TODO Error
+							
 							
 						}
 					});
