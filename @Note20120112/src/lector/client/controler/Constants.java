@@ -28,4 +28,8 @@ public class Constants {
 	public static String BLOB_PUBLISHED_YEAR = "publishedyear";
 	public static String BLOB_TITLE = "title";
 	
+	// VISUALIZACION
+	public static String VISUAL_ARBOL ="Visualization in Tree";
+	public static String VISUAL_KEY="Visualization in Keys";
+	
 }

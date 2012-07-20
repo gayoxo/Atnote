@@ -32,5 +32,7 @@ public class ErrorConstants {
 	public static String ERROR_THERE_ARE_NOT_UP_BROTHER_TO_DEGRADE="There are not a up brother to degrade the category";
 	public static String ERROR_THERE_ARE_NOT_DOWN_BROTHER="There are not a down brother to swap weights the category";
 	public static String ERROR_THERE_ARE_NOT_UP_BROTHER="There are not a up brother to swap weights the category";
+	public static String ERROR_LOADING_TEMPLATE="Error loading the template";
+	public static String COULD_NOT_REFRESH_TEMPLATES="Error retriving templates, plese try re-open editor";
 	
 }
