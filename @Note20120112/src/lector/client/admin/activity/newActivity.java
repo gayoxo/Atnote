@@ -2,6 +2,7 @@ package lector.client.admin.activity;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
+import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
 
@@ -84,6 +85,8 @@ public class newActivity extends PopupPanel {
 					ReadingActivity A = new ReadingActivity();
 					A.setName(S);
 					A.setProfessorId(ActualUser.getUser().getId());
+					A.setTemplateLibre(true);
+					A.setVisualizacion(Constants.VISUAL_ARBOL);
 					LoadingPanel.getInstance().center();
 					LoadingPanel.getInstance().setLabelTexto("Saving...");
 					bookReaderServiceHolder.saveReadingActivity(A,

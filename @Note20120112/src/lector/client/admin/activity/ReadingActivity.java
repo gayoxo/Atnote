@@ -9,6 +9,8 @@ import javax.persistence.Id;
 
 import javax.persistence.Table;
 
+import lector.client.controler.Constants;
+
 @Entity
 @Table(name = "reading_activity")
 public class ReadingActivity implements Serializable, IsSerializable {
@@ -31,12 +33,14 @@ public class ReadingActivity implements Serializable, IsSerializable {
 	}
 
 	public ReadingActivity(String languageName, String bookId, Long groupId,
-			Long professorId, Long catalogId) {
+			Long professorId, Long catalogId,String visualization ) {
 		this.languageName = languageName;
 		this.bookId = bookId;
 		this.groupId = groupId;
 		this.professorId = professorId;
 		this.catalogId = catalogId;
+		this.TemplateLibre=true;
+		this.Visualizacion=visualization;
 	}
 
 	public String getBookId() {

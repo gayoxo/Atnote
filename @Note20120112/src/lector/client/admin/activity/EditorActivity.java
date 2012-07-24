@@ -226,6 +226,10 @@ public class EditorActivity extends PopupPanel {
 					ActualActivity.setLanguageName(SelectedLanguage.getName());
 				if (SelectedCatalogPublic != null)
 					ActualActivity.setOpenCatalogId(SelectedCatalogPublic.getId());
+				if (Template != null)
+					ActualActivity.setTemplateId(Template.getId());
+				ActualActivity.setTemplateLibre(CheckBoxFree.getValue());
+				ActualActivity.setVisualizacion(comboBox.getItemText(comboBox.getSelectedIndex()));
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Saving...");
 				bookReaderServiceHolder.saveReadingActivity(ActualActivity,
@@ -325,8 +329,13 @@ public class EditorActivity extends PopupPanel {
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				if (CheckBoxFree.getValue())
 				BlankTemplateBox.setVisible(true);
-					else
-				BlankTemplateBox.setVisible(false);
+					else 
+					if (Template!=null)
+						BlankTemplateBox.setVisible(false);
+					else {
+						Window.alert(ErrorConstants.TEMPLATES_CAT_BE_EMPTY);
+						CheckBoxFree.setValue(true, false);
+					}
 			}
 		});
 		horizontalPanel.add(CheckBoxFree);
@@ -348,7 +357,7 @@ public class EditorActivity extends PopupPanel {
 		comboBox = new ListBox();
 		comboBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				if (comboBox.getItemText(comboBox.getSelectedIndex())==Constants.VISUAL_ARBOL)
+				if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(Constants.VISUAL_ARBOL))
 					{
 					VisualizacionLabel.setText("Visualizacion:" + Constants.VISUAL_ARBOL);
 					image.setUrl("EditImages/Arbol.jpg");
@@ -578,23 +587,30 @@ public class EditorActivity extends PopupPanel {
 	{
 		if (ActualActivity.getTemplateLibre() != null) {
 			
-			if (ActualActivity.getTemplateLibre())
+			if (ActualActivity.getTemplateLibre()){
 				BlankTemplateBox.setVisible(true);
-			else 	BlankTemplateBox.setVisible(false);
+				CheckBoxFree.setValue(true, false);
+			}
+			else{
+				CheckBoxFree.setValue(false, false);
+				BlankTemplateBox.setVisible(false);
+			}
 			
 			generateFinderOld();
 
 
-		} else
+		} else{
 			generateFinderOld();
+		}
+			
 		
 	}
 	private void generateFinderOld()
 	{
 		if (ActualActivity.getVisualizacion() != null) {
-			if (ActualActivity.getVisualizacion()==Constants.VISUAL_ARBOL)
+			if (ActualActivity.getVisualizacion().equals(Constants.VISUAL_ARBOL))
 					{
-					comboBox.setSelectedIndex(1);
+					comboBox.setSelectedIndex(0);
 					VisualizacionLabel.setText("Visualizacion:" + Constants.VISUAL_ARBOL);
 					image.setUrl("EditImages/Arbol.jpg");
 				
@@ -602,7 +618,7 @@ public class EditorActivity extends PopupPanel {
 					}
 			else 
 			{
-				comboBox.setSelectedIndex(0);	
+				comboBox.setSelectedIndex(1);	
 				VisualizacionLabel.setText("Visualizacion:" + Constants.VISUAL_KEY);
 				image.setUrl("EditImages/Key.jpg");
 			}
