@@ -2,6 +2,7 @@ package lector.client.reader;
 
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
+import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
@@ -35,7 +36,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 
 public class SelectorTypePopUpAnnotacion extends PopupPanel {
-	private static FinderGrafo finder;
+	private static Finder finder;
 	protected MenuItem mntmNewItem;
 	protected MenuBar menuBar;
 	private static CatalogTipo CT;
@@ -114,78 +115,91 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
         dockPanel.add(scrollPanel);
         dockPanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
         
-        FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),HP));
+//        FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),HP));
+//        
+//        
+//        FinderGrafo.setBotonClickGrafo(new ClickHandler() {
+//
+//	        public void onClick(ClickEvent event) {
+//	        	BotonesStackPanelReaderSelectMio BS=((BotonesStackPanelReaderSelectMio) event.getSource());
+//	        Entity Act=BS.getEntidad();
+//	        
+//	        if (Act instanceof File)
+//	        {
+//	        	ButtonTipo nuevo=new ButtonTipo(Act,CT.getTexto(),BS.getLabeltypo());
+//	        	nuevo.addClickHandler(new ClickHandler() {
+//					
+//					public void onClick(ClickEvent event) {
+//						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+//						
+//					}
+//				});
+//			
+//	        	nuevo.addMouseDownHandler(new MouseDownHandler() {
+//					public void onMouseDown(MouseDownEvent event) {
+//						((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+//					}
+//				});
+//				
+//
+//	        	nuevo.addMouseOutHandler(new MouseOutHandler() {
+//					public void onMouseOut(MouseOutEvent event) {
+//						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+//				}
+//			});
+//				
+//
+//	        	nuevo.addMouseOverHandler(new MouseOverHandler() {
+//					public void onMouseOver(MouseOverEvent event) {
+//						
+//						((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+//					
+//				}
+//			});
+//
+//	        	nuevo.setStyleName("gwt-ButtonCenter");
+//	        	nuevo.addClickHandler(new ClickHandler() {
+//					
+//					public void onClick(ClickEvent event) {
+//						ButtonTipo Yo=(ButtonTipo)event.getSource();
+//						Yo.getPertenezco().remove(Yo);
+//						
+//						
+//					}
+//				});
+//	        	if (!ExistPreview(BS.getLabeltypo(),Act))
+//	        			BS.getLabeltypo().add(nuevo);
+//	        	else Window.alert(ActualUser.getLanguage().getE_ExistBefore());
+//	        }
+//	        }
+//
+//			private boolean ExistPreview(HorizontalPanel labeltypo, Entity act) {
+//				for (int i = 0; i < labeltypo.getWidgetCount(); i++) {
+//					Entity temp = ((ButtonTipo)labeltypo.getWidget(i)).getEntidad();
+//					if (temp.getID()==act.getID()) return true;
+//					
+//				}
+//				return false;
+//			}
+//	        });
         
+        RestoreFinderButtonActio();
         
-        FinderGrafo.setBotonClickGrafo(new ClickHandler() {
-
-	        public void onClick(ClickEvent event) {
-	        	BotonesStackPanelReaderSelectMio BS=((BotonesStackPanelReaderSelectMio) event.getSource());
-	        Entity Act=BS.getEntidad();
-	        
-	        if (Act instanceof File)
-	        {
-	        	ButtonTipo nuevo=new ButtonTipo(Act,CT.getTexto(),BS.getLabeltypo());
-	        	nuevo.addClickHandler(new ClickHandler() {
-					
-					public void onClick(ClickEvent event) {
-						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-						
-					}
-				});
-			
-	        	nuevo.addMouseDownHandler(new MouseDownHandler() {
-					public void onMouseDown(MouseDownEvent event) {
-						((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
-					}
-				});
-				
-
-	        	nuevo.addMouseOutHandler(new MouseOutHandler() {
-					public void onMouseOut(MouseOutEvent event) {
-						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-				}
-			});
-				
-
-	        	nuevo.addMouseOverHandler(new MouseOverHandler() {
-					public void onMouseOver(MouseOverEvent event) {
-						
-						((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
-					
-				}
-			});
-
-	        	nuevo.setStyleName("gwt-ButtonCenter");
-	        	nuevo.addClickHandler(new ClickHandler() {
-					
-					public void onClick(ClickEvent event) {
-						ButtonTipo Yo=(ButtonTipo)event.getSource();
-						Yo.getPertenezco().remove(Yo);
-						
-						
-					}
-				});
-	        	if (!ExistPreview(BS.getLabeltypo(),Act))
-	        			BS.getLabeltypo().add(nuevo);
-	        	else Window.alert(ActualUser.getLanguage().getE_ExistBefore());
-	        }
-	        }
-
-			private boolean ExistPreview(HorizontalPanel labeltypo, Entity act) {
-				for (int i = 0; i < labeltypo.getWidgetCount(); i++) {
-					Entity temp = ((ButtonTipo)labeltypo.getWidget(i)).getEntidad();
-					if (temp.getID()==act.getID()) return true;
-					
-				}
-				return false;
-			}
-	        });
+        if (ActualUser.getReadingactivity().getVisualizacion()==null||ActualUser.getReadingactivity().getVisualizacion().equals(Constants.VISUAL_ARBOL))
+        {
         finder= new FinderGrafo(Cata);
         scrollPanel.setWidget(finder);
         finder.setSize("100%", "100%");
         finder.RefrescaLosDatos();
-        
+        }
+        else 
+        {
+        	 finder= new FinderKeys();
+        	 finder.setCatalogo(Cata);
+             scrollPanel.setWidget(finder);
+             finder.setSize("100%", "100%");
+             finder.RefrescaLosDatos();
+        }
 	}
 
 	protected void setAllowCreate(boolean state)
@@ -259,5 +273,8 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
 					return false;
 				}
 		        });
+		 
+		 FinderKeys.setButtonTipo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),HP));
+		 FinderKeys.setBotonClick(new ClickHandlerMioSelector(CT));
 	}
 }

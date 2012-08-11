@@ -53,9 +53,6 @@ public class FinderKeys extends Finder {
 	
 	//el finder del reading activity tiene lenguaje asociado
 	protected boolean InReadingActivity=false;
-	protected ScrollPanel scrollPanel;
-	protected ClickHandler clickHandler;
-	protected BotonesStackPanelMio buttonMio;
 	private ElementKey EK;
 	private ClickHandler CHM;
 	private ClickHandler CHS;
@@ -157,7 +154,9 @@ public class FinderKeys extends Finder {
 				}
 			});
 				B.setEntidad(ActualEle.getEntidad());
-				((ClickHandlerMio)clickHandler).onClickMan(B);
+				if (clickHandler instanceof ClickHandlerMio )
+					((ClickHandlerMio)clickHandler).onClickMan(B);
+				else B.click();
 
 				
 			}
@@ -315,13 +314,13 @@ public class FinderKeys extends Finder {
 //		cargaLaRama();
 	}
 	
-	public void setButtonTipo(BotonesStackPanelMio buttonMio) {
-		this.buttonMio=buttonMio;
+	public static void setButtonTipo(BotonesStackPanelMio buttonMio) {
+		Finder.buttonMio=buttonMio;
 
 	}
 
-	public void setBotonClick(ClickHandler clickHandler) {
-		this.clickHandler=clickHandler;
+	public static void setBotonClick(ClickHandler clickHandler) {
+		Finder.clickHandler=clickHandler;
 	}
 
 	public Entity getTopPath() {

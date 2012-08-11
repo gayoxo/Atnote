@@ -55,8 +55,8 @@ public class Finder extends Composite {
 	protected SimplePanel simplePanel;
 	protected Node trtmNewItem;
 	protected ScrollPanel scrollPanel;
-	protected ClickHandler clickHandler;
-	protected BotonesStackPanelMio buttonMio;
+	protected static ClickHandler clickHandler;
+	protected static BotonesStackPanelMio buttonMio;
 	private Tree ArbolDeNavegacion;
 	
 	public Finder() {
@@ -260,13 +260,13 @@ public class Finder extends Composite {
 		cargaLaRama();
 	}
 	
-	public void setButtonTipo(BotonesStackPanelMio buttonMio) {
-		this.buttonMio=buttonMio;
+	public static void setButtonTipo(BotonesStackPanelMio buttonMio) {
+		Finder.buttonMio=buttonMio;
 
 	}
 
-	public void setBotonClick(ClickHandler clickHandler) {
-		this.clickHandler=clickHandler;
+	public static void setBotonClick(ClickHandler clickHandler) {
+		Finder.clickHandler=clickHandler;
 	}
 
 	public Entity getTopPath() {
