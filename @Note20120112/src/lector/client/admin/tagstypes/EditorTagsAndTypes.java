@@ -71,10 +71,10 @@ public class EditorTagsAndTypes implements EntryPoint {
 		SimplePanel S = new SimplePanel();
 		S.setSize("100%", "97%");
 		S.add(finder);
-		finder.setButtonTipo(new BotonesStackPanelAdministracionMio(
+		FinderKeys.setButtonTipo(new BotonesStackPanelAdministracionMio(
 				"prototipo", new VerticalPanel(), Selected, finder));
 		
-		finder.setBotonClick(new ClickHandlerMio());
+		FinderKeys.setBotonClick(new ClickHandlerMio());
 
 		finder.setSize("100%", "100%");
 
@@ -374,6 +374,10 @@ public class EditorTagsAndTypes implements EntryPoint {
 		// Asincronino
 		Selected.clear();
 		Selected.add(menuBar_3);
+		FinderKeys.setButtonTipo(new BotonesStackPanelAdministracionMio(
+				"prototipo", new VerticalPanel(), Selected, finder));
+		
+		FinderKeys.setBotonClick(new ClickHandlerMio());
 		finder.RefrescaLosDatos();
 		// scrollPanel.setWidget(finder);
 		finder.setSize("100%", "100%");

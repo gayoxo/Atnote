@@ -3242,6 +3242,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 	private void addFatherToFolder(Long folderId, Long fatherId)
 			throws FileException {
 
+
 		FolderDB folderFather = null;
 		boolean isFatherCatalog = true;
 
@@ -3268,6 +3269,11 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 				sonFolder.getFathers().add(fatherId);
 				updateFolder(sonFolder);
 			}
+		}
+		else 
+		{
+			//TODO lanzar excepcion
+			throw new FileException("Descendant Error");
 		}
 	}
 
@@ -3374,6 +3380,8 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		if (folderTo == null) {
 			return false;
 		}
+		if (folderTo.getId().equals(folderFromId))
+			return true;
 		boolean isDecendant = false;
 		ArrayList<FolderDB> parentsList = new ArrayList<FolderDB>();
 		ArrayList<Long> parentsListIDs = folderTo.getFathers();
@@ -3773,6 +3781,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			addFatherToFolder(sonId, fatherId);
 		}
 
+		//TODO lanzar excepcion
 	}
 
 	// private UserApp loadUserBybookId(String bookId) {

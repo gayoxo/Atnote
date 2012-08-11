@@ -65,7 +65,7 @@ public class SelectorTypePopUpAnnotacion extends PopupPanel {
        
         mntmNewItem = new MenuItem(ActualUser.getLanguage().getNewAdmin(), false, new Command() {
         	public void execute() {
-        		SelectorTypePopUpAnnotacionAdministracion SBTF=new SelectorTypePopUpAnnotacionAdministracion(panelBotonesTipo,Cata,CT,finder);
+        		SelectorTypePopUpAnnotacionAdministracion SBTF=new SelectorTypePopUpAnnotacionAdministracion(panelBotonesTipo,Cata,finder);
         		SBTF.center();
         	}
         });

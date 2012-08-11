@@ -6,6 +6,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
+import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.controler.Constants;
@@ -27,7 +28,7 @@ import com.google.gwt.user.client.Window;
 
 public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 
-	private FinderGrafo finder;
+	private Finder finder;
 	static GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
 	private Entity father;
@@ -70,12 +71,62 @@ public class PopUpFinderSelectorExistAnnotation extends PopupPanel {
 				
 			}
 		});
-		finder = new FinderGrafo(CatalogoIn);
+		
 		finderrefresh=finderin;
+		
+		if (ActualUser.getReadingactivity().getVisualizacion()==null||ActualUser.getReadingactivity().getVisualizacion().equals(Constants.VISUAL_ARBOL))
+        {
+		finder = new FinderGrafo(CatalogoIn);
+		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelAdministracionMio(
+				"prototipo", new VerticalPanel(), new VerticalPanel(),finder));
+		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				Entity E=((BotonesStackPanelAdministracionMio)event.getSource()).getEntidad();
+				AsyncCallback<Void> LLamada=new AsyncCallback<Void>() {
+					
+					public void onSuccess(Void result) {
+//						finderrefresh.RefrescaLosDatos();
+//						//	scrollPanel.setWidget(finder);
+//						finderrefresh.setSize("100%","100%");
+						finderrefresh.RefrescaLosDatos();
+						SelectorTypePopUpAnnotacion.RestoreFinderButtonActio();
+						//	scrollPanel.setWidget(finder);
+						//finderrefresh.setSize("100%","100%");
+						hide();
+						
+					}
+					
+					public void onFailure(Throwable caught) {
+						Window.alert(ActualUser.getLanguage().getE_Saving());
+						
+					}
+				};
+				if (father==null)
+				bookReaderServiceHolder.addFather(E.getID(), Constants.CATALOGID, LLamada);
+				else 
+					bookReaderServiceHolder.addFather(E.getID(), father.getID(), LLamada);
+				
+			}
+		});
+        }
+        else 
+        {
+        	 finder= new FinderKeys();
+        	 finder.setCatalogo(CatalogoIn);
+             finder.RefrescaLosDatos();
+             FinderKeys.setButtonTipo(new BotonesStackPanelAdministracionMio(
+     				"prototipo", new VerticalPanel(), new VerticalPanel(),finder));
+             FinderKeys.setBotonClick(new ClickHandlerMioSelectorExist(this,finderrefresh,father));
+        }
+		
+		
+		
 		SimplePanel S= new SimplePanel();
 		S.setSize("100%", "100%");
 		S.add(finder);
 
+		
 		finder.setSize("100%", "100%");
 		
 		DockLayoutPanel DLP=new DockLayoutPanel(Unit.EM);

@@ -2,6 +2,7 @@ package lector.client.reader;
 
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
+import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.File;
@@ -36,11 +37,9 @@ public class SelectorTypePopUpAnnotacionAdministracion extends PopupPanel {
 	private Finder finderrefresh;
 	protected MenuItem mntmNewItem;
 	protected MenuBar menuBar;
-	private CatalogTipo CT;
 
-	public SelectorTypePopUpAnnotacionAdministracion(HorizontalPanel penelBotonesTipo,Catalog Cata, CatalogTipo catalog2,Finder refresh) {
+	public SelectorTypePopUpAnnotacionAdministracion(HorizontalPanel penelBotonesTipo,Catalog Cata, Finder refresh) {
 		super(true);
-		CT=catalog2;
 		SimplePanel verticalPanel = new SimplePanel();
 		finderrefresh=refresh;
 		setWidget(verticalPanel);
@@ -88,24 +87,21 @@ public class SelectorTypePopUpAnnotacionAdministracion extends PopupPanel {
         dockPanel.add(scrollPanel, DockPanel.CENTER);
        // scrollPanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
         dockPanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
-        FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),penelBotonesTipo));
+        FinderKeys.setButtonTipo(new BotonesStackPanelReaderSelectMio("prototipo", new VerticalPanel(),penelBotonesTipo));
         
         
-        FinderGrafo.setBotonClickGrafo(new ClickHandler() {
+        FinderKeys.setBotonClick(new ClickHandler() {
 
 	        public void onClick(ClickEvent event) {
 	        	
 			}
 	        });
-        finder= new Finder();
+        finder= new FinderKeys();
         finder.setCatalogo(Cata);
         scrollPanel.setWidget(finder);
         finder.RefrescaLosDatos();
         
 	}
 
-	protected void setAllowCreate(boolean state)
-	{
-		if (state) menuBar.addItem(mntmNewItem);
-	}
+
 }

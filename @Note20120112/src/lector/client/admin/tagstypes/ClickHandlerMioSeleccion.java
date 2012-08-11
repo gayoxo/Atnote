@@ -36,7 +36,9 @@ public class ClickHandlerMioSeleccion extends ClickHandlerMio implements
 			}
 			
 			public void onFailure(Throwable caught) {
+				EditorTagsAndTypes.LoadBasicTypes();
 				Window.alert("Error in copy in folder");
+				
 				
 			}
 		};
