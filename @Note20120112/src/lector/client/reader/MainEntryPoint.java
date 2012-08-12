@@ -562,7 +562,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 				hideDENSelector();
 				ActualUser.setBook(book);
 				Controlador.change2Browser();
-				PEX.hide();
+				if (PEX!=null) PEX.hide();
 			}
 		});
 		mntmBrowser.setHTML(ActualLang.getBrowserMainButton());

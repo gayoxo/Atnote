@@ -7,9 +7,13 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.browser.BotonesStackPanelBrowser;
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
+import lector.client.catalogo.FinderKeys;
+import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.login.UserApp;
+import lector.client.reader.BotonesStackPanelReaderSelectMio;
+import lector.client.reader.ClickHandlerMioSelector;
 import lector.client.reader.MainEntryPoint;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -39,6 +43,10 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 
 public class FilterAdvance implements EntryPoint{
 
@@ -47,9 +55,10 @@ public class FilterAdvance implements EntryPoint{
 	private VerticalPanel AlumnosYProfesores;
 	private GWTServiceAsync bookReaderServiceHolder = GWT
 			.create(GWTService.class);
-	private FinderGrafo FinderButton2;
-	private FinderGrafo FinderButton1;
+	private Finder FinderButton2;
+	private Finder FinderButton1;
 //	private static VerticalPanel AnotacionesResultado;
+	private DecoratedTabPanel decoratedTabPanel;
 	
 	public FilterAdvance() {
 		Rules = new VerticalPanel();
@@ -122,8 +131,27 @@ public class FilterAdvance implements EntryPoint{
 				
 			}
 		});
+		
+		FinderKeys.setButtonTipo(new BotonesStackPanelBrowser(
+				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton2));
+		 FinderKeys.setBotonClick(new ClickHandlerMioFilterAdvance());
+		 
 //		FinderButton2.setCatalogo(ActualUser.getCatalogo());
-		FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
+		
+//		FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
+		
+		if (ActualUser.getReadingactivity().getVisualizacion()==null||ActualUser.getReadingactivity().getVisualizacion().equals(Constants.VISUAL_ARBOL))
+        {
+			FinderButton2= new FinderGrafo(ActualUser.getCatalogo());
+			//FinderButton2.RefrescaLosDatos();
+        }
+        else 
+        {
+        	FinderButton2= new FinderKeys();
+        	FinderButton2.setCatalogo(ActualUser.getCatalogo());
+          //  FinderButton2.RefrescaLosDatos();
+        }
+		
 //		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 //				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton2));
 //		FinderGrafo.setBotonClickGrafo(new ClickHandler() {
@@ -186,9 +214,26 @@ public class FilterAdvance implements EntryPoint{
 				
 			}
 		});
-	//	FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
-		FinderButton1 = new FinderGrafo(ActualUser.getOpenCatalog());
 		
+		FinderKeys.setButtonTipo(new BotonesStackPanelBrowser(
+				"prototipo", new VerticalPanel(), new VerticalPanel(),FinderButton1));
+		 FinderKeys.setBotonClick(new ClickHandlerMioFilterAdvance());
+		 
+		 
+	//	FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
+		
+		 //FinderButton1 = new FinderGrafo(ActualUser.getOpenCatalog());
+		 if (ActualUser.getReadingactivity().getVisualizacion()==null||ActualUser.getReadingactivity().getVisualizacion().equals(Constants.VISUAL_ARBOL))
+	        {
+			 FinderButton1= new FinderGrafo(ActualUser.getOpenCatalog());
+			// FinderButton1.RefrescaLosDatos();
+	        }
+	        else 
+	        {
+	        	FinderButton1= new FinderKeys();
+	        	FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
+	        //	FinderButton1.RefrescaLosDatos();
+	        }
 		
 		FinderButton1.setSize("100%", "100%");
 		
@@ -196,7 +241,16 @@ public class FilterAdvance implements EntryPoint{
 		ScrollPanel scrollPanel_1 = new ScrollPanel();
 		splitLayoutPanel.add(scrollPanel_1);
 		
-		DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
+		decoratedTabPanel = new DecoratedTabPanel();
+		decoratedTabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			public void onSelection(SelectionEvent<Integer> event) {
+				int selectedd=event.getSelectedItem();
+				if (selectedd==0)
+					FinderButton2.RefrescaLosDatos();
+				else 
+					FinderButton1.RefrescaLosDatos();
+			}
+		});
 		scrollPanel_1.setWidget(decoratedTabPanel);
 		decoratedTabPanel.setSize("100%", "100%");
 		

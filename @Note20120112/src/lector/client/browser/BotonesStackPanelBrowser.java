@@ -80,7 +80,7 @@ public class BotonesStackPanelBrowser extends
 	}
 
 	private boolean EstainSelectedmio() {
-		for (int i = 1; i < Selected.getWidgetCount(); i++) {
+		for (int i = 0; i < Selected.getWidgetCount(); i++) {
 			BotonesStackPanelAdministracionMio BSM= (BotonesStackPanelAdministracionMio)Selected.getWidget(i);
 			if (BSM.getEntidad().getID().intValue()==super.getEntidad().getID().intValue()) return true;
 		}

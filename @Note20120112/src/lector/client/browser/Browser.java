@@ -7,6 +7,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
+import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
@@ -16,6 +17,7 @@ import lector.client.login.ActualUser;
 import lector.client.reader.Annotation;
 import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.LoadingPanel;
+import lector.client.reader.filter.advance.ClickHandlerMioFilterAdvance;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -46,12 +48,14 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.DecoratedTabBar;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 
 public class Browser implements EntryPoint {
 
-	private FinderGrafo FinderButton;
+	private Finder FinderButton;
 	private VerticalPanel Selected;
-	private FinderGrafo FinderButton2;
+	private Finder FinderButton2;
 	private static VerticalPanel SelectedB;
 	private Language ActualLang;
 	private static Button btnNewButton;
@@ -119,14 +123,58 @@ public class Browser implements EntryPoint {
 				return false;
 			}
 		});
-		FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
 		
 		
-				FinderButton2.setSize("100%", "100%");
+		FinderKeys.setButtonTipo(new BotonesStackPanelBrowser(
+				"prototipo", new VerticalPanel(),SelectedB,FinderButton));
+		 FinderKeys.setBotonClick(new ClickHandlerMioFilterBrowser(FinderButton));
+		 
+		 
+	//	FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
+		
+		 //FinderButton1 = new FinderGrafo(ActualUser.getOpenCatalog());
+		 if (ActualUser.getReadingactivity().getVisualizacion()==null||ActualUser.getReadingactivity().getVisualizacion().equals(Constants.VISUAL_ARBOL))
+	        {
+			 FinderButton= new FinderGrafo(ActualUser.getOpenCatalog());
+			// FinderButton1.RefrescaLosDatos();
+	        }
+	        else 
+	        {
+	        	FinderButton= new FinderKeys();
+	        	FinderButton.setCatalogo(ActualUser.getOpenCatalog());
+	        //	FinderButton1.RefrescaLosDatos();
+	        }
+		
+	//	FinderButton2 = new FinderGrafo(ActualUser.getCatalogo());
 		
 		
+				
 		
-		FinderButton = new FinderGrafo(ActualUser.getOpenCatalog());
+				FinderKeys.setButtonTipo(new BotonesStackPanelBrowser(
+						"prototipo", new VerticalPanel(), SelectedB,FinderButton2));
+				 FinderKeys.setBotonClick(new ClickHandlerMioFilterBrowser(FinderButton));
+				 
+				 
+			//	FinderButton1.setCatalogo(ActualUser.getOpenCatalog());
+				
+				 //FinderButton1 = new FinderGrafo(ActualUser.getOpenCatalog());
+				 if (ActualUser.getReadingactivity().getVisualizacion()==null||ActualUser.getReadingactivity().getVisualizacion().equals(Constants.VISUAL_ARBOL))
+			        {
+					 FinderButton2= new FinderGrafo(ActualUser.getCatalogo());
+					// FinderButton1.RefrescaLosDatos();
+			        }
+			        else 
+			        {
+			        	FinderButton2= new FinderKeys();
+			        	FinderButton2.setCatalogo(ActualUser.getCatalogo());
+			        //	FinderButton1.RefrescaLosDatos();
+			        }
+		
+				
+				 FinderButton2.setSize("100%", "100%");
+		//FinderButton = new FinderGrafo(ActualUser.getOpenCatalog());
+		
+		
 		FinderGrafo.setButtonTipoGrafo(new BotonesStackPanelBrowser(
 				"prototipo", new VerticalPanel(), SelectedB,FinderButton));
 		
@@ -163,7 +211,7 @@ public class Browser implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				BotonesStackPanelBrowser BS = ((BotonesStackPanelBrowser) event
 						.getSource());
-//			//TODO REvisar Despierto.
+//			// REvisar Despierto.
 //				if ((FinderButton.getTopPath()==null)||(BS.getEntidad().getFathers().isEmpty())) 
 //					{
 //					BS.Swap();
@@ -194,6 +242,22 @@ public class Browser implements EntryPoint {
 		scrollPanel.setSize("", "");
 		
 		DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
+		decoratedTabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			public void onSelection(SelectionEvent<Integer> event) {
+				int selectedd=event.getSelectedItem();
+				if (selectedd==0)
+				{
+					
+				FinderKeys.setBotonClick(new ClickHandlerMioFilterBrowser(FinderButton2));
+				FinderButton2.RefrescaLosDatos();
+				}
+				else  {
+					
+					FinderKeys.setBotonClick(new ClickHandlerMioFilterBrowser(FinderButton));
+					FinderButton.RefrescaLosDatos();
+				}
+			}
+		});
 		scrollPanel.setWidget(decoratedTabPanel);
 		decoratedTabPanel.setSize("100%", "100%");
 		SimplePanel CatalogoProf= new SimplePanel();
@@ -315,5 +379,13 @@ public class Browser implements EntryPoint {
 	{
 		if (SelectedB.getWidgetCount()==0)btnNewButton.setVisible(false);
 		else btnNewButton.setVisible(true);
+	}
+	
+	public static VerticalPanel getSelectedB() {
+		return SelectedB;
+	}
+	
+	public static Button getBtnNewButton() {
+		return btnNewButton;
 	}
 }

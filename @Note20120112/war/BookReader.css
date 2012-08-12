@@ -545,7 +545,7 @@ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center cen
  display: block;
     float: left;
     font: normal 12px arial, sans-serif;
-	color: Scrollbar;
+	color: red;
 	font-size: 24px;
 	text-decoration: none;
 		border: 0px solid;
@@ -829,4 +829,10 @@ background: transparent url('/BotonesSueltos/BotonIzq.jpg') no-repeat center cen
 .gwt-DecoratorPanel .middleCenter {
 height: 100%;
    width: 100%;
+}
+.gwt-LabelRedactivity {
+
+	color: orangered;
+
+
 }
