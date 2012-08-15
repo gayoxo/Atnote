@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class RepresentacionTemplateCategory extends Composite {
 
 	private TemplateCategory T;
-	private VerticalPanelTemplate AnnotPanel;
+	private VerticalPanelTemplate SonsTemplatePanel;
 	private RepresentacionTemplateCategory Father;
 	private ButtonTemplateRep BotonSelect;
 	private boolean Selected;
@@ -361,9 +361,9 @@ public class RepresentacionTemplateCategory extends Composite {
 		horizontalPanel_3.add(simplePanel);
 		simplePanel.setWidth("35px");
 		
-		AnnotPanel = new VerticalPanelTemplate(YO);
-		horizontalPanel_3.add(AnnotPanel);
-		AnnotPanel.setWidth("100%");
+		SonsTemplatePanel = new VerticalPanelTemplate(YO);
+		horizontalPanel_3.add(SonsTemplatePanel);
+		SonsTemplatePanel.setWidth("100%");
 		
 	}
 
@@ -374,7 +374,7 @@ public class RepresentacionTemplateCategory extends Composite {
 
 
 	public void addSon(RepresentacionTemplateCategory nuevo) {
-		AnnotPanel.add(nuevo);
+		SonsTemplatePanel.add(nuevo);
 		
 	}
 
@@ -386,7 +386,7 @@ public class RepresentacionTemplateCategory extends Composite {
 
 
 	public void clear() {
-		AnnotPanel.clear();
+		SonsTemplatePanel.clear();
 		
 	}
 	
@@ -407,6 +407,6 @@ public class RepresentacionTemplateCategory extends Composite {
 	}
 	
 	public VerticalPanelTemplate getAnnotPanel() {
-		return AnnotPanel;
+		return SonsTemplatePanel;
 	}
 }
