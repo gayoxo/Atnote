@@ -2,11 +2,16 @@ package lector.client.reader;
 
 import java.util.ArrayList;
 
+import lector.client.admin.export.template.Template;
+import lector.client.admin.export.template.TemplateCategory;
+import lector.client.book.reader.ExportService;
+import lector.client.book.reader.ExportServiceAsync;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.book.reader.ImageService;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.controler.Controlador;
+import lector.client.controler.ErrorConstants;
 import lector.client.login.ActualUser;
 import lector.client.reader.export.EnvioExportacion;
 import lector.client.reader.export.ExportResult;
@@ -29,13 +34,26 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class PopUPEXportacion extends PopupPanel {
 
 	private VerticalPanel verticalPanel;
+	private ListBox comboBox;
 	private static final int Longitud = 473;
 	static ImageServiceAsync imageServiceHolder = GWT
 			.create(ImageService.class);
+	static GWTServiceAsync bookReaderServiceHolder = GWT
+			.create(GWTService.class);
+	static ExportServiceAsync exportServiceHolder = GWT
+			.create(ExportService.class);
+	private Template Asociado;
+	private static VerticalPanel Actual;
+
 
 	public PopUPEXportacion() {
 		super(false);
@@ -65,6 +83,7 @@ public class PopUPEXportacion extends PopupPanel {
 					// Controlador.change2ExportResult();
 					for (Widget widget : verticalPanel) {
 						ElementoExportacion EE = (ElementoExportacion) widget;
+						//TODO separar en funcion de la clase
 						list.add(new ExportObject(EE.getAnnotation(), EE
 								.getImagen().getUrl(),EE.getImagen().getWidth(),EE.getImagen().getHeight(),EE.getAnnotation().getUserName(),EE.getAnnotation().getCreatedDate().toGMTString()));
 						// EnvioExportacion EnEx=new
@@ -94,7 +113,7 @@ public class PopUPEXportacion extends PopupPanel {
 								}
 
 								public void onFailure(Throwable caught) {
-									// TODO Auto-generated method stub
+								
 
 								}
 							});
@@ -109,11 +128,99 @@ public class PopUPEXportacion extends PopupPanel {
 		scrollPanel.setSize(Longitud + "px", Window.getClientHeight() - 48
 				+ "px");
 		dockLayoutPanel.add(scrollPanel);
+		
+		VerticalPanel verticalPanel_1 = new VerticalPanel();
+		scrollPanel.setWidget(verticalPanel_1);
+		verticalPanel_1.setSize("100%", "100%");
+				
+				HorizontalPanel horizontalPanel = new HorizontalPanel();
+				verticalPanel_1.add(horizontalPanel);
+				
+				if (ActualUser.getReadingactivity().getTemplateLibre()&&ActualUser.getReadingactivity().getTemplateId()!=null)
+				{
+					comboBox = new ListBox();
+				Long IDTemplate=ActualUser.getReadingactivity().getTemplateId();
+				if (ActualUser.getReadingactivity().getTemplateLibre())
+					comboBox.addItem("Blank Template");
+				
+				if (IDTemplate!=null)
+					exportServiceHolder.loadTemplateById(IDTemplate, new AsyncCallback<Template>() {
+						
+						public void onSuccess(Template result) {
+							comboBox.addItem(result.getName());
+							Asociado=result;
+						}
+						
+						public void onFailure(Throwable caught) {
+							
+							Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_EXPORT_PANEL);
+						}
+				});
+								comboBox.setSelectedIndex(0);
+				comboBox.addChangeHandler(new ChangeHandler() {
+					public void onChange(ChangeEvent event) {
+						verticalPanel.clear();
+						ListBox CB=(ListBox) event.getSource();
+						if (CB.getSelectedIndex()!=0)
+							LoadTemplate();
+						else Actual=verticalPanel;
+					}
 
-		verticalPanel = new VerticalPanel();
-		scrollPanel.setWidget(verticalPanel);
-		verticalPanel.setSize("100%", "100%");
+				
+				});
+				horizontalPanel.add(comboBox);
+				comboBox.setWidth("245px");
+				}
+				else if (ActualUser.getReadingactivity().getTemplateId()!=null)
+				{
+					exportServiceHolder.loadTemplateById(ActualUser.getReadingactivity().getTemplateId(), new AsyncCallback<Template>() {
+						
+						public void onSuccess(Template result) {
+							Window.alert("Load: " + result.getName());
+							Asociado=result;
+							LoadTemplate();
+							Actual=verticalPanel;
+							verticalPanel.clear();
+						}
+						
+						public void onFailure(Throwable caught) {
+							
+							Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_EXPORT_PANEL);
+						}
+					});
+				}
+				
+				
+				verticalPanel = new VerticalPanel();
+				verticalPanel_1.add(verticalPanel);
+				Actual=verticalPanel;
 
+	}
+
+	protected void LoadTemplate() {
+		if (!Asociado.getCategories().isEmpty())
+		exportServiceHolder.getTemplateCategoriesByIds(Asociado.getCategories(), new AsyncCallback<ArrayList<TemplateCategory>>() {
+			
+			public void onSuccess(ArrayList<TemplateCategory> result) {
+				ArrayList<ElementoExportacionTemplate> AEx=new ArrayList<ElementoExportacionTemplate>();
+				for (TemplateCategory templateCategory : result) {
+					ElementoExportacionTemplate E=new ElementoExportacionTemplate(templateCategory, 1, Asociado.isModificable());
+					AEx.add(E);
+					Actual.add(E);
+					E.addCliker(Actual);
+				}
+				for (ElementoExportacionTemplate elementoExportacionTemplate : AEx) {
+					ArbitroLlamadasTemplatesExport.getInstance().addElement(elementoExportacionTemplate);
+				}
+				
+			}
+			
+			public void onFailure(Throwable caught) {
+				Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH);
+				
+			}
+		});
+		
 	}
 
 	public static int getLongitud() {
@@ -121,7 +228,12 @@ public class PopUPEXportacion extends PopupPanel {
 	}
 
 	public void addAlement(ElementoExportacion elementoExportacion) {
-		verticalPanel.add(elementoExportacion);
-		elementoExportacion.addCliker(verticalPanel);
+		Actual.add(elementoExportacion);
+		elementoExportacion.addCliker(Actual);
 	}
+	
+	public static void setActual(VerticalPanel actual) {
+		Actual = actual;
+	}
+	
 }

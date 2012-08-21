@@ -1,4 +1,4 @@
-package lector.client.admin.export.admin;
+package lector.client.reader;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -15,31 +15,31 @@ import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.ErrorConstants;
 import lector.client.reader.LoadingPanel;
 
-public class ArbitroLlamadasTemplates {
+public class ArbitroLlamadasTemplatesExport {
 
-	private ArrayList<RepresentacionTemplateCategory> Pila =new ArrayList<RepresentacionTemplateCategory>();
+	private ArrayList<ElementoExportacionTemplate> Pila =new ArrayList<ElementoExportacionTemplate>();
 	private boolean finales=true;
-	private static ArbitroLlamadasTemplates YO;
+	private static ArbitroLlamadasTemplatesExport YO;
 	private ExportServiceAsync exportServiceHolder = GWT
 			.create(ExportService.class);
 	
-	public ArbitroLlamadasTemplates() {
-		Pila =new ArrayList<RepresentacionTemplateCategory>();
+	public ArbitroLlamadasTemplatesExport() {
+		Pila =new ArrayList<ElementoExportacionTemplate>();
 		finales=true;
 	}
 	
 	
 	public void clear() {
-		Pila =new ArrayList<RepresentacionTemplateCategory>();
+		Pila =new ArrayList<ElementoExportacionTemplate>();
 		finales=true;
 
 	}
-	public static ArbitroLlamadasTemplates getInstance(){
-		if (YO==null) YO=new ArbitroLlamadasTemplates();
+	public static ArbitroLlamadasTemplatesExport getInstance(){
+		if (YO==null) YO=new ArbitroLlamadasTemplatesExport();
 		return YO;
 	}
 	
-	public void addElement(RepresentacionTemplateCategory EL){
+	public void addElement(ElementoExportacionTemplate EL){
 		Pila.add(EL);
 		if (finales)
 			{
@@ -51,8 +51,8 @@ public class ArbitroLlamadasTemplates {
 	private void llamadacontinua() {
 
 		finales=false;
-		RepresentacionTemplateCategory EL=Pila.get(0);
-		TemplateCategory TC=EL.getT();
+		ElementoExportacionTemplate EL=Pila.get(0);
+		TemplateCategory TC=EL.getTemplate();
 		if (TC.getSubCategories()!=null&&!TC.getSubCategories().isEmpty()){
 			LoadingPanel.getInstance().center();
 			LoadingPanel.getInstance().setLabelTexto("Loading...");
@@ -60,7 +60,7 @@ public class ArbitroLlamadasTemplates {
 				
 				public void onSuccess(ArrayList<TemplateCategory> result) {
 					LoadingPanel.getInstance().hide();
-					RepresentacionTemplateCategory EL=Pila.get(0);
+					ElementoExportacionTemplate EL=Pila.get(0);
 					Pila.remove(EL);
 					procesallamada(result,EL);
 					if (!Pila.isEmpty())
@@ -71,14 +71,14 @@ public class ArbitroLlamadasTemplates {
 				public void onFailure(Throwable caught) {
 					LoadingPanel.getInstance().hide();
 					Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_THREAD_REFRESH);
-					Pila=new ArrayList<RepresentacionTemplateCategory>();
+					Pila=new ArrayList<ElementoExportacionTemplate>();
 					finales=true;
 					
 				}
 			});
 		}
 		else {
-			RepresentacionTemplateCategory ELL=Pila.get(0);
+			ElementoExportacionTemplate ELL=Pila.get(0);
 			Pila.remove(ELL);
 			if (!Pila.isEmpty())
 				llamadacontinua();
@@ -87,19 +87,11 @@ public class ArbitroLlamadasTemplates {
 		
 	}
 
-	protected void procesallamada(ArrayList<TemplateCategory> result, RepresentacionTemplateCategory elementoLlamada) {
-		RepresentacionTemplateCategory Padre=elementoLlamada;
+	protected void procesallamada(ArrayList<TemplateCategory> result, ElementoExportacionTemplate elementoLlamada) {
+		ElementoExportacionTemplate Padre=elementoLlamada;
 		for (TemplateCategory templateCategory : result) {
-			RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Padre,Padre.getProfundidad());
+			ElementoExportacionTemplate Nuevo=new ElementoExportacionTemplate(templateCategory, Padre.getProfundidad()+1,Padre.isEditable());
 			Padre.addSon(Nuevo);
-			Nuevo.setclickHandel(new ClickHandler() {
-				
-				public void onClick(ClickEvent event) {
-					ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
-					PanelGestionTemplate.setActual(Mas.getTRep());
-					
-				}
-			});
 			Pila.add(Nuevo);
 		}
 		

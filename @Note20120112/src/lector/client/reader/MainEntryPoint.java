@@ -626,7 +626,8 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 		Exportacion = new MenuItem("", false, new Command() {
 
 			public void execute() {
-				PEX=new PopUPEXportacion();
+				if (PEX==null)
+					PEX=new PopUPEXportacion();
 				PEX.setPopupPosition(Window.getClientWidth()+Window.getScrollLeft()-PopUPEXportacion.getLongitud()-DesviacionVentanaExportacionH, DesviacionVentanaExportacion+Window.getScrollTop());
 				PEX.show();
 			}

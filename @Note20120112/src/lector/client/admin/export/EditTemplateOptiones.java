@@ -83,12 +83,12 @@ public class EditTemplateOptiones extends PopupPanel {
 		
 		checkBox = new CheckBox(InformationConstants.ORDER_EDITABLE);
 		verticalPanel.add(checkBox);
-		checkBox.setValue(T.isModifyable());
+		checkBox.setValue(T.isModificable());
 		
 		Button btnNewButton = new Button("Save");
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				T.setModifyable(checkBox.getValue());
+				T.setModificable(checkBox.getValue());
 				T.setName(checkBox.getText());
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");

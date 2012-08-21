@@ -89,7 +89,7 @@ public class newTemplate extends PopupPanel {
 				Template T=new Template();
 				T.setName(textBox.getText());
 				T.setUserApp(ActualUser.getUser().getId());
-				T.setModifyable(chckbxNewCheckBox.getValue());
+				T.setModificable(chckbxNewCheckBox.getValue());
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");
 				exportServiceHolder.saveTemplate(T, new AsyncCallback<Void>() {

@@ -37,9 +37,11 @@ public class RepresentacionTemplateCategory extends Composite {
 	private RepresentacionTemplateCategory YO;
 	private ExportServiceAsync exportServiceHolder = GWT
 	.create(ExportService.class);
+	private int profundidad;
 	
-	public RepresentacionTemplateCategory(TemplateCategory t,RepresentacionTemplateCategory father) {
+	public RepresentacionTemplateCategory(TemplateCategory t,RepresentacionTemplateCategory father,int profundidadnueva) {
 		
+		profundidad=profundidadnueva;
 		T=t;
 		Father=father;
 		Selected=false;
@@ -408,5 +410,9 @@ public class RepresentacionTemplateCategory extends Composite {
 	
 	public VerticalPanelTemplate getAnnotPanel() {
 		return SonsTemplatePanel;
+	}
+	
+	public int getProfundidad() {
+		return profundidad;
 	}
 }

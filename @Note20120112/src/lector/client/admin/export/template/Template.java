@@ -53,12 +53,12 @@ public class Template implements Serializable {
 		this.name = name;
 	}
 
-	public boolean isModifyable() {
+	public boolean isModificable() {
 		return modifyable;
 	}
 
-	public void setModifyable(boolean modifyable) {
-		this.modifyable = modifyable;
+	public void setModificable(boolean modificable) {
+		this.modifyable = modificable;
 	}
 
 	public ArrayList<Long> getCategories() {

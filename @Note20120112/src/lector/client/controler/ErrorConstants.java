@@ -35,5 +35,6 @@ public class ErrorConstants {
 	public static String ERROR_LOADING_TEMPLATE="Error loading the template";
 	public static String COULD_NOT_REFRESH_TEMPLATES="Error retriving templates, plese try re-open editor";
 	public static String TEMPLATES_CAT_BE_EMPTY="You can not unselect if you do not select a template first";
+	public static String ERROR_RETRIVING_TEMPLATE_MASTER_EXPORT_PANEL="Error Retriving Template, please reload";
 	
 }

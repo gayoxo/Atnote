@@ -34,7 +34,7 @@ public class PanelGestionTemplate extends Composite {
 		ActualBaseT = new TemplateCategory(T.getName(),T.getCategories(),
 				new ArrayList<Long>(), Constants.TEMPLATEID, T.getId());
 		ActualBaseT.setId(Constants.TEMPLATEID);
-		ActualBase=new RepresentacionTemplateCategory(ActualBaseT,null);
+		ActualBase=new RepresentacionTemplateCategory(ActualBaseT,null,0);
 		Actual=ActualBase;
 		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
 		Actual.setSelected(true);
@@ -60,7 +60,7 @@ public class PanelGestionTemplate extends Composite {
 			public void onSuccess(ArrayList<TemplateCategory> result) {
 				LoadingPanel.getInstance().hide();
 				for (TemplateCategory templateCategory : result) {
-					RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual);
+					RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual,Actual.getProfundidad());
 					Nuevo.setclickHandel(new ClickHandler() {
 						
 						public void onClick(ClickEvent event) {
@@ -126,7 +126,7 @@ public class PanelGestionTemplate extends Composite {
 					public void onSuccess(ArrayList<TemplateCategory> result) {
 						LoadingPanel.getInstance().hide();
 						for (TemplateCategory templateCategory : result) {
-							RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual);
+							RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual,Actual.getProfundidad());
 							Nuevo.setclickHandel(new ClickHandler() {
 								
 								public void onClick(ClickEvent event) {
