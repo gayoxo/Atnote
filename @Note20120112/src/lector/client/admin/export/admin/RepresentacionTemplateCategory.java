@@ -61,25 +61,25 @@ public class RepresentacionTemplateCategory extends Composite {
 		Button btnNewButton_1 = new Button("<img src=\"/BotonesTemplate/Izquierda.gif\" alt=\"<-\">");
 		horizontalPanel_1.add(btnNewButton_1);
 		btnNewButton_1.setSize("100%", "100%");
-		btnNewButton_1.setStyleName("gwt-ButtonIzquierda");
+		btnNewButton_1.setStyleName("gwt-ButtonCenterContinuoIzqEnd");
 		btnNewButton_1.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzqEnd");
 			}
 		});
 		btnNewButton_1.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzqEndOver");
 			}
 		});
 		btnNewButton_1.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzqEndPush");
 			}
 		});
 		btnNewButton_1.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzqEnd");
 			}
 		});
 		btnNewButton_1.addClickHandler(new ClickHandler() {
@@ -122,25 +122,25 @@ public class RepresentacionTemplateCategory extends Composite {
 		Button btnNewButton_2 = new Button("<img src=\"/BotonesTemplate/Derecha.gif\" alt=\"<-\">");
 		horizontalPanel_1.add(btnNewButton_2);
 		btnNewButton_2.setSize("100%", "100%");
-		btnNewButton_2.setStyleName("gwt-ButtonDerecha");
+		btnNewButton_2.setStyleName("gwt-ButtonCenterContinuoIzq");
 		btnNewButton_2.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzq");
 			}
 		});
 		btnNewButton_2.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzqOver");
 			}
 		});
 		btnNewButton_2.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzqPush");
 			}
 		});
 		btnNewButton_2.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoIzq");
 			}
 		});
 		btnNewButton_2.addClickHandler(new ClickHandler() {
@@ -198,20 +198,20 @@ public class RepresentacionTemplateCategory extends Composite {
 		BotonSelect.setSize("77px", "49px");
 		
 		
-		BotonSelect.setStyleName("gwt-ButtonCenter");
+		BotonSelect.setStyleName("gwt-ButtonCenterContinuoDoble");
 		BotonSelect.setSize("100%", "100%");
 
 		BotonSelect.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
 				if (!Selected)
-					((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoDoblePush");
 			}
 		});
 		
 		BotonSelect.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				if (!Selected)
-					((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoDoble");
 		}
 		});
 		
@@ -219,7 +219,7 @@ public class RepresentacionTemplateCategory extends Composite {
 			public void onMouseOver(MouseOverEvent event) {
 				
 				if (!Selected)
-					((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoDobleOver");
 			
 		}
 	});
@@ -231,25 +231,25 @@ public class RepresentacionTemplateCategory extends Composite {
 		Button btnNewButton_3 = new Button("<img src=\"/BotonesTemplate/Arriba.gif\" alt=\"<-\">");
 		horizontalPanel_2.add(btnNewButton_3);
 		btnNewButton_3.setSize("100%", "100%");
-		btnNewButton_3.setStyleName("gwt-ButtonIzquierda");
+		btnNewButton_3.setStyleName("gwt-ButtonCenterContinuo");
 		btnNewButton_3.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
 			}
 		});
 		btnNewButton_3.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoOver");
 			}
 		});
 		btnNewButton_3.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoPush");
 			}
 		});
 		btnNewButton_3.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
 			}
 		});
 		btnNewButton_3.addClickHandler(new ClickHandler() {
@@ -295,25 +295,25 @@ public class RepresentacionTemplateCategory extends Composite {
 		Button btnNewButton_4 = new Button("<img src=\"/BotonesTemplate/Abajo.gif\" alt=\"<-\">");
 		horizontalPanel_2.add(btnNewButton_4);
 		btnNewButton_4.setSize("100%", "100%");
-		btnNewButton_4.setStyleName("gwt-ButtonDerecha");
+		btnNewButton_4.setStyleName("gwt-ButtonCenterContinuoEnd");
 		btnNewButton_4.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 			}
 		});
 		btnNewButton_4.addMouseOverHandler(new MouseOverHandler() {
 			public void onMouseOver(MouseOverEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndOver");
 			}
 		});
 		btnNewButton_4.addMouseDownHandler(new MouseDownHandler() {
 			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndPush");
 			}
 		});
 		btnNewButton_4.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+				((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 			}
 		});
 		btnNewButton_4.addClickHandler(new ClickHandler() {

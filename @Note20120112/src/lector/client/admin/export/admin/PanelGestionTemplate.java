@@ -36,16 +36,16 @@ public class PanelGestionTemplate extends Composite {
 		ActualBaseT.setId(Constants.TEMPLATEID);
 		ActualBase=new RepresentacionTemplateCategory(ActualBaseT,null,0);
 		Actual=ActualBase;
-		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDobleSelect");
 		Actual.setSelected(true);
 		ActualBase.setclickHandel(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
 				ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
-				Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+				Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDoble");
 				Actual.setSelected(false);
 				Actual=Mas.getTRep();
-				Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+				Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDobleSelect");
 				Actual.setSelected(true);
 				
 			}
@@ -65,10 +65,10 @@ public class PanelGestionTemplate extends Composite {
 						
 						public void onClick(ClickEvent event) {
 							ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
-							Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+							Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDoble");
 							Actual.setSelected(false);
 							Actual=Mas.getTRep();
-							Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+							Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDobleSelect");
 							Actual.setSelected(true);
 							
 						}
@@ -96,18 +96,18 @@ public class PanelGestionTemplate extends Composite {
 	}
 	
 	public static void setActual(RepresentacionTemplateCategory actual) {
-		Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDoble");
 		Actual.setSelected(false);
 		Actual = actual;
-		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDobleSelect");
 		Actual.setSelected(true);
 	}
 
 	public void refresh() {
-		Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDoble");
 		Actual.setSelected(false);
 		Actual=ActualBase;
-		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+		Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDobleSelect");
 		Actual.setSelected(true);
 		ActualBase.clear();
 		PanelTemplate.clear();
@@ -131,10 +131,10 @@ public class PanelGestionTemplate extends Composite {
 								
 								public void onClick(ClickEvent event) {
 									ButtonTemplateRep Mas=(ButtonTemplateRep)event.getSource();
-									Actual.getBotonSelect().setStyleName("gwt-ButtonCenter");
+									Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDoble");
 									Actual.setSelected(false);
 									Actual=Mas.getTRep();
-									Actual.getBotonSelect().setStyleName("gwt-ButtonCenterSelect");
+									Actual.getBotonSelect().setStyleName("gwt-ButtonCenterContinuoDobleSelect");
 									Actual.setSelected(true);
 									
 								}

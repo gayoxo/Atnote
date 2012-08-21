@@ -38,7 +38,7 @@ public class MenuOpciones extends PopupPanel {
 		YO=yo;
 		VerticalPanel verticalPanel = new VerticalPanel();
 		setWidget(verticalPanel);
-		verticalPanel.setSize("100%", "100%");
+		//verticalPanel.setSize("100%", "100%");
 		
 		Button btnNewButton = new Button("Edit");
 		btnNewButton.addClickHandler(new ClickHandler() {

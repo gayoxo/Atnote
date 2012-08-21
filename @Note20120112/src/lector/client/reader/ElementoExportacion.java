@@ -81,77 +81,83 @@ public class ElementoExportacion extends Composite{
 
 
 	        button_1 = new Button("X");
-	        button_1.setStyleName("gwt-ButtonDerecha");
+	        button_1.setStyleName("gwt-ButtonCenterContinuo");
 	        button_1.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
 				}
 			});
 	        button_1.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoOver");
 				}
 			});
 	        button_1.addMouseDownHandler(new MouseDownHandler() {
 				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoPush");
 				}
 			});
 	        button_1.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
 				}
 			});
 	        horizontalPanel.add(button_1);
 	        button_1.setSize("52px", "30px");
 	        
-	        Down = new Button("DOWN");
-	        horizontalPanel.add(Down);
-	        Down.setWidth("106px");
-	        Down.setStyleName("gwt-ButtonIzquierda");
-	        Down.addMouseOutHandler(new MouseOutHandler() {
-				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
-				}
-			});
-	        Down.addMouseOverHandler(new MouseOverHandler() {
-				public void onMouseOver(MouseOverEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
-				}
-			});
-	        Down.addMouseDownHandler(new MouseDownHandler() {
-				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
-				}
-			});
-	        Down.addMouseUpHandler(new MouseUpHandler() {
-				public void onMouseUp(MouseUpEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
-				}
-			});
-	        
 	        UP = new Button("UP");
 	        horizontalPanel.add(UP);
-	        UP.setWidth("63px");
-	        UP.setStyleName("gwt-ButtonDerecha");
+	        horizontalPanel.setCellVerticalAlignment(UP, HasVerticalAlignment.ALIGN_MIDDLE);
+	        horizontalPanel.setCellHorizontalAlignment(UP, HasHorizontalAlignment.ALIGN_CENTER);
+	        UP.setHTML("<img src=\"/BotonesTemplate/Arriba.gif\" alt=\"UP\">");
+	        UP.setSize("50px", "30px");
+	        UP.setStyleName("gwt-ButtonCenterContinuo");
 	        UP.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
 				}
 			});
 	        UP.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoOver");
 				}
 			});
 	        UP.addMouseDownHandler(new MouseDownHandler() {
 				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoPush");
 				}
 			});
 	        UP.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
+				}
+			});
+	        
+	        Down = new Button("DOWN");
+	        horizontalPanel.add(Down);
+	        horizontalPanel.setCellHorizontalAlignment(Down, HasHorizontalAlignment.ALIGN_CENTER);
+	        horizontalPanel.setCellVerticalAlignment(Down, HasVerticalAlignment.ALIGN_MIDDLE);
+	        Down.setHTML("<img src=\"/BotonesTemplate/Abajo.gif\" alt=\"<-\">");
+	        Down.setSize("50px", "30px");
+	        Down.setStyleName("gwt-ButtonCenterContinuoEnd");
+	        Down.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
+				}
+			});
+	        Down.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndOver");
+				}
+			});
+	        Down.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndPush");
+				}
+			});
+	        Down.addMouseUpHandler(new MouseUpHandler() {
+				public void onMouseUp(MouseUpEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 				}
 			});
 	}

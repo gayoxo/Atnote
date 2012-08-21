@@ -27,7 +27,6 @@ public class ElementoExportacionTemplate extends Composite{
 	private TemplateCategory Template;
 	private int Profundidad;
 	private Button button;
-	private Button button_1;
 	private Button UP;
 	private Button Down;
 	private VerticalPanel VerticalPanel;
@@ -36,11 +35,14 @@ public class ElementoExportacionTemplate extends Composite{
 	private SimplePanel simplePanel;
 	private HorizontalPanel horizontalPanel_1;
 	private boolean Editable;
+	private Button Glue;
+	private boolean Seleccionado;
 	
 	public ElementoExportacionTemplate(TemplateCategory Templatein, int Profundidadin,boolean isEtiable) {
 		Template=Templatein;
 		Profundidad=Profundidadin;
 		yo=this;
+		Seleccionado=false;
 		Editable=isEtiable;
 		VerticalPanel verticalPanel = new VerticalPanel();
 		initWidget(verticalPanel);
@@ -54,7 +56,8 @@ public class ElementoExportacionTemplate extends Composite{
 	        button = new Button(Template.getName());
 	        button.addClickHandler(new ClickHandler() {
 	        	public void onClick(ClickEvent event) {
-	        		PopUPEXportacion.setActual(Fondo);
+	        		button.setStyleName("gwt-ButtonIzquierda");
+	        		PopUPEXportacion.setActual(yo);
 	        	}
 	        });
 	       button.setHTML(Template.getName());
@@ -65,82 +68,112 @@ public class ElementoExportacionTemplate extends Composite{
 	        button.setStyleName("gwt-ButtonIzquierda");
 	        button.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+					if (!Seleccionado) 
+						((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
 				}
 			});
 	        button.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
+				if (!Seleccionado) 
 					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
 				}
 			});
 	        button.addMouseDownHandler(new MouseDownHandler() {
 				public void onMouseDown(MouseDownEvent event) {
+					if (!Seleccionado) 
 					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
 				}
 			});
 	        button.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
+					if (!Seleccionado) 
 					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
 				}
 			});
 
 	        horizontalPanel.add(button);
-
-
-	        button_1 = new Button("");
-	        button_1.setStyleName("gwt-ButtonDerecha");
-	        button_1.addMouseOutHandler(new MouseOutHandler() {
+	        
+	        Glue = new Button(" ");
+	        horizontalPanel.add(Glue);
+	        Glue.setSize("50px", "30px");
+	        Glue.setStyleName("gwt-ButtonCenterContinuoEnd");
+	        Glue.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 				}
 			});
-	        button_1.addMouseOverHandler(new MouseOverHandler() {
+	        Glue.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndOver");
 				}
 			});
-	        button_1.addMouseDownHandler(new MouseDownHandler() {
+	        Glue.addMouseDownHandler(new MouseDownHandler() {
 				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndPush");
 				}
 			});
-	        button_1.addMouseUpHandler(new MouseUpHandler() {
+	        Glue.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 				}
 			});
-	        horizontalPanel.add(button_1);
-	        button_1.setSize("52px", "30px");
+	        
+	        
+	        UP = new Button("UP");
+	        horizontalPanel.add(UP);
+	        horizontalPanel.setCellVerticalAlignment(UP, HasVerticalAlignment.ALIGN_MIDDLE);
+	        horizontalPanel.setCellHorizontalAlignment(UP, HasHorizontalAlignment.ALIGN_CENTER);
+	        UP.setHTML("<img src=\"/BotonesTemplate/Arriba.gif\" alt=\"UP\">");
+	        UP.setSize("50px", "30px");
+	        UP.setStyleName("gwt-ButtonCenterContinuo");
+	        UP.addMouseOutHandler(new MouseOutHandler() {
+				public void onMouseOut(MouseOutEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
+				}
+			});
+	        UP.addMouseOverHandler(new MouseOverHandler() {
+				public void onMouseOver(MouseOverEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoOver");
+				}
+			});
+	        UP.addMouseDownHandler(new MouseDownHandler() {
+				public void onMouseDown(MouseDownEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoPush");
+				}
+			});
+	        UP.addMouseUpHandler(new MouseUpHandler() {
+				public void onMouseUp(MouseUpEvent event) {
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuo");
+				}
+			});
 	        
 	        Down = new Button("DOWN");
 	        horizontalPanel.add(Down);
-	        Down.setWidth("106px");
-	        Down.setStyleName("gwt-ButtonIzquierda");
+	        horizontalPanel.setCellHorizontalAlignment(Down, HasHorizontalAlignment.ALIGN_CENTER);
+	        horizontalPanel.setCellVerticalAlignment(Down, HasVerticalAlignment.ALIGN_MIDDLE);
+	        Down.setHTML("<img src=\"/BotonesTemplate/Abajo.gif\" alt=\"<-\">");
+	        Down.setSize("50px", "30px");
+	        Down.setStyleName("gwt-ButtonCenterContinuoEnd");
 	        Down.addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 				}
 			});
 	        Down.addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaOver");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndOver");
 				}
 			});
 	        Down.addMouseDownHandler(new MouseDownHandler() {
 				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierdaPush");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEndPush");
 				}
 			});
 	        Down.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonIzquierda");
+					((Button)event.getSource()).setStyleName("gwt-ButtonCenterContinuoEnd");
 				}
 			});
-	        
-	        UP = new Button("UP");
-	        horizontalPanel.add(UP);
-	        UP.setWidth("63px");
-	        UP.setStyleName("gwt-ButtonDerecha");
 	        
 	        horizontalPanel_1 = new HorizontalPanel();
 	        verticalPanel.add(horizontalPanel_1);
@@ -152,45 +185,21 @@ public class ElementoExportacionTemplate extends Composite{
 	        
 	        Fondo = new VerticalPanel();
 	        horizontalPanel_1.add(Fondo);
-	        Fondo.setSize("444px", "100%");
-	        UP.addMouseOutHandler(new MouseOutHandler() {
-				public void onMouseOut(MouseOutEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
-				}
-			});
-	        UP.addMouseOverHandler(new MouseOverHandler() {
-				public void onMouseOver(MouseOverEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaOver");
-				}
-			});
-	        UP.addMouseDownHandler(new MouseDownHandler() {
-				public void onMouseDown(MouseDownEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerechaPush");
-				}
-			});
-	        UP.addMouseUpHandler(new MouseUpHandler() {
-				public void onMouseUp(MouseUpEvent event) {
-					((Button)event.getSource()).setStyleName("gwt-ButtonDerecha");
-				}
-			});
+	        Fondo.setSize("", "100%");
 	        
 	        if (!Editable)
 	        	{
 	        	UP.setVisible(false);
 	        	Down.setVisible(false);
+	        	
 	        	}
+	        else Glue.setVisible(false);
 	}
 	
 	public void addCliker(VerticalPanel verticalPanel) {
 		
 		VerticalPanel=verticalPanel;
-		button_1.addClickHandler(new ClickHandler() {
-        	public void onClick(ClickEvent event) {
-//        		VerticalPanel.remove(yo);
-        		yo.removeFromParent();
-        	}
-        });
-		
+				
 		UP.addClickHandler(new ClickHandler() {
         	public void onClick(ClickEvent event) {
 
@@ -240,6 +249,22 @@ public void addSon(ElementoExportacionTemplate Hijo) {
 
 public boolean isEditable() {
 	return Editable;
+}
+
+public VerticalPanel getFondo() {
+	return Fondo;
+}
+
+public void ResetButton()
+{
+	button.setStyleName("gwt-ButtonIzquierda");	
+	Seleccionado=false;
+}
+
+public void selectedButton()
+{
+	button.setStyleName("gwt-ButtonIzquierdaSelect");	
+	Seleccionado=true;
 }
 
 }

@@ -89,7 +89,7 @@ public class EditTemplateOptiones extends PopupPanel {
 		btnNewButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				T.setModificable(checkBox.getValue());
-				T.setName(checkBox.getText());
+				T.setName(textBox.getText());
 				LoadingPanel.getInstance().center();
 				LoadingPanel.getInstance().setLabelTexto("Loading...");
 				exportServiceHolder.saveTemplate(T, new AsyncCallback<Void>() {

@@ -53,6 +53,7 @@ public class PopUPEXportacion extends PopupPanel {
 			.create(ExportService.class);
 	private Template Asociado;
 	private static VerticalPanel Actual;
+	private static ElementoExportacionTemplate EET;
 
 
 	public PopUPEXportacion() {
@@ -163,7 +164,11 @@ public class PopUPEXportacion extends PopupPanel {
 						ListBox CB=(ListBox) event.getSource();
 						if (CB.getSelectedIndex()!=0)
 							LoadTemplate();
-						else Actual=verticalPanel;
+						else {
+							Actual=verticalPanel;
+							if (EET!=null) 
+								EET.ResetButton();
+						}
 					}
 
 				
@@ -180,6 +185,8 @@ public class PopUPEXportacion extends PopupPanel {
 							Asociado=result;
 							LoadTemplate();
 							Actual=verticalPanel;
+							if (EET!=null) 
+								EET.ResetButton();
 							verticalPanel.clear();
 						}
 						
@@ -194,6 +201,8 @@ public class PopUPEXportacion extends PopupPanel {
 				verticalPanel = new VerticalPanel();
 				verticalPanel_1.add(verticalPanel);
 				Actual=verticalPanel;
+				if (EET!=null) 
+					EET.ResetButton();
 
 	}
 
@@ -232,8 +241,12 @@ public class PopUPEXportacion extends PopupPanel {
 		elementoExportacion.addCliker(Actual);
 	}
 	
-	public static void setActual(VerticalPanel actual) {
-		Actual = actual;
+	public static void setActual(ElementoExportacionTemplate actual) {
+		if (EET!=null)
+			EET.ResetButton();
+		EET=actual;
+		EET.selectedButton();
+		Actual = actual.getFondo();
 	}
 	
 }
