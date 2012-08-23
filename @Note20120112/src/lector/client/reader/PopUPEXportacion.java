@@ -181,7 +181,7 @@ public class PopUPEXportacion extends PopupPanel {
 					exportServiceHolder.loadTemplateById(ActualUser.getReadingactivity().getTemplateId(), new AsyncCallback<Template>() {
 						
 						public void onSuccess(Template result) {
-							Window.alert("Load: " + result.getName());
+//							Window.alert("Load: " + result.getName());
 							Asociado=result;
 							LoadTemplate();
 							Actual=verticalPanel;
@@ -248,5 +248,15 @@ public class PopUPEXportacion extends PopupPanel {
 		EET.selectedButton();
 		Actual = actual.getFondo();
 	}
+	
+
+	public void Refresh() {
+		verticalPanel.clear();
+		if (Asociado!=null&&(comboBox==null||comboBox.getSelectedIndex()!=0))
+			LoadTemplate();
+		
+	}
+	
+
 	
 }

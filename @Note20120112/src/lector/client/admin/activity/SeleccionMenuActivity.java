@@ -29,11 +29,11 @@ public class SeleccionMenuActivity extends PopupPanel {
 	public SeleccionMenuActivity(BottonActivity BL, NewAdminActivities Fatherin) {
 		super(true);
 		BLan=BL;
-		setSize("100%", "100%");
+//		setSize("", "");
 		Father=Fatherin;
 		VerticalPanel verticalPanel = new VerticalPanel();
 		setWidget(verticalPanel);
-		verticalPanel.setSize("100%", "100%");
+		//verticalPanel.setSize("100%", "100%");
 		
 		Button btnNewButton = new Button("Select");
 		btnNewButton.addClickHandler(new ClickHandler() {

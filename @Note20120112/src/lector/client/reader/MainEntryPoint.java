@@ -628,6 +628,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			public void execute() {
 				if (PEX==null)
 					PEX=new PopUPEXportacion();
+				else PEX.Refresh();
 				PEX.setPopupPosition(Window.getClientWidth()+Window.getScrollLeft()-PopUPEXportacion.getLongitud()-DesviacionVentanaExportacionH, DesviacionVentanaExportacion+Window.getScrollTop());
 				PEX.show();
 			}

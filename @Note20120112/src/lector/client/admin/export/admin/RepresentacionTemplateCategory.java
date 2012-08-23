@@ -6,6 +6,7 @@ import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.ErrorConstants;
+import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -91,15 +92,18 @@ public class RepresentacionTemplateCategory extends Composite {
 					if (Padreact.getParent() instanceof VerticalPanelTemplate)
 					{			
 						RepresentacionTemplateCategory Padrenew=((VerticalPanelTemplate) Padreact.getParent()).getFatherObject();
-						
+						LoadingPanel.getInstance().center();
+						LoadingPanel.getInstance().setLabelTexto("Loading...");
 						exportServiceHolder.moveCategory(Padreact.getT().getId(), Padrenew.getT().getId(), YO.getT().getId(), YO.getT().getTemplateId(), new AsyncCallback<Void>() {
 							
 							public void onSuccess(Void result) {
+								LoadingPanel.getInstance().hide();
 								EditTemplate.getPGT().refresh();
 								
 							}
 							
 							public void onFailure(Throwable caught) {
+								LoadingPanel.getInstance().hide();
 								Window.alert(ErrorConstants.ERROR_ON_MOVE_CATEGORY_PROMOTING);	
 								
 							}
@@ -150,19 +154,25 @@ public class RepresentacionTemplateCategory extends Composite {
 				{			
 					RepresentacionTemplateCategory Padreact=((VerticalPanelTemplate) YO.getParent()).getFatherObject();
 					RepresentacionTemplateCategory nuevoPadre=NuevoPadre(Padreact);
-					if (nuevoPadre!=null)
+					if (nuevoPadre!=null){
+						
+							LoadingPanel.getInstance().center();
+							LoadingPanel.getInstance().setLabelTexto("Loading...");
 							exportServiceHolder.moveCategory(Padreact.getT().getId(), nuevoPadre.getT().getId(), YO.getT().getId(), YO.getT().getTemplateId(), new AsyncCallback<Void>() {
 							
 							public void onSuccess(Void result) {
+								LoadingPanel.getInstance().hide();
 								EditTemplate.getPGT().refresh();
 								
 							}
 							
 							public void onFailure(Throwable caught) {
+								LoadingPanel.getInstance().hide();
 								Window.alert(ErrorConstants.ERROR_ON_MOVE_CATEGORY_DEGRADING);	
 								
 							}
 						});
+					}
 						else
 						{
 							Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_UP_BROTHER_TO_DEGRADE);	
@@ -285,7 +295,7 @@ public class RepresentacionTemplateCategory extends Composite {
 						encontrado=true;
 					iterador++;
 				}
-				if ((encontrado)&&(iterador>=1))
+				if ((encontrado)&&(iterador>1))
 					return ((RepresentacionTemplateCategory) VPT.getWidget(iterador-2));
 				return null;
 			}

@@ -565,7 +565,8 @@ public class EditorActivity extends PopupPanel {
 				
 				public void onSuccess(Template result) {
 					Template=result;
-					TemplateLabel.setText("Template: "
+					if (result!=null)
+						TemplateLabel.setText("Template: "
 							+ result.getName());
 					generateBlancTemplateOld();
 					
