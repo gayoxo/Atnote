@@ -8,6 +8,7 @@ import lector.client.book.reader.ImageService;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.controler.InformationConstants;
 import lector.client.reader.ExportObject;
+import lector.client.reader.ExportObjectTemplate;
 import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.GWT;
@@ -55,6 +56,24 @@ public class arbitroLlamadasHTML {
 		if (!pendientes.isEmpty())
 		{
 			ExportObject E=pendientes.pop();
+			if (E instanceof ExportObjectTemplate)
+			{
+				ExportObjectTemplate EE=(ExportObjectTemplate) E;
+				if (EE.getProfundidad()>3) EE.setProfundidad(3);
+				StringBuffer SB=new StringBuffer();
+				SB.append("<h");
+				SB.append(EE.getProfundidad());
+				SB.append("> ");
+				SB.append(EE.getText());
+				SB.append(" </h");
+				SB.append(EE.getProfundidad());
+				SB.append("> ");
+				Result.append(SB.toString());
+				llamadaBucle();
+				
+			}
+			else
+			{
 			imageServiceHolder.loadHTMLStringForExportUni(E,
 					new AsyncCallback<String>() {
 
@@ -68,6 +87,7 @@ public class arbitroLlamadasHTML {
 
 						}
 					});
+			}
 
 		}else
 		{

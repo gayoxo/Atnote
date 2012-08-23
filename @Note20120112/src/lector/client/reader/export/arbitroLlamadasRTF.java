@@ -8,6 +8,7 @@ import lector.client.book.reader.ImageService;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.controler.InformationConstants;
 import lector.client.reader.ExportObject;
+import lector.client.reader.ExportObjectTemplate;
 import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.GWT;
@@ -51,6 +52,41 @@ public class arbitroLlamadasRTF {
 		if (!pendientes.isEmpty())
 		{
 			ExportObject E=pendientes.pop();
+			
+//			\pard\s1\sb100\sa100\kerning36\b\f0\fs48 Creamos \par
+//			\pard\s2\sb100\sa100\kerning0\fs36 Por dentro bien \par
+//			\pard\s1\sb100\sa100\kerning36\fs48 Porque no va \par
+			
+			if (E instanceof ExportObjectTemplate)
+			{
+				ExportObjectTemplate EE=(ExportObjectTemplate) E;
+				if (EE.getProfundidad()>3) EE.setProfundidad(3);
+				StringBuffer SB=new StringBuffer();
+				SB.append("\\pard\\s");
+				SB.append(EE.getProfundidad());
+				SB.append("\\sb100\\sa100\\kerning");
+				switch (EE.getProfundidad()) {
+				case 1:
+					SB.append("36\\b\\f0\\fs48 ");
+					break;
+				case 2:
+					SB.append("0\\fs36 ");
+					break;
+				case 3:
+					SB.append("0\\fs27 ");
+					break;
+				default:
+					SB.append("0\\fs27 ");
+					break;
+				}
+				SB.append(EE.getText());
+				SB.append("\\par");
+				Result.append(SB.toString());
+				llamadaBucle();
+				
+			}
+			else
+			{
 			imageServiceHolder.loadRTFStringForExportUni(E,
 					new AsyncCallback<String>() {
 
@@ -64,6 +100,7 @@ public class arbitroLlamadasRTF {
 
 						}
 					});
+			}
 
 		}else
 		{

@@ -10,6 +10,7 @@ header('Content-Disposition: inline; filename='.$number.'.rtf');
 
 
 $fileContent = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang3082\\deflangfe3082{\\fonttbl{\\f0\\froman\\fprq2\\fcharset0 Times New Roman;}{\\f1\\fswiss\\fcharset0 Arial;}}
+{\stylesheet{ Normal;}{\s1 heading 1;}{\s2 heading 2;}{\s3 heading 3;}}
 {\\colortbl ;\\red0\\green0\\blue0;\\red0\\green0\\blue255;}
 {\\*\\generator Msftedit 5.41.15.1515;}\\viewkind4\\uc1\\trowd\\trgaph15\\trleft-45\\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3
 \\clvertalc\\cellx3686\\clvertalc\\cellx10822\\pard\\intbl\\nowidctlpar\\sb100\\sa100\\kerning36\\b\\f0\\fs36 Export:";

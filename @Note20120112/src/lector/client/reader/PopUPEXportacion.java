@@ -82,14 +82,32 @@ public class PopUPEXportacion extends PopupPanel {
 				if (verticalPanel.getWidgetCount() > 0) {
 					ArrayList<ExportObject> list = new ArrayList<ExportObject>();
 					// Controlador.change2ExportResult();
-					for (Widget widget : verticalPanel) {
-						ElementoExportacion EE = (ElementoExportacion) widget;
-						//TODO separar en funcion de la clase
-						list.add(new ExportObject(EE.getAnnotation(), EE
-								.getImagen().getUrl(),EE.getImagen().getWidth(),EE.getImagen().getHeight(),EE.getAnnotation().getUserName(),EE.getAnnotation().getCreatedDate().toGMTString()));
-						// EnvioExportacion EnEx=new
-						// EnvioExportacion(EE.getAnnotation(), EE.getImagen());
-						// ExportResult.addResult(EnEx);
+					for (Widget W : verticalPanel) {
+						
+						if (W instanceof ElementoExportacionTemplate)
+							{
+							ElementoExportacionTemplate EET=(ElementoExportacionTemplate)W;
+							list.add(new ExportObjectTemplate(EET.getProfundidad(), EET.getTExt()));
+							EET.Export(list);
+							}
+						else if (W instanceof ElementoExportacion)
+							{
+							ElementoExportacion EE=(ElementoExportacion)W;
+							list.add(new ExportObject(EE.getAnnotation(), 
+														 EE.getImagen().getUrl(),
+														 EE.getImagen().getWidth(),
+														 EE.getImagen().getHeight(),
+														 EE.getAnnotation().getUserName(),
+														 EE.getAnnotation().getCreatedDate().toGMTString()));
+							}
+						
+//						ElementoExportacion EE = (ElementoExportacion) widget;
+//						//TODO separar en funcion de la clase
+//						list.add(new ExportObject(EE.getAnnotation(), EE
+//								.getImagen().getUrl(),EE.getImagen().getWidth(),EE.getImagen().getHeight(),EE.getAnnotation().getUserName(),EE.getAnnotation().getCreatedDate().toGMTString()));
+//						// EnvioExportacion EnEx=new
+//						// EnvioExportacion(EE.getAnnotation(), EE.getImagen());
+//						// ExportResult.addResult(EnEx);
 					}
 					PanelSeleccionExportacion PSE=new PanelSeleccionExportacion(list);
 					PSE.center();
@@ -183,11 +201,11 @@ public class PopUPEXportacion extends PopupPanel {
 						public void onSuccess(Template result) {
 //							Window.alert("Load: " + result.getName());
 							Asociado=result;
-							LoadTemplate();
-							Actual=verticalPanel;
+							verticalPanel.clear();	
 							if (EET!=null) 
 								EET.ResetButton();
-							verticalPanel.clear();
+							Actual=verticalPanel;
+							LoadTemplate();
 						}
 						
 						public void onFailure(Throwable caught) {
@@ -218,9 +236,15 @@ public class PopUPEXportacion extends PopupPanel {
 					Actual.add(E);
 					E.addCliker(Actual);
 				}
+				
 				for (ElementoExportacionTemplate elementoExportacionTemplate : AEx) {
 					ArbitroLlamadasTemplatesExport.getInstance().addElement(elementoExportacionTemplate);
 				}
+				
+				if (!AEx.isEmpty())
+					{
+					setActual(AEx.get(0));
+					}
 				
 			}
 			

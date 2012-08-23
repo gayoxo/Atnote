@@ -1,5 +1,7 @@
 package lector.client.reader;
 
+import java.util.ArrayList;
+
 import lector.client.admin.export.template.TemplateCategory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,6 +23,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ElementoExportacionTemplate extends Composite{
 
@@ -267,4 +270,32 @@ public void selectedButton()
 	Seleccionado=true;
 }
 
+public ArrayList<ExportObject> Export(ArrayList<ExportObject> entrada)
+{
+	for (int i = 0; i < Fondo.getWidgetCount(); i++) {
+		Widget W=Fondo.getWidget(i);
+		if (W instanceof ElementoExportacionTemplate)
+			{
+			ElementoExportacionTemplate EET=(ElementoExportacionTemplate)W;
+			entrada.add(new ExportObjectTemplate(EET.getProfundidad(), EET.getTExt()));
+			EET.Export(entrada);
+			}
+		else if (W instanceof ElementoExportacion)
+			{
+			ElementoExportacion EE=(ElementoExportacion)W;
+			entrada.add(new ExportObject(EE.getAnnotation(), 
+										 EE.getImagen().getUrl(),
+										 EE.getImagen().getWidth(),
+										 EE.getImagen().getHeight(),
+										 EE.getAnnotation().getUserName(),
+										 EE.getAnnotation().getCreatedDate().toGMTString()));
+			}
+	}
+return entrada;
+}
+
+public String getTExt()
+{
+	return Template.getName();
+}
 }
