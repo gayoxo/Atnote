@@ -39,5 +39,9 @@ public interface ExportService extends RemoteService {
 	public ArrayList<Template> getTemplatesByIds(ArrayList<Long> ids);
 	
 	public void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId, Long templateId);
+	
+	public void swapCategoryWeight(Long movingCategoryId,Long staticCategoryId);
+	
+	public ArrayList<Template> getTemplatesByProfessorId(Long professorId);
 
 }

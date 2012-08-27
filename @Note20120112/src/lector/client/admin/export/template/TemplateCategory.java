@@ -10,9 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "template_category")
-public class TemplateCategory implements Serializable {
+public class TemplateCategory implements Serializable,Comparable<TemplateCategory> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,6 +95,10 @@ public class TemplateCategory implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public int compareTo(TemplateCategory anotherInstance) {
+		return this.order - anotherInstance.order;
 	}
 
 }

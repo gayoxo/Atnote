@@ -2713,6 +2713,19 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		return readingActivitys;
 	}
 
+	private ArrayList<ReadingActivity> getReadingActivities() {
+		EntityManager entityManager;
+		entityManager = EMF.get().createEntityManager();
+		List<ReadingActivity> list;
+		ArrayList<ReadingActivity> readingActivitys;
+		String sql = "SELECT r FROM ReadingActivity r";
+		list = entityManager.createQuery(sql).getResultList();
+		readingActivitys = new ArrayList<ReadingActivity>(list);
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+		return readingActivitys;
+	}
 	public void removeFileFromAnnotation(Long annotationId, Long fileId) {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		EntityTransaction entityTransaction;
@@ -3862,6 +3875,15 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 		}
 		removeBookFromReadingActivity(id);
 
+	}
+
+	public void updateReadingActivities() {
+		ArrayList<ReadingActivity> readingActivities = getReadingActivities();
+		for (ReadingActivity readingActivity : readingActivities) {
+			readingActivity.setVisualizacion(Constants.VISUAL_KEY);
+			readingActivity.setTemplateId(null);
+			readingActivity.setTemplateLibre(true);
+		}
 	}
 
 }

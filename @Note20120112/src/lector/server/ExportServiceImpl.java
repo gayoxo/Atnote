@@ -1,6 +1,7 @@
 package lector.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -10,6 +11,7 @@ import lector.client.book.reader.ExportService;
 import lector.client.controler.Constants;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 
 /**
  * The server side implementation of the RPC service.
@@ -31,17 +33,17 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 			entityManager.merge(template);
 			entityManager.flush();
 		}
-		
+
 		try {
-			 Thread.sleep(1000l);
-			 } catch (InterruptedException e) {
-			 // TODO Auto-generated catch block
-			 e.printStackTrace();
-			 }
-		
+			Thread.sleep(1000l);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		entityTransaction.commit();
 		entityManager.close();
-//		Template T=loadTemplateById(template.getId());
+		// Template T=loadTemplateById(template.getId());
 
 	}
 
@@ -59,31 +61,29 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityTransaction.commit();
 		entityManager.close();
 
-		 
-
 		if (templateCategory.getFatherId().equals(Constants.TEMPLATEID)) {
 			Template template = loadTemplateById(templateCategory
 					.getTemplateId());
-			
+
 			template.getCategories().add(templateCategory.getId());
 			Template templateToSave = swapTemplate(template);
 			saveTemplate(templateToSave);
 		} else {
 			TemplateCategory templateCategoryFather = loadTemplateCategoryById(templateCategory
 					.getFatherId());
-			
+
 			templateCategoryFather.getSubCategories().add(
 					templateCategory.getId());
 			TemplateCategory categoryToSave = swapCategory(templateCategoryFather);
 			savePlainCategory(categoryToSave);
-			
+
 		}
 		try {
-			 Thread.sleep(1000l);
-			 } catch (InterruptedException e) {
-			 // TODO Auto-generated catch block
-			 e.printStackTrace();
-			 }
+			Thread.sleep(1000l);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void savePlainCategory(TemplateCategory templateCategory) {
@@ -97,11 +97,11 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 			entityManager.merge(templateCategory);
 		}
 		try {
-			 Thread.sleep(1000l);
-			 } catch (InterruptedException e) {
-			 // TODO Auto-generated catch block
-			 e.printStackTrace();
-			 }
+			Thread.sleep(1000l);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.close();
@@ -131,19 +131,19 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		entityTransaction.begin();
 		String sql = "SELECT a FROM TemplateCategory a WHERE a.id="
 				+ templateCategoryId;
-		templateCategorys = entityManager.createQuery(sql).getResultList();		
+		templateCategorys = entityManager.createQuery(sql).getResultList();
 		if (!templateCategorys.isEmpty()) {
-			TemplateCategory T=templateCategorys.get(0);
-			Long Padre=T.getFatherId();
-			Long Hijo=T.getId();
-			Long Template=T.getTemplateId();
+			TemplateCategory T = templateCategorys.get(0);
+			Long Padre = T.getFatherId();
+			Long Hijo = T.getId();
+			Long Template = T.getTemplateId();
 			for (Long categoryId : templateCategorys.get(0).getSubCategories()) {
 				deleteTemplateCategory(categoryId);
 			}
 			entityManager.remove(templateCategorys.get(0));
 			entityTransaction.commit();
 			entityManager.close();
-			removeCategoryFromParent(Padre,Hijo,Template);
+			removeCategoryFromParent(Padre, Hijo, Template);
 
 		}
 
@@ -238,6 +238,27 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		return templateCategory;
 	}
 
+	public ArrayList<Template> getTemplatesByProfessorId(Long professorId) {
+		EntityManager entityManager = EMF.get().createEntityManager();
+		List<Template> list;
+		ArrayList<Template> listTemplates;
+		String sql = "SELECT a FROM Template a WHERE a.userApp=" +professorId;
+		list = entityManager.createQuery(sql).getResultList();
+		listTemplates = new ArrayList<Template>(list);
+
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
+
+		for (int i = 0; i < listTemplates.size(); i++) {
+			listTemplates.get(i).setCategories(
+					new ArrayList<Long>(listTemplates.get(i).getCategories()));
+		}
+
+		return listTemplates;
+	}
+
+	
 	public ArrayList<Template> getTemplates() {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		List<Template> list;
@@ -258,14 +279,55 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		return listTemplates;
 	}
 
+	public void swapCategoryWeight(Long movingCategoryId, Long staticCategoryId) {
+	TemplateCategory movingCategory = loadTemplateCategoryById(movingCategoryId);
+	TemplateCategory staticCategory = loadTemplateCategoryById(staticCategoryId);
+	movingCategory.setOrder(staticCategory.getOrder());
+	staticCategory.setOrder(movingCategory.getOrder());
+	savePlainCategory(movingCategory);
+	savePlainCategory(staticCategory);
+	
+	}
+	
 	public void moveCategory(Long fromFatherId, Long toFatherId,
 			Long categoryId, Long templateId) {
+		Template template = loadTemplateById(templateId);
 		removeCategoryFromParent(fromFatherId, categoryId, templateId);
 		addNewFatherToCategory(toFatherId, categoryId);
+		updateOrderToLeftBrothers(template.getCategories(), categoryId);
+		
 		if (toFatherId.equals(Constants.TEMPLATEID)) {
 			addChildToTemplate(categoryId, templateId);
 		} else {
 			addChildToCategory(categoryId, toFatherId);
+		}
+
+	}
+
+	private void updateOrderToLeftBrothers(ArrayList<Long> categoriesIds,
+			Long leavingCategoryId) {
+		ArrayList<TemplateCategory> categories = getTemplateCategoriesByIds(categoriesIds);
+		int leavingWeight = getLeavingWeight(categories, leavingCategoryId);
+		Collections.sort(categories);
+		updateOrder(categories, leavingWeight);
+	}
+
+	private int getLeavingWeight(ArrayList<TemplateCategory> categories,
+			Long categoryId) {
+
+		for (TemplateCategory templateCategory : categories) {
+			if (templateCategory.getId().equals(categoryId)) {
+				return templateCategory.getOrder();
+			}
+		}
+		return -1;
+	}
+
+	private void updateOrder(ArrayList<TemplateCategory> categories, int weight) {
+
+		for (int i = weight; i < categories.size(); i++) {
+			categories.get(i).setOrder(categories.get(i).getOrder() - 1);
+			saveTemplateCategory(categories.get(i));
 		}
 
 	}
@@ -332,5 +394,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		template.setUserApp(templateToSwap.getUserApp());
 		return template;
 	}
+
+	
 
 }

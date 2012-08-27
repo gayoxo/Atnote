@@ -239,4 +239,6 @@ public interface GWTServiceAsync {
 	void getFileNamesByIds(ArrayList<Long> ids,
 			AsyncCallback<ArrayList<String>> callback);
 
+	void updateReadingActivities(AsyncCallback<Void> callback);
+
 }

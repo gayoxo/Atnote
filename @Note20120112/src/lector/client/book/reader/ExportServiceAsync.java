@@ -35,6 +35,12 @@ public interface ExportServiceAsync {
 	void moveCategory(Long fromFatherId, Long toFatherId, Long categoryId,
 			Long templateId, AsyncCallback<Void> callback);
 
+	void swapCategoryWeight(Long movingCategoryId, Long staticCategoryId,
+			AsyncCallback<Void> callback);
+
+	void getTemplatesByProfessorId(Long professorId,
+			AsyncCallback<ArrayList<Template>> callback);
+
 
 
 }

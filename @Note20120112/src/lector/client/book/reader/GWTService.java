@@ -88,7 +88,8 @@ public interface GWTService extends RemoteService {
 
 	public ArrayList<FileDB> getEntriesIdsByIdsRec(ArrayList<Long> Ids);
 
-	public ArrayList<Annotation> getAnnotationsByIdsTeacher(ArrayList<Long> ids, Long readingActivityId);
+	public ArrayList<Annotation> getAnnotationsByIdsTeacher(
+			ArrayList<Long> ids, Long readingActivityId);
 
 	public ArrayList<Annotation> getAnnotationsByIdsStudent(
 			ArrayList<Long> ids, Long Student, Long readingActivityId);
@@ -126,7 +127,8 @@ public interface GWTService extends RemoteService {
 
 	public ArrayList<UserApp> getUsersApp() throws UserNotFoundException;
 
-	public int deleteUserApp(Long userId)throws GeneralException, NullParameterException;
+	public int deleteUserApp(Long userId) throws GeneralException,
+			NullParameterException;
 
 	public void removeUserAndGroupRelation(Long userId, Long groupId);
 
@@ -218,25 +220,29 @@ public interface GWTService extends RemoteService {
 	public ArrayList<Annotation> getAnnotationsByIds(ArrayList<Long> ids);
 
 	public void addFather(Long sonId, Long fatherId) throws FileException;
-	
+
 	public void renameFile(Long fileId, String newName) throws FileException;
-	
-	public void renameFolder(Long folderId, String newName) throws FolderException;
-	
+
+	public void renameFolder(Long folderId, String newName)
+			throws FolderException;
+
 	public Long saveAnnotationThread(AnnotationThread annotationThread);
-	
-	public void deleteAnnotationThread(Long annotationThread) throws GeneralException;
+
+	public void deleteAnnotationThread(Long annotationThread)
+			throws GeneralException;
 
 	public ArrayList<AnnotationThread> getAnnotationThreadsByItsFather(
 			Long annotationId, Long threadFatherId) throws GeneralException;
 
 	public String getJSONServiceTODrawGraph(String url, String body);
-	
+
 	public ArrayList<AnnotationSchema> getSchemaByCatalogId(Long catalogId);
-	
-	public void updateRenameOfUser(Long userId); 
-	
+
+	public void updateRenameOfUser(Long userId);
+
 	public void deleteBook(String bookId, Long userId);
-	
+
 	public ArrayList<String> getFileNamesByIds(ArrayList<Long> ids);
+
+	public void updateReadingActivities();
 }
