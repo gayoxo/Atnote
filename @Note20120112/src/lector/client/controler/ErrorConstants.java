@@ -2,6 +2,7 @@ package lector.client.controler;
 
 public class ErrorConstants {
 
+
 	public static String ERROR_NO_EMAIL_VALIDO = "Error in email, it should be look like 'example@server.com' but looks like ";
 	public static String ERROR_LOAD_IMAGE = "Error retriving graph refresh the page";
 	public static String ERROR_LOAD_FORCE_LOGIN ="Error Loadig the User, reload the web to view the changes";
@@ -36,5 +37,6 @@ public class ErrorConstants {
 	public static String COULD_NOT_REFRESH_TEMPLATES="Error retriving templates, plese try re-open editor";
 	public static String TEMPLATES_CAT_BE_EMPTY="You can not unselect if you do not select a template first";
 	public static String ERROR_RETRIVING_TEMPLATE_MASTER_EXPORT_PANEL="Error Retriving Template, please reload";
+	public static String ERROR_ON_MOVE_CATEGORY_ASCENDESCEN = "Error moving category with her brothers, please retry it";
 	
 }

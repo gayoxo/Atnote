@@ -271,7 +271,24 @@ public class RepresentacionTemplateCategory extends Composite {
 					RepresentacionTemplateCategory HermanoArriba=SwapElementUp(Padreact);
 					if (HermanoArriba!=null) 
 					{
-						//TODO SWAP PESOS
+						LoadingPanel.getInstance().center();
+						LoadingPanel.getInstance().setLabelTexto("Loading...");
+						exportServiceHolder.swapCategoryWeight(YO.getT().getId(), HermanoArriba.getT().getId(),new AsyncCallback<Void>(){
+
+							public void onFailure(Throwable caught) {
+								LoadingPanel.getInstance().hide();
+								Window.alert(ErrorConstants.ERROR_ON_MOVE_CATEGORY_ASCENDESCEN);	
+								
+							}
+
+							public void onSuccess(Void result) {
+								LoadingPanel.getInstance().hide();
+								EditTemplate.getPGT().refresh();
+								
+							}
+							
+							
+						} );
 					}else 
 					{
 						Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_UP_BROTHER);		
@@ -335,7 +352,22 @@ public class RepresentacionTemplateCategory extends Composite {
 					RepresentacionTemplateCategory HermanoArriba=SwapElementDown(Padreact);
 					if (HermanoArriba!=null) 
 					{
-						//TODO SWAP PESOS
+						LoadingPanel.getInstance().center();
+						LoadingPanel.getInstance().setLabelTexto("Loading...");
+						exportServiceHolder.swapCategoryWeight(YO.getT().getId(), HermanoArriba.getT().getId(),new AsyncCallback<Void>(){
+
+							public void onFailure(Throwable caught) {
+								LoadingPanel.getInstance().hide();
+								Window.alert(ErrorConstants.ERROR_ON_MOVE_CATEGORY_ASCENDESCEN);	
+								
+							}
+
+							public void onSuccess(Void result) {
+								LoadingPanel.getInstance().hide();
+								EditTemplate.getPGT().refresh();
+								
+							}
+						});
 					}else 
 					{
 						Window.alert(ErrorConstants.ERROR_THERE_ARE_NOT_DOWN_BROTHER);		
