@@ -67,19 +67,8 @@ public class Welcome implements EntryPoint {
 	FormPanel formPanel = new FormPanel();
 
 	public void onModuleLoad() {
-		 callUserRoot();
-		 bookReaderServiceHolder.updateReadingActivities(new AsyncCallback<Void>() {
-			
-			public void onSuccess(Void result) {
-			Window.alert("Listo");
-				
-			}
-			
-			public void onFailure(Throwable caught) {
-				Window.alert("Hubo un error");
-				
-			}
-		});
+//		 callUserRoot();
+	
 //		// POST request test
 
 //		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
