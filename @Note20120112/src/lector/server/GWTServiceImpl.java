@@ -3883,6 +3883,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 			readingActivity.setVisualizacion(Constants.VISUAL_KEY);
 			readingActivity.setTemplateId(null);
 			readingActivity.setTemplateLibre(true);
+			saveReadingActivity(readingActivity);
 		}
 	}
 
