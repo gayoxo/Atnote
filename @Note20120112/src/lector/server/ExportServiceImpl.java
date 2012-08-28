@@ -12,7 +12,6 @@ import lector.client.controler.Constants;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-
 /**
  * The server side implementation of the RPC service.
  */
@@ -242,7 +241,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		EntityManager entityManager = EMF.get().createEntityManager();
 		List<Template> list;
 		ArrayList<Template> listTemplates;
-		String sql = "SELECT a FROM Template a WHERE a.userApp=" +professorId;
+		String sql = "SELECT a FROM Template a WHERE a.userApp=" + professorId;
 		list = entityManager.createQuery(sql).getResultList();
 		listTemplates = new ArrayList<Template>(list);
 
@@ -258,7 +257,6 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		return listTemplates;
 	}
 
-	
 	public ArrayList<Template> getTemplates() {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		List<Template> list;
@@ -280,28 +278,45 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public void swapCategoryWeight(Long movingCategoryId, Long staticCategoryId) {
-	TemplateCategory movingCategory = loadTemplateCategoryById(movingCategoryId);
-	TemplateCategory staticCategory = loadTemplateCategoryById(staticCategoryId);
-	movingCategory.setOrder(staticCategory.getOrder());
-	staticCategory.setOrder(movingCategory.getOrder());
-	savePlainCategory(movingCategory);
-	savePlainCategory(staticCategory);
-	
+		TemplateCategory movingCategory = loadTemplateCategoryById(movingCategoryId);
+		int oldMovingWeight = movingCategory.getOrder();
+		TemplateCategory staticCategory = loadTemplateCategoryById(staticCategoryId);
+		movingCategory.setOrder(staticCategory.getOrder());
+		staticCategory.setOrder(oldMovingWeight);
+		savePlainCategory(movingCategory);
+		savePlainCategory(staticCategory);
+
 	}
-	
+
 	public void moveCategory(Long fromFatherId, Long toFatherId,
 			Long categoryId, Long templateId) {
 		Template template = loadTemplateById(templateId);
 		removeCategoryFromParent(fromFatherId, categoryId, templateId);
 		addNewFatherToCategory(toFatherId, categoryId);
-		updateOrderToLeftBrothers(template.getCategories(), categoryId);
-		
+
+		if (fromFatherId.equals(Constants.TEMPLATEID)) {
+			updateOrderToLeftBrothers(template.getCategories(), categoryId);
+		} else {
+			TemplateCategory fromFatherCategory = loadTemplateCategoryById(fromFatherId);
+			updateOrderToLeftBrothers(fromFatherCategory.getSubCategories(),
+					categoryId);
+		}
 		if (toFatherId.equals(Constants.TEMPLATEID)) {
+			updateSelfOrder(template.getCategories().size(), categoryId);
 			addChildToTemplate(categoryId, templateId);
 		} else {
+			TemplateCategory fatherCategory = loadTemplateCategoryById(toFatherId);
+			updateSelfOrder(fatherCategory.getSubCategories().size(),
+					categoryId);
 			addChildToCategory(categoryId, toFatherId);
 		}
 
+	}
+
+	private void updateSelfOrder(int size, Long categoryId) {
+		TemplateCategory category = loadTemplateCategoryById(categoryId);
+		category.setOrder(size + 1);
+		savePlainCategory(category);
 	}
 
 	private void updateOrderToLeftBrothers(ArrayList<Long> categoriesIds,
@@ -394,7 +409,5 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		template.setUserApp(templateToSwap.getUserApp());
 		return template;
 	}
-
-	
 
 }

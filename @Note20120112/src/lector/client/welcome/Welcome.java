@@ -50,24 +50,24 @@ public class Welcome implements EntryPoint {
 	private RootPanel Footer;
 
 //	 DESCOMENTAR EN DESARROLLO, CREA UN USUARIO ROOT.
-//	 private void callUserRoot() {
-//	 UserApp adminUser2 = new UserApp();
-//	 adminUser2.setEmail("root");
-//	 adminUser2.setProfile(Constants.PROFESSOR);
-//	 bookReaderServiceHolder.saveUser(adminUser2,
-//	 new AsyncCallback<Boolean>() {
-//	 public void onSuccess(Boolean result) {
-//	 }
-//	
-//	 public void onFailure(Throwable caught) {
-//	 Window.alert("Ha fallado Cesar");
-//	 }
-//	 });
-//	 }
+	 private void callUserRoot() {
+	 UserApp adminUser2 = new UserApp();
+	 adminUser2.setEmail("root");
+	 adminUser2.setProfile(Constants.PROFESSOR);
+	 bookReaderServiceHolder.saveUser(adminUser2,
+	 new AsyncCallback<Boolean>() {
+	 public void onSuccess(Boolean result) {
+	 }
+	
+	 public void onFailure(Throwable caught) {
+	 Window.alert("Ha fallado Cesar");
+	 }
+	 });
+	 }
 	FormPanel formPanel = new FormPanel();
 
 	public void onModuleLoad() {
-		// callUserRoot();
+		 callUserRoot();
 
 		// POST request test
 
