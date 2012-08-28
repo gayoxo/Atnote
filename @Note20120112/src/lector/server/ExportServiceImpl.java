@@ -291,15 +291,16 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	public void moveCategory(Long fromFatherId, Long toFatherId,
 			Long categoryId, Long templateId) {
 		Template template = loadTemplateById(templateId);
+		TemplateCategory category = loadTemplateCategoryById(categoryId);
 		removeCategoryFromParent(fromFatherId, categoryId, templateId);
 		addNewFatherToCategory(toFatherId, categoryId);
 
 		if (fromFatherId.equals(Constants.TEMPLATEID)) {
-			updateOrderToLeftBrothers(template.getCategories(), categoryId);
+			updateOrderToLeftBrothers(template.getCategories(), category.getOrder());
 		} else {
 			TemplateCategory fromFatherCategory = loadTemplateCategoryById(fromFatherId);
 			updateOrderToLeftBrothers(fromFatherCategory.getSubCategories(),
-					categoryId);
+					category.getOrder());
 		}
 		if (toFatherId.equals(Constants.TEMPLATEID)) {
 			updateSelfOrder(template.getCategories().size(), categoryId);
@@ -320,29 +321,18 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	}
 
 	private void updateOrderToLeftBrothers(ArrayList<Long> categoriesIds,
-			Long leavingCategoryId) {
+			int leavingWeight) {
 		ArrayList<TemplateCategory> categories = getTemplateCategoriesByIds(categoriesIds);
-		int leavingWeight = getLeavingWeight(categories, leavingCategoryId);
 		Collections.sort(categories);
 		updateOrder(categories, leavingWeight);
 	}
 
-	private int getLeavingWeight(ArrayList<TemplateCategory> categories,
-			Long categoryId) {
-
-		for (TemplateCategory templateCategory : categories) {
-			if (templateCategory.getId().equals(categoryId)) {
-				return templateCategory.getOrder();
-			}
-		}
-		return -1;
-	}
-
 	private void updateOrder(ArrayList<TemplateCategory> categories, int weight) {
 
-		for (int i = weight; i < categories.size(); i++) {
+		for (int i = weight-1; i < categories.size(); i++) {
 			categories.get(i).setOrder(categories.get(i).getOrder() - 1);
-			saveTemplateCategory(categories.get(i));
+			savePlainCategory(categories.get(i));
+			
 		}
 
 	}
