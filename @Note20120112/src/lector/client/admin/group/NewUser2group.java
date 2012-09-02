@@ -31,7 +31,7 @@ public class NewUser2group extends PopupPanel {
 	
 	public NewUser2group(GroupAndUserPanel GAUPin) {
 		super(true);
-		
+		setGlassEnabled(true);
 		GAUP=GAUPin;
 		
 		ScrollPanel scrollPanel = new ScrollPanel();

@@ -41,6 +41,7 @@ public class NewGroupPopUpPanel extends PopupPanel {
 
 	public NewGroupPopUpPanel(Groupadministration Fatherin) {
 		super(true);
+		setGlassEnabled(true);
 		Father=Fatherin;
 		
 		FlowPanel flowPanel = new FlowPanel();
