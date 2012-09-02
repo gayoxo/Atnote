@@ -9,6 +9,7 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
+import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -114,7 +115,7 @@ public class NewAdminTemplate implements EntryPoint  {
 	private void RecargaLosTEmplates() {
 		LoadingPanel.getInstance().center();
 		LoadingPanel.getInstance().setLabelTexto("Loading...");
-		exportServiceHolder.getTemplates(new AsyncCallback<ArrayList<Template>>() {
+		exportServiceHolder.getTemplatesByProfessorId(ActualUser.getUser().getId(),new AsyncCallback<ArrayList<Template>>() {
 			
 			public void onSuccess(ArrayList<Template> result) {
 				LoadingPanel.getInstance().hide();

@@ -97,6 +97,7 @@ public class PopUpFinderSelectorExist extends PopupPanel {
 		MenuItem mntmClose = new MenuItem("Close", false, new Command() {
 			public void execute() {
 				hide();
+				EditorTagsAndTypes.LoadBasicTypes();
 			}
 		});
 		menuBar.addItem(mntmClose);

@@ -394,4 +394,9 @@ public class EditorTagsAndTypes implements EntryPoint {
 	public static void setCatalogo(Catalog catalogo) {
 		EditorTagsAndTypes.catalogo = catalogo;
 	}
+	
+	public static void restoreHandle()
+	{
+		FinderKeys.setBotonClick(new ClickHandlerMio());
+	}
 }

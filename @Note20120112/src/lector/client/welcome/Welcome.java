@@ -204,7 +204,7 @@ public class Welcome implements EntryPoint {
 				new AsyncCallback<UserApp>() {
 
 					public void onFailure(Throwable error) {
-						Window.alert("Warning: Error in Database");
+						Window.Location.reload();
 					}
 
 					public void onSuccess(UserApp result) {

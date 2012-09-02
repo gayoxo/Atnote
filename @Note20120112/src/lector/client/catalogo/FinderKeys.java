@@ -108,12 +108,18 @@ public class FinderKeys extends Finder {
 							if (ActualRamaNew.getEntidad().getID()!=Constants.CATALOGID)
 								{
 								Selecciona();
-								ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaMIN");
-								ActualEle.setSelected(false);
+								ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaSelectMIN");
+								//ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaMIN");
+								//ActualEle.setSelected(false);
 								}
 						
-							else {}
-						else NanotimeOld=System.currentTimeMillis();
+							else {
+								ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaSelectMIN");
+							}
+						else{
+							NanotimeOld=System.currentTimeMillis();
+							ActualEle.getLabel().setStyleName("gwt-ButtonIzquierdaSelectMIN");
+						}
 					}
 					
 									
@@ -248,7 +254,6 @@ public class FinderKeys extends Finder {
 					ListaTemp.add(A);
 					AddElementLista(new EstadoElementKey(A,false));
 					}
-				//TODO
 				FinderKeysArbitro.getInstance().setfalse();
 				for (ElementKey elementKey : ListaTemp) {
 					FinderKeysArbitro.getInstance().add(elementKey);

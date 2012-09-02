@@ -1,9 +1,9 @@
 
 Un Profesor solo ve sus template
 Actualizacion al promocionar o degradar templates categories
-Obtener todas las actividades del sistema
-Salvar todas en pila
-Reparar HTML
-Recursion falla
+Reparar PHP href debajo del comentario
 Error de los padres como siempre en los Template categories
 Al borrar un template limpiar las actividades en las que aparece
+//Mejorar click en panel de llaves
+Problema en Merge con mutiples padres ambos
+//Recuperar oyente al cerrar en el caso de reuse 

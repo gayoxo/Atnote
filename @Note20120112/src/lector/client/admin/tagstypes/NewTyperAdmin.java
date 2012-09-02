@@ -43,6 +43,7 @@ public class NewTyperAdmin extends PopupPanel {
 
 	public NewTyperAdmin(Entity father, whatsthenew WNin) {
 		super(false);
+		setGlassEnabled(true);
 		WNCopy = WNin;
 		if (WNin == whatsthenew.TypeCategory)
 			WN = "Type Category";
