@@ -100,7 +100,7 @@ public class newRule extends PopupPanel{
 		Cancel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (textBox.getText().length()>=0){
-					FilterAdvance.getRules().add(new Rule(textBox.getText()));
+				//	FilterAdvance.getRules().add(new Rule(textBox.getText()));
 					hide();
 				}
 				else Window.alert("Error el tamaño ha de ser mayor que 0");
