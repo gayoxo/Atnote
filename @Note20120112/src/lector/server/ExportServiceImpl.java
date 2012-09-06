@@ -296,6 +296,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		addNewFatherToCategory(toFatherId, categoryId);
 
 		if (fromFatherId.equals(Constants.TEMPLATEID)) {
+			template = loadTemplateById(templateId);
 			updateOrderToLeftBrothers(template.getCategories(), category.getOrder());
 		} else {
 			TemplateCategory fromFatherCategory = loadTemplateCategoryById(fromFatherId);

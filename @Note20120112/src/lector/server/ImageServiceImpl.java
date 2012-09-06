@@ -453,7 +453,14 @@ public class ImageServiceImpl extends RemoteServiceServlet implements
 		int imageWidth = exportObject.getWidth();
 		int imageHeight = exportObject.getHeight();
 		String clear = exportObject.getAnnotation().getComment().getValue();
-		clear=clear.replaceAll("\\<.*?\\>","");
+		clear=clear.replace("<div>", "\\par ");
+		clear=ParserHTML2RTF.parser(clear);
+//		String Links =findLinks(clear);
+//		String Image =StractImage(clear);
+//		clear=clear.replace("<div>", "\\par ");
+//		clear=clear.replaceAll("\\<a.*?/a\\>", "");
+//		clear=clear.replaceAll("\\<.*?\\>","");
+//		clear=clear+Links+Image;
 		rtf.append("\\trowd\\trgaph15\\trleft-15\\trqc\\trbrdrl\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrt\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrr\\brdrdash\\brdrw15\\brdrcf2 \\trbrdrb\\brdrdash\\brdrw15\\brdrcf2 \\trpaddl15\\trpaddr15\\trpaddfl3\\trpaddfr3"
 				+ "\\clvmgf\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx2066\\clvertalc\\clbrdrl\\brdrw15\\brdrs\\brdrcf2\\clbrdrt\\brdrw15\\brdrs\\brdrcf2\\clbrdrr\\brdrw15\\brdrs\\brdrcf2\\clbrdrb\\brdrw15\\brdrs\\brdrcf2 \\cellx7151\\pard\\intbl\\nowidctlpar\\sb100\\sa100\\cf1\\fs27"
 				+ produceCutImagesList(imageURL, anchors, imageWidth,
