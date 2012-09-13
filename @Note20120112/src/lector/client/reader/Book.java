@@ -3,6 +3,8 @@ package lector.client.reader;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import lector.share.model.Annotation;
+
 public class Book implements Serializable {
 
     /**

@@ -6,7 +6,7 @@ import java.util.Stack;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.reader.MainEntryPoint;
-import lector.client.reader.annotthread.AnnotationThread;
+import lector.share.model.AnnotationThread;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;

@@ -10,10 +10,10 @@ import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.Folder;
 import lector.client.catalogo.grafo.PanelGrafo;
-import lector.client.catalogo.server.Catalogo;
 import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.Catalogo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;

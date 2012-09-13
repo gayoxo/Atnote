@@ -2,8 +2,8 @@ package lector.client.admin.export.admin;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import lector.client.admin.export.template.Template;
-import lector.client.admin.export.template.TemplateCategory;
+import lector.share.model.Template;
+import lector.share.model.TemplateCategory;
 
 public class ElementoLlamada {
 

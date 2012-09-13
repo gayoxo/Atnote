@@ -17,9 +17,9 @@ import org.apache.commons.codec.binary.Base64;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.ImageService;
-import lector.client.reader.BookBlob;
 import lector.client.reader.ExportObject;
-import lector.client.reader.TextSelector;
+import lector.share.model.BookBlob;
+import lector.share.model.TextSelector;
 
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;

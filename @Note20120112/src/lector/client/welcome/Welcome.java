@@ -9,9 +9,9 @@ import lector.client.controler.Controlador;
 import lector.client.controler.LogMessageConstants;
 import lector.client.logger.Logger;
 import lector.client.login.ActualUser;
-import lector.client.login.UserApp;
 import lector.client.reader.About;
-import lector.client.reader.BookBlob;
+import lector.share.model.BookBlob;
+import lector.share.model.UserApp;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.gwt.core.client.EntryPoint;

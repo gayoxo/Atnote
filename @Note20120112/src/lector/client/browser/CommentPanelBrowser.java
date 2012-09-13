@@ -1,7 +1,7 @@
 package lector.client.browser;
 
-import lector.client.reader.Annotation;
 import lector.client.reader.SelectorPanel;
+import lector.share.model.Annotation;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;

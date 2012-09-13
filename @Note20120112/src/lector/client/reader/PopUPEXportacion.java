@@ -2,8 +2,6 @@ package lector.client.reader;
 
 import java.util.ArrayList;
 
-import lector.client.admin.export.template.Template;
-import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.book.reader.GWTService;
@@ -17,6 +15,8 @@ import lector.client.reader.export.EnvioExportacion;
 import lector.client.reader.export.ExportResult;
 import lector.client.reader.export.PanelSeleccionExportacion;
 import lector.client.reader.export.arbitroLlamadas;
+import lector.share.model.Template;
+import lector.share.model.TemplateCategory;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;

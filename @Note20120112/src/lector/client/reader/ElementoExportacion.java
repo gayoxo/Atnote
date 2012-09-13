@@ -1,5 +1,7 @@
 package lector.client.reader;
 
+import lector.share.model.Annotation;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;

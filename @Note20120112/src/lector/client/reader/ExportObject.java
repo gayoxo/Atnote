@@ -2,6 +2,8 @@ package lector.client.reader;
 
 import java.io.Serializable;
 
+import lector.share.model.Annotation;
+
 public class ExportObject implements Serializable {
 
 	private Annotation annotation;

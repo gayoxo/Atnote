@@ -10,8 +10,8 @@ import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
 import lector.client.login.ActualUser;
-import lector.client.login.UserApp;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.UserApp;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

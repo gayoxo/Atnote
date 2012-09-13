@@ -1,4 +1,4 @@
-package lector.client.admin.export.template;
+package lector.share.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

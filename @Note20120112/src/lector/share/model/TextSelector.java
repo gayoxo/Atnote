@@ -1,4 +1,4 @@
-package lector.client.reader;
+package lector.share.model;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.gwt.user.client.rpc.IsSerializable;

@@ -7,6 +7,7 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.ReadingActivity;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

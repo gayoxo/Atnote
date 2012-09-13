@@ -1,6 +1,6 @@
 package lector.client.admin.export;
 
-import lector.client.admin.export.template.Template;
+import lector.share.model.Template;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;

@@ -4,21 +4,21 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 	<persistence-unit name="System" transaction-type="RESOURCE_LOCAL">
 		<provider>org.datanucleus.store.appengine.jpa.DatastorePersistenceProvider</provider>
-		<class>lector.client.reader.Annotation</class>
-		<class>lector.client.reader.TextSelector</class>
-		<class>lector.client.login.GroupApp</class>
-		<class>lector.client.login.UserApp</class>
-		<class>lector.client.catalogo.server.FolderDB</class>
-		<class>lector.client.catalogo.server.FileDB</class>
-		<class>lector.client.catalogo.server.Entry</class>
-		<class>lector.client.catalogo.server.Catalogo</class>
-		<class>lector.client.catalogo.client.Catalog</class>
-		<class>lector.client.language.Language</class>
-		<class>lector.client.admin.activity.ReadingActivity</class>
-		<class>lector.client.reader.annotthread.AnnotationThread</class>
-		<class>lector.client.reader.BookBlob</class>
-		<class>lector.client.admin.export.template.Template</class>
-		<class>lector.client.admin.export.template.TemplateCategory</class>
+		<class>lector.share.model.Annotation</class>
+		<class>lector.share.model.TextSelector</class>
+		<class>lector.share.model.GroupApp</class>
+		<class>lector.share.model.UserApp</class>
+		<class>lector.share.model.FolderDB</class>
+		<class>lector.share.model.FileDB</class>
+		<class>lector.share.model.Entry</class>
+		<class>lector.share.model.Catalogo</class>
+		<!--  <class>lector.client.catalogo.client.Catalog</class> -->
+		<class>lector.share.model.Language</class>
+		<class>lector.share.model.ReadingActivity</class>
+		<class>lector.share.model.AnnotationThread</class>
+		<class>lector.share.model.BookBlob</class>
+		<class>lector.share.model.Template</class>
+		<class>lector.share.model.TemplateCategory</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="datanucleus.ConnectionURL" value="appengine" />

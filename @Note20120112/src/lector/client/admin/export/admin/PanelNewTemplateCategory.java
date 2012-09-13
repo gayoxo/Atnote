@@ -3,13 +3,13 @@ package lector.client.admin.export.admin;
 import java.util.ArrayList;
 
 import lector.client.admin.export.newTemplate;
-import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.ErrorConstants;
 import lector.client.controler.InformationConstants;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.TemplateCategory;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Window;

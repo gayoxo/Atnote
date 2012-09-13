@@ -9,11 +9,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.ErrorConstants;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.TemplateCategory;
 
 public class ArbitroLlamadasTemplates {
 

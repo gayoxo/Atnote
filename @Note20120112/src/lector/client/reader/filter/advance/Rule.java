@@ -6,10 +6,10 @@ import java.util.Collection;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
 import lector.client.login.ActualUser;
-import lector.client.reader.Annotation;
+import lector.share.model.Annotation;
+import lector.share.model.FileDB;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;

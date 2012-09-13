@@ -5,4 +5,4 @@ gaeHrdEnabled=true
 gaeIsEclipseDefaultInstPath=true
 googleCloudSqlEnabled=false
 localDevMySqlEnabled=true
-ormEnhancementInclusions=src/lector/server/|test/|src/lector/client/catalogo/server/|src/lector/client/catalogo/client/|src/lector/client/reader/Annotation.java|src/lector/client/login/|src/lector/client/admin/activity/ReadingActivity.java|src/lector/client/language/Language.java|src/lector/client/reader/Book.java|src/lector/client/reader/Tag.java|src/lector/client/reader/TextSelector.java|gwt-dnd-3.1.1.jar|src/lector/client/reader/AnnotationConfig.java|src/lector/client/reader/fltertype/FilterConfig.java|src/lector/client/reader/annotthread/AnnotationThread.java|src/lector/client/reader/BookBlob.java|src/lector/client/admin/export/template/Template.java|src/lector/client/admin/export/template/TemplateCategory.java
+ormEnhancementInclusions=src/lector/server/|gwt-dnd-3.1.1.jar|src/lector/share/

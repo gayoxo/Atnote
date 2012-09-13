@@ -1,6 +1,6 @@
 package lector.client.admin.export.admin;
 
-import lector.client.admin.export.template.TemplateCategory;
+import lector.share.model.TemplateCategory;
 
 import com.google.gwt.user.client.ui.Button;
 

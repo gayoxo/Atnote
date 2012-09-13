@@ -2,11 +2,11 @@ package lector.client.reader.hilocomentarios;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
 import lector.client.reader.MainEntryPoint;
 import lector.client.reader.RichTextToolbar;
-import lector.client.reader.annotthread.AnnotationThread;
+import lector.share.model.AnnotationThread;
+import lector.share.model.Language;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.gwt.core.client.GWT;

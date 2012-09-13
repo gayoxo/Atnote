@@ -2,7 +2,7 @@ package lector.client.reader;
 
 import java.util.ArrayList;
 
-import lector.client.admin.export.template.TemplateCategory;
+import lector.share.model.TemplateCategory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

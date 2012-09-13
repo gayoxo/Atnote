@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import lector.client.admin.export.template.Template;
-import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.controler.Constants;
+import lector.share.model.Template;
+import lector.share.model.TemplateCategory;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

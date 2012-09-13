@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lector.client.controler.Constants;
-import lector.client.login.UserApp;
-import lector.client.reader.BookBlob;
+import lector.share.model.BookBlob;
+import lector.share.model.UserApp;
 
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;

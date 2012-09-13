@@ -9,15 +9,15 @@ import lector.client.catalogo.Finder;
 import lector.client.catalogo.FinderGrafo;
 import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Entity;
-import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
-import lector.client.reader.Annotation;
 import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.LoadingPanel;
 import lector.client.reader.filter.advance.ClickHandlerMioFilterAdvance;
+import lector.share.model.Annotation;
+import lector.share.model.FileDB;
+import lector.share.model.Language;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
-import lector.client.reader.Annotation;
 import lector.client.reader.MainEntryPoint;
 import lector.client.reader.SelectorPanel;
-import lector.client.reader.TextSelector;
+import lector.share.model.Annotation;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;

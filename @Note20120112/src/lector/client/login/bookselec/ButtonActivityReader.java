@@ -1,6 +1,6 @@
 package lector.client.login.bookselec;
 
-import lector.client.admin.activity.ReadingActivity;
+import lector.share.model.ReadingActivity;
 
 import com.google.gwt.user.client.ui.Button;
 

@@ -8,8 +8,8 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.ErrorConstants;
-import lector.client.login.UserApp;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.UserApp;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;

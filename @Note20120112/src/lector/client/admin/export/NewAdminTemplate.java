@@ -2,7 +2,6 @@ package lector.client.admin.export;
 
 import java.util.ArrayList;
 
-import lector.client.admin.export.template.Template;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.book.reader.GWTService;
@@ -11,6 +10,7 @@ import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.Template;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

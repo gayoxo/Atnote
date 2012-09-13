@@ -1,5 +1,7 @@
 package lector.client.reader;
 
+import lector.share.model.Annotation;
+
 public class AnnotationRanked {
 
 	private Annotation AnotacionRankeada;

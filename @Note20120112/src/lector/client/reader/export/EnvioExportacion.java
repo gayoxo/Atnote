@@ -2,8 +2,8 @@ package lector.client.reader.export;
 
 import java.util.ArrayList;
 
-import lector.client.reader.Annotation;
-import lector.client.reader.TextSelector;
+import lector.share.model.Annotation;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;

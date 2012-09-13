@@ -6,9 +6,9 @@ package lector.client.book.reader;
 
 import java.util.ArrayList;
 
-import lector.client.reader.BookBlob;
 import lector.client.reader.ExportObject;
-import lector.client.reader.TextSelector;
+import lector.share.model.BookBlob;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

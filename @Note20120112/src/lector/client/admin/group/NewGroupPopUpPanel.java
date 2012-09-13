@@ -2,8 +2,8 @@ package lector.client.admin.group;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.login.GroupApp;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.GroupApp;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;

@@ -1,7 +1,6 @@
 package lector.client.admin.export;
 
 import lector.client.admin.export.admin.EditTemplate;
-import lector.client.admin.export.template.Template;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.book.reader.GWTService;
@@ -9,6 +8,7 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.Template;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;

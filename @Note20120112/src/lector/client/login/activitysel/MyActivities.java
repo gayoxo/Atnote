@@ -2,23 +2,23 @@ package lector.client.login.activitysel;
 
 import java.util.ArrayList;
 
-import lector.client.admin.activity.ReadingActivity;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.book.reader.ImageService;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.catalogo.client.Catalog;
-import lector.client.catalogo.server.Catalogo;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
-import lector.client.login.UserApp;
 import lector.client.login.bookselec.ButtonActivityReader;
 import lector.client.reader.Book;
-import lector.client.reader.BookBlob;
 import lector.client.reader.LoadingPanel;
 import lector.client.reader.MainEntryPoint;
+import lector.share.model.BookBlob;
+import lector.share.model.Catalogo;
+import lector.share.model.Language;
+import lector.share.model.ReadingActivity;
+import lector.share.model.UserApp;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

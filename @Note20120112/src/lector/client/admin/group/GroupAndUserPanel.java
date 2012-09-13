@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
-import lector.client.login.GroupApp;
-import lector.client.login.UserApp;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.GroupApp;
+import lector.share.model.UserApp;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

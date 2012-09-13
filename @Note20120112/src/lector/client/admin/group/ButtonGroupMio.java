@@ -1,6 +1,6 @@
 package lector.client.admin.group;
 
-import lector.client.login.UserApp;
+import lector.share.model.UserApp;
 
 import com.google.gwt.user.client.ui.Button;
 

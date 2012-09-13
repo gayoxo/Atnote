@@ -1,7 +1,7 @@
 package lector.client.reader.export;
 
 import lector.client.reader.SelectorPanel;
-import lector.client.reader.TextSelector;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;

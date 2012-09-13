@@ -7,7 +7,7 @@ import lector.client.admin.users.EntidadUser;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.StackPanelMio;
-import lector.client.login.UserApp;
+import lector.share.model.UserApp;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;

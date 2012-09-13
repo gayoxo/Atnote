@@ -2,7 +2,7 @@ package lector.client.reader.hilocomentarios;
 
 import java.util.ArrayList;
 
-import lector.client.reader.TextSelector;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 

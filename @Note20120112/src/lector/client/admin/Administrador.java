@@ -1,10 +1,10 @@
 package lector.client.admin;
 
-import lector.client.admin.activity.ReadingActivity;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
+import lector.share.model.ReadingActivity;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

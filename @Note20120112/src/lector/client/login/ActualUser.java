@@ -1,9 +1,10 @@
 package lector.client.login;
 
-import lector.client.admin.activity.ReadingActivity;
 import lector.client.catalogo.client.Catalog;
-import lector.client.language.Language;
 import lector.client.reader.Book;
+import lector.share.model.Language;
+import lector.share.model.ReadingActivity;
+import lector.share.model.UserApp;
 
 public class ActualUser {
 

@@ -7,7 +7,7 @@ import lector.client.admin.langedit.tabs.MainWindowEditor;
 import lector.client.admin.langedit.tabs.SpecificationsEditor;
 import lector.client.admin.langedit.tabs.VariosEditor;
 import lector.client.controler.Controlador;
-import lector.client.language.Language;
+import lector.share.model.Language;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;

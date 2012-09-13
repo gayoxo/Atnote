@@ -4,8 +4,8 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.FinderKeys;
 import lector.client.catalogo.client.Catalog;
-import lector.client.catalogo.server.Catalogo;
 import lector.client.controler.ErrorConstants;
+import lector.share.model.Catalogo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;

@@ -1,6 +1,6 @@
 package lector.client.admin.langedit;
 
-import lector.client.language.Language;
+import lector.share.model.Language;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;

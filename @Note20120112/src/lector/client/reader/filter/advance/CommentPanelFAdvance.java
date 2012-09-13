@@ -1,8 +1,8 @@
 package lector.client.reader.filter.advance;
 
-import lector.client.reader.Annotation;
 import lector.client.reader.SelectorPanel;
 import lector.client.reader.hilocomentarios.ReplyDialog;
+import lector.share.model.Annotation;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;

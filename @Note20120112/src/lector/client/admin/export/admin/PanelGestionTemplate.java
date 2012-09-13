@@ -2,13 +2,13 @@ package lector.client.admin.export.admin;
 
 import java.util.ArrayList;
 
-import lector.client.admin.export.template.Template;
-import lector.client.admin.export.template.TemplateCategory;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.Constants;
 import lector.client.controler.ErrorConstants;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.Template;
+import lector.share.model.TemplateCategory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

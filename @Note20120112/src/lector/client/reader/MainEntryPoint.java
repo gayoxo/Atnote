@@ -41,12 +41,14 @@ import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
 import lector.client.controler.HelpMessage;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
 import lector.client.reader.filter.FilterBasicPopUp;
 import lector.client.reader.hilocomentarios.Arbitro;
 import lector.client.reader.hilocomentarios.JeraquiaSimulada;
 import lector.client.reader.hilocomentarios.ParesLlamada;
+import lector.share.model.Annotation;
+import lector.share.model.Language;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuItemSeparator;

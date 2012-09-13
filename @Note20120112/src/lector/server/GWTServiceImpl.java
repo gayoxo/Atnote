@@ -25,7 +25,6 @@ import javax.persistence.PersistenceContext;
 
 import org.mortbay.util.ajax.JSON;
 
-import lector.client.admin.activity.ReadingActivity;
 import lector.client.book.reader.GWTService;
 import lector.client.catalogo.client.Catalog;
 import lector.client.catalogo.client.DecendanceException;
@@ -34,33 +33,34 @@ import lector.client.catalogo.client.File;
 import lector.client.catalogo.client.FileException;
 import lector.client.catalogo.client.Folder;
 import lector.client.catalogo.client.FolderException;
-import lector.client.catalogo.server.Catalogo;
-import lector.client.catalogo.server.Entry;
-import lector.client.catalogo.server.FileDB;
-import lector.client.catalogo.server.FolderDB;
 import lector.client.controler.Constants;
-import lector.client.language.Language;
 import lector.client.language.LanguageNotFoundException;
-import lector.client.login.GroupApp;
 import lector.client.login.GroupNotFoundException;
-import lector.client.login.UserApp;
 import lector.client.login.UserNotFoundException;
-import lector.client.reader.Annotation;
 import lector.client.reader.AnnotationNotFoundException;
 import lector.client.reader.Book;
-import lector.client.reader.BookBlob;
 import lector.client.reader.BookNotFoundException;
 import lector.client.reader.GeneralException;
 import lector.client.reader.IlegalFolderFusionException;
 import lector.client.reader.NullParameterException;
-import lector.client.reader.TextSelector;
-import lector.client.reader.annotthread.AnnotationThread;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import lector.client.service.AnnotationSchema;
+import lector.share.model.Annotation;
+import lector.share.model.AnnotationThread;
+import lector.share.model.BookBlob;
+import lector.share.model.Catalogo;
+import lector.share.model.Entry;
+import lector.share.model.FileDB;
+import lector.share.model.FolderDB;
+import lector.share.model.GroupApp;
+import lector.share.model.Language;
+import lector.share.model.ReadingActivity;
+import lector.share.model.TextSelector;
+import lector.share.model.UserApp;
 
 public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 

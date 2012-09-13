@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import lector.client.reader.Annotation;
+import lector.share.model.Annotation;
 
 @Entity
 @XmlRootElement

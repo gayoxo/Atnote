@@ -9,10 +9,10 @@ import lector.client.catalogo.client.Entity;
 import lector.client.catalogo.client.Folder;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
-import lector.client.login.UserApp;
 import lector.client.reader.MainEntryPoint;
+import lector.share.model.Language;
+import lector.share.model.UserApp;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

@@ -1,4 +1,4 @@
-package lector.client.reader.annotthread;
+package lector.share.model;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.gwt.user.client.rpc.IsSerializable;

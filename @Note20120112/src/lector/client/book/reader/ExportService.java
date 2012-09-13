@@ -6,8 +6,9 @@ package lector.client.book.reader;
 
 import java.util.ArrayList;
 
-import lector.client.admin.export.template.Template;
-import lector.client.admin.export.template.TemplateCategory;
+import lector.share.model.Template;
+import lector.share.model.TemplateCategory;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 

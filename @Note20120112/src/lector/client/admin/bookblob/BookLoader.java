@@ -6,8 +6,6 @@ import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.controler.ErrorConstants;
 import lector.client.login.ActualUser;
-import lector.client.login.UserApp;
-import lector.client.reader.BookBlob;
 
 
 import com.google.gwt.core.client.EntryPoint;
@@ -47,6 +45,8 @@ import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.book.reader.ImageServiceAsync;
 import lector.client.book.reader.ImageService;
+import lector.share.model.BookBlob;
+import lector.share.model.UserApp;
 
 public class BookLoader implements EntryPoint {
 

@@ -3,7 +3,7 @@ package lector.client.catalogo.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lector.client.catalogo.server.Catalogo;
+import lector.share.model.Catalogo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 

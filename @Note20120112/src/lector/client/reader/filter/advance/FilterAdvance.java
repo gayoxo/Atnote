@@ -11,10 +11,10 @@ import lector.client.catalogo.FinderKeys;
 import lector.client.controler.Constants;
 import lector.client.controler.Controlador;
 import lector.client.login.ActualUser;
-import lector.client.login.UserApp;
 import lector.client.reader.BotonesStackPanelReaderSelectMio;
 import lector.client.reader.ClickHandlerMioSelector;
 import lector.client.reader.MainEntryPoint;
+import lector.share.model.UserApp;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

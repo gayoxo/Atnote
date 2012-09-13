@@ -1,4 +1,4 @@
-package lector.client.login;
+package lector.share.model;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import java.io.Serializable;

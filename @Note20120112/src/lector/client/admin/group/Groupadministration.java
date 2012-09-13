@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.controler.Controlador;
-import lector.client.login.GroupApp;
+import lector.share.model.GroupApp;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

@@ -1,7 +1,7 @@
 package lector.client.reader;
 
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
+import lector.share.model.Language;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;

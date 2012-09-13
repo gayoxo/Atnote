@@ -8,8 +8,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import lector.client.browser.CommentPanelBrowser;
 import lector.client.login.ActualUser;
-import lector.client.reader.Annotation;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.Annotation;
 
 
 public class FilterAsyncSystem {

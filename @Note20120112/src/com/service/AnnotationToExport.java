@@ -13,8 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import lector.client.catalogo.server.Entry;
-import lector.client.login.UserApp;
+import lector.share.model.Entry;
+import lector.share.model.UserApp;
 
 @Entity
 @XmlRootElement

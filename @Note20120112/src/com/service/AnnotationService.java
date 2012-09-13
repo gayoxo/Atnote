@@ -32,15 +32,9 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import lector.client.book.reader.ImageService;
-import lector.client.catalogo.server.Catalogo;
-import lector.client.catalogo.server.FileDB;
-import lector.client.catalogo.server.FolderDB;
 
-import lector.client.login.UserApp;
 import lector.client.login.UserNotFoundException;
-import lector.client.reader.Annotation;
 import lector.client.reader.Book;
-import lector.client.reader.BookBlob;
 import lector.client.service.AnnotationSchema;
 import lector.server.EMF;
 import lector.server.GWTServiceImpl;
@@ -48,6 +42,12 @@ import lector.server.ImageServiceImpl;
 import lector.server.JSONArray;
 import lector.server.JSONException;
 import lector.server.JSONObject;
+import lector.share.model.Annotation;
+import lector.share.model.BookBlob;
+import lector.share.model.Catalogo;
+import lector.share.model.FileDB;
+import lector.share.model.FolderDB;
+import lector.share.model.UserApp;
 
 /**
  * 

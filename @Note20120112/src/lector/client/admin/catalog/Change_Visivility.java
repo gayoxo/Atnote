@@ -3,10 +3,10 @@ package lector.client.admin.catalog;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.client.Catalog;
-import lector.client.catalogo.server.Catalogo;
 import lector.client.controler.ErrorConstants;
 import lector.client.login.ActualUser;
 import lector.client.reader.LoadingPanel;
+import lector.share.model.Catalogo;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;

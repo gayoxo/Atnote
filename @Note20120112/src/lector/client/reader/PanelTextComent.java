@@ -1,8 +1,9 @@
 package lector.client.reader;
 
 import lector.client.controler.Constants;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
+import lector.share.model.Annotation;
+import lector.share.model.Language;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;

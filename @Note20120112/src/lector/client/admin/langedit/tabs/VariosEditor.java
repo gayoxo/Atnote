@@ -2,7 +2,7 @@ package lector.client.admin.langedit.tabs;
 
 import lector.client.admin.langedit.PanelDecorador;
 import lector.client.admin.langedit.Texto;
-import lector.client.language.Language;
+import lector.share.model.Language;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;

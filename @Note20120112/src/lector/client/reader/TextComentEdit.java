@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import lector.client.book.reader.GWTService;
 import lector.client.book.reader.GWTServiceAsync;
 import lector.client.catalogo.client.File;
-import lector.client.catalogo.server.FileDB;
 import lector.client.controler.Constants;
-import lector.client.language.Language;
 import lector.client.login.ActualUser;
 import lector.client.reader.PanelTextComent.CatalogTipo;
+import lector.share.model.Annotation;
+import lector.share.model.FileDB;
+import lector.share.model.Language;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.gwt.core.client.GWT;

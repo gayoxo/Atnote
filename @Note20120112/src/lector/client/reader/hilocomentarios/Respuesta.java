@@ -8,8 +8,8 @@ import lector.client.book.reader.GWTServiceAsync;
 import lector.client.login.ActualUser;
 import lector.client.reader.MainEntryPoint;
 import lector.client.reader.SelectorPanel;
-import lector.client.reader.TextSelector;
-import lector.client.reader.annotthread.AnnotationThread;
+import lector.share.model.AnnotationThread;
+import lector.share.model.TextSelector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

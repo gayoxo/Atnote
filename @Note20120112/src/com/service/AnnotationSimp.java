@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import lector.client.reader.TextSelector;
+import lector.share.model.TextSelector;
 
 @Entity
 @XmlRootElement

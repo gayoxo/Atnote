@@ -1,5 +1,7 @@
 package lector.client.reader;
 
+import lector.share.model.TextSelector;
+
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
