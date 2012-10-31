@@ -79,7 +79,8 @@ public class AnnotationService {
 
 		return annotationsToExport;
 	}
-
+	
+	
 	// TESTED with one user
 	@GET
 	@Path("annotations/creators/{ids}")
@@ -98,6 +99,37 @@ public class AnnotationService {
 		return annotationsToExport;
 	}
 
+	@GET
+	@Path("google/book/{id}")
+	public String getBookImageStringInGoogle(@PathParam("id")String id) {
+		URL url;
+		URLConnection connection;
+		String line;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader;
+		try {
+			url = new URL(
+					"http://books.google.com/ebooks/reader?id="
+							+ id
+							+ "&pg=PP0&key=ABQIAAAAgGfd0Syld4wI6M_8-PchExQ_l6-Ytnm_KJl3gFahMrxfvqMmehRrB92flZ-iJptRd3l62UsasikVhg");
+			connection = url.openConnection();
+			connection.addRequestProperty("Referer",
+					"http://kido180020783.appspot.com/");
+			reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+		return builder.toString();
+	}
+	
 	@POST
 	@Path("html/produce")
 	@Produces(MediaType.TEXT_HTML)
@@ -580,5 +612,10 @@ public class AnnotationService {
 
 		return ate;
 	}
+	
+	
+	// GOOGLE BOOK SERVICE.
+	
+	
 
 }
