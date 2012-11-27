@@ -59,6 +59,7 @@ public class PanelGestionTemplate extends Composite {
 			
 			public void onSuccess(ArrayList<TemplateCategory> result) {
 				LoadingPanel.getInstance().hide();
+				quickSort(result,0,result.size()-1);
 				for (TemplateCategory templateCategory : result) {
 					RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual,Actual.getProfundidad());
 					Nuevo.setclickHandel(new ClickHandler() {
@@ -125,6 +126,7 @@ public class PanelGestionTemplate extends Composite {
 					
 					public void onSuccess(ArrayList<TemplateCategory> result) {
 						LoadingPanel.getInstance().hide();
+						quickSort(result,0,result.size()-1);
 						for (TemplateCategory templateCategory : result) {
 							RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Actual,Actual.getProfundidad());
 							Nuevo.setclickHandel(new ClickHandler() {
@@ -151,6 +153,9 @@ public class PanelGestionTemplate extends Composite {
 						Window.alert(ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES1+ T.getName() + ErrorConstants.ERROR_RETRIVING_TEMPLATE_MASTER_CATEGORIES2);
 						
 					}
+					
+					
+					
 				});
 			}
 			
@@ -161,6 +166,39 @@ public class PanelGestionTemplate extends Composite {
 			}
 		});
 		
+	}
+	
+	private int partition(ArrayList<TemplateCategory> result, int left, int right)
+	{
+	      int i = left, j = right;
+	      TemplateCategory tmp;
+	      float pivot = result.get((left + right) / 2).getOrder();
+	     
+	      while (i <= j) {
+	            while (result.get(i).getOrder() < pivot)
+	                  i++;
+	            while (result.get(j).getOrder()  > pivot)
+	                  j--;
+	            if (i <= j) {
+	                  tmp = result.get(i);
+	                  result.set(i, result.get(j));
+	                  result.set(j, tmp);
+	                  i++;
+	                  j--;
+	            }
+	      };
+	     
+	      return i;
+	}
+	 
+	private void quickSort(ArrayList<TemplateCategory> result, int left, int right) {
+		if (!result.isEmpty()){
+	      int index = partition(result, left, right);
+	      if (left < index - 1)
+	            quickSort(result, left, index - 1);
+	      if (index < right)
+	            quickSort(result, index, right);
+		}
 	}
 	
 	public static RepresentacionTemplateCategory getActual() {

@@ -281,8 +281,8 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		TemplateCategory movingCategory = loadTemplateCategoryById(movingCategoryId);
 		int oldMovingWeight = movingCategory.getOrder();
 		TemplateCategory staticCategory = loadTemplateCategoryById(staticCategoryId);
-		movingCategory.setOrder(staticCategory.getOrder());
-		staticCategory.setOrder(oldMovingWeight);
+		movingCategory.setOrder(new Integer(staticCategory.getOrder().intValue()));
+		staticCategory.setOrder(new Integer(oldMovingWeight));
 		savePlainCategory(movingCategory);
 		savePlainCategory(staticCategory);
 

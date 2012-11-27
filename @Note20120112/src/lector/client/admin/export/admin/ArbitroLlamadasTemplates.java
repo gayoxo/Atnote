@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import lector.client.book.reader.ExportService;
 import lector.client.book.reader.ExportServiceAsync;
 import lector.client.controler.ErrorConstants;
+import lector.client.reader.AnnotationRanked;
 import lector.client.reader.LoadingPanel;
 import lector.share.model.TemplateCategory;
 
@@ -89,7 +90,8 @@ public class ArbitroLlamadasTemplates {
 
 	protected void procesallamada(ArrayList<TemplateCategory> result, RepresentacionTemplateCategory elementoLlamada) {
 		RepresentacionTemplateCategory Padre=elementoLlamada;
-		for (TemplateCategory templateCategory : result) {
+		quickSort(result,0,result.size()-1);
+		for (TemplateCategory templateCategory : result) {		
 			RepresentacionTemplateCategory Nuevo=new RepresentacionTemplateCategory(templateCategory, Padre,Padre.getProfundidad());
 			Padre.addSon(Nuevo);
 			Nuevo.setclickHandel(new ClickHandler() {
@@ -102,9 +104,39 @@ public class ArbitroLlamadasTemplates {
 			});
 			Pila.add(Nuevo);
 		}
-		
-		
-		
+	}
+	
+	private static int partition(ArrayList<TemplateCategory> result, int left, int right)
+	{
+	      int i = left, j = right;
+	      TemplateCategory tmp;
+	      float pivot = result.get((left + right) / 2).getOrder();
+	     
+	      while (i <= j) {
+	    	  while (result.get(i).getOrder() < pivot)
+                  i++;
+            while (result.get(j).getOrder()  > pivot)
+                  j--;
+            if (i <= j) {
+	                  tmp = result.get(i);
+	                  result.set(i, result.get(j));
+	                  result.set(j, tmp);
+	                  i++;
+	                  j--;
+	            }
+	      };
+	     
+	      return i;
+	}
+	 
+	private static void quickSort(ArrayList<TemplateCategory> result, int left, int right) {
+		if (!result.isEmpty()){
+	      int index = partition(result, left, right);
+	      if (left < index - 1)
+	            quickSort(result, left, index - 1);
+	      if (index < right)
+	            quickSort(result, index, right);
+		}
 	}
 	
 }
