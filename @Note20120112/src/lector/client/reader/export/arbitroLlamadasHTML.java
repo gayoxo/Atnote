@@ -102,6 +102,8 @@ public class arbitroLlamadasHTML {
 				formPanel.setMethod(FormPanel.METHOD_POST);
 				TextArea textArea = new TextArea();
 				textArea.setText(Result.toString());
+				textArea.setSize("100%", "100%");
+				textArea.setReadOnly(true);
 //				try {
 //					textArea.setText(new String(Result.toString().getBytes("UTF-8")));
 //					
@@ -111,10 +113,12 @@ public class arbitroLlamadasHTML {
 				textArea.setName("html");
 				textArea.getValue();
 				VerticalPanel V=new VerticalPanel();
-				formPanel.add(V);
+
 				V.add(textArea);
 				TextArea textArea2 = new TextArea();
 				textArea2.setText(Long.toString(System.currentTimeMillis()));
+				textArea2.setSize("100%", "100%");
+				textArea2.setReadOnly(true);
 //				try {
 //					textArea.setText(new String(Result.toString().getBytes("UTF-8")));
 //					
@@ -129,8 +133,19 @@ public class arbitroLlamadasHTML {
 //				formPanel
 //				.setAction("http://phpconvertservice.netne.net");
 				
-				Window.alert(InformationConstants.WAIT_RESULTS);
+				//Window.alert(InformationConstants.WAIT_RESULTS);
+				
+				formPanel.add(V);
+				if (!Window.Navigator.getUserAgent().contains("Chrome"))
+				{
+				PopUpExportConfirm PopUpExportConfirm =new PopUpExportConfirm(formPanel);
+				PopUpExportConfirm.center();
+				}
+			else
+				{
 				formPanel.submit();
+				Window.alert(InformationConstants.WAIT_RESULTS);
+				}
 		}			
 		
 	}

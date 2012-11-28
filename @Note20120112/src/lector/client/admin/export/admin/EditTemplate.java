@@ -75,17 +75,13 @@ public class EditTemplate implements EntryPoint {
 		});
 		menuBar.addItem(mntmBack);
 		
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		dockLayoutPanel.add(horizontalPanel);
-		horizontalPanel.setSize("100%", "100%");
-		
-		SplitLayoutPanel splitLayoutPanel = new SplitLayoutPanel();
-		horizontalPanel.add(splitLayoutPanel);
-		splitLayoutPanel.setSize("100%", "100%");
+		DockLayoutPanel dockLayoutPanel_1 = new DockLayoutPanel(Unit.EM);
+		dockLayoutPanel.add(dockLayoutPanel_1);
+		dockLayoutPanel_1.setSize(Window.getClientHeight()-10+"px", Window.getClientHeight()-100+"px");
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
-		splitLayoutPanel.addWest(verticalPanel, 300.0);
-		verticalPanel.setWidth("100%");
+		dockLayoutPanel_1.addWest(verticalPanel, 23.0);
+		verticalPanel.setWidth("300px");
 		
 		Button CreateNew = new Button("Create");
 		verticalPanel.add(CreateNew);
@@ -103,145 +99,145 @@ public class EditTemplate implements EntryPoint {
 				
 			}
 		});
-
-		CreateNew.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
-			}
-		});
 		
-		CreateNew.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-		}
-		});
-		
-		CreateNew.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
+				CreateNew.addMouseDownHandler(new MouseDownHandler() {
+					public void onMouseDown(MouseDownEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+					}
+				});
 				
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
-			
-		}
-	});
-		
-		Button Delete = new Button("Delete");
-		verticalPanel.add(Delete);
-		Delete.setWidth("100%");
-		
-		Delete.setStyleName("gwt-ButtonCenter");
-		Delete.setSize("100%", "100%");
-		Delete.addClickHandler(new ClickHandler() {
-			
-			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-				
-			}
-		});
-
-		Delete.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
-			}
-		});
-		
-		Delete.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-		}
-		});
-		
-		Delete.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
-			
-		}
-	});
-		
-		Delete.addClickHandler(new ClickHandler() {
-			
-			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-				RepresentacionTemplateCategory TC=PanelGestionTemplate.getActual();
-				RepresentacionTemplateCategory TCP=TC.getFather();
-				if (TCP!=null)
-				{
-					LoadingPanel.getInstance().center();
-					LoadingPanel.getInstance().setLabelTexto(InformationConstants.SAVING);
-					exportServiceHolder.deleteTemplateCategory(TC.getT().getId(), new AsyncCallback<Void>() {
-
-						public void onFailure(Throwable caught) {
-							LoadingPanel.getInstance().hide();
-							Window.alert(ErrorConstants.ERROR_DELETING_TEMPLATE_CATEGORY);
-							
-						}
-
-						public void onSuccess(Void result) {
-							
-							LoadingPanel.getInstance().hide();
-							PGT.refresh();
-						}
-					});
-						
-					
-					
-				}else
-				{
-					Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE_DELETE);	
+				CreateNew.addMouseOutHandler(new MouseOutHandler() {
+					public void onMouseOut(MouseOutEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
 				}
+				});
 				
-			}
-		});
-		
-		Button Rename = new Button("Rename");
-		verticalPanel.add(Rename);
-		Rename.setWidth("100%");
-		
-		Rename.setStyleName("gwt-ButtonCenter");
-		Rename.setSize("100%", "100%");
-		Rename.addClickHandler(new ClickHandler() {
-			
-			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-				
-			}
-		});
-
-		Rename.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
-			}
-		});
-		
-		Rename.addMouseOutHandler(new MouseOutHandler() {
-			public void onMouseOut(MouseOutEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-		}
-		});
-		
-		Rename.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
-			
-		}
-			
+				CreateNew.addMouseOverHandler(new MouseOverHandler() {
+					public void onMouseOver(MouseOverEvent event) {
+						
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+					
+				}
 	});
-		Rename.addClickHandler(new ClickHandler() {
-			
-			public void onClick(ClickEvent event) {
-				((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
-				RepresentacionTemplateCategory TC=PanelGestionTemplate.getActual();
-				NewPanelRename NPR=new NewPanelRename(TC);
-				NPR.center();
 				
+				Button Delete = new Button("Delete");
+				verticalPanel.add(Delete);
+				Delete.setWidth("100%");
 				
-			}
-		});
-		
-		scrollPanel = new ScrollPanel();
-		splitLayoutPanel.add(scrollPanel);
-		scrollPanel.setSize("100%", "100%");
+				Delete.setStyleName("gwt-ButtonCenter");
+				Delete.setSize("100%", "100%");
+				Delete.addClickHandler(new ClickHandler() {
+					
+					public void onClick(ClickEvent event) {
+						((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+						
+					}
+				});
+				
+						Delete.addMouseDownHandler(new MouseDownHandler() {
+							public void onMouseDown(MouseDownEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+							}
+						});
+						
+						Delete.addMouseOutHandler(new MouseOutHandler() {
+							public void onMouseOut(MouseOutEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+						}
+						});
+						
+						Delete.addMouseOverHandler(new MouseOverHandler() {
+							public void onMouseOver(MouseOverEvent event) {
+								
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+							
+						}
+	});
+						
+						Delete.addClickHandler(new ClickHandler() {
+							
+							public void onClick(ClickEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								RepresentacionTemplateCategory TC=PanelGestionTemplate.getActual();
+								RepresentacionTemplateCategory TCP=TC.getFather();
+								if (TCP!=null)
+								{
+									LoadingPanel.getInstance().center();
+									LoadingPanel.getInstance().setLabelTexto(InformationConstants.SAVING);
+									exportServiceHolder.deleteTemplateCategory(TC.getT().getId(), new AsyncCallback<Void>() {
+
+										public void onFailure(Throwable caught) {
+											LoadingPanel.getInstance().hide();
+											Window.alert(ErrorConstants.ERROR_DELETING_TEMPLATE_CATEGORY);
+											
+										}
+
+										public void onSuccess(Void result) {
+											
+											LoadingPanel.getInstance().hide();
+											PGT.refresh();
+										}
+									});
+										
+									
+									
+								}else
+								{
+									Window.alert(ErrorConstants.ERROR_THIS_IS_A_TEMPLATE_DELETE);	
+								}
+								
+							}
+						});
+						
+						Button Rename = new Button("Rename");
+						verticalPanel.add(Rename);
+						Rename.setWidth("100%");
+						
+						Rename.setStyleName("gwt-ButtonCenter");
+						Rename.setSize("100%", "100%");
+						
+						scrollPanel = new ScrollPanel();
+						dockLayoutPanel_1.add(scrollPanel);
+						scrollPanel.setSize("100%", "100%");
+						Rename.addClickHandler(new ClickHandler() {
+							
+							public void onClick(ClickEvent event) {
+								((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								
+							}
+						});
+						
+								Rename.addMouseDownHandler(new MouseDownHandler() {
+									public void onMouseDown(MouseDownEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterPush");
+									}
+								});
+								
+								Rename.addMouseOutHandler(new MouseOutHandler() {
+									public void onMouseOut(MouseOutEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+								}
+								});
+								
+								Rename.addMouseOverHandler(new MouseOverHandler() {
+									public void onMouseOver(MouseOverEvent event) {
+										
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenterOver");
+									
+								}
+									
+	});
+								Rename.addClickHandler(new ClickHandler() {
+									
+									public void onClick(ClickEvent event) {
+										((Button)event.getSource()).setStyleName("gwt-ButtonCenter");
+										RepresentacionTemplateCategory TC=PanelGestionTemplate.getActual();
+										NewPanelRename NPR=new NewPanelRename(TC);
+										NPR.center();
+										
+										
+									}
+								});
 		
 	}
 	

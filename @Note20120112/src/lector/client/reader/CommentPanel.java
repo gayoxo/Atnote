@@ -117,7 +117,7 @@ public enum CatalogTipo {
         button.addClickHandler(new ClickHandler() {
         	public void onClick(ClickEvent event) {
         		PopUPEXportacion PEX=MainEntryPoint.getPEX();
-        		if (PEX.isShowing())
+        		if (PEX!=null&&PEX.isShowing())
         			PEX.addAlement(new ElementoExportacion(annotation,Imagen));
         	}
         });
