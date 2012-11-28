@@ -12,8 +12,14 @@ import lector.client.reader.ExportObjectTemplate;
 import lector.client.reader.LoadingPanel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -114,11 +120,18 @@ public class arbitroLlamadasRTF {
 		}else
 		{
 			
+			
+			
+			
+			
 			LoadingPanel.getInstance().hide();
+				
 		//	Result.append("</body></html>");
 //			RichTextArea textArea1 = new RichTextArea();
 //			textArea1.setHTML(Result.toString());	
-			formPanel = new FormPanel();
+			formPanel = new FormPanel("_blank");
+			formPanel
+			.setAction("../RTF.php");
 			formPanel
 					.setEncoding(FormPanel.ENCODING_URLENCODED);
 			formPanel.setMethod(FormPanel.METHOD_POST);
@@ -134,10 +147,12 @@ public class arbitroLlamadasRTF {
 //			}
 			textArea.setName("html");
 			textArea.getValue();
-			VerticalPanel V=new VerticalPanel();
-			
+//			formPanel.add(textArea);
+			//AQUI
+			VerticalPanel V=new VerticalPanel();		
 			V.add(textArea);
 			V.setSize("100%", "100%");
+			
 			TextArea textArea2 = new TextArea();
 			textArea2.setSize("100%", "100%");
 			textArea2.setReadOnly(true);
@@ -150,15 +165,16 @@ public class arbitroLlamadasRTF {
 //			}
 			textArea2.setName("ExportN");
 			textArea2.getValue();
+			
+			//AQUI
 			V.add(textArea2);
-			formPanel
-					.setAction("../RTF.php");
+
+
 //			formPanel
 //			.setAction("http://phpconvertservice.netne.net");
 			
 			//Window.alert(InformationConstants.WAIT_RESULTS);
 			formPanel.add(V);
-			
 
 			if (!Window.Navigator.getUserAgent().contains("Chrome"))
 				{
@@ -174,5 +190,7 @@ public class arbitroLlamadasRTF {
 		}			
 		
 	}
+
+	
 
 }

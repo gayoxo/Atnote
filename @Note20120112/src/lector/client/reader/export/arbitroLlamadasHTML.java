@@ -96,7 +96,7 @@ public class arbitroLlamadasHTML {
 				Result.append("</body></html>");
 //				RichTextArea textArea1 = new RichTextArea();
 //				textArea1.setHTML(Result.toString());	
-				FormPanel formPanel = new FormPanel();
+				FormPanel formPanel = new FormPanel("_blank");
 				formPanel
 						.setEncoding(FormPanel.ENCODING_URLENCODED);
 				formPanel.setMethod(FormPanel.METHOD_POST);
@@ -115,6 +115,7 @@ public class arbitroLlamadasHTML {
 				VerticalPanel V=new VerticalPanel();
 
 				V.add(textArea);
+				V.setSize("100%", "100%");
 				TextArea textArea2 = new TextArea();
 				textArea2.setText(Long.toString(System.currentTimeMillis()));
 				textArea2.setSize("100%", "100%");

@@ -31,7 +31,7 @@ public class PopUpExportConfirm extends PopupPanel {
 		setAnimationEnabled(true);
 		
 //		simplePanel.setSize("100%", "100%");
-		verticalpanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
+//		verticalpanel.setSize(Window.getClientWidth()-100+"px", Window.getClientHeight()-100+"px");
 		verticalpanel.add(formPanel);
 		
 		Button btnNewButton = new Button("submit");

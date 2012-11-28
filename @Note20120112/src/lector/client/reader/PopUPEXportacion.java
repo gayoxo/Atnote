@@ -144,7 +144,8 @@ public class PopUPEXportacion extends PopupPanel {
 		menuBar.addItem(mntmNewItem_1);
 
 		ScrollPanel scrollPanel = new ScrollPanel();
-		scrollPanel.setSize(Longitud + "px", Window.getClientHeight() - 48
+		scrollPanel.setAlwaysShowScrollBars(true);
+		scrollPanel.setSize(Longitud + "px", Window.getClientHeight() - 74
 				+ "px");
 		dockLayoutPanel.add(scrollPanel);
 		
