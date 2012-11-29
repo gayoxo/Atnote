@@ -77,7 +77,7 @@ public class EditTemplate implements EntryPoint {
 		
 		DockLayoutPanel dockLayoutPanel_1 = new DockLayoutPanel(Unit.EM);
 		dockLayoutPanel.add(dockLayoutPanel_1);
-		dockLayoutPanel_1.setSize(Window.getClientHeight()-10+"px", Window.getClientHeight()-100+"px");
+		dockLayoutPanel_1.setSize(Window.getClientWidth()+"px", Window.getClientHeight()-25+"px");
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		dockLayoutPanel_1.addWest(verticalPanel, 23.0);

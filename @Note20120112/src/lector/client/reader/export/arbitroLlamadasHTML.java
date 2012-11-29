@@ -15,6 +15,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -137,16 +138,21 @@ public class arbitroLlamadasHTML {
 				//Window.alert(InformationConstants.WAIT_RESULTS);
 				
 				formPanel.add(V);
-				if (!Window.Navigator.getUserAgent().contains("Chrome"))
-				{
-				PopUpExportConfirm PopUpExportConfirm =new PopUpExportConfirm(formPanel);
-				PopUpExportConfirm.center();
-				}
-			else
-				{
-				formPanel.submit();
+				RootPanel RP=RootPanel.get();
+				formPanel.setVisible(false);
+				RP.add(formPanel);
 				Window.alert(InformationConstants.WAIT_RESULTS);
-				}
+				formPanel.submit();
+//				if (!Window.Navigator.getUserAgent().contains("Chrome"))
+//				{
+//				PopUpExportConfirm PopUpExportConfirm =new PopUpExportConfirm(formPanel);
+//				PopUpExportConfirm.center();
+//				}
+//			else
+//				{
+//				formPanel.submit();
+//				Window.alert(InformationConstants.WAIT_RESULTS);
+//				}
 		}			
 		
 	}

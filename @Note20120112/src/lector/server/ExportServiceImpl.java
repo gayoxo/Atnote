@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import lector.client.book.reader.ExportService;
 import lector.client.controler.Constants;
+import lector.client.logger.Logger;
 import lector.share.model.Template;
 import lector.share.model.TemplateCategory;
 
@@ -28,7 +29,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 			entityManager.persist(template);
 			entityManager.flush();
 		} else {
-
+	//		new LoggerServlet().info("Remove from parent", "Template Save"+template.getCategories().toString());
 			entityManager.merge(template);
 			entityManager.flush();
 		}
@@ -36,7 +37,6 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		try {
 			Thread.sleep(1000l);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -49,6 +49,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	public void saveTemplateCategory(TemplateCategory templateCategory) {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
+	//	new LoggerServlet().info("Remove from parent",  "Template Category Save" +templateCategory.getSubCategories().toString());
 		entityTransaction.begin();
 		if (templateCategory.getId() == null) {
 			entityManager.persist(templateCategory);
@@ -80,7 +81,6 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		try {
 			Thread.sleep(1000l);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -88,6 +88,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	public void savePlainCategory(TemplateCategory templateCategory) {
 		EntityManager entityManager = EMF.get().createEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
+	//	new LoggerServlet().info("Remove from parent",  "Template Category Save Plain" +templateCategory.getSubCategories().toString());
 		entityTransaction.begin();
 		if (templateCategory.getId() == null) {
 			entityManager.persist(templateCategory);
@@ -296,24 +297,42 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		TemplateCategory category = loadTemplateCategoryById(categoryId);
 		removeCategoryFromParent(fromFatherId, categoryId, templateId);
 		addNewFatherToCategory(toFatherId, categoryId);
-
+		
+	//	new LoggerServlet().info("Remove from parent", "Template addNewFatherToCategory"+template.getCategories().toString() + "Template Category" + category.getSubCategories().toString());
+		
 		if (fromFatherId.equals(Constants.TEMPLATEID)) {
 			template = loadTemplateById(templateId);
 			updateOrderToLeftBrothers(template.getCategories(), category.getOrder());
+			
+	//		new LoggerServlet().info("Remove from parent", "Template updateOrderToLeftBrothers"+template.getCategories().toString());
+			
+			
 		} else {
 			TemplateCategory fromFatherCategory = loadTemplateCategoryById(fromFatherId);
 			updateOrderToLeftBrothers(fromFatherCategory.getSubCategories(),
 					category.getOrder());
+			
+	//		new LoggerServlet().info("Remove from parent",  "Template Category updateOrderToLeftBrothers" +fromFatherCategory.getSubCategories().toString());
+			
 		}
+		
+		
 		if (toFatherId.equals(Constants.TEMPLATEID)) {
 			updateSelfOrder(template.getCategories().size(), categoryId);
 			addChildToTemplate(categoryId, templateId);
+			
+	//		new LoggerServlet().info("Remove from parent", "Template addChildToTemplate"+template.getCategories().toString());
+			
 		} else {
 			TemplateCategory fatherCategory = loadTemplateCategoryById(toFatherId);
 			updateSelfOrder(fatherCategory.getSubCategories().size(),
 					categoryId);
 			addChildToCategory(categoryId, toFatherId);
+			
+	//		new LoggerServlet().info("Remove from parent",  "Template Category addChildToTemplate" +fatherCategory.getSubCategories().toString());
+			
 		}
+		
 
 	}
 
@@ -343,7 +362,7 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 	private void addChildToCategory(Long categoryId, Long toFatherId) {
 		TemplateCategory templateCategory = loadTemplateCategoryById(toFatherId);
 		templateCategory.getSubCategories().add(categoryId);
-		saveTemplateCategory(templateCategory);
+		savePlainCategory(templateCategory);
 
 	}
 
