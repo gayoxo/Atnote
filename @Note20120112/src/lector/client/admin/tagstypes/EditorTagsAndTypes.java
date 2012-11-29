@@ -52,7 +52,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		Actual.add(menuBar_2);
 		menuBar_2.setWidth("100%");
 
-		MenuItem mntmNewItem_2 = new MenuItem("Avariable", false,
+		MenuItem mntmNewItem_2 = new MenuItem("Available", false,
 				(Command) null);
 		mntmNewItem_2.setEnabled(false);
 		mntmNewItem_2.setHTML("Avariable");

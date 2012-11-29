@@ -636,7 +636,7 @@ pageBack.addMouseDownHandler(new MouseDownHandler() {
 			}
 		});
 		//TODO Anadir a LEnguaje
-		Exportacion.setHTML("Exportacion");
+		Exportacion.setHTML("Export");
 		Exportacion.setVisible(false);
 		menuBar.addItem(Exportacion);
 		FilterInfo.setStyleName("gwt-MenuItemFiltering");

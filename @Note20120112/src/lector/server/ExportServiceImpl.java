@@ -288,7 +288,9 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 
 	}
 
-	public void moveCategory(Long fromFatherId, Long toFatherId,
+	public void moveCategory(
+			Long fromFatherId,
+			Long toFatherId,
 			Long categoryId, Long templateId) {
 		Template template = loadTemplateById(templateId);
 		TemplateCategory category = loadTemplateCategoryById(categoryId);
@@ -363,15 +365,30 @@ public class ExportServiceImpl extends RemoteServiceServlet implements
 		if (fromFatherId.equals(Constants.TEMPLATEID)) {
 			Template template = loadTemplateById(templateId);
 			if (template.getCategories().contains(categoryId)) {
-				template.getCategories().remove(categoryId);
+				ArrayList<Long> newList = new ArrayList<Long>();
+				for (Long long1 : template.getCategories()) {
+					if(!long1.equals(categoryId)){
+						newList.add(long1);
+					}
+				}
+				template.setCategories(newList);
+//				template.getCategories().remove(categoryId);
+				
 				saveTemplate(template);
 			}
 		} else {
 			TemplateCategory templateCategoryFather = loadTemplateCategoryById(fromFatherId);
 			if (templateCategoryFather.getSubCategories().contains(categoryId)) {
-				templateCategoryFather.getSubCategories().remove(categoryId);
-				TemplateCategory categoryToSave = swapCategory(templateCategoryFather);
-				savePlainCategory(categoryToSave);
+				ArrayList<Long> newList = new ArrayList<Long>();
+				for (Long long1 : templateCategoryFather.getSubCategories()) {
+					if(!long1.equals(categoryId)){
+						newList.add(long1);
+					}
+				}
+				templateCategoryFather.setSubCategories(newList);
+//				templateCategoryFather.getSubCategories().remove(categoryId);
+				//TemplateCategory categoryToSave = swapCategory(templateCategoryFather);
+				savePlainCategory(templateCategoryFather);
 			}
 
 		}
