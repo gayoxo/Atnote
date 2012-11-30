@@ -55,7 +55,7 @@ public class EditorTagsAndTypes implements EntryPoint {
 		MenuItem mntmNewItem_2 = new MenuItem("Available", false,
 				(Command) null);
 		mntmNewItem_2.setEnabled(false);
-		mntmNewItem_2.setHTML("Avariable");
+		mntmNewItem_2.setHTML("Available");
 		menuBar_2.addItem(mntmNewItem_2);
 
 		menuBar_3 = new MenuBar(false);
