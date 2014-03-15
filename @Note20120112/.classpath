@@ -3,7 +3,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" output="test-classes" path="test"/>
-	<classpathentry kind="lib" path="libs/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="libs/jackson-core-asl-1.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/jersey-client-1.1.5.1.jar"/>
 	<classpathentry kind="lib" path="libs/jersey-core-1.1.5.1.jar"/>
@@ -21,7 +20,8 @@
 	<classpathentry kind="lib" path="libs/jsr173_api.jar"/>
 	<classpathentry kind="lib" path="libs/gwt-incubator-20101117-r1766.jar"/>
 	<classpathentry kind="lib" path="libs/resin.jar"/>
+	<classpathentry kind="lib" path="libs/asm-4.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (6)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
