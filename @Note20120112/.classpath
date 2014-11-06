@@ -22,6 +22,6 @@
 	<classpathentry kind="lib" path="libs/resin.jar"/>
 	<classpathentry kind="lib" path="libs/asm-4.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (6)"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (8)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
